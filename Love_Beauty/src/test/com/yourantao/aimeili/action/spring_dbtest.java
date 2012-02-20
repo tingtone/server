@@ -2,6 +2,7 @@ package test.com.yourantao.aimeili.action;
 
 import main.com.yourantao.aimeili.bean.Brand;
 import main.com.yourantao.aimeili.bean.BrandDAO;
+import main.com.yourantao.aimeili.conf.Config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,16 +26,30 @@ public class spring_dbtest {
 		 * session.flush(); txTransaction.commit();
 		 */
 
+		java.util.Properties p = System.getProperties();
+		java.util.Enumeration keys = p.keys();
+		while( keys.hasMoreElements() )
+		{
+		     System.out.println( keys.nextElement());
+		 }
+		String pathString=System.getProperty("testpath");
+		System.out.println(pathString);
+		String pathString2=System.getProperty("config.location");
+		System.out.println(pathString2);
+		 System.out.println(Runtime.getRuntime().maxMemory()); 
+		
 		//spring 使用方式(成功事例)
-		System.out.println("aaaa");
-		ApplicationContext ac=new ClassPathXmlApplicationContext("applicationContext.xml");
+		String pathString1=System.getProperty("user.dir");
+		System.out.println(pathString1);
+		
+		ApplicationContext ac=Config.getACInstant();
 		  BrandDAO td = BrandDAO.getFromApplicationContext(ac);
 		  
 		  Brand brand=td.findById(1);//查询
 		  System.out.print(brand.getBrandName());
 		  System.out.println(brand.getBrandName());
 		  log.debug(brand.getBrandName());
-		  
+		
 		  Brand brand1=new Brand();
 		  brand1.setBrandId(2);
 		  brand1.setBrandName("test2");

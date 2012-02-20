@@ -28,5 +28,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
   <br>  OK?
+  <a href="jsontest.jsp">json测试</a>
   </body>
 </html>

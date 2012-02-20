@@ -5,11 +5,35 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	
+	<!-- Spring 的监听器 -->
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>main.com.yourantao.aimeili.servlet.SystemInit</listener-class>
+	</listener>
+	
+	<context-param> 
+	   <param-name>log4jConfigLocation</param-name> 
+	   <param-value>/WEB-INF/classes/log4j.properties</param-value> 
+	</context-param> 
+
+
+		<!-- 定义LOG4J监听器 --> 
+		<listener> 
+		   <listener-class> 
+		org.springframework.web.util.Log4jConfigListener 
+		   </listener-class> 
+		</listener> 
+	
 	<!-- spring的应用上下文 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			WEB-INF/applicationContext.xml
+			/WEB-INF/classes/applicationContext*.xml
 		</param-value>
 	</context-param>
 	<!-- struts2 过滤器 -->
@@ -26,25 +50,9 @@
 	<!-- spring的监听器，以便在启动时就自动加载spring的配置典型的web容器监听器，当web容器做出某种动作的时候就会触发监听器，运行其中的方法
 		我们可以继承监听器接口，自己实现监听器，然后配置在web.xml中 -->
 
-	<listener>
-		<listener-class>
-			org.springframework.web.context.ContextLoaderListener
-		</listener-class>
-	</listener>
-	
 	
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
-  <!--  <filter>
-  	<filter-name>struts2</filter-name>
-  	<filter-class>
-  		org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
-  	</filter-class>
-  </filter>
-  <filter-mapping>
-  	<filter-name>struts2</filter-name>
-  	<url-pattern>*.action</url-pattern> 
-  </filter-mapping>-->
   
   </web-app>

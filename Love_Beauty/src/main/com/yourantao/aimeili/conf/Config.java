@@ -3,34 +3,39 @@ package main.com.yourantao.aimeili.conf;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+
 /**
  * @author whp
- * @´´½¨Ê±¼ä£º 2012-2-20 ÏÂÎç06:32:36
- * @ĞŞ¸ÄÊ±¼ä£º2012-2-20 ÏÂÎç06:32:36
- * @¾ßÌåÃèÊö£º »ù±¾ÅäÖÃÀà
+ * @åˆ›å»ºæ—¶é—´ï¼š 2012-2-20 ä¸‹åˆ06:32:36
+ * @ä¿®æ”¹æ—¶é—´ï¼š2012-2-20 ä¸‹åˆ06:32:36
+ * @å…·ä½“æè¿°ï¼š åŸºæœ¬é…ç½®ç±»
  */
 public class Config {
 
+	public static ApplicationContext ac;
+	
 	/*
-	 * Êı¾İ¿â³õÊ¼»¯
+	 * æ•°æ®åº“åˆå§‹åŒ–
 	 */
-	public static ApplicationContext DbInit(String springPath) {
+	public static void DbInit(String springPath) {
 
 		/*
-		 * ĞèÒªÓÃµ½hibernate.cfg.xml ÅäÖÃÎÄ¼ş //hibernateºËĞÄ½Ó¿Ú Configuration
-		 * configuration = new Configuration().configure(); //ÅäÖÃ SessionFactory
+		 * éœ€è¦ç”¨åˆ°hibernate.cfg.xml é…ç½®æ–‡ä»¶ //hibernateæ ¸å¿ƒæ¥å£ Configuration
+		 * configuration = new Configuration().configure(); //é…ç½® SessionFactory
 		 * sessionFactory=configuration.buildSessionFactory();
-		 * //SessionFactory¶ÔÏóÖĞ±£´æÁËµ±Ç°µÄÊı¾İ¿âÅäÖÃ¼°Ó³ÉäĞÅÏ¢£¬»¹¸ºÔğ¶ş¼¶»º´æ
-		 * //SessionFactory¿ªÏú´ó£¬Ò»¸öÊı¾İ¿â¹«ÓÃÒ»¸ö¾ÍĞĞ Session session =
-		 * sessionFactory.openSession(); //²»ÊÇÏß³Ì°²È«µÄ Transaction
-		 * txTransaction=session.beginTransaction(); //¿ªÆôÊÂÎñ Brand brand= new
+		 * //SessionFactoryå¯¹è±¡ä¸­ä¿å­˜äº†å½“å‰çš„æ•°æ®åº“é…ç½®åŠæ˜ å°„ä¿¡æ¯ï¼Œè¿˜è´Ÿè´£äºŒçº§ç¼“å­˜
+		 * //SessionFactoryå¼€é”€å¤§ï¼Œä¸€ä¸ªæ•°æ®åº“å…¬ç”¨ä¸€ä¸ªå°±è¡Œ Session session =
+		 * sessionFactory.openSession(); //ä¸æ˜¯çº¿ç¨‹å®‰å…¨çš„ Transaction
+		 * txTransaction=session.beginTransaction(); //å¼€å¯äº‹åŠ¡ Brand brand= new
 		 * Brand(); brand.setBrandName("test1"); session.save(brand);
 		 * session.flush(); txTransaction.commit();
 		 */
 		ApplicationContext ac = new ClassPathXmlApplicationContext(springPath);
 		if (ac == null)
-			ac = new ClassPathXmlApplicationContext("../applicationContext.xml");
+			ac = new ClassPathXmlApplicationContext("applicationContext.xml");
+	}
+	public static ApplicationContext getACInstant(){
+		
 		return ac;
-
 	}
 }
