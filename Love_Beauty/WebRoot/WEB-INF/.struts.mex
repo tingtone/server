@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Struts2Diagram version="2.0">
+  <package name="lovebeauty" location="50,50" size="170,971">
+    <action name="rand" location="10,20" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="login" location="10,120" size="150,83">
+      <result name="index">
+        <resourceEdge source="index" routing="0" target="mc_index.jsp" />
+      </result>
+      <result name="myProfile">
+        <resourceEdge source="myProfile" routing="0" target="myProfile.jsp" />
+      </result>
+      <result name="doother" />
+    </action>
+    <action name="logout" location="10,220" size="150,62">
+      <result name="logout" />
+      <result name="login" />
+    </action>
+    <action name="imgupload" location="10,320" size="150,40" />
+    <action name="userAction" location="10,370" size="150,83">
+      <result name="profile" />
+      <result name="register" />
+      <result name="checkemail" />
+    </action>
+    <action name="reg" location="10,470" size="150,209">
+      <result name="login" />
+      <result name="timeout" />
+      <result name="timeout1" />
+      <result name="findpwd" />
+      <result name="index" />
+      <result name="myProfile" />
+      <result name="userCenterInfo" />
+      <result name="regsuccess" />
+      <result name="doother" />
+    </action>
+    <action name="searchWordAction" location="10,720" size="150,40" />
+    <action name="notifyAction" location="10,770" size="150,40" />
+    <action name="searchHistory" location="10,820" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="userNotice" location="10,920" size="150,41">
+      <result name="success" />
+    </action>
+  </package>
+  <webResource name="mc_index.jsp" path="/mc_index.jsp" location="350,50" size="150,55" />
+  <webResource name="myProfile.jsp" path="/myProfile.jsp" location="500,50" size="150,55" />
+</Struts2Diagram>
+

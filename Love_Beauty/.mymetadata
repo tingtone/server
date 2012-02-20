@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="Love_Beauty"
+  id="myeclipse.1329724905208"
+  context-root="/Love_Beauty"
+  j2ee-spec="5.0"
+  archive="Love_Beauty.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
