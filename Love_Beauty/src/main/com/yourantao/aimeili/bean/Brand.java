@@ -31,6 +31,12 @@ public class Brand implements java.io.Serializable {
 		this.brandRank = brandRank;
 	}
 
+	/** part constructor */
+	public Brand(String brandName, String brandAlias,  Integer brandRank) {
+		this.brandName = brandName;
+		this.brandAlias = brandAlias;
+		this.brandRank = brandRank;
+	}
 	// Property accessors
 
 	public Integer getBrandId() {

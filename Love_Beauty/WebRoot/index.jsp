@@ -27,6 +27,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
+  <form action="wallapiall">
+  	<button type="submit" >action！</button>
+  </form>
   <br>  OK?
   <a href="jsontest.jsp">json测试</a>
   </body>

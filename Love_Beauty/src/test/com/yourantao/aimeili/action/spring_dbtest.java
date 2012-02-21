@@ -11,17 +11,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class spring_dbtest {
 
-	private static final Logger log = LoggerFactory.getLogger(spring_dbtest.class); //springµÄÈÕÖ¾¸ñÊ½
+	private static final Logger log = LoggerFactory.getLogger(spring_dbtest.class); //springçš„æ—¥å¿—æ ¼å¼
 	public static void main(String [] args){
-		/* hibernateÊ¹ÓÃ·½Ê½
+		/* hibernateä½¿ç”¨æ–¹å¼
 		/*
-		 * ĞèÒªÓÃµ½hibernate.cfg.xml ÅäÖÃÎÄ¼ş //hibernateºËĞÄ½Ó¿Ú Configuration
-		 * configuration = new Configuration().configure(); //ÅäÖÃ SessionFactory
+		 * éœ€è¦ç”¨åˆ°hibernate.cfg.xml é…ç½®æ–‡ä»¶ //hibernateæ ¸å¿ƒæ¥å£ Configuration
+		 * configuration = new Configuration().configure(); //é…ç½® SessionFactory
 		 * sessionFactory=configuration.buildSessionFactory();
-		 * //SessionFactory¶ÔÏóÖĞ±£´æÁËµ±Ç°µÄÊı¾İ¿âÅäÖÃ¼°Ó³ÉäĞÅÏ¢£¬»¹¸ºÔğ¶ş¼¶»º´æ
-		 * //SessionFactory¿ªÏú´ó£¬Ò»¸öÊı¾İ¿â¹«ÓÃÒ»¸ö¾ÍĞĞ Session session =
-		 * sessionFactory.openSession(); //²»ÊÇÏß³Ì°²È«µÄ Transaction
-		 * txTransaction=session.beginTransaction(); //¿ªÆôÊÂÎñ Brand brand= new
+		 * //SessionFactoryå¯¹è±¡ä¸­ä¿å­˜äº†å½“å‰çš„æ•°æ®åº“é…ç½®åŠæ˜ å°„ä¿¡æ¯ï¼Œè¿˜è´Ÿè´£äºŒçº§ç¼“å­˜
+		 * //SessionFactoryå¼€é”€å¤§ï¼Œä¸€ä¸ªæ•°æ®åº“å…¬ç”¨ä¸€ä¸ªå°±è¡Œ Session session =
+		 * sessionFactory.openSession(); //ä¸æ˜¯çº¿ç¨‹å®‰å…¨çš„ Transaction
+		 * txTransaction=session.beginTransaction(); //å¼€å¯äº‹åŠ¡ Brand brand= new
 		 * Brand(); brand.setBrandName("test1"); session.save(brand);
 		 * session.flush(); txTransaction.commit();
 		 */
@@ -38,14 +38,14 @@ public class spring_dbtest {
 		System.out.println(pathString2);
 		 System.out.println(Runtime.getRuntime().maxMemory()); 
 		
-		//spring Ê¹ÓÃ·½Ê½(³É¹¦ÊÂÀı)
+		//spring ä½¿ç”¨æ–¹å¼(æˆåŠŸäº‹ä¾‹)
 		String pathString1=System.getProperty("user.dir");
 		System.out.println(pathString1);
 		
 		ApplicationContext ac=Config.getACInstant();
 		  BrandDAO td = BrandDAO.getFromApplicationContext(ac);
 		  
-		  Brand brand=td.findById(1);//²éÑ¯
+		  Brand brand=td.findById(1);//æŸ¥è¯¢
 		  System.out.print(brand.getBrandName());
 		  System.out.println(brand.getBrandName());
 		  log.debug(brand.getBrandName());
@@ -54,21 +54,21 @@ public class spring_dbtest {
 		  brand1.setBrandId(2);
 		  brand1.setBrandName("test2");
 		  brand1.setBrandAlias("aaa");
-		  brand1.setBrandDescription("²âÊÔÃèÊö");
+		  brand1.setBrandDescription("æµ‹è¯•æè¿°");
 		  brand1.setBrandOtherNames("othername test");
 		  brand1.setBrandRank(1);
-		  td.save(brand1);//Ôö¼Ó
+		  td.save(brand1);//å¢åŠ 
 		  log.debug(brand1.getBrandName());
 		  System.out.println(brand1.getBrandName());
 		  
 		  Brand brand2=td.findById(1);
-		  td.delete(brand2);//É¾³ı
+		  td.delete(brand2);//åˆ é™¤
 		  log.debug(brand2.getBrandName());
 		  System.out.println(brand2.getBrandName());
 		  
 		  Brand brand3=td.findById(2);
 		  brand3.setBrandName("5");
-		  td.merge(brand3);//¸ü¸Ä
+		  td.merge(brand3);//æ›´æ”¹
 		  log.debug(brand3.getBrandName());
 		  System.out.println(brand3.getBrandName());
 	}

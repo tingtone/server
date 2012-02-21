@@ -1,5 +1,7 @@
 package main.com.yourantao.aimeili.servlet;
 
+import java.io.File;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -37,13 +39,11 @@ public class SystemInit implements ServletContextListener{
 		    log.debug("   begin.....................debug.");
 		    log.warn("   begin......................warn");
 		    log.error("   begin.....................error.");
-			
 			String path = System.getProperty("testpath");
 			log.info("path={}",path);
-			
 			Config.DbInit("applicationContext.xml");  
+//			Config.DbInit(path+File.separator+"applicationContext.xml");  
 //			Config.DbInit(path+"/applicationContext.xml");  
-			
 			Log log1=LogFactory.getLog("myTest1");
 			log1.debug(" 测试");
 			

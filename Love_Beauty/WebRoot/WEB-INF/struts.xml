@@ -21,8 +21,8 @@
 			<result name="login">/login.jsp</result>
 		</action>
 
-		<!-- 头像上传 -->
-		<action name="imgupload" class="main.com.yourantao.aimeili.action.ImgUploadAction">
+		<!-- 淘宝贝首页 -->
+		<action name="wallapiall" class="main.com.yourantao.aimeili.action.WallApiAllAction">
 		</action>
 
 		<!-- 用户管理 -->
@@ -60,7 +60,7 @@
 			<result name="success">/history.jsp</result>
 		</action>
 		
-		<!-- 用户通知查询 add by yangjianfei 2011-09-23 -->
+		<!-- 用户通知查询  -->
 		<action name="userNotice"
 			class="main.com.yourantao.aimeili.action.UserNoticeAction">
 			<result name="success">/notice.jsp</result>

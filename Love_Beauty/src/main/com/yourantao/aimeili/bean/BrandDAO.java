@@ -1,10 +1,16 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -161,4 +167,30 @@ public class BrandDAO extends HibernateDaoSupport {
 	public static BrandDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (BrandDAO) ctx.getBean("BrandDAO");
 	}
+	
+	/**
+	 * 自定义的方法，查找rank>0的
+	 * @return
+	 */
+	public List findRank() {
+		log.debug("finding all Brand instances");
+		try {
+			/*1.查询全部字段的情况下，如"from 实体类"，list中封装的对象为实体类本身，各属性都将得到填充。
+
+			  2.只查询一个字段，默认情况下，list中封装的是Object对象。
+
+		      3.查询两个或两个以上的字段，默认情况下，list中封装的是Object[],长度与所查询的字段数一致。*/
+//			final String hql = "select new Brand( "+BRAND_NAME+", "+BRAND_ALIAS+", "+BRAND_RANK+") from Brand ";   // 需要在Brand类中加入新的构造函数
+//			final String hql = " from Brand where "+BRAND_RANK+">0";
+			final String hql = "select new map("+BRAND_NAME+" as "+BRAND_NAME+","+BRAND_ALIAS+" as "+BRAND_ALIAS+","+BRAND_RANK+" as "+BRAND_RANK+") from Brand ";  //hql动态生成map实现，map中第一个是value,第二个是key，可与前端约定名字
+//			return getHibernateTemplate().find(queryString);   //find()方法是类似sql语句的访问
+			      return getHibernateTemplate().find(hql);
+		} catch (RuntimeException re) {
+			log.error("find all failed", re);
+			throw re;
+		}
+	}
+	
+	
+	
 }

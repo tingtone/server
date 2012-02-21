@@ -30,7 +30,7 @@ public class Config {
 		 * Brand(); brand.setBrandName("test1"); session.save(brand);
 		 * session.flush(); txTransaction.commit();
 		 */
-		ApplicationContext ac = new ClassPathXmlApplicationContext(springPath);
+		ac = new ClassPathXmlApplicationContext(springPath);
 		if (ac == null)
 			ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 	}
