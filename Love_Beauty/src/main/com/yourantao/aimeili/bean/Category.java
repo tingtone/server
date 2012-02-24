@@ -12,6 +12,8 @@ public class Category implements java.io.Serializable {
 	private String categoryName;
 	private String categoryDescription;
 	private Integer categoryRank;
+	private Integer parentCatid;
+	private Short catLayer;
 
 	// Constructors
 
@@ -21,10 +23,12 @@ public class Category implements java.io.Serializable {
 
 	/** full constructor */
 	public Category(String categoryName, String categoryDescription,
-			Integer categoryRank) {
+			Integer categoryRank, Integer parentCatid, Short catLayer) {
 		this.categoryName = categoryName;
 		this.categoryDescription = categoryDescription;
 		this.categoryRank = categoryRank;
+		this.parentCatid = parentCatid;
+		this.catLayer = catLayer;
 	}
 
 	// Property accessors
@@ -59,6 +63,22 @@ public class Category implements java.io.Serializable {
 
 	public void setCategoryRank(Integer categoryRank) {
 		this.categoryRank = categoryRank;
+	}
+
+	public Integer getParentCatid() {
+		return this.parentCatid;
+	}
+
+	public void setParentCatid(Integer parentCatid) {
+		this.parentCatid = parentCatid;
+	}
+
+	public Short getCatLayer() {
+		return this.catLayer;
+	}
+
+	public void setCatLayer(Short catLayer) {
+		this.catLayer = catLayer;
 	}
 
 }

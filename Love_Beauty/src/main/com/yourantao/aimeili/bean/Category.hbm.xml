@@ -25,5 +25,15 @@
                 <comment>类别的排序值，越大的优先级越高</comment>
             </column>
         </property>
+        <property name="parentCatid" type="java.lang.Integer">
+            <column name="parent_catid" not-null="true">
+                <comment>父类别的id</comment>
+            </column>
+        </property>
+        <property name="catLayer" type="java.lang.Short">
+            <column name="cat_layer" not-null="true">
+                <comment>类别所在层数，如1、2、3等</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

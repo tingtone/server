@@ -3,19 +3,22 @@ package main.com.yourantao.aimeili.bean;
 import java.sql.Timestamp;
 
 /**
- * Goods entity. @author MyEclipse Persistence Tools
+ * GoodsReal entity. @author MyEclipse Persistence Tools
  */
 
-public class Goods implements java.io.Serializable {
+public class GoodsReal implements java.io.Serializable {
 
 	// Fields
 
-	private Integer goodsId;
+	private Integer goodsRealId;
+	private Integer providerId;
 	private Integer brandId;
 	private Integer categoryId;
 	private String goodsName;
 	private String goodsThumb;
 	private String goodsImages;
+	private Float goodsPrice;
+	private String goodsUrl;
 	private Float goodsScore;
 	private String goodsForskin;
 	private String goodsNotforskin;
@@ -23,6 +26,9 @@ public class Goods implements java.io.Serializable {
 	private String goodsAge;
 	private String goodsDescription;
 	private String goodsSpecification;
+	private Integer goodsCount;
+	private Short goodsIsNew;
+	private Short goodsIsHot;
 	private Integer goodsBuyCount;
 	private Integer goodsViewCount;
 	private Timestamp goodsAddTime;
@@ -33,26 +39,34 @@ public class Goods implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public Goods() {
+	public GoodsReal() {
 	}
 
 	/** minimal constructor */
-	public Goods(Integer brandId, Integer categoryId, String goodsName,
-			String goodsThumb, String goodsImages, Float goodsScore,
+	public GoodsReal(Integer providerId, Integer brandId, Integer categoryId,
+			String goodsName, String goodsThumb, String goodsImages,
+			Float goodsPrice, String goodsUrl, Float goodsScore,
 			String goodsForskin, String goodsAge, String goodsDescription,
-			String goodsSpecification, Integer goodsBuyCount,
-			Integer goodsViewCount, Timestamp goodsAddTime,
-			Timestamp goodsLastUpdate, Short goodsStatus, Integer goodsRank) {
+			String goodsSpecification, Integer goodsCount, Short goodsIsNew,
+			Short goodsIsHot, Integer goodsBuyCount, Integer goodsViewCount,
+			Timestamp goodsAddTime, Timestamp goodsLastUpdate,
+			Short goodsStatus, Integer goodsRank) {
+		this.providerId = providerId;
 		this.brandId = brandId;
 		this.categoryId = categoryId;
 		this.goodsName = goodsName;
 		this.goodsThumb = goodsThumb;
 		this.goodsImages = goodsImages;
+		this.goodsPrice = goodsPrice;
+		this.goodsUrl = goodsUrl;
 		this.goodsScore = goodsScore;
 		this.goodsForskin = goodsForskin;
 		this.goodsAge = goodsAge;
 		this.goodsDescription = goodsDescription;
 		this.goodsSpecification = goodsSpecification;
+		this.goodsCount = goodsCount;
+		this.goodsIsNew = goodsIsNew;
+		this.goodsIsHot = goodsIsHot;
 		this.goodsBuyCount = goodsBuyCount;
 		this.goodsViewCount = goodsViewCount;
 		this.goodsAddTime = goodsAddTime;
@@ -62,19 +76,24 @@ public class Goods implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Goods(Integer brandId, Integer categoryId, String goodsName,
-			String goodsThumb, String goodsImages, Float goodsScore,
+	public GoodsReal(Integer providerId, Integer brandId, Integer categoryId,
+			String goodsName, String goodsThumb, String goodsImages,
+			Float goodsPrice, String goodsUrl, Float goodsScore,
 			String goodsForskin, String goodsNotforskin,
 			String goodsNoticeforskin, String goodsAge,
 			String goodsDescription, String goodsSpecification,
+			Integer goodsCount, Short goodsIsNew, Short goodsIsHot,
 			Integer goodsBuyCount, Integer goodsViewCount,
 			Timestamp goodsAddTime, Timestamp goodsLastUpdate,
 			Short goodsStatus, Integer goodsRank) {
+		this.providerId = providerId;
 		this.brandId = brandId;
 		this.categoryId = categoryId;
 		this.goodsName = goodsName;
 		this.goodsThumb = goodsThumb;
 		this.goodsImages = goodsImages;
+		this.goodsPrice = goodsPrice;
+		this.goodsUrl = goodsUrl;
 		this.goodsScore = goodsScore;
 		this.goodsForskin = goodsForskin;
 		this.goodsNotforskin = goodsNotforskin;
@@ -82,6 +101,9 @@ public class Goods implements java.io.Serializable {
 		this.goodsAge = goodsAge;
 		this.goodsDescription = goodsDescription;
 		this.goodsSpecification = goodsSpecification;
+		this.goodsCount = goodsCount;
+		this.goodsIsNew = goodsIsNew;
+		this.goodsIsHot = goodsIsHot;
 		this.goodsBuyCount = goodsBuyCount;
 		this.goodsViewCount = goodsViewCount;
 		this.goodsAddTime = goodsAddTime;
@@ -92,12 +114,20 @@ public class Goods implements java.io.Serializable {
 
 	// Property accessors
 
-	public Integer getGoodsId() {
-		return this.goodsId;
+	public Integer getGoodsRealId() {
+		return this.goodsRealId;
 	}
 
-	public void setGoodsId(Integer goodsId) {
-		this.goodsId = goodsId;
+	public void setGoodsRealId(Integer goodsRealId) {
+		this.goodsRealId = goodsRealId;
+	}
+
+	public Integer getProviderId() {
+		return this.providerId;
+	}
+
+	public void setProviderId(Integer providerId) {
+		this.providerId = providerId;
 	}
 
 	public Integer getBrandId() {
@@ -138,6 +168,22 @@ public class Goods implements java.io.Serializable {
 
 	public void setGoodsImages(String goodsImages) {
 		this.goodsImages = goodsImages;
+	}
+
+	public Float getGoodsPrice() {
+		return this.goodsPrice;
+	}
+
+	public void setGoodsPrice(Float goodsPrice) {
+		this.goodsPrice = goodsPrice;
+	}
+
+	public String getGoodsUrl() {
+		return this.goodsUrl;
+	}
+
+	public void setGoodsUrl(String goodsUrl) {
+		this.goodsUrl = goodsUrl;
 	}
 
 	public Float getGoodsScore() {
@@ -194,6 +240,30 @@ public class Goods implements java.io.Serializable {
 
 	public void setGoodsSpecification(String goodsSpecification) {
 		this.goodsSpecification = goodsSpecification;
+	}
+
+	public Integer getGoodsCount() {
+		return this.goodsCount;
+	}
+
+	public void setGoodsCount(Integer goodsCount) {
+		this.goodsCount = goodsCount;
+	}
+
+	public Short getGoodsIsNew() {
+		return this.goodsIsNew;
+	}
+
+	public void setGoodsIsNew(Short goodsIsNew) {
+		this.goodsIsNew = goodsIsNew;
+	}
+
+	public Short getGoodsIsHot() {
+		return this.goodsIsHot;
+	}
+
+	public void setGoodsIsHot(Short goodsIsHot) {
+		this.goodsIsHot = goodsIsHot;
 	}
 
 	public Integer getGoodsBuyCount() {

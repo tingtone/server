@@ -115,6 +115,12 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/DiaryComment.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/GoodsMap.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/GoodsReal.hbm.xml
 				</value></list>
 		</property></bean>
 	<bean id="EfficacyDAO"
@@ -287,6 +293,18 @@
 	</bean>
 	<bean id="DiaryCommentDAO"
 		class="main.com.yourantao.aimeili.bean.DiaryCommentDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GoodsMapDAO"
+		class="main.com.yourantao.aimeili.bean.GoodsMapDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GoodsRealDAO"
+		class="main.com.yourantao.aimeili.bean.GoodsRealDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

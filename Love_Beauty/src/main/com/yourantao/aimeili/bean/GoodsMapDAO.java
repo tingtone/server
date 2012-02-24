@@ -9,32 +9,29 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * Category entities. Transaction control of the save(), update() and delete()
+ * GoodsMap entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see main.com.yourantao.aimeili.bean.Category
+ * @see main.com.yourantao.aimeili.bean.GoodsMap
  * @author MyEclipse Persistence Tools
  */
 
-public class CategoryDAO extends HibernateDaoSupport {
+public class GoodsMapDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
-			.getLogger(CategoryDAO.class);
+			.getLogger(GoodsMapDAO.class);
 	// property constants
-	public static final String CATEGORY_NAME = "categoryName";
-	public static final String CATEGORY_DESCRIPTION = "categoryDescription";
-	public static final String CATEGORY_RANK = "categoryRank";
-	public static final String PARENT_CATID = "parentCatid";
-	public static final String CAT_LAYER = "catLayer";
+	public static final String GOODS_REAL_ID = "goodsRealId";
+	public static final String GOODS_ID = "goodsId";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(Category transientInstance) {
-		log.debug("saving Category instance");
+	public void save(GoodsMap transientInstance) {
+		log.debug("saving GoodsMap instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -44,8 +41,8 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(Category persistentInstance) {
-		log.debug("deleting Category instance");
+	public void delete(GoodsMap persistentInstance) {
+		log.debug("deleting GoodsMap instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -55,11 +52,11 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public Category findById(java.lang.Integer id) {
-		log.debug("getting Category instance with id: " + id);
+	public GoodsMap findById(java.lang.Integer id) {
+		log.debug("getting GoodsMap instance with id: " + id);
 		try {
-			Category instance = (Category) getHibernateTemplate().get(
-					"main.com.yourantao.aimeili.bean.Category", id);
+			GoodsMap instance = (GoodsMap) getHibernateTemplate().get(
+					"main.com.yourantao.aimeili.bean.GoodsMap", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -67,8 +64,8 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(Category instance) {
-		log.debug("finding Category instance by example");
+	public List findByExample(GoodsMap instance) {
+		log.debug("finding GoodsMap instance by example");
 		try {
 			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: "
@@ -81,10 +78,10 @@ public class CategoryDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding Category instance with property: " + propertyName
+		log.debug("finding GoodsMap instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from Category as model where model."
+			String queryString = "from GoodsMap as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -93,30 +90,18 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByCategoryName(Object categoryName) {
-		return findByProperty(CATEGORY_NAME, categoryName);
+	public List findByGoodsRealId(Object goodsRealId) {
+		return findByProperty(GOODS_REAL_ID, goodsRealId);
 	}
 
-	public List findByCategoryDescription(Object categoryDescription) {
-		return findByProperty(CATEGORY_DESCRIPTION, categoryDescription);
-	}
-
-	public List findByCategoryRank(Object categoryRank) {
-		return findByProperty(CATEGORY_RANK, categoryRank);
-	}
-
-	public List findByParentCatid(Object parentCatid) {
-		return findByProperty(PARENT_CATID, parentCatid);
-	}
-
-	public List findByCatLayer(Object catLayer) {
-		return findByProperty(CAT_LAYER, catLayer);
+	public List findByGoodsId(Object goodsId) {
+		return findByProperty(GOODS_ID, goodsId);
 	}
 
 	public List findAll() {
-		log.debug("finding all Category instances");
+		log.debug("finding all GoodsMap instances");
 		try {
-			String queryString = "from Category";
+			String queryString = "from GoodsMap";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -124,10 +109,10 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public Category merge(Category detachedInstance) {
-		log.debug("merging Category instance");
+	public GoodsMap merge(GoodsMap detachedInstance) {
+		log.debug("merging GoodsMap instance");
 		try {
-			Category result = (Category) getHibernateTemplate().merge(
+			GoodsMap result = (GoodsMap) getHibernateTemplate().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -137,8 +122,8 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(Category instance) {
-		log.debug("attaching dirty Category instance");
+	public void attachDirty(GoodsMap instance) {
+		log.debug("attaching dirty GoodsMap instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -148,8 +133,8 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(Category instance) {
-		log.debug("attaching clean Category instance");
+	public void attachClean(GoodsMap instance) {
+		log.debug("attaching clean GoodsMap instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -159,7 +144,7 @@ public class CategoryDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static CategoryDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (CategoryDAO) ctx.getBean("CategoryDAO");
+	public static GoodsMapDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (GoodsMapDAO) ctx.getBean("GoodsMapDAO");
 	}
 }
