@@ -1,8 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ page import="main.com.yourantao.aimeili.server.BrandServer" %>
 <%
-BrandServer brandServer=new BrandServer(request);
-String str=brandServer.getBrandList().toString();
+BrandServer brandAction=new BrandServer(request);
+String str=brandAction.getBrandList().toString();
 out.println(str);
 
 
