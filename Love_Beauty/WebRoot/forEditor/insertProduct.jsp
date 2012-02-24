@@ -1,21 +1,28 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ page import="main.com.yourantao.aimeili.server.BrandServer" %>
 <%
+BrandServer brandAction=new BrandServer(request);
+String str=brandAction.getBrandList().toString();
+out.println(str);
+
+
+
+String page1=request.getParameter("page");
+String num=request.getParameter("num");
+String url=request.getRequestURL().toString();
+String servletPath=request.getServletPath();
+String URI=request.getRequestURI();
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<%@ page import="main.com.yourantao.aimeili.bean.Brand" %>
-<%@ page import="main.com.yourantao.aimeili.bean.BrandDAO" %>
-<%@ page import="org.hibernate.classic.Session" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.springframework.context.ApplicationContext" %>
-<%@ page import="org.springframework.context.support.ClassPathXmlApplicationContext" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
+
   <head>
     <base href="<%=basePath%>">
     
-    <title>爱美丽运营首页</title>
+    <title>商品插入</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -27,8 +34,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  <a href="forEditor/topic.jsp">专题插入</a><br/>
-  <a href="forEditor/insertProduct.jsp">商品插入</a><br/>
-  <a href="forEditor/brand.jsp">品牌</a><br/>
+  <form action="wallapiall">
+  	<button type="submit" >action！</button>
+  </form>
+  <br>  OK?
+  <a href="jsontest.jsp">json测试</a>
   </body>
 </html>
+
+  
+

@@ -42,16 +42,11 @@ public class SystemInit implements ServletContextListener{
 			String path = System.getProperty("testpath");
 			log.info("path={}",path);
 			Config.DbInit("applicationContext.xml");  
-//			Config.DbInit(path+File.separator+"applicationContext.xml");  
-//			Config.DbInit(path+"/applicationContext.xml");  
 			Log log1=LogFactory.getLog("myTest1");
 			log1.debug(" 测试");
-			
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
-	
 }

@@ -15,7 +15,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>爱美丽运营首页</title>
+    <title>专题插入</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -24,11 +24,52 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+	<script src="jquery1.4.2.js" type="text/javascript"></script>
+	<script type="text/javascript">
+   
+	function GetTopic(){
+			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopic";
+			var params = {"action":"get"};
+			$.ajax({
+				type:"POST",
+				data:params,
+				dataType: "json",
+				url: url,
+				success: function(data) {
+					if(json==null){
+						alert("json null");
+					}else{
+						alert(json.toString());
+					}
+				}
+			});
+	}
+	
+	
+	$(document).ready(function(){
+	
+			   GetTopic();
+			   $('#topicname').change(function(){
+				   SetupTopic();
+				   
+			   });
+       });
+	</script>
   </head>
   
   <body>
-  <a href="forEditor/topic.jsp">专题插入</a><br/>
-  <a href="forEditor/insertProduct.jsp">商品插入</a><br/>
-  <a href="forEditor/brand.jsp">品牌</a><br/>
+  <form action="topic">
+  	新专题名：<input type="text" name="newtopic"/> 图片上传：
+  	</form>
+ <table border="1">
+ <tbody>
+ <tr>
+ <td>专题名：</td><td><select id="topicname" name="newtopic"/></td>
+ </tr>
+  <tr>
+ <td>图片上传：</td><td><input name="newtopic" type="text"/></td>
+ </tr>
+ </tbody>
+ </table>
   </body>
 </html>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+ <package name="lovebeauty" namespace="/"  extends="struts-default">
+		<!-- 专题页 -->
+		<action name="topic_*" class="main.com.yourantao.aimeili.action.TopicAction" method="{1}">
+			<result name="test">/index.jsp</result>
+		</action>
+
+
+		<!-- 登录 
+		<action name="login" class="main.com.yourantao.aimeili.action.LoginAction">
+			<result name="index">/mc_index.jsp</result>
+			<result name="myProfile">/myProfile.jsp</result>
+			<result type="redirect" name="doother">${url}</result>
+		</action>
+		<action name="logout" class="main.com.yourantao.aimeili.action.LogoutAction">
+			<result name="logout">${url}</result>
+			<result name="login">/login.jsp</result>
+		</action>
+
+		 淘宝贝首页 
+		<action name="wallapiall" class="main.com.yourantao.aimeili.action.WallApiAllAction">
+		</action>
+
+		 用户管理 
+		<action name="userAction" class="main.com.yourantao.aimeili.action.UserAction">
+			<result name="profile">/myProfile.jsp</result>
+			<result name="register">/reg.jsp</result>
+			<result name="checkemail">/reg_03.jsp</result>
+		</action>
+
+		 邮箱激活 
+		<action name="reg" class="main.com.yourantao.aimeili.action.RegAction">
+			<result name="login">/login.jsp</result>
+			<result name="timeout">/findPwd_email_timeout.jsp</result> 找密码超时，到登陆页面 
+			<result name="timeout1">/reg_email_timeout.jsp</result> 注册超时，到登陆页面 
+			<result name="findpwd">/findPwd_email.jsp</result> 返回邮箱的修改密码页面 
+			<result name="index">/mc_index.jsp</result>
+			<result name="myProfile">/myProfile.jsp</result>
+			<result name="userCenterInfo">/userCenterInfo.jsp</result>
+			<result name="regsuccess">/reg_04.jsp</result>
+			<result type="redirect" name="doother">${url}</result>
+		</action>
+
+
+		 提示词代理 
+		<action name="searchWordAction" class="main.com.yourantao.aimeili.action.SearchWordAction">
+		</action>
+
+		 外部http通知接口 
+		<action name="notifyAction" class="main.com.yourantao.aimeili.action.NotifyAction">
+		</action>
+
+		 搜索历史查询 
+		<action name="searchHistory"
+			class="main.com.yourantao.aimeili.action.SearchHistoryAction">
+			<result name="success">/history.jsp</result>
+		</action>
+		
+		 用户通知查询  
+		<action name="userNotice"
+			class="main.com.yourantao.aimeili.action.UserNoticeAction">
+			<result name="success">/notice.jsp</result>
+		</action>
+	--></package>
+</struts>    
