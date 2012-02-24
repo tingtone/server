@@ -70,7 +70,7 @@ CREATE TABLE `category` (
   `parent_catid` int(11) NOT NULL COMMENT '父类别的id',
   `cat_layer` tinyint(3) NOT NULL COMMENT '类别所在层数，如1、2、3等',
   PRIMARY KEY (`category_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table category
@@ -78,6 +78,74 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+INSERT INTO `category` VALUES (1,'护肤','',1,0,0);
+INSERT INTO `category` VALUES (2,'妆扮','',2,0,0);
+INSERT INTO `category` VALUES (3,'美发','',3,0,0);
+INSERT INTO `category` VALUES (4,'美体','',4,0,0);
+INSERT INTO `category` VALUES (5,'日护理','',5,1,1);
+INSERT INTO `category` VALUES (6,'周护理','',6,1,1);
+INSERT INTO `category` VALUES (8,'卸妆','',0,5,2);
+INSERT INTO `category` VALUES (9,'洁面','',0,5,2);
+INSERT INTO `category` VALUES (10,'化妆水','',0,5,2);
+INSERT INTO `category` VALUES (11,'乳液/面霜','',0,5,2);
+INSERT INTO `category` VALUES (13,'精华','',0,5,2);
+INSERT INTO `category` VALUES (14,'眼霜/精华','',0,5,2);
+INSERT INTO `category` VALUES (15,'润唇膏','',0,5,2);
+INSERT INTO `category` VALUES (16,'喷雾\r\n喷雾\r\n喷雾','',0,5,2);
+INSERT INTO `category` VALUES (17,'防晒','',0,5,2);
+INSERT INTO `category` VALUES (18,'精油','',0,5,2);
+INSERT INTO `category` VALUES (19,'面膜','',0,6,2);
+INSERT INTO `category` VALUES (20,'按摩霜','',0,6,2);
+INSERT INTO `category` VALUES (21,'去角质','',0,6,2);
+INSERT INTO `category` VALUES (22,'妆底','',0,2,1);
+INSERT INTO `category` VALUES (23,'眼部妆容','',0,2,1);
+INSERT INTO `category` VALUES (24,'唇部妆容','',0,2,1);
+INSERT INTO `category` VALUES (26,'面颊妆容','',0,2,1);
+INSERT INTO `category` VALUES (27,'沐浴清洁','',0,4,1);
+INSERT INTO `category` VALUES (28,'身体乳/霜','',0,4,1);
+INSERT INTO `category` VALUES (29,'手部护理','',0,4,1);
+INSERT INTO `category` VALUES (30,'足部护理','',0,4,1);
+INSERT INTO `category` VALUES (32,'洗发','',0,3,1);
+INSERT INTO `category` VALUES (33,'护法','',0,3,1);
+INSERT INTO `category` VALUES (34,'染发','',0,3,1);
+INSERT INTO `category` VALUES (35,'造型','',0,3,1);
+INSERT INTO `category` VALUES (36,'妆底隔离','',0,22,2);
+INSERT INTO `category` VALUES (37,'遮瑕膏','',0,22,2);
+INSERT INTO `category` VALUES (38,'粉底液','',0,22,2);
+INSERT INTO `category` VALUES (39,'粉底霜','',0,22,2);
+INSERT INTO `category` VALUES (40,'粉饼','',0,22,2);
+INSERT INTO `category` VALUES (41,'粉蜜（散粉）','',0,22,2);
+INSERT INTO `category` VALUES (42,'眼部底霜','',0,23,2);
+INSERT INTO `category` VALUES (43,'眼影','',0,23,2);
+INSERT INTO `category` VALUES (44,'眼线','',0,23,2);
+INSERT INTO `category` VALUES (45,'假睫毛','',0,23,2);
+INSERT INTO `category` VALUES (46,'睫毛膏','',0,23,2);
+INSERT INTO `category` VALUES (47,'眉笔','',0,23,2);
+INSERT INTO `category` VALUES (48,'唇彩','',0,24,2);
+INSERT INTO `category` VALUES (49,'唇线笔','',0,24,2);
+INSERT INTO `category` VALUES (50,'唇膏','',0,24,2);
+INSERT INTO `category` VALUES (51,'腮红（胭脂）','',0,26,2);
+INSERT INTO `category` VALUES (52,'卸妆油','',0,8,3);
+INSERT INTO `category` VALUES (53,'卸妆水','',0,8,3);
+INSERT INTO `category` VALUES (54,'卸妆乳','',0,8,3);
+INSERT INTO `category` VALUES (55,'全脸','',0,8,3);
+INSERT INTO `category` VALUES (56,'眼唇','',0,8,3);
+INSERT INTO `category` VALUES (57,'洁面乳','',0,9,3);
+INSERT INTO `category` VALUES (58,'洁面啫喱','',0,9,3);
+INSERT INTO `category` VALUES (59,'洁面摩丝','',0,9,3);
+INSERT INTO `category` VALUES (60,'洁面粉','',0,9,3);
+INSERT INTO `category` VALUES (61,'洁面皂','',0,9,3);
+INSERT INTO `category` VALUES (62,'深层清洁','',0,9,3);
+INSERT INTO `category` VALUES (63,'补水保湿','',0,9,3);
+INSERT INTO `category` VALUES (64,'美白/淡斑','',0,9,3);
+INSERT INTO `category` VALUES (65,'控油','',0,9,3);
+INSERT INTO `category` VALUES (66,'日','',0,11,3);
+INSERT INTO `category` VALUES (67,'夜','',0,11,3);
+INSERT INTO `category` VALUES (68,'轻盈防晒','',0,17,3);
+INSERT INTO `category` VALUES (69,'高度防晒','',0,17,3);
+INSERT INTO `category` VALUES (70,'面膜帖','',0,19,3);
+INSERT INTO `category` VALUES (71,'水洗式','',0,19,3);
+INSERT INTO `category` VALUES (72,'睡眠免洗','',0,19,3);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -165,7 +233,7 @@ CREATE TABLE `efficacy` (
   `efficacy_name` varchar(32) NOT NULL COMMENT '功效名称',
   `efficacy_rank` int(11) NOT NULL COMMENT '功效的排序值，越大的优先级越高',
   PRIMARY KEY (`efficacy_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table efficacy
@@ -173,6 +241,26 @@ CREATE TABLE `efficacy` (
 
 LOCK TABLES `efficacy` WRITE;
 /*!40000 ALTER TABLE `efficacy` DISABLE KEYS */;
+INSERT INTO `efficacy` VALUES (1,'深层清洁',0);
+INSERT INTO `efficacy` VALUES (2,'去角质',0);
+INSERT INTO `efficacy` VALUES (3,'补水保湿',0);
+INSERT INTO `efficacy` VALUES (4,'活肤滋润',0);
+INSERT INTO `efficacy` VALUES (5,'美白/淡斑',0);
+INSERT INTO `efficacy` VALUES (6,'提亮肤色',0);
+INSERT INTO `efficacy` VALUES (7,'抗氧化',0);
+INSERT INTO `efficacy` VALUES (8,'淡化细纹',0);
+INSERT INTO `efficacy` VALUES (9,'抗皱紧肤',0);
+INSERT INTO `efficacy` VALUES (10,'控油',0);
+INSERT INTO `efficacy` VALUES (11,'细致毛孔',0);
+INSERT INTO `efficacy` VALUES (12,'祛黑头',0);
+INSERT INTO `efficacy` VALUES (13,'祛痘',0);
+INSERT INTO `efficacy` VALUES (14,'祛痘印',0);
+INSERT INTO `efficacy` VALUES (15,'舒缓抗敏',0);
+INSERT INTO `efficacy` VALUES (16,'晒后修护',0);
+INSERT INTO `efficacy` VALUES (17,'祛眼袋',0);
+INSERT INTO `efficacy` VALUES (18,'祛黑眼圈',0);
+INSERT INTO `efficacy` VALUES (19,'消除眼部浮肿',0);
+INSERT INTO `efficacy` VALUES (20,'淡化眼部细纹',0);
 /*!40000 ALTER TABLE `efficacy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,23 +293,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods` (
-  `goods_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品ID',
-  `provider_id` int(10) unsigned NOT NULL COMMENT '供应商ID',
+  `goods_id` int(11) NOT NULL AUTO_INCREMENT,
   `brand_id` int(10) unsigned NOT NULL COMMENT '品牌ID',
   `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
   `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
   `goods_thumb` varchar(64) NOT NULL COMMENT '商品缩略图',
   `goods_images` text NOT NULL COMMENT '商品细节图',
-  `goods_price` float NOT NULL COMMENT '商品价格',
-  `goods_url` varchar(255) NOT NULL COMMENT '来源网站中商品的url',
   `goods_score` float NOT NULL COMMENT '商品评分',
-  `goods_skin` set('干性','油性','混合性','中性','敏感性') NOT NULL COMMENT '商品适用的肤质',
+  `goods_forskin` set('干性','油性','混合性','中性','敏感性') NOT NULL DEFAULT '' COMMENT '商品适用的肤质',
+  `goods_notforskin` set('干性','油性','混合性','中性','敏感性') DEFAULT '' COMMENT '商品不适合的肤质',
+  `goods_noticeforskin` set('干性','油性','混合性','中性','敏感性') DEFAULT '' COMMENT '商品对应肤质用法需要注意的',
   `goods_age` set('20岁以下','20-25岁','26-30岁','30-35岁','36-40岁','40岁以上') NOT NULL COMMENT '商品适用的年龄范围',
   `goods_description` text NOT NULL COMMENT '商品的特点及成分',
   `goods_specification` text NOT NULL COMMENT '商品的用法',
-  `goods_count` int(10) unsigned NOT NULL COMMENT '商品库存',
-  `goods_is_new` tinyint(3) unsigned NOT NULL COMMENT '商品是否新品',
-  `goods_is_hot` tinyint(3) unsigned NOT NULL COMMENT '商品是否热销',
   `goods_buy_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品销量',
   `goods_view_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品浏览量',
   `goods_add_time` datetime NOT NULL COMMENT '商品的添加时间',
@@ -229,7 +313,7 @@ CREATE TABLE `goods` (
   `goods_status` tinyint(3) unsigned NOT NULL DEFAULT '3' COMMENT '商品的状态，0表示不可用，3表示新添加待审核，6表示已审核',
   `goods_rank` int(10) NOT NULL COMMENT '商品的排序值，越大的优先级越高',
   PRIMARY KEY (`goods_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table goods
@@ -282,6 +366,70 @@ CREATE TABLE `goods_efficacy` (
 LOCK TABLES `goods_efficacy` WRITE;
 /*!40000 ALTER TABLE `goods_efficacy` DISABLE KEYS */;
 /*!40000 ALTER TABLE `goods_efficacy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+#
+# Source for table goods_map
+#
+
+DROP TABLE IF EXISTS `goods_map`;
+CREATE TABLE `goods_map` (
+  `map_id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_real_id` int(11) NOT NULL DEFAULT '0',
+  `goods_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`map_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# Dumping data for table goods_map
+#
+
+LOCK TABLES `goods_map` WRITE;
+/*!40000 ALTER TABLE `goods_map` DISABLE KEYS */;
+/*!40000 ALTER TABLE `goods_map` ENABLE KEYS */;
+UNLOCK TABLES;
+
+#
+# Source for table goods_real
+#
+
+DROP TABLE IF EXISTS `goods_real`;
+CREATE TABLE `goods_real` (
+  `goods_real_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品ID',
+  `provider_id` int(10) unsigned NOT NULL COMMENT '供应商ID',
+  `brand_id` int(10) unsigned NOT NULL COMMENT '品牌ID',
+  `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
+  `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
+  `goods_thumb` varchar(64) NOT NULL COMMENT '商品缩略图',
+  `goods_images` text NOT NULL COMMENT '商品细节图',
+  `goods_price` float NOT NULL COMMENT '商品价格',
+  `goods_url` varchar(255) NOT NULL COMMENT '来源网站中商品的url',
+  `goods_score` float NOT NULL COMMENT '商品评分',
+  `goods_forskin` set('干性','油性','混合性','中性','敏感性') NOT NULL DEFAULT '' COMMENT '商品适用的肤质',
+  `goods_notforskin` set('干性','油性','混合性','中性','敏感性') DEFAULT '' COMMENT '商品不适合的肤质',
+  `goods_noticeforskin` set('干性','油性','混合性','中性','敏感性') DEFAULT '' COMMENT '商品对应肤质用法需要注意的',
+  `goods_age` set('20岁以下','20-25岁','26-30岁','30-35岁','36-40岁','40岁以上') NOT NULL COMMENT '商品适用的年龄范围',
+  `goods_description` text NOT NULL COMMENT '商品的特点及成分',
+  `goods_specification` text NOT NULL COMMENT '商品的用法',
+  `goods_count` int(10) unsigned NOT NULL COMMENT '商品库存',
+  `goods_is_new` tinyint(3) unsigned NOT NULL COMMENT '商品是否新品',
+  `goods_is_hot` tinyint(3) unsigned NOT NULL COMMENT '商品是否热销',
+  `goods_buy_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品销量',
+  `goods_view_count` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '商品浏览量',
+  `goods_add_time` datetime NOT NULL COMMENT '商品的添加时间',
+  `goods_last_update` datetime NOT NULL COMMENT '商品最后更新的时间',
+  `goods_status` tinyint(3) unsigned NOT NULL DEFAULT '3' COMMENT '商品的状态，0表示不可用，3表示新添加待审核，6表示已审核',
+  `goods_rank` int(10) NOT NULL COMMENT '商品的排序值，越大的优先级越高',
+  PRIMARY KEY (`goods_real_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# Dumping data for table goods_real
+#
+
+LOCK TABLES `goods_real` WRITE;
+/*!40000 ALTER TABLE `goods_real` DISABLE KEYS */;
+/*!40000 ALTER TABLE `goods_real` ENABLE KEYS */;
 UNLOCK TABLES;
 
 #
