@@ -38,10 +38,5 @@
     <comment>添加时间</comment>
    </column>
   </property>
-  <set lazy="false" name="goods" sort="unsorted" table="topic_goods">
-   <key column="topic_id" not-null="false"/>
-   <many-to-many class="main.com.yourantao.aimeili.bean.Goods"
-    column="goods_id" unique="false"/>
-  </set>
  </class>
 </hibernate-mapping>

@@ -19,25 +19,22 @@ public class Topic implements java.io.Serializable {
 	private String topicImages;
 	private Integer topicRank;
 	private Timestamp addTime;
-	private Set goods;
 
 	// Constructors
 
 	/** default constructor */
 	public Topic() {
-		goods = new HashSet();
 	}
 
 	/** full constructor */
 	public Topic(String topicName, Integer categoryId, String topicKeywords,
-			String topicImages, Integer topicRank, Timestamp addTime, Set goods) {
+			String topicImages, Integer topicRank, Timestamp addTime) {
 		this.topicName = topicName;
 		this.setCategoryId(categoryId);
 		this.topicKeywords = topicKeywords;
 		this.topicImages = topicImages;
 		this.topicRank = topicRank;
 		this.addTime = addTime;
-		this.goods = goods;
 	}
 
 	// Property accessors
@@ -88,14 +85,6 @@ public class Topic implements java.io.Serializable {
 
 	public void setAddTime(Timestamp addTime) {
 		this.addTime = addTime;
-	}
-
-	public void setGoods(Set goods) {
-		this.goods = goods;
-	}
-
-	public Set getGoods() {
-		return goods;
 	}
 
 	public void setCategoryId(Integer categoryId) {

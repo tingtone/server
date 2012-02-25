@@ -20,7 +20,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @SuppressWarnings("serial")
 public class BaseAction extends ActionSupport {
-	private static Logger log = LoggerFactory.getLogger(BaseAction.class);
+	private static Logger logger = LoggerFactory.getLogger(BaseAction.class);
 
 	protected static final String encode = "UTF-8";
 //	private static final String JSONCONTENTTYPE = "text/x-json;charset=UTF-8 ";
@@ -46,7 +46,7 @@ public class BaseAction extends ActionSupport {
 			response.getOutputStream().close();
 			response.flushBuffer();
 		} catch (IOException e) {
-			log.error("response flush error : " + e.getMessage());
+			logger.error("response flush error : " + e.getMessage());
 		}
 	}
 
@@ -65,7 +65,7 @@ public class BaseAction extends ActionSupport {
 			out = response.getWriter();
 			out.print(str);
 		} catch (IOException e) {
-			log.error(e.getMessage(), e);
+			logger.error(e.getMessage(), e);
 		} finally {
 			out.flush();
 			out.close();

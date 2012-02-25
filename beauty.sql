@@ -157,9 +157,11 @@ CREATE TABLE `goods` (
   `goods_status` tinyint(3) unsigned NOT NULL DEFAULT '3' COMMENT '商品的状态，0表示不可用，3表示新添加待审核，6表示已审核',
   `goods_rank` int(10) NOT NULL COMMENT '商品的排序值，越大的优先级越高',
   PRIMARY KEY (`goods_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 /*Data for the table `goods` */
+
+insert  into `goods`(`goods_id`,`brand_id`,`category_id`,`goods_name`,`goods_thumb`,`goods_images`,`goods_score`,`goods_forskin`,`goods_notforskin`,`goods_noticeforskin`,`goods_age`,`goods_description`,`goods_specification`,`goods_buy_count`,`goods_view_count`,`goods_add_time`,`goods_last_update`,`goods_status`,`goods_rank`) values (1,1,1,'test','test','test',100,'敏感性','敏感性','敏感性','40岁以上','test','test',0,0,'2012-02-01 00:00:00','2012-02-01 00:00:00',3,1);
 
 /*Table structure for table `goods_comment` */
 
@@ -456,10 +458,14 @@ CREATE TABLE `topic` (
   `topic_rank` int(11) NOT NULL COMMENT '专题的排序值，越大的优先级越高',
   `add_time` datetime NOT NULL COMMENT '添加时间',
   `topic_thumb` text NOT NULL COMMENT '专题缩略图',
-  PRIMARY KEY (`topic_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`topic_id`),
+  KEY `NewIndex1` (`category_id`),
+  KEY `NewIndex2` (`topic_rank`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Data for the table `topic` */
+
+insert  into `topic`(`topic_id`,`topic_name`,`category_id`,`topic_keywords`,`topic_images`,`topic_rank`,`add_time`,`topic_thumb`) values (1,'test',1,'1234','4321',1,'2012-01-01 00:00:00','1');
 
 /*Table structure for table `topic_goods` */
 
@@ -468,10 +474,14 @@ DROP TABLE IF EXISTS `topic_goods`;
 CREATE TABLE `topic_goods` (
   `topic_id` int(10) unsigned NOT NULL COMMENT '专题ID',
   `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID',
-  `goods_note` text NOT NULL COMMENT '商品在专题中的额外描述信息'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `goods_note` text NOT NULL COMMENT '商品在专题中的额外描述信息',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '代理主键，没什么用',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
 /*Data for the table `topic_goods` */
+
+insert  into `topic_goods`(`topic_id`,`goods_id`,`goods_note`,`id`) values (1,1,'',1);
 
 /*Table structure for table `user` */
 
