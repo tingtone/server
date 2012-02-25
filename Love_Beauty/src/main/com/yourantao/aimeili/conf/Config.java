@@ -3,7 +3,6 @@ package main.com.yourantao.aimeili.conf;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-
 /**
  * @author whp
  * @创建时间： 2012-2-20 下午06:32:36
@@ -13,7 +12,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Config {
 
 	public static ApplicationContext ac;
-	
+
 	/*
 	 * 数据库初始化
 	 */
@@ -34,8 +33,8 @@ public class Config {
 		if (ac == null)
 			ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 	}
-	public static ApplicationContext getACInstant(){
-		
+
+	public static ApplicationContext getACInstant() {
 		return ac;
 	}
 }
