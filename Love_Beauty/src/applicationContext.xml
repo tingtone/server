@@ -25,6 +25,12 @@
 				<prop key="hibernate.dialect">
 					org.hibernate.dialect.MySQLDialect
 				</prop>
+				<prop key="hibernate.show_sql">
+					true
+				</prop>
+				<prop key="hibernate.format_sql">
+					true
+				</prop>
 			</props>
 		</property>
 		<property name="mappingResources">
@@ -90,10 +96,10 @@
 					main/com/yourantao/aimeili/bean/GoodsComment.hbm.xml
 				</value>
 				<value>
-					main/com/yourantao/aimeili/bean/TopicGoods.hbm.xml
+					main/com/yourantao/aimeili/bean/Goods.hbm.xml
 				</value>
 				<value>
-					main/com/yourantao/aimeili/bean/Goods.hbm.xml
+					main/com/yourantao/aimeili/bean/TopicGoods.hbm.xml
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/ProviderLocations.hbm.xml
@@ -243,14 +249,14 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="TopicGoodsDAO"
-		class="main.com.yourantao.aimeili.bean.TopicGoodsDAO">
+	<bean id="GoodsDAO"
+		class="main.com.yourantao.aimeili.bean.GoodsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsDAO">
+	<bean id="TopicGoodsDAO"
+		class="main.com.yourantao.aimeili.bean.TopicGoodsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

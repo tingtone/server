@@ -1,6 +1,8 @@
 package main.com.yourantao.aimeili.bean;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Topic entity. @author MyEclipse Persistence Tools
@@ -28,7 +30,7 @@ public class Topic implements java.io.Serializable {
 	public Topic(String topicName, Integer categoryId, String topicKeywords,
 			String topicImages, Integer topicRank, Timestamp addTime) {
 		this.topicName = topicName;
-		this.categoryId = categoryId;
+		this.setCategoryId(categoryId);
 		this.topicKeywords = topicKeywords;
 		this.topicImages = topicImages;
 		this.topicRank = topicRank;
@@ -51,14 +53,6 @@ public class Topic implements java.io.Serializable {
 
 	public void setTopicName(String topicName) {
 		this.topicName = topicName;
-	}
-
-	public Integer getCategoryId() {
-		return this.categoryId;
-	}
-
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
 	}
 
 	public String getTopicKeywords() {
@@ -91,6 +85,14 @@ public class Topic implements java.io.Serializable {
 
 	public void setAddTime(Timestamp addTime) {
 		this.addTime = addTime;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
+	public Integer getCategoryId() {
+		return categoryId;
 	}
 
 }

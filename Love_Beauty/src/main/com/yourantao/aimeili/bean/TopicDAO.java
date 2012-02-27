@@ -28,6 +28,7 @@ public class TopicDAO extends HibernateDaoSupport {
 	public static final String TOPIC_KEYWORDS = "topicKeywords";
 	public static final String TOPIC_IMAGES = "topicImages";
 	public static final String TOPIC_RANK = "topicRank";
+	public static final String TOPIC_THUMB = "topicThumb";
 
 	protected void initDao() {
 		// do nothing
@@ -111,6 +112,10 @@ public class TopicDAO extends HibernateDaoSupport {
 
 	public List findByTopicRank(Object topicRank) {
 		return findByProperty(TOPIC_RANK, topicRank);
+	}
+
+	public List findByTopicThumb(Object topicThumb) {
+		return findByProperty(TOPIC_THUMB, topicThumb);
 	}
 
 	public List findAll() {

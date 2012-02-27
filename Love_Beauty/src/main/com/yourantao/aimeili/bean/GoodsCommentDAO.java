@@ -24,7 +24,7 @@ public class GoodsCommentDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(GoodsCommentDAO.class);
 	// property constants
-	public static final String GOODS_ID = "goodsId";
+	public static final String GOODS_REAL_ID = "goodsRealId";
 	public static final String COMMENTATOR = "commentator";
 	public static final String COMMENT_CONTENT = "commentContent";
 	public static final String COMMENT_LEVEL = "commentLevel";
@@ -94,8 +94,8 @@ public class GoodsCommentDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByGoodsId(Object goodsId) {
-		return findByProperty(GOODS_ID, goodsId);
+	public List findByGoodsRealId(Object goodsRealId) {
+		return findByProperty(GOODS_REAL_ID, goodsRealId);
 	}
 
 	public List findByCommentator(Object commentator) {

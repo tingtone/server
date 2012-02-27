@@ -1,24 +1,25 @@
-﻿# MySQL-Front 5.1  (Build 4.2)
+/*
+SQLyog 企业版 - MySQL GUI v8.14 
+MySQL - 5.5.21 : Database - beauty
+*********************************************************************
+*/
 
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE */;
-/*!40101 SET SQL_MODE='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES */;
-/*!40103 SET SQL_NOTES='ON' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS */;
-/*!40014 SET FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET NAMES utf8 */;
 
+/*!40101 SET SQL_MODE=''*/;
 
-# Host: 127.0.0.1    Database: beauty
-# ------------------------------------------------------
-# Server version 5.5.17
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`beauty` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-#
-# Source for table brand
-#
+USE `beauty`;
+
+/*Table structure for table `brand` */
 
 DROP TABLE IF EXISTS `brand`;
+
 CREATE TABLE `brand` (
   `brand_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '品牌ID',
   `brand_name` varchar(32) NOT NULL COMMENT '品牌名称',
@@ -29,39 +30,14 @@ CREATE TABLE `brand` (
   PRIMARY KEY (`brand_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table brand
-#
+/*Data for the table `brand` */
 
-LOCK TABLES `brand` WRITE;
-/*!40000 ALTER TABLE `brand` DISABLE KEYS */;
-INSERT INTO `brand` VALUES (2,'雅诗兰黛 ','雅诗兰黛 ','','',0);
-INSERT INTO `brand` VALUES (3,'maybelline','美宝莲','othername test','测试描述',1);
-INSERT INTO `brand` VALUES (4,'资生堂 ','','','',1);
-INSERT INTO `brand` VALUES (5,'OLAY','玉兰油\r','','',0);
-INSERT INTO `brand` VALUES (6,'Mentholatum','曼秀雷敦','','',0);
-INSERT INTO `brand` VALUES (7,'dior','迪奥','','',0);
-INSERT INTO `brand` VALUES (8,'maxfactor','蜜丝佛陀','','',0);
-INSERT INTO `brand` VALUES (9,'chanel','香奈儿\r','','',0);
-INSERT INTO `brand` VALUES (10,'kose','高丝','','',0);
-INSERT INTO `brand` VALUES (11,'dove','多芬','','',0);
-INSERT INTO `brand` VALUES (12,'娥佩兰','娥佩兰','','',0);
-INSERT INTO `brand` VALUES (13,'火烈鸟','火烈鸟','','',0);
-INSERT INTO `brand` VALUES (14,'芭茉儿','芭茉儿','','',0);
-INSERT INTO `brand` VALUES (15,'碧欧泉','碧欧泉','','',0);
-INSERT INTO `brand` VALUES (16,'百雀羚','','','',0);
-INSERT INTO `brand` VALUES (17,'佰草集','','','',0);
-INSERT INTO `brand` VALUES (18,'婵真','婵真','','',0);
-INSERT INTO `brand` VALUES (19,'御泥坊','御泥坊','','',0);
-INSERT INTO `brand` VALUES (20,'美即','美即','','',0);
-/*!40000 ALTER TABLE `brand` ENABLE KEYS */;
-UNLOCK TABLES;
+insert  into `brand`(`brand_id`,`brand_name`,`brand_alias`,`brand_other_names`,`brand_description`,`brand_rank`) values (2,'雅诗兰黛 ','雅诗兰黛 ','','',0),(3,'maybelline','美宝莲','othername test','测试描述',1),(4,'资生堂 ','','','',1),(5,'OLAY','玉兰油\r','','',0),(6,'Mentholatum','曼秀雷敦','','',0),(7,'dior','迪奥','','',0),(8,'maxfactor','蜜丝佛陀','','',0),(9,'chanel','香奈儿\r','','',0),(10,'kose','高丝','','',0),(11,'dove','多芬','','',0),(12,'娥佩兰','娥佩兰','','',0),(13,'火烈鸟','火烈鸟','','',0),(14,'芭茉儿','芭茉儿','','',0),(15,'碧欧泉','碧欧泉','','',0),(16,'百雀羚','','','',0),(17,'佰草集','','','',0),(18,'婵真','婵真','','',0),(19,'御泥坊','御泥坊','','',0),(20,'美即','美即','','',0);
 
-#
-# Source for table category
-#
+/*Table structure for table `category` */
 
 DROP TABLE IF EXISTS `category`;
+
 CREATE TABLE `category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '类别ID',
   `category_name` varchar(32) NOT NULL COMMENT '类别名称',
@@ -72,88 +48,14 @@ CREATE TABLE `category` (
   PRIMARY KEY (`category_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=74 DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table category
-#
+/*Data for the table `category` */
 
-LOCK TABLES `category` WRITE;
-/*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'护肤','',1,0,0);
-INSERT INTO `category` VALUES (2,'妆扮','',2,0,0);
-INSERT INTO `category` VALUES (3,'美发','',3,0,0);
-INSERT INTO `category` VALUES (4,'美体','',4,0,0);
-INSERT INTO `category` VALUES (5,'日护理','',5,1,1);
-INSERT INTO `category` VALUES (6,'周护理','',6,1,1);
-INSERT INTO `category` VALUES (8,'卸妆','',0,5,2);
-INSERT INTO `category` VALUES (9,'洁面','',0,5,2);
-INSERT INTO `category` VALUES (10,'化妆水','',0,5,2);
-INSERT INTO `category` VALUES (11,'乳液/面霜','',0,5,2);
-INSERT INTO `category` VALUES (13,'精华','',0,5,2);
-INSERT INTO `category` VALUES (14,'眼霜/精华','',0,5,2);
-INSERT INTO `category` VALUES (15,'润唇膏','',0,5,2);
-INSERT INTO `category` VALUES (16,'喷雾\r\n喷雾\r\n喷雾','',0,5,2);
-INSERT INTO `category` VALUES (17,'防晒','',0,5,2);
-INSERT INTO `category` VALUES (18,'精油','',0,5,2);
-INSERT INTO `category` VALUES (19,'面膜','',0,6,2);
-INSERT INTO `category` VALUES (20,'按摩霜','',0,6,2);
-INSERT INTO `category` VALUES (21,'去角质','',0,6,2);
-INSERT INTO `category` VALUES (22,'妆底','',0,2,1);
-INSERT INTO `category` VALUES (23,'眼部妆容','',0,2,1);
-INSERT INTO `category` VALUES (24,'唇部妆容','',0,2,1);
-INSERT INTO `category` VALUES (26,'面颊妆容','',0,2,1);
-INSERT INTO `category` VALUES (27,'沐浴清洁','',0,4,1);
-INSERT INTO `category` VALUES (28,'身体乳/霜','',0,4,1);
-INSERT INTO `category` VALUES (29,'手部护理','',0,4,1);
-INSERT INTO `category` VALUES (30,'足部护理','',0,4,1);
-INSERT INTO `category` VALUES (32,'洗发','',0,3,1);
-INSERT INTO `category` VALUES (33,'护法','',0,3,1);
-INSERT INTO `category` VALUES (34,'染发','',0,3,1);
-INSERT INTO `category` VALUES (35,'造型','',0,3,1);
-INSERT INTO `category` VALUES (36,'妆底隔离','',0,22,2);
-INSERT INTO `category` VALUES (37,'遮瑕膏','',0,22,2);
-INSERT INTO `category` VALUES (38,'粉底液','',0,22,2);
-INSERT INTO `category` VALUES (39,'粉底霜','',0,22,2);
-INSERT INTO `category` VALUES (40,'粉饼','',0,22,2);
-INSERT INTO `category` VALUES (41,'粉蜜（散粉）','',0,22,2);
-INSERT INTO `category` VALUES (42,'眼部底霜','',0,23,2);
-INSERT INTO `category` VALUES (43,'眼影','',0,23,2);
-INSERT INTO `category` VALUES (44,'眼线','',0,23,2);
-INSERT INTO `category` VALUES (45,'假睫毛','',0,23,2);
-INSERT INTO `category` VALUES (46,'睫毛膏','',0,23,2);
-INSERT INTO `category` VALUES (47,'眉笔','',0,23,2);
-INSERT INTO `category` VALUES (48,'唇彩','',0,24,2);
-INSERT INTO `category` VALUES (49,'唇线笔','',0,24,2);
-INSERT INTO `category` VALUES (50,'唇膏','',0,24,2);
-INSERT INTO `category` VALUES (51,'腮红（胭脂）','',0,26,2);
-INSERT INTO `category` VALUES (52,'卸妆油','',0,8,3);
-INSERT INTO `category` VALUES (53,'卸妆水','',0,8,3);
-INSERT INTO `category` VALUES (54,'卸妆乳','',0,8,3);
-INSERT INTO `category` VALUES (55,'全脸','',0,8,3);
-INSERT INTO `category` VALUES (56,'眼唇','',0,8,3);
-INSERT INTO `category` VALUES (57,'洁面乳','',0,9,3);
-INSERT INTO `category` VALUES (58,'洁面啫喱','',0,9,3);
-INSERT INTO `category` VALUES (59,'洁面摩丝','',0,9,3);
-INSERT INTO `category` VALUES (60,'洁面粉','',0,9,3);
-INSERT INTO `category` VALUES (61,'洁面皂','',0,9,3);
-INSERT INTO `category` VALUES (62,'深层清洁','',0,9,3);
-INSERT INTO `category` VALUES (63,'补水保湿','',0,9,3);
-INSERT INTO `category` VALUES (64,'美白/淡斑','',0,9,3);
-INSERT INTO `category` VALUES (65,'控油','',0,9,3);
-INSERT INTO `category` VALUES (66,'日','',0,11,3);
-INSERT INTO `category` VALUES (67,'夜','',0,11,3);
-INSERT INTO `category` VALUES (68,'轻盈防晒','',0,17,3);
-INSERT INTO `category` VALUES (69,'高度防晒','',0,17,3);
-INSERT INTO `category` VALUES (70,'面膜帖','',0,19,3);
-INSERT INTO `category` VALUES (71,'水洗式','',0,19,3);
-INSERT INTO `category` VALUES (72,'睡眠免洗','',0,19,3);
-/*!40000 ALTER TABLE `category` ENABLE KEYS */;
-UNLOCK TABLES;
+insert  into `category`(`category_id`,`category_name`,`category_description`,`category_rank`,`parent_catid`,`cat_layer`) values (1,'护肤','',1,0,0),(2,'妆扮','',2,0,0),(3,'美发','',3,0,0),(4,'美体','',4,0,0),(5,'日护理','',5,1,1),(6,'周护理','',6,1,1),(8,'卸妆','',0,5,2),(9,'洁面','',0,5,2),(10,'化妆水','',0,5,2),(11,'乳液/面霜','',0,5,2),(13,'精华','',0,5,2),(14,'眼霜/精华','',0,5,2),(15,'润唇膏','',0,5,2),(16,'喷雾\r\n喷雾\r\n喷雾','',0,5,2),(17,'防晒','',0,5,2),(18,'精油','',0,5,2),(19,'面膜','',0,6,2),(20,'按摩霜','',0,6,2),(21,'去角质','',0,6,2),(22,'妆底','',0,2,1),(23,'眼部妆容','',0,2,1),(24,'唇部妆容','',0,2,1),(26,'面颊妆容','',0,2,1),(27,'沐浴清洁','',0,4,1),(28,'身体乳/霜','',0,4,1),(29,'手部护理','',0,4,1),(30,'足部护理','',0,4,1),(32,'洗发','',0,3,1),(33,'护法','',0,3,1),(34,'染发','',0,3,1),(35,'造型','',0,3,1),(36,'妆底隔离','',0,22,2),(37,'遮瑕膏','',0,22,2),(38,'粉底液','',0,22,2),(39,'粉底霜','',0,22,2),(40,'粉饼','',0,22,2),(41,'粉蜜（散粉）','',0,22,2),(42,'眼部底霜','',0,23,2),(43,'眼影','',0,23,2),(44,'眼线','',0,23,2),(45,'假睫毛','',0,23,2),(46,'睫毛膏','',0,23,2),(47,'眉笔','',0,23,2),(48,'唇彩','',0,24,2),(49,'唇线笔','',0,24,2),(50,'唇膏','',0,24,2),(51,'腮红（胭脂）','',0,26,2),(52,'卸妆油','',0,8,3),(53,'卸妆水','',0,8,3),(54,'卸妆乳','',0,8,3),(55,'全脸','',0,8,3),(56,'眼唇','',0,8,3),(57,'洁面乳','',0,9,3),(58,'洁面啫喱','',0,9,3),(59,'洁面摩丝','',0,9,3),(60,'洁面粉','',0,9,3),(61,'洁面皂','',0,9,3),(62,'深层清洁','',0,9,3),(63,'补水保湿','',0,9,3),(64,'美白/淡斑','',0,9,3),(65,'控油','',0,9,3),(66,'日','',0,11,3),(67,'夜','',0,11,3),(68,'轻盈防晒','',0,17,3),(69,'高度防晒','',0,17,3),(70,'面膜帖','',0,19,3),(71,'水洗式','',0,19,3),(72,'睡眠免洗','',0,19,3);
 
-#
-# Source for table coin_record
-#
+/*Table structure for table `coin_record` */
 
 DROP TABLE IF EXISTS `coin_record`;
+
 CREATE TABLE `coin_record` (
   `record_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '美币增减记录ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -164,20 +66,12 @@ CREATE TABLE `coin_record` (
   PRIMARY KEY (`record_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table coin_record
-#
+/*Data for the table `coin_record` */
 
-LOCK TABLES `coin_record` WRITE;
-/*!40000 ALTER TABLE `coin_record` DISABLE KEYS */;
-/*!40000 ALTER TABLE `coin_record` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table diary
-#
+/*Table structure for table `diary` */
 
 DROP TABLE IF EXISTS `diary`;
+
 CREATE TABLE `diary` (
   `diary_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '日记ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -192,20 +86,12 @@ CREATE TABLE `diary` (
   PRIMARY KEY (`diary_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table diary
-#
+/*Data for the table `diary` */
 
-LOCK TABLES `diary` WRITE;
-/*!40000 ALTER TABLE `diary` DISABLE KEYS */;
-/*!40000 ALTER TABLE `diary` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table diary_comment
-#
+/*Table structure for table `diary_comment` */
 
 DROP TABLE IF EXISTS `diary_comment`;
+
 CREATE TABLE `diary_comment` (
   `diary_id` int(10) unsigned NOT NULL COMMENT '日记ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -214,20 +100,12 @@ CREATE TABLE `diary_comment` (
   `add_time` datetime NOT NULL COMMENT '添加时间'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='日记的评论';
 
-#
-# Dumping data for table diary_comment
-#
+/*Data for the table `diary_comment` */
 
-LOCK TABLES `diary_comment` WRITE;
-/*!40000 ALTER TABLE `diary_comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `diary_comment` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table efficacy
-#
+/*Table structure for table `efficacy` */
 
 DROP TABLE IF EXISTS `efficacy`;
+
 CREATE TABLE `efficacy` (
   `efficacy_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '功效ID',
   `efficacy_name` varchar(32) NOT NULL COMMENT '功效名称',
@@ -235,40 +113,14 @@ CREATE TABLE `efficacy` (
   PRIMARY KEY (`efficacy_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table efficacy
-#
+/*Data for the table `efficacy` */
 
-LOCK TABLES `efficacy` WRITE;
-/*!40000 ALTER TABLE `efficacy` DISABLE KEYS */;
-INSERT INTO `efficacy` VALUES (1,'深层清洁',0);
-INSERT INTO `efficacy` VALUES (2,'去角质',0);
-INSERT INTO `efficacy` VALUES (3,'补水保湿',0);
-INSERT INTO `efficacy` VALUES (4,'活肤滋润',0);
-INSERT INTO `efficacy` VALUES (5,'美白/淡斑',0);
-INSERT INTO `efficacy` VALUES (6,'提亮肤色',0);
-INSERT INTO `efficacy` VALUES (7,'抗氧化',0);
-INSERT INTO `efficacy` VALUES (8,'淡化细纹',0);
-INSERT INTO `efficacy` VALUES (9,'抗皱紧肤',0);
-INSERT INTO `efficacy` VALUES (10,'控油',0);
-INSERT INTO `efficacy` VALUES (11,'细致毛孔',0);
-INSERT INTO `efficacy` VALUES (12,'祛黑头',0);
-INSERT INTO `efficacy` VALUES (13,'祛痘',0);
-INSERT INTO `efficacy` VALUES (14,'祛痘印',0);
-INSERT INTO `efficacy` VALUES (15,'舒缓抗敏',0);
-INSERT INTO `efficacy` VALUES (16,'晒后修护',0);
-INSERT INTO `efficacy` VALUES (17,'祛眼袋',0);
-INSERT INTO `efficacy` VALUES (18,'祛黑眼圈',0);
-INSERT INTO `efficacy` VALUES (19,'消除眼部浮肿',0);
-INSERT INTO `efficacy` VALUES (20,'淡化眼部细纹',0);
-/*!40000 ALTER TABLE `efficacy` ENABLE KEYS */;
-UNLOCK TABLES;
+insert  into `efficacy`(`efficacy_id`,`efficacy_name`,`efficacy_rank`) values (1,'深层清洁',0),(2,'去角质',0),(3,'补水保湿',0),(4,'活肤滋润',0),(5,'美白/淡斑',0),(6,'提亮肤色',0),(7,'抗氧化',0),(8,'淡化细纹',0),(9,'抗皱紧肤',0),(10,'控油',0),(11,'细致毛孔',0),(12,'祛黑头',0),(13,'祛痘',0),(14,'祛痘印',0),(15,'舒缓抗敏',0),(16,'晒后修护',0),(17,'祛眼袋',0),(18,'祛黑眼圈',0),(19,'消除眼部浮肿',0),(20,'淡化眼部细纹',0);
 
-#
-# Source for table feedback
-#
+/*Table structure for table `feedback` */
 
 DROP TABLE IF EXISTS `feedback`;
+
 CREATE TABLE `feedback` (
   `feedback_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '反馈ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -278,26 +130,18 @@ CREATE TABLE `feedback` (
   PRIMARY KEY (`feedback_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table feedback
-#
+/*Data for the table `feedback` */
 
-LOCK TABLES `feedback` WRITE;
-/*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-/*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table goods
-#
+/*Table structure for table `goods` */
 
 DROP TABLE IF EXISTS `goods`;
+
 CREATE TABLE `goods` (
-  `goods_id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `brand_id` int(10) unsigned NOT NULL COMMENT '品牌ID',
   `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
   `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
-  `goods_thumb` varchar(64) NOT NULL COMMENT '商品缩略图',
+  `goods_thumb` text NOT NULL COMMENT '商品缩略图',
   `goods_images` text NOT NULL COMMENT '商品细节图',
   `goods_score` float NOT NULL COMMENT '商品评分',
   `goods_forskin` set('干性','油性','混合性','中性','敏感性') NOT NULL DEFAULT '' COMMENT '商品适用的肤质',
@@ -313,25 +157,19 @@ CREATE TABLE `goods` (
   `goods_status` tinyint(3) unsigned NOT NULL DEFAULT '3' COMMENT '商品的状态，0表示不可用，3表示新添加待审核，6表示已审核',
   `goods_rank` int(10) NOT NULL COMMENT '商品的排序值，越大的优先级越高',
   PRIMARY KEY (`goods_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-#
-# Dumping data for table goods
-#
+/*Data for the table `goods` */
 
-LOCK TABLES `goods` WRITE;
-/*!40000 ALTER TABLE `goods` DISABLE KEYS */;
-/*!40000 ALTER TABLE `goods` ENABLE KEYS */;
-UNLOCK TABLES;
+insert  into `goods`(`goods_id`,`brand_id`,`category_id`,`goods_name`,`goods_thumb`,`goods_images`,`goods_score`,`goods_forskin`,`goods_notforskin`,`goods_noticeforskin`,`goods_age`,`goods_description`,`goods_specification`,`goods_buy_count`,`goods_view_count`,`goods_add_time`,`goods_last_update`,`goods_status`,`goods_rank`) values (1,1,1,'test','test','test',100,'敏感性','敏感性','敏感性','40岁以上','test','test',0,0,'2012-02-01 00:00:00','2012-02-01 00:00:00',3,1);
 
-#
-# Source for table goods_comment
-#
+/*Table structure for table `goods_comment` */
 
 DROP TABLE IF EXISTS `goods_comment`;
+
 CREATE TABLE `goods_comment` (
   `comment_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '评论ID',
-  `goods_id` int(10) unsigned NOT NULL COMMENT '商品评论',
+  `goods_real_id` int(10) unsigned NOT NULL COMMENT '商品评论',
   `commentator` varchar(32) NOT NULL COMMENT '评论者名称',
   `comment_content` text NOT NULL COMMENT '评论的内容',
   `comment_level` tinyint(3) unsigned NOT NULL COMMENT '评论的等级，如0为好评、1为中评、2为差评',
@@ -340,67 +178,43 @@ CREATE TABLE `goods_comment` (
   PRIMARY KEY (`comment_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table goods_comment
-#
+/*Data for the table `goods_comment` */
 
-LOCK TABLES `goods_comment` WRITE;
-/*!40000 ALTER TABLE `goods_comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `goods_comment` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table goods_efficacy
-#
+/*Table structure for table `goods_efficacy` */
 
 DROP TABLE IF EXISTS `goods_efficacy`;
+
 CREATE TABLE `goods_efficacy` (
   `efficacy_id` int(10) unsigned NOT NULL COMMENT '功效ID',
   `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table goods_efficacy
-#
+/*Data for the table `goods_efficacy` */
 
-LOCK TABLES `goods_efficacy` WRITE;
-/*!40000 ALTER TABLE `goods_efficacy` DISABLE KEYS */;
-/*!40000 ALTER TABLE `goods_efficacy` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table goods_map
-#
+/*Table structure for table `goods_map` */
 
 DROP TABLE IF EXISTS `goods_map`;
+
 CREATE TABLE `goods_map` (
-  `map_id` int(11) NOT NULL AUTO_INCREMENT,
-  `goods_real_id` int(11) NOT NULL DEFAULT '0',
-  `goods_id` int(11) NOT NULL DEFAULT '0',
+  `map_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `goods_real_id` int(11) unsigned NOT NULL,
+  `goods_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`map_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
-#
-# Dumping data for table goods_map
-#
+/*Data for the table `goods_map` */
 
-LOCK TABLES `goods_map` WRITE;
-/*!40000 ALTER TABLE `goods_map` DISABLE KEYS */;
-/*!40000 ALTER TABLE `goods_map` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table goods_real
-#
+/*Table structure for table `goods_real` */
 
 DROP TABLE IF EXISTS `goods_real`;
+
 CREATE TABLE `goods_real` (
   `goods_real_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品ID',
   `provider_id` int(10) unsigned NOT NULL COMMENT '供应商ID',
   `brand_id` int(10) unsigned NOT NULL COMMENT '品牌ID',
   `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
   `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
-  `goods_thumb` varchar(64) NOT NULL COMMENT '商品缩略图',
+  `goods_thumb` text NOT NULL COMMENT '商品缩略图',
   `goods_images` text NOT NULL COMMENT '商品细节图',
   `goods_price` float NOT NULL COMMENT '商品价格',
   `goods_url` varchar(255) NOT NULL COMMENT '来源网站中商品的url',
@@ -423,20 +237,12 @@ CREATE TABLE `goods_real` (
   PRIMARY KEY (`goods_real_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table goods_real
-#
+/*Data for the table `goods_real` */
 
-LOCK TABLES `goods_real` WRITE;
-/*!40000 ALTER TABLE `goods_real` DISABLE KEYS */;
-/*!40000 ALTER TABLE `goods_real` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table keyword
-#
+/*Table structure for table `keyword` */
 
 DROP TABLE IF EXISTS `keyword`;
+
 CREATE TABLE `keyword` (
   `keyword_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '关键词ID',
   `keyword` varchar(32) NOT NULL COMMENT '关键词',
@@ -445,20 +251,12 @@ CREATE TABLE `keyword` (
   PRIMARY KEY (`keyword_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='搜索关键词，可以用于‘自动完成搜索词’或者‘提示你想搜的是’';
 
-#
-# Dumping data for table keyword
-#
+/*Data for the table `keyword` */
 
-LOCK TABLES `keyword` WRITE;
-/*!40000 ALTER TABLE `keyword` DISABLE KEYS */;
-/*!40000 ALTER TABLE `keyword` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table order
-#
+/*Table structure for table `order` */
 
 DROP TABLE IF EXISTS `order`;
+
 CREATE TABLE `order` (
   `order_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -478,41 +276,25 @@ CREATE TABLE `order` (
   PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='订单';
 
-#
-# Dumping data for table order
-#
+/*Data for the table `order` */
 
-LOCK TABLES `order` WRITE;
-/*!40000 ALTER TABLE `order` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table order_goods
-#
+/*Table structure for table `order_goods` */
 
 DROP TABLE IF EXISTS `order_goods`;
+
 CREATE TABLE `order_goods` (
   `order_id` int(10) unsigned NOT NULL COMMENT '订单ID',
-  `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID',
+  `goods_real_id` int(10) unsigned NOT NULL COMMENT '商品ID',
   `count` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '商品数量',
   PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='订单中包含的商品';
 
-#
-# Dumping data for table order_goods
-#
+/*Data for the table `order_goods` */
 
-LOCK TABLES `order_goods` WRITE;
-/*!40000 ALTER TABLE `order_goods` DISABLE KEYS */;
-/*!40000 ALTER TABLE `order_goods` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table provider
-#
+/*Table structure for table `provider` */
 
 DROP TABLE IF EXISTS `provider`;
+
 CREATE TABLE `provider` (
   `provider_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商ID',
   `provider_name` varchar(32) NOT NULL COMMENT '供应商名称',
@@ -523,20 +305,12 @@ CREATE TABLE `provider` (
   PRIMARY KEY (`provider_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table provider
-#
+/*Data for the table `provider` */
 
-LOCK TABLES `provider` WRITE;
-/*!40000 ALTER TABLE `provider` DISABLE KEYS */;
-/*!40000 ALTER TABLE `provider` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table provider_locations
-#
+/*Table structure for table `provider_locations` */
 
 DROP TABLE IF EXISTS `provider_locations`;
+
 CREATE TABLE `provider_locations` (
   `provider_id` int(11) NOT NULL COMMENT '供应商ID',
   `province` varchar(32) NOT NULL COMMENT '省',
@@ -544,20 +318,12 @@ CREATE TABLE `provider_locations` (
   `distric` varchar(32) NOT NULL COMMENT '区、县'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table provider_locations
-#
+/*Data for the table `provider_locations` */
 
-LOCK TABLES `provider_locations` WRITE;
-/*!40000 ALTER TABLE `provider_locations` DISABLE KEYS */;
-/*!40000 ALTER TABLE `provider_locations` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table question
-#
+/*Table structure for table `question` */
 
 DROP TABLE IF EXISTS `question`;
+
 CREATE TABLE `question` (
   `question_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '问答ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -571,20 +337,12 @@ CREATE TABLE `question` (
   PRIMARY KEY (`question_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table question
-#
+/*Data for the table `question` */
 
-LOCK TABLES `question` WRITE;
-/*!40000 ALTER TABLE `question` DISABLE KEYS */;
-/*!40000 ALTER TABLE `question` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table question_comment
-#
+/*Table structure for table `question_comment` */
 
 DROP TABLE IF EXISTS `question_comment`;
+
 CREATE TABLE `question_comment` (
   `question_id` int(10) unsigned NOT NULL COMMENT '问答ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -594,20 +352,12 @@ CREATE TABLE `question_comment` (
   `coin` int(11) NOT NULL DEFAULT '0' COMMENT '该回答获得的悬赏美币值'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table question_comment
-#
+/*Data for the table `question_comment` */
 
-LOCK TABLES `question_comment` WRITE;
-/*!40000 ALTER TABLE `question_comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `question_comment` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table report
-#
+/*Table structure for table `report` */
 
 DROP TABLE IF EXISTS `report`;
+
 CREATE TABLE `report` (
   `report_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '测评ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -621,20 +371,12 @@ CREATE TABLE `report` (
   PRIMARY KEY (`report_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table report
-#
+/*Data for the table `report` */
 
-LOCK TABLES `report` WRITE;
-/*!40000 ALTER TABLE `report` DISABLE KEYS */;
-/*!40000 ALTER TABLE `report` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table report_comment
-#
+/*Table structure for table `report_comment` */
 
 DROP TABLE IF EXISTS `report_comment`;
+
 CREATE TABLE `report_comment` (
   `report_id` int(10) unsigned NOT NULL COMMENT '测评ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -643,60 +385,36 @@ CREATE TABLE `report_comment` (
   `add_time` datetime NOT NULL COMMENT '添加时间'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='测评的评论';
 
-#
-# Dumping data for table report_comment
-#
+/*Data for the table `report_comment` */
 
-LOCK TABLES `report_comment` WRITE;
-/*!40000 ALTER TABLE `report_comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `report_comment` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table report_goods
-#
+/*Table structure for table `report_goods` */
 
 DROP TABLE IF EXISTS `report_goods`;
+
 CREATE TABLE `report_goods` (
   `report_id` int(10) unsigned NOT NULL COMMENT '测评ID',
   `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID',
   `goods_score` float unsigned NOT NULL COMMENT '商品评分'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='测评包含的商品，单独列一个表的原因是：1.一个测评可能涉及多个商品，2.可能根据商品搜索测评';
 
-#
-# Dumping data for table report_goods
-#
+/*Data for the table `report_goods` */
 
-LOCK TABLES `report_goods` WRITE;
-/*!40000 ALTER TABLE `report_goods` DISABLE KEYS */;
-/*!40000 ALTER TABLE `report_goods` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table shopping_cart
-#
+/*Table structure for table `shopping_cart` */
 
 DROP TABLE IF EXISTS `shopping_cart`;
+
 CREATE TABLE `shopping_cart` (
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
-  `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID',
+  `goods_real_id` int(10) unsigned NOT NULL COMMENT '商品ID',
   `count` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '商品的数量'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table shopping_cart
-#
+/*Data for the table `shopping_cart` */
 
-LOCK TABLES `shopping_cart` WRITE;
-/*!40000 ALTER TABLE `shopping_cart` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shopping_cart` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table show
-#
+/*Table structure for table `show` */
 
 DROP TABLE IF EXISTS `show`;
+
 CREATE TABLE `show` (
   `show_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'show ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -711,20 +429,12 @@ CREATE TABLE `show` (
   PRIMARY KEY (`show_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table show
-#
+/*Data for the table `show` */
 
-LOCK TABLES `show` WRITE;
-/*!40000 ALTER TABLE `show` DISABLE KEYS */;
-/*!40000 ALTER TABLE `show` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table show_comment
-#
+/*Table structure for table `show_comment` */
 
 DROP TABLE IF EXISTS `show_comment`;
+
 CREATE TABLE `show_comment` (
   `show_id` int(10) unsigned NOT NULL COMMENT 'show ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -733,20 +443,12 @@ CREATE TABLE `show_comment` (
   `add_time` datetime NOT NULL COMMENT '添加时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table show_comment
-#
+/*Data for the table `show_comment` */
 
-LOCK TABLES `show_comment` WRITE;
-/*!40000 ALTER TABLE `show_comment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `show_comment` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table topic
-#
+/*Table structure for table `topic` */
 
 DROP TABLE IF EXISTS `topic`;
+
 CREATE TABLE `topic` (
   `topic_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '专题ID',
   `topic_name` varchar(32) NOT NULL COMMENT '专题名称',
@@ -755,43 +457,36 @@ CREATE TABLE `topic` (
   `topic_images` text NOT NULL,
   `topic_rank` int(11) NOT NULL COMMENT '专题的排序值，越大的优先级越高',
   `add_time` datetime NOT NULL COMMENT '添加时间',
-  PRIMARY KEY (`topic_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `topic_thumb` text NOT NULL COMMENT '专题缩略图',
+  PRIMARY KEY (`topic_id`),
+  KEY `NewIndex1` (`category_id`),
+  KEY `NewIndex2` (`topic_rank`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table topic
-#
+/*Data for the table `topic` */
 
-LOCK TABLES `topic` WRITE;
-/*!40000 ALTER TABLE `topic` DISABLE KEYS */;
-/*!40000 ALTER TABLE `topic` ENABLE KEYS */;
-UNLOCK TABLES;
+insert  into `topic`(`topic_id`,`topic_name`,`category_id`,`topic_keywords`,`topic_images`,`topic_rank`,`add_time`,`topic_thumb`) values (1,'test',1,'1234','4321',1,'2012-01-01 00:00:00','1');
 
-#
-# Source for table topic_goods
-#
+/*Table structure for table `topic_goods` */
 
 DROP TABLE IF EXISTS `topic_goods`;
+
 CREATE TABLE `topic_goods` (
   `topic_id` int(10) unsigned NOT NULL COMMENT '专题ID',
   `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID',
-  `goods_note` text NOT NULL COMMENT '商品在专题中的额外描述信息'
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `goods_note` text NOT NULL COMMENT '商品在专题中的额外描述信息',
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '代理主键，没什么用',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
-#
-# Dumping data for table topic_goods
-#
+/*Data for the table `topic_goods` */
 
-LOCK TABLES `topic_goods` WRITE;
-/*!40000 ALTER TABLE `topic_goods` DISABLE KEYS */;
-/*!40000 ALTER TABLE `topic_goods` ENABLE KEYS */;
-UNLOCK TABLES;
+insert  into `topic_goods`(`topic_id`,`goods_id`,`goods_note`,`id`) values (1,1,'',1);
 
-#
-# Source for table user
-#
+/*Table structure for table `user` */
 
 DROP TABLE IF EXISTS `user`;
+
 CREATE TABLE `user` (
   `user_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户ID',
   `nick_name` varchar(32) NOT NULL COMMENT '用户昵称',
@@ -811,20 +506,12 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table user
-#
+/*Data for the table `user` */
 
-LOCK TABLES `user` WRITE;
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table user_address
-#
+/*Table structure for table `user_address` */
 
 DROP TABLE IF EXISTS `user_address`;
+
 CREATE TABLE `user_address` (
   `address_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '地址ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -840,20 +527,12 @@ CREATE TABLE `user_address` (
   PRIMARY KEY (`address_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table user_address
-#
+/*Data for the table `user_address` */
 
-LOCK TABLES `user_address` WRITE;
-/*!40000 ALTER TABLE `user_address` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_address` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table user_favorite
-#
+/*Table structure for table `user_favorite` */
 
 DROP TABLE IF EXISTS `user_favorite`;
+
 CREATE TABLE `user_favorite` (
   `favorite_id` int(10) unsigned NOT NULL COMMENT '收藏ID',
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
@@ -862,20 +541,12 @@ CREATE TABLE `user_favorite` (
   `add_time` datetime NOT NULL COMMENT '添加时间'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table user_favorite
-#
+/*Data for the table `user_favorite` */
 
-LOCK TABLES `user_favorite` WRITE;
-/*!40000 ALTER TABLE `user_favorite` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_favorite` ENABLE KEYS */;
-UNLOCK TABLES;
-
-#
-# Source for table user_login
-#
+/*Table structure for table `user_login` */
 
 DROP TABLE IF EXISTS `user_login`;
+
 CREATE TABLE `user_login` (
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
   `user_name` varchar(32) NOT NULL COMMENT '用户名',
@@ -886,16 +557,9 @@ CREATE TABLE `user_login` (
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-#
-# Dumping data for table user_login
-#
+/*Data for the table `user_login` */
 
-LOCK TABLES `user_login` WRITE;
-/*!40000 ALTER TABLE `user_login` DISABLE KEYS */;
-/*!40000 ALTER TABLE `user_login` ENABLE KEYS */;
-UNLOCK TABLES;
-
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

@@ -9,5 +9,6 @@ package main.com.yourantao.aimeili.conf;
  * 具体描述: 定义常量
  */
 public interface Constant {
-
+	public static final String CATEGORY_ID = "cid";
+	public static final String TOPIC_ID = "tid";
 }

@@ -30,7 +30,6 @@ public class ImageUploadAction extends BaseAction{
 		BrandDAO td = BrandDAO.getFromApplicationContext(ac);
 		List<Brand> brands = td.findRank();
 		JSONArray json = JSONArray.fromObject(brands);
-		outputJson(json.toString());
 		
 		return null;
 	}
