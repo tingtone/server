@@ -2,6 +2,8 @@
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+String topic_id=request.getParameter("topic_id");
+String topic_name=request.getParameter("topic_name");
 %>
 <%@ page import="main.com.yourantao.aimeili.bean.Brand" %>
 <%@ page import="main.com.yourantao.aimeili.bean.BrandDAO" %>
@@ -15,7 +17,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>品牌页</title>
+    <title>专题与商品的对应关系</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -52,30 +54,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	$(document).ready(function(){
 	
-			   GetTopic();
-			   $('#topicname').change(function(){
-				//   SetupTopic();
-				   
-			   });
        });
 	</script>
   </head>
   
   <body>
   <%@include file="/top.jsp"%>
-  <form action="topic">
-  	新专题名：<input type="text" name="newtopic"/> 
-  	
+  <form action="topic_goods">
+  	<input type="hidden" name="topic_id" value="<%=topic_id%>"/>专题： <%=topic_name %><input name="submit" type="submit"  value="查看商品关系"/>
+  	  新商品id:<input name="new_topic_id" type="text"/> <input name="submit" type="submit"  value="添加对应商品"/>  
   	</form>
- <table border="1">
- <tbody>
- <tr>
- <td>专题名：</td><td><select id="topicname" name="newtopic"></select></td>
- </tr>
-  <tr>
- <td>图片上传：</td><td><input name="newtopic" type="text"/></td>
- </tr>
- </tbody>
+ <table id="table">
  </table>
   </body>
 </html>

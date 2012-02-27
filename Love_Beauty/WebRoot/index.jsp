@@ -21,14 +21,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="expires" content="0">    
 	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
+	<!--<link rel="stylesheet" type="text/css" href="styles.css">-->
   </head>
   
   <body>
-  <a href="forEditor/topic.jsp">专题插入</a><br/>
-  <a href="forEditor/insertProduct.jsp">商品插入</a><br/>
-  <a href="forEditor/brand.jsp">品牌</a><br/>
+<%@include file="/top.jsp"%>
+
+<b>爱美丽后台</b>
   </body>
 </html>

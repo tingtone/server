@@ -15,7 +15,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>品牌页</title>
+    <title>专题插入</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -64,16 +64,40 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   <%@include file="/top.jsp"%>
   <form action="topic">
-  	新专题名：<input type="text" name="newtopic"/> 
+  	一级分类：<input type="text" name="newtopic"/> 图片上传：  
   	
   	</form>
  <table border="1">
  <tbody>
  <tr>
- <td>专题名：</td><td><select id="topicname" name="newtopic"></select></td>
+ <td>一级分类：<select id="maincla">
+ <option value="1">护肤</option>
+  <option value="2">妆扮</option>
+   <option value="3">美体</option>
+    <option value="4">美发</option>
+ </select></td>
+ 
+ <td>二级分类：<select id="secondcla">
+ <option value="1">护肤</option>
+  <option value="2">妆扮</option>
+   <option value="3">美体</option>
+    <option value="4">美发</option>
+ </select></td>
+  <td>三级分类：<select id="thirdcla">
+ <option value="1">护肤</option>
+  <option value="2">妆扮</option>
+   <option value="3">美体</option>
+    <option value="4">美发</option>
+ </select></td>
+  <td>四级分类：<select id="forthcla">
+ <option value="1">护肤</option>
+  <option value="2">妆扮</option>
+   <option value="3">美体</option>
+    <option value="4">美发</option>
+ </select></td>
  </tr>
   <tr>
- <td>图片上传：</td><td><input name="newtopic" type="text"/></td>
+ 	
  </tr>
  </tbody>
  </table>
