@@ -1,8 +1,6 @@
 package main.com.yourantao.aimeili.bean;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Topic entity. @author MyEclipse Persistence Tools
@@ -16,9 +14,10 @@ public class Topic implements java.io.Serializable {
 	private String topicName;
 	private Integer categoryId;
 	private String topicKeywords;
-	private String topicImages;
+	private Integer topicImagesId;
 	private Integer topicRank;
 	private Timestamp addTime;
+	private Integer topicThumbId;
 
 	// Constructors
 
@@ -26,15 +25,27 @@ public class Topic implements java.io.Serializable {
 	public Topic() {
 	}
 
-	/** full constructor */
+	/** minimal constructor */
 	public Topic(String topicName, Integer categoryId, String topicKeywords,
-			String topicImages, Integer topicRank, Timestamp addTime) {
+			Integer topicRank, Timestamp addTime) {
 		this.topicName = topicName;
-		this.setCategoryId(categoryId);
+		this.categoryId = categoryId;
 		this.topicKeywords = topicKeywords;
-		this.topicImages = topicImages;
 		this.topicRank = topicRank;
 		this.addTime = addTime;
+	}
+
+	/** full constructor */
+	public Topic(String topicName, Integer categoryId, String topicKeywords,
+			Integer topicImagesId, Integer topicRank, Timestamp addTime,
+			Integer topicThumbId) {
+		this.topicName = topicName;
+		this.categoryId = categoryId;
+		this.topicKeywords = topicKeywords;
+		this.topicImagesId = topicImagesId;
+		this.topicRank = topicRank;
+		this.addTime = addTime;
+		this.topicThumbId = topicThumbId;
 	}
 
 	// Property accessors
@@ -55,6 +66,14 @@ public class Topic implements java.io.Serializable {
 		this.topicName = topicName;
 	}
 
+	public Integer getCategoryId() {
+		return this.categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
 	public String getTopicKeywords() {
 		return this.topicKeywords;
 	}
@@ -63,12 +82,12 @@ public class Topic implements java.io.Serializable {
 		this.topicKeywords = topicKeywords;
 	}
 
-	public String getTopicImages() {
-		return this.topicImages;
+	public Integer getTopicImagesId() {
+		return this.topicImagesId;
 	}
 
-	public void setTopicImages(String topicImages) {
-		this.topicImages = topicImages;
+	public void setTopicImagesId(Integer topicImagesId) {
+		this.topicImagesId = topicImagesId;
 	}
 
 	public Integer getTopicRank() {
@@ -87,12 +106,12 @@ public class Topic implements java.io.Serializable {
 		this.addTime = addTime;
 	}
 
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
+	public Integer getTopicThumbId() {
+		return this.topicThumbId;
 	}
 
-	public Integer getCategoryId() {
-		return categoryId;
+	public void setTopicThumbId(Integer topicThumbId) {
+		this.topicThumbId = topicThumbId;
 	}
 
 }

@@ -2,6 +2,7 @@ package main.com.yourantao.aimeili.action;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +34,7 @@ public class BaseAction extends ActionSupport {
 	private static final String c2 = ")";
 
 	private HttpServletResponse response;
+	private HttpServletRequest request;
 	// protected PrintWriter out;
 	protected String sessionId;
 	protected String url;
@@ -96,7 +98,14 @@ public class BaseAction extends ActionSupport {
 	}
 
 	protected HttpServletRequest getReqeust() {
-		return ServletActionContext.getRequest();
+		try {
+			//设置为utf-8格式，为避免乱码，action应该用post方式，不用get
+			request=ServletActionContext.getRequest();
+			request.setCharacterEncoding(encode);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("request.setCharacterEncoding  error");
+		}
+		return request;
 	}
 
 	protected HttpServletResponse getResponse() {

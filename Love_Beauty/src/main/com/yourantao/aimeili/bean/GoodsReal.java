@@ -14,11 +14,14 @@ public class GoodsReal implements java.io.Serializable {
 	private Integer providerId;
 	private Integer brandId;
 	private Integer categoryId;
+	private String brandName;
+	private String categoryName;
 	private String goodsName;
 	private String goodsThumb;
 	private String goodsImages;
 	private Float goodsPrice;
 	private String goodsUrl;
+	private String goodsOrigPid;
 	private Float goodsScore;
 	private String goodsForskin;
 	private String goodsNotforskin;
@@ -44,8 +47,9 @@ public class GoodsReal implements java.io.Serializable {
 
 	/** minimal constructor */
 	public GoodsReal(Integer providerId, Integer brandId, Integer categoryId,
-			String goodsName, String goodsThumb, String goodsImages,
-			Float goodsPrice, String goodsUrl, Float goodsScore,
+			String brandName, String categoryName, String goodsName,
+			String goodsThumb, String goodsImages, Float goodsPrice,
+			String goodsUrl, String goodsOrigPid, Float goodsScore,
 			String goodsForskin, String goodsAge, String goodsDescription,
 			String goodsSpecification, Integer goodsCount, Short goodsIsNew,
 			Short goodsIsHot, Integer goodsBuyCount, Integer goodsViewCount,
@@ -54,11 +58,14 @@ public class GoodsReal implements java.io.Serializable {
 		this.providerId = providerId;
 		this.brandId = brandId;
 		this.categoryId = categoryId;
+		this.brandName = brandName;
+		this.categoryName = categoryName;
 		this.goodsName = goodsName;
 		this.goodsThumb = goodsThumb;
 		this.goodsImages = goodsImages;
 		this.goodsPrice = goodsPrice;
 		this.goodsUrl = goodsUrl;
+		this.goodsOrigPid = goodsOrigPid;
 		this.goodsScore = goodsScore;
 		this.goodsForskin = goodsForskin;
 		this.goodsAge = goodsAge;
@@ -77,8 +84,9 @@ public class GoodsReal implements java.io.Serializable {
 
 	/** full constructor */
 	public GoodsReal(Integer providerId, Integer brandId, Integer categoryId,
-			String goodsName, String goodsThumb, String goodsImages,
-			Float goodsPrice, String goodsUrl, Float goodsScore,
+			String brandName, String categoryName, String goodsName,
+			String goodsThumb, String goodsImages, Float goodsPrice,
+			String goodsUrl, String goodsOrigPid, Float goodsScore,
 			String goodsForskin, String goodsNotforskin,
 			String goodsNoticeforskin, String goodsAge,
 			String goodsDescription, String goodsSpecification,
@@ -89,11 +97,14 @@ public class GoodsReal implements java.io.Serializable {
 		this.providerId = providerId;
 		this.brandId = brandId;
 		this.categoryId = categoryId;
+		this.brandName = brandName;
+		this.categoryName = categoryName;
 		this.goodsName = goodsName;
 		this.goodsThumb = goodsThumb;
 		this.goodsImages = goodsImages;
 		this.goodsPrice = goodsPrice;
 		this.goodsUrl = goodsUrl;
+		this.goodsOrigPid = goodsOrigPid;
 		this.goodsScore = goodsScore;
 		this.goodsForskin = goodsForskin;
 		this.goodsNotforskin = goodsNotforskin;
@@ -146,6 +157,22 @@ public class GoodsReal implements java.io.Serializable {
 		this.categoryId = categoryId;
 	}
 
+	public String getBrandName() {
+		return this.brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
+	public String getCategoryName() {
+		return this.categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
 	public String getGoodsName() {
 		return this.goodsName;
 	}
@@ -184,6 +211,14 @@ public class GoodsReal implements java.io.Serializable {
 
 	public void setGoodsUrl(String goodsUrl) {
 		this.goodsUrl = goodsUrl;
+	}
+
+	public String getGoodsOrigPid() {
+		return this.goodsOrigPid;
+	}
+
+	public void setGoodsOrigPid(String goodsOrigPid) {
+		this.goodsOrigPid = goodsOrigPid;
 	}
 
 	public Float getGoodsScore() {

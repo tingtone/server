@@ -27,11 +27,14 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 	public static final String PROVIDER_ID = "providerId";
 	public static final String BRAND_ID = "brandId";
 	public static final String CATEGORY_ID = "categoryId";
+	public static final String BRAND_NAME = "brandName";
+	public static final String CATEGORY_NAME = "categoryName";
 	public static final String GOODS_NAME = "goodsName";
 	public static final String GOODS_THUMB = "goodsThumb";
 	public static final String GOODS_IMAGES = "goodsImages";
 	public static final String GOODS_PRICE = "goodsPrice";
 	public static final String GOODS_URL = "goodsUrl";
+	public static final String GOODS_ORIG_PID = "goodsOrigPid";
 	public static final String GOODS_SCORE = "goodsScore";
 	public static final String GOODS_FORSKIN = "goodsForskin";
 	public static final String GOODS_NOTFORSKIN = "goodsNotforskin";
@@ -123,6 +126,14 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 		return findByProperty(CATEGORY_ID, categoryId);
 	}
 
+	public List findByBrandName(Object brandName) {
+		return findByProperty(BRAND_NAME, brandName);
+	}
+
+	public List findByCategoryName(Object categoryName) {
+		return findByProperty(CATEGORY_NAME, categoryName);
+	}
+
 	public List findByGoodsName(Object goodsName) {
 		return findByProperty(GOODS_NAME, goodsName);
 	}
@@ -141,6 +152,10 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 
 	public List findByGoodsUrl(Object goodsUrl) {
 		return findByProperty(GOODS_URL, goodsUrl);
+	}
+
+	public List findByGoodsOrigPid(Object goodsOrigPid) {
+		return findByProperty(GOODS_ORIG_PID, goodsOrigPid);
 	}
 
 	public List findByGoodsScore(Object goodsScore) {

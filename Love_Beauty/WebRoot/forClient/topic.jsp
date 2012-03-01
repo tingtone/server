@@ -1,16 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%@ page import="main.com.yourantao.aimeili.server.ProductServer" %>
+<%@page import="main.com.yourantao.aimeili.server.TopicServer"%>
 <%
-ProductServer brandAction=new ProductServer(request);
-//String str=brandAction.getBrandList().toString();
-//out.println(str);
+TopicServer topicServer=new TopicServer(request);
+String str=topicServer.getTopicGoods();
+out.println(str);
 
-
-String page1=request.getParameter("page");
-String num=request.getParameter("num");
-String url=request.getRequestURL().toString();
-String servletPath=request.getServletPath();
-String URI=request.getRequestURI();
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>

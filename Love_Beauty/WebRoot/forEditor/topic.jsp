@@ -1,4 +1,4 @@
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
@@ -10,17 +10,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <%@ page import="org.springframework.context.ApplicationContext" %>
 <%@ page import="org.springframework.context.support.ClassPathXmlApplicationContext" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
   <head>
     <base href="<%=basePath%>">
     
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>编辑专题页</title>
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
@@ -33,6 +29,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	.tabel td{
 		border: 1px solid blue;
+	}
+	.tabel b{
+		border: 1px solid blue;
+	}
+	.tabel b input{
+		width: 10px;
 	}
 	
 	</style>
@@ -63,13 +65,29 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 	}*/
+	/*
+	 *删除的确认框
+	 */
+	function delete_confirm()   
+  {   
+  var r=confirm("确认删除");
+  if (r==true)   
+    {   
+   //删除操作
+   alert("删除");
+    }   
+  else   
+    {   
+     
+    }   
+  }   
 	
 	/*
     *通过大分类获得专题详细信息
     */
-	function GetTopic_Detail(cla){
-			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopic";
-			var params = {"cla":cla};
+	function GetTopic_Detail(cid){
+			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopicsOfCategory";
+			var params = {"cid":cid};
 			var topic="";
 			$.ajax({
 				type:"POST",
@@ -80,15 +98,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				if(json == null){
 					alert("json null");
 				}else{
-				 topic+="<tbody>";
 					for(var i=0;i<json.length;i++){
-					topic+="<tr><form action='topic_updateTopic' enctype='multipart/form-data'>";
-						topic+="<td><input type='hidden' name='topic_id' value='"+json[i]['topic_id']+"'/>专题名: <input name='topic_name' value='"+json[i]['topic_name']+"'/></td><td>专题关键词：<input name='topic_keywords' value='"+json[i]['topic_keywords']+"'/></td><td>专题缩略图：<img src='"+json[i]['topic_thumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td> <td>专题大图：<img src='"+json[i]['topic_images']+"'/>更改：<input type='file' name='newtopic_image'></td><td><input name='submit' type='submit' value='前移'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更改'/><a href='forEditor/topic_goods.jsp?id="+json[i]['topic_id']+"&name="+json[i]['topic_name']+"'>对应商品</a></td>" ;
-						
-					topic+="</form></tr>";
+					topic+="<form action='topic_updateTopic' enctype='multipart/form-data' method='post'>";
+					topic+="<table class='tabel'><tbody><tr>";
+					//topic+="<td><input type='hidden' name='tid' value='"+json[i]['topicId']+"'/>专题名: <input name='topic_name' value='"+json[i]['topicName']+"'/></td><td>专题关键词：<input name='topic_keywords' value='"+json[i]['topicKeywords']+"'/></td><td>专题缩略图：<img src='"+json[i]['topicThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td> <td>专题大图：<img src='"+json[i]['topicImages']+"'/>更改：<input type='file' name='newtopic_image'></td><td><input name='submit' type='submit' value='前移'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><a target='_blank' href='forEditor/topic_goods.jsp?tid="+json[i]['topicId']+"&tname="+json[i]['topicName']+"'>对应商品</a></td>" ;
+					topic+="<td><input type='hidden' name='tid' value='"+json[i]['topicId']+"'/>专题名: <input name='topic_name' value='"+json[i]['topicName']+"'/></td><td>专题关键词：<input name='topic_keywords' value='"+json[i]['topicKeywords']+"'/></td><td>专题缩略图：<img src='"+json[i]['topicThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td> <td>专题大图：<img src='"+json[i]['topicImages']+"'/>更改：<input type='file' name='newtopic_image'></td><td><input name='submit' type='submit' value='前移'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
+					
+					topic+="</tr></tbody></form><br/>";
 					}
 				}
-				 topic+="</tbody>";
 				$('#topic_detail').html(topic.toString());
 				}
 			});
@@ -123,10 +141,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  </tr>
   </tbody>
  </table>
- 
- <table class="tabel"  id="topic_detail">
- 
- </table>
- 
+ <div id="topic_detail">
+</div>
   </body>
 </html>

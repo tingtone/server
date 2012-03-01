@@ -127,6 +127,9 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/GoodsReal.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/Image.hbm.xml
 				</value></list>
 		</property></bean>
 	<bean id="EfficacyDAO"
@@ -311,6 +314,12 @@
 	</bean>
 	<bean id="GoodsRealDAO"
 		class="main.com.yourantao.aimeili.bean.GoodsRealDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="ImageDAO"
+		class="main.com.yourantao.aimeili.bean.ImageDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

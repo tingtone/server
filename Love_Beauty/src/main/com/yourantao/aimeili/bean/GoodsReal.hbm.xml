@@ -25,13 +25,19 @@
                 <comment>分类ID</comment>
             </column>
         </property>
+        <property name="brandName" type="java.lang.String">
+            <column name="brand_name" length="32" not-null="true" />
+        </property>
+        <property name="categoryName" type="java.lang.String">
+            <column name="category_name" length="32" not-null="true" />
+        </property>
         <property name="goodsName" type="java.lang.String">
             <column name="goods_name" length="64" not-null="true">
                 <comment>商品名称</comment>
             </column>
         </property>
         <property name="goodsThumb" type="java.lang.String">
-            <column name="goods_thumb" length="64" not-null="true">
+            <column name="goods_thumb" length="65535" not-null="true">
                 <comment>商品缩略图</comment>
             </column>
         </property>
@@ -48,6 +54,11 @@
         <property name="goodsUrl" type="java.lang.String">
             <column name="goods_url" not-null="true">
                 <comment>来源网站中商品的url</comment>
+            </column>
+        </property>
+        <property name="goodsOrigPid" type="java.lang.String">
+            <column name="goods_orig_pid" length="15" not-null="true">
+                <comment>来源网站中商品编号</comment>
             </column>
         </property>
         <property name="goodsScore" type="java.lang.Float">
