@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-	xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:p="http://www.springframework.org/schema/p"
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 
-	<bean id="dataSource"
-		class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName"
-			value="com.mysql.jdbc.Driver">
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver">
 		</property>
 		<property name="url" value="jdbc:mysql://localhost/beauty"></property>
 		<property name="username" value="root"></property>
-		<property name="password" value="123456"></property>
+		<property name="password" value=""></property>
 	</bean>
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
@@ -130,197 +126,198 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/Image.hbm.xml
-				</value></list>
-		</property></bean>
-	<bean id="EfficacyDAO"
-		class="main.com.yourantao.aimeili.bean.EfficacyDAO">
+				</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="BrandDAO"
-		class="main.com.yourantao.aimeili.bean.BrandDAO">
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>*Dao</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="EfficacyDAO" class="main.com.yourantao.aimeili.bean.EfficacyDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ReportDAO"
-		class="main.com.yourantao.aimeili.bean.ReportDAO">
+	<bean id="BrandDAO" class="main.com.yourantao.aimeili.bean.BrandDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="UserAddressDAO"
-		class="main.com.yourantao.aimeili.bean.UserAddressDAO">
+	<bean id="ReportDAO" class="main.com.yourantao.aimeili.bean.ReportDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="OrderDAO"
-		class="main.com.yourantao.aimeili.bean.OrderDAO">
+	<bean id="UserAddressDAO" class="main.com.yourantao.aimeili.bean.UserAddressDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ShowDAO"
-		class="main.com.yourantao.aimeili.bean.ShowDAO">
+	<bean id="OrderDAO" class="main.com.yourantao.aimeili.bean.OrderDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="OrderGoodsDAO"
-		class="main.com.yourantao.aimeili.bean.OrderGoodsDAO">
+	<bean id="ShowDAO" class="main.com.yourantao.aimeili.bean.ShowDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="FeedbackDAO"
-		class="main.com.yourantao.aimeili.bean.FeedbackDAO">
+	<bean id="OrderGoodsDAO" class="main.com.yourantao.aimeili.bean.OrderGoodsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="CoinRecordDAO"
-		class="main.com.yourantao.aimeili.bean.CoinRecordDAO">
+	<bean id="FeedbackDAO" class="main.com.yourantao.aimeili.bean.FeedbackDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="UserLoginDAO"
-		class="main.com.yourantao.aimeili.bean.UserLoginDAO">
+	<bean id="CoinRecordDAO" class="main.com.yourantao.aimeili.bean.CoinRecordDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ShoppingCartDAO"
-		class="main.com.yourantao.aimeili.bean.ShoppingCartDAO">
+	<bean id="UserLoginDAO" class="main.com.yourantao.aimeili.bean.UserLoginDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="QuestionDAO"
-		class="main.com.yourantao.aimeili.bean.QuestionDAO">
+	<bean id="ShoppingCartDAO" class="main.com.yourantao.aimeili.bean.ShoppingCartDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="QuestionCommentDAO"
-		class="main.com.yourantao.aimeili.bean.QuestionCommentDAO">
+	<bean id="QuestionDAO" class="main.com.yourantao.aimeili.bean.QuestionDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ReportCommentDAO"
-		class="main.com.yourantao.aimeili.bean.ReportCommentDAO">
+	<bean id="QuestionCommentDAO" class="main.com.yourantao.aimeili.bean.QuestionCommentDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ShowCommentDAO"
-		class="main.com.yourantao.aimeili.bean.ShowCommentDAO">
+	<bean id="ReportCommentDAO" class="main.com.yourantao.aimeili.bean.ReportCommentDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsEfficacyDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsEfficacyDAO">
+	<bean id="ShowCommentDAO" class="main.com.yourantao.aimeili.bean.ShowCommentDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ReportGoodsDAO"
-		class="main.com.yourantao.aimeili.bean.ReportGoodsDAO">
+	<bean id="GoodsEfficacyDAO" class="main.com.yourantao.aimeili.bean.GoodsEfficacyDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="UserFavoriteDAO"
-		class="main.com.yourantao.aimeili.bean.UserFavoriteDAO">
+	<bean id="ReportGoodsDAO" class="main.com.yourantao.aimeili.bean.ReportGoodsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="DiaryDAO"
-		class="main.com.yourantao.aimeili.bean.DiaryDAO">
+	<bean id="UserFavoriteDAO" class="main.com.yourantao.aimeili.bean.UserFavoriteDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsCommentDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsCommentDAO">
+	<bean id="DiaryDAO" class="main.com.yourantao.aimeili.bean.DiaryDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsDAO">
+	<bean id="GoodsCommentDAO" class="main.com.yourantao.aimeili.bean.GoodsCommentDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="TopicGoodsDAO"
-		class="main.com.yourantao.aimeili.bean.TopicGoodsDAO">
+	<bean id="GoodsDAO" class="main.com.yourantao.aimeili.bean.GoodsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ProviderLocationsDAO"
-		class="main.com.yourantao.aimeili.bean.ProviderLocationsDAO">
+	<bean id="TopicGoodsDAO" class="main.com.yourantao.aimeili.bean.TopicGoodsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="UserDAO"
-		class="main.com.yourantao.aimeili.bean.UserDAO">
+	<bean id="ProviderLocationsDAO" class="main.com.yourantao.aimeili.bean.ProviderLocationsDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="KeywordDAO"
-		class="main.com.yourantao.aimeili.bean.KeywordDAO">
+	<bean id="UserDAO" class="main.com.yourantao.aimeili.bean.UserDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="CategoryDAO"
-		class="main.com.yourantao.aimeili.bean.CategoryDAO">
+	<bean id="KeywordDAO" class="main.com.yourantao.aimeili.bean.KeywordDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ProviderDAO"
-		class="main.com.yourantao.aimeili.bean.ProviderDAO">
+	<bean id="CategoryDAO" class="main.com.yourantao.aimeili.bean.CategoryDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="TopicDAO"
-		class="main.com.yourantao.aimeili.bean.TopicDAO">
+	<bean id="ProviderDAO" class="main.com.yourantao.aimeili.bean.ProviderDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="DiaryCommentDAO"
-		class="main.com.yourantao.aimeili.bean.DiaryCommentDAO">
+	<bean id="TopicDAO" class="main.com.yourantao.aimeili.bean.TopicDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsMapDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsMapDAO">
+	<bean id="DiaryCommentDAO" class="main.com.yourantao.aimeili.bean.DiaryCommentDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsRealDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsRealDAO">
+	<bean id="GoodsMapDAO" class="main.com.yourantao.aimeili.bean.GoodsMapDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="ImageDAO"
-		class="main.com.yourantao.aimeili.bean.ImageDAO">
+	<bean id="GoodsRealDAO" class="main.com.yourantao.aimeili.bean.GoodsRealDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
-	</bean></beans>
+	</bean>
+	<bean id="ImageDAO" class="main.com.yourantao.aimeili.bean.ImageDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+</beans>
