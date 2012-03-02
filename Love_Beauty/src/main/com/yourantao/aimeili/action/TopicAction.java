@@ -55,6 +55,7 @@ public class TopicAction extends BaseAction implements Constant {
 	    private String imageFileName;	//上传文件名2
 	    private String thumbContentType;//上传文件类型1
 	    private String thumbFileName;	//上传文件名1
+	    SimpleDateFormat sdFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	   
 	    public void setNewtopic_thumbContentType(String thumbContentType)  {
 	   	 System.out.println("thumbContentType : " + thumbContentType);
@@ -223,6 +224,33 @@ public class TopicAction extends BaseAction implements Constant {
 	 */
 	public String insertTopic(){
 		
+		Topic topic=new Topic();
+		ApplicationContext ac = Config.getACInstant();
+		TopicDAO topicDAO = TopicDAO.getFromApplicationContext(ac);
+		
+		
+		topic.setTopicName(getReqeust().getParameter(TOPIC_NAME));
+		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
+		topic.setCategoryId(getIntegerParameter(getReqeust().getParameter(CATEGORY_ID)));
+		topic.setAddTime(Timestamp.valueOf(sdFormat.format(new Date())));
+		topic.setTopicRank(0);
+		if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
+//			String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
+			String FileName =thumbFileName;
+	        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+	        int imageid=getImgAttribute(newtopic_thumb,FileName);
+	        topic.setTopicThumbId(imageid);
+	        copy(newtopic_thumb, thumbFile);
+		}
+		if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
+//			String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
+			String FileName =imageFileName;
+	        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+	        int imageid= getImgAttribute(newtopic_image,FileName);
+	        topic.setTopicImagesId(imageid);
+	        copy(newtopic_image, imageFile);
+		}
+		topicDAO.save(topic);
 		
 		return null;
 	}
@@ -247,7 +275,6 @@ public class TopicAction extends BaseAction implements Constant {
 		
 		try {
         BufferedImage buff = ImageIO.read(imgfile);
-        SimpleDateFormat sdFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         image.setImgHeight(buff.getHeight());
 		image.setImgSize(imgfile.length());
 		image.setImgWidth(buff.getWidth());

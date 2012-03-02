@@ -84,14 +84,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <body>
   <%@include file="/top.jsp"%>
   	
-<form action="topic_insertTopic" enctype="multipart/form-data" name="form1">
+<form action="topic_insertTopic" enctype="multipart/form-data" method="post">
  <table class="tabel" >
  <tbody>
    <tr>
- <td>新专题名：<input type="text" name="newtopic_name"/></td><td>关键词（“，”隔开）：<input type="text" name="newtopic_keywords"/></td><td>新缩略图：<input type="file" name="newtopic_thumb"></td><td>新大图：<input type="file" name="newtopic_image"></td>
+ <td>新专题名：<input type="text" name="topic_name"/></td><td>关键词（“，”隔开）：<input type="text" name="topic_keywords"/></td><td>新缩略图：<input type="file" name="newtopic_thumb"></td><td>新大图：<input type="file" name="newtopic_image"></td>
  </tr>
  <tr>
- <td>加入的分类：<select id="maincla">
+ <td>加入的分类：<select id="maincla" name="cid">
  <option value="1">护肤</option>
   <option value="2">妆扮</option>
    <option value="3">美体</option>
