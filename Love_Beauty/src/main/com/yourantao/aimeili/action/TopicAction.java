@@ -28,6 +28,7 @@ import main.com.yourantao.aimeili.bean.TopicGoods;
 import main.com.yourantao.aimeili.bean.TopicGoodsDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.vo.TopicView;
 
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public class TopicAction extends BaseAction implements Constant {
 	    private String imageFileName;	//上传文件名2
 	    private String thumbContentType;//上传文件类型1
 	    private String thumbFileName;	//上传文件名1
+	    SimpleDateFormat sdFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	   
 	    public void setNewtopic_thumbContentType(String thumbContentType)  {
 	   	 System.out.println("thumbContentType : " + thumbContentType);
@@ -175,9 +177,10 @@ public class TopicAction extends BaseAction implements Constant {
 		getReqeust().getAttribute("newtopic_thumb");
 		if(updateType.equals("前移")){
 			
-		}else if(updateType.equals("后移")){}
-		
-		else if(updateType.equals("更新")){    //需要对每个进行更新
+		}else if(updateType.equals("后移")){
+			
+			
+		}else if(updateType.equals("更新")){    //需要对每个进行更新
 			if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
 //				String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
 				String FileName =thumbFileName;
@@ -198,7 +201,7 @@ public class TopicAction extends BaseAction implements Constant {
 			return SUCCESS;
 		}
 		else if(updateType.equals("删除")){  //删除
-			topicDAO.deleteById(topic);
+			topicDAO.deleteById(topicDAO.findById(topicId));
 			return SUCCESS;
 			}
 		else if(updateType.equals("对应商品")){  //查看对应商品
@@ -214,8 +217,48 @@ public class TopicAction extends BaseAction implements Constant {
 		return null;
 	}
 	
+	/**
+	 * 新增专题
+	 * 通过action访问
+	 * @return
+	 */
+	public String insertTopic(){
+		
+		Topic topic=new Topic();
+		ApplicationContext ac = Config.getACInstant();
+		TopicDAO topicDAO = TopicDAO.getFromApplicationContext(ac);
+		
+		
+		topic.setTopicName(getReqeust().getParameter(TOPIC_NAME));
+		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
+		topic.setCategoryId(getIntegerParameter(getReqeust().getParameter(CATEGORY_ID)));
+		topic.setAddTime(Timestamp.valueOf(sdFormat.format(new Date())));
+		topic.setTopicRank(0);
+		if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
+//			String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
+			String FileName =thumbFileName;
+	        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+	        int imageid=getImgAttribute(newtopic_thumb,FileName);
+	        topic.setTopicThumbId(imageid);
+	        copy(newtopic_thumb, thumbFile);
+		}
+		if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
+//			String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
+			String FileName =imageFileName;
+	        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+	        int imageid= getImgAttribute(newtopic_image,FileName);
+	        topic.setTopicImagesId(imageid);
+	        copy(newtopic_image, imageFile);
+		}
+		topicDAO.save(topic);
+		
+		return null;
+	}
+	
+	
+	
 	/*
-	 * 获得图片信息
+	 * 获得图片信息，并更新或新增
 	 * return imgid
 	 */
 	private int getImgAttribute(File imgfile,String fileName) {
@@ -223,24 +266,25 @@ public class TopicAction extends BaseAction implements Constant {
 		ApplicationContext ac = Config.getACInstant();
 		ImageDAO imageDAO=ImageDAO.getFromApplicationContext(ac);
 		
-		String imgurl=BASE_IMAGEURL+fileName;
-		 byte[] bytes= imgurl.getBytes();
-	        CRC32 crc32 = new CRC32();
-	        crc32.update(bytes);
-	        logger.info(""+crc32.getValue());
+		String imgurl=BASE_IMAGEURL+fileName;   //保存的图片url
+//		 byte[] bytes= imgurl.getBytes();   //对长的url进行crc32编码
+//	        CRC32 crc32 = new CRC32();
+//	        crc32.update(bytes);
+		String imgurl_md5=MD5.md5(imgurl);  //MD5加密
+		
+		
 		try {
         BufferedImage buff = ImageIO.read(imgfile);
-        SimpleDateFormat sdFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         image.setImgHeight(buff.getHeight());
 		image.setImgSize(imgfile.length());
 		image.setImgWidth(buff.getWidth());
-		image.setImgCrc(crc32.getValue());
-		image.setImgType(1);   //1
+		image.setImgMd5(imgurl_md5);
+		image.setImgType(1);   //1代表是编辑给的图片
 		image.setImgUrl(imgurl);
 		image.setCreatTime(Timestamp.valueOf(sdFormat.format(new Date())));
 //		System.out.println(sdFormat.format(new Date()));
 		
-		List<Image> list=imageDAO.findByImgCrc(crc32.getValue());  //用crc校验值查询是否有图片存在
+		List<Image> list=imageDAO.findByImgMd5(imgurl_md5);  //用md5校验值查询是否有图片存在
 		if(list.isEmpty()){
 			logger.info("list is empty insert!");
 			imageDAO.save(image);

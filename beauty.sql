@@ -1783,14 +1783,14 @@ DROP TABLE IF EXISTS `image`;
 CREATE TABLE `image` (
   `Img_id` int(11) NOT NULL AUTO_INCREMENT,
   `Img_url` varchar(255) DEFAULT NULL COMMENT '图片链接',
-  `Img_CRC` bigint(32) DEFAULT NULL COMMENT '图片链接校验',
+  `Img_MD5` varchar(32) DEFAULT NULL COMMENT '图片链接校验',
   `Img_width` int(11) NOT NULL DEFAULT '0' COMMENT '图片宽（像素）',
   `Img_height` int(11) NOT NULL DEFAULT '0' COMMENT '图片高度',
   `Img_size` bigint(20) NOT NULL DEFAULT '0' COMMENT '图片大小（byte）',
   `Img_type` int(2) DEFAULT NULL COMMENT '图片的使用类型（0-网上图片 1-编辑图片）',
   `creatTime` datetime DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`Img_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table image
@@ -1798,8 +1798,8 @@ CREATE TABLE `image` (
 
 LOCK TABLES `image` WRITE;
 /*!40000 ALTER TABLE `image` DISABLE KEYS */;
-INSERT INTO `image` VALUES (1,'http://192.168.14.24:8080/img/girl~ipad.png',3470093359,174,532,130357,1,'2012-03-01 16:22:40');
-INSERT INTO `image` VALUES (2,'http://192.168.14.24:8080/img/boy~ipad.png',174485404,238,508,109599,1,'2012-03-01 17:50:23');
+INSERT INTO `image` VALUES (3,'http://192.168.14.24:8080/img/boy~ipad.png','xsz9TmD4sevMDmrUDHZ5Aw==',238,508,109599,1,'2012-03-02 10:48:42');
+INSERT INTO `image` VALUES (4,'http://192.168.14.24:8080/img/girl~ipad.png','hZLz/X43o/5j7VpYXSzhQQ==',174,532,130357,1,'2012-03-02 10:48:42');
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2144,7 +2144,7 @@ CREATE TABLE `topic` (
 
 LOCK TABLES `topic` WRITE;
 /*!40000 ALTER TABLE `topic` DISABLE KEYS */;
-INSERT INTO `topic` VALUES (3,'测试专题1',1,'干燥，保湿',0,0,'2012-03-01 11:30:30',2);
+INSERT INTO `topic` VALUES (3,'测试专题1',1,'干燥，保湿',4,0,'2012-03-01 11:30:30',3);
 /*!40000 ALTER TABLE `topic` ENABLE KEYS */;
 UNLOCK TABLES;
 

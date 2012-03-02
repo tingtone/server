@@ -12,7 +12,7 @@ public class Image implements java.io.Serializable {
 
 	private Integer imgId;
 	private String imgUrl;
-	private Long imgCrc;
+	private String imgMd5;
 	private Integer imgWidth;
 	private Integer imgHeight;
 	private Long imgSize;
@@ -33,11 +33,11 @@ public class Image implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Image(String imgUrl, Long imgCrc, Integer imgWidth,
+	public Image(String imgUrl, String imgMd5, Integer imgWidth,
 			Integer imgHeight, Long imgSize, Integer imgType,
 			Timestamp creatTime) {
 		this.imgUrl = imgUrl;
-		this.imgCrc = imgCrc;
+		this.imgMd5 = imgMd5;
 		this.imgWidth = imgWidth;
 		this.imgHeight = imgHeight;
 		this.imgSize = imgSize;
@@ -63,12 +63,12 @@ public class Image implements java.io.Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public Long getImgCrc() {
-		return this.imgCrc;
+	public String getImgMd5() {
+		return this.imgMd5;
 	}
 
-	public void setImgCrc(Long imgCrc) {
-		this.imgCrc = imgCrc;
+	public void setImgMd5(String imgMd5) {
+		this.imgMd5 = imgMd5;
 	}
 
 	public Integer getImgWidth() {

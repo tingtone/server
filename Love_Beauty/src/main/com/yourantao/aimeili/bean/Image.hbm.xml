@@ -15,8 +15,8 @@
                 <comment>图片链接</comment>
             </column>
         </property>
-        <property name="imgCrc" type="java.lang.Long">
-            <column name="Img_CRC">
+        <property name="imgMd5" type="java.lang.String">
+            <column name="Img_MD5" length="32">
                 <comment>图片链接校验</comment>
             </column>
         </property>
