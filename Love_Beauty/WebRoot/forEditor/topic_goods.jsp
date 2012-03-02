@@ -41,7 +41,7 @@ String tname=request.getParameter("topic_name");
 	<script type="text/javascript">
    
 	function GetTopicGoods(tid){
-			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopicGoods";
+			var url=BASE_SERVER+"/topic_getTopicGoods";
 			var params = {"tid":tid};
 			var topicGoods="";
 			var goodsDetail="";

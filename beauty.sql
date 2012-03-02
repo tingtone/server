@@ -1798,8 +1798,9 @@ CREATE TABLE `image` (
 
 LOCK TABLES `image` WRITE;
 /*!40000 ALTER TABLE `image` DISABLE KEYS */;
-INSERT INTO `image` VALUES (3,'http://192.168.14.24:8080/img/boy~ipad.png','xsz9TmD4sevMDmrUDHZ5Aw==',238,508,109599,1,'2012-03-02 10:48:42');
-INSERT INTO `image` VALUES (4,'http://192.168.14.24:8080/img/girl~ipad.png','hZLz/X43o/5j7VpYXSzhQQ==',174,532,130357,1,'2012-03-02 10:48:42');
+INSERT INTO `image` VALUES (23,'kthJ65iAX0PSmGW0bY9lDQ==.png','RiKQP3n9DTz5Z4c/EQjrJA==',65,65,12809,1,'2012-03-02 17:15:15');
+INSERT INTO `image` VALUES (24,'VfasXoSYE4xYH+a0eDZTtg==.png','s5/9p6uoaGaR1e9LjeM27g==',65,65,12797,1,'2012-03-02 17:15:15');
+INSERT INTO `image` VALUES (25,'sM2DxhP1CCbAagP5nszUvg==.png','2PSUPSyAsKhqHXAEt3Eodw==',65,65,12964,1,'2012-03-02 17:34:50');
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2130,13 +2131,13 @@ CREATE TABLE `topic` (
   `category_id` int(10) unsigned NOT NULL COMMENT '类别ID',
   `topic_keywords` text NOT NULL COMMENT '专题关键词',
   `topic_images_id` int(11) DEFAULT '0' COMMENT '专题大图',
-  `topic_rank` int(11) NOT NULL COMMENT '专题的排序值，越大的优先级越高',
+  `topic_rank` bigint(30) NOT NULL DEFAULT '0' COMMENT '专题的排序值，越大的优先级越高',
   `add_time` datetime NOT NULL COMMENT '添加时间',
   `topic_thumb_id` int(12) DEFAULT '0' COMMENT '专题缩略图',
   PRIMARY KEY (`topic_id`),
   KEY `NewIndex1` (`category_id`),
   KEY `NewIndex2` (`topic_rank`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table topic
@@ -2144,7 +2145,11 @@ CREATE TABLE `topic` (
 
 LOCK TABLES `topic` WRITE;
 /*!40000 ALTER TABLE `topic` DISABLE KEYS */;
-INSERT INTO `topic` VALUES (3,'测试专题1',1,'干燥，保湿',4,0,'2012-03-01 11:30:30',3);
+INSERT INTO `topic` VALUES (3,'测试专题1',1,'干燥，保湿',0,0,'2012-03-01 11:30:30',0);
+INSERT INTO `topic` VALUES (5,'添加测试2',1,'护肤，保湿',0,0,'2012-03-02 14:53:18',0);
+INSERT INTO `topic` VALUES (6,'添加测试2',1,'护肤，保湿',0,0,'2012-03-02 14:54:12',0);
+INSERT INTO `topic` VALUES (7,'添加测试2',1,'护肤，保湿',0,0,'2012-03-02 14:56:14',0);
+INSERT INTO `topic` VALUES (11,'123',1,'123',25,1330680887734,'2012-03-02 17:34:47',25);
 /*!40000 ALTER TABLE `topic` ENABLE KEYS */;
 UNLOCK TABLES;
 

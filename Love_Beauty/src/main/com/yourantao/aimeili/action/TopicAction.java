@@ -78,14 +78,14 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 			topicView.setTopicId(topic.getTopicId());
 			topicView.setTopicKeywords(topic.getTopicKeywords());
 			topicView.setTopicName(topic.getTopicName());
-			if (thumb != null) {
-				topicView.setTopicThumb(thumb.getImgUrl());
-			} else {
+			if(thumb!=null){
+				topicView.setTopicThumb(BASE_IMAGEURL+thumb.getImgUrl());
+			}else{
 				topicView.setTopicThumb("");
 			}
-			if (image != null) {
-				topicView.setTopicImages(image.getImgUrl());
-			} else {
+			if(image!=null){
+				topicView.setTopicImages(BASE_IMAGEURL+image.getImgUrl());
+			}else{
 				topicView.setTopicImages("");
 			}
 			result.add(topicView);
@@ -135,28 +135,27 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 		String topicKerwords = getReqeust().getParameter("topic_keywords");
 		String updateType = getReqeust().getParameter("submit");
 		getReqeust().getAttribute("newtopic_thumb");
-		if (updateType.equals("前移")) {
-
-		} else if (updateType.equals("后移")) {
-
-		} else if (updateType.equals("更新")) { // 需要对每个进行更新
-			if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
-				// String FileName =thumbFileName+ new Date().getTime() +
-				// getExtention(thumbFileName);
-				String FileName = thumbFileName;
-				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
-				int imageid = getImgAttribute(newtopic_thumb, FileName);
-				topic.setTopicThumbId(imageid);
-				copy(newtopic_thumb, thumbFile);
+		if(updateType.equals("前移")){
+			
+		}else if(updateType.equals("后移")){
+			
+			
+		}else if(updateType.equals("更新")){    //需要对每个进行更新
+			if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
+//				String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
+				String FileName =MD5.md5(thumbFileName)+ getExtention(thumbFileName);
+		        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+		        int imageid=getImgAttribute(newtopic_thumb,FileName);
+		        topic.setTopicThumbId(imageid);
+		        copy(newtopic_thumb, thumbFile);
 			}
-			if (imageFileName != null && !imageFileName.equals("")) { // 上传大图，并存储
-				// String FileName =imageFileName+ new Date().getTime() +
-				// getExtention(imageFileName);
-				String FileName = imageFileName;
-				File imageFile = new File(BASE_IMAGESTORAGE + FileName);
-				int imageid = getImgAttribute(newtopic_image, FileName);
-				topic.setTopicImagesId(imageid);
-				copy(newtopic_image, imageFile);
+			if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
+//				String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
+				String FileName =MD5.md5(imageFileName)+ getExtention(thumbFileName);
+		        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+		        int imageid= getImgAttribute(newtopic_image,FileName);
+		        topic.setTopicImagesId(imageid);
+		        copy(newtopic_image, imageFile);
 			}
 			topicDAO.updateTopic(topic);
 			return SUCCESS;
@@ -189,31 +188,29 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 
 		topic.setTopicName(getReqeust().getParameter(TOPIC_NAME));
 		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
-		topic.setCategoryId(getIntegerParameter(getReqeust().getParameter(
-				CATEGORY_ID)));
+		topic.setCategoryId(getIntegerParameter(CATEGORY_ID));
 		topic.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));
-		topic.setTopicRank(0);
-		if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
-			// String FileName =thumbFileName+ new Date().getTime() +
-			// getExtention(thumbFileName);
-			String FileName = thumbFileName;
-			File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
-			int imageid = getImgAttribute(newtopic_thumb, FileName);
-			topic.setTopicThumbId(imageid);
-			copy(newtopic_thumb, thumbFile);
+		topic.setTopicRank(System.currentTimeMillis());
+		if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
+//			String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
+			String FileName =MD5.md5(thumbFileName)+ getExtention(thumbFileName);  //MD5加密;
+	        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+	        int imageid=getImgAttribute(newtopic_thumb,FileName);
+	        topic.setTopicThumbId(imageid);
+	        copy(newtopic_thumb, thumbFile);
 		}
-		if (imageFileName != null && !imageFileName.equals("")) { // 上传大图，并存储
-			// String FileName =imageFileName+ new Date().getTime() +
-			// getExtention(imageFileName);
-			String FileName = imageFileName;
-			File imageFile = new File(BASE_IMAGESTORAGE + FileName);
-			int imageid = getImgAttribute(newtopic_image, FileName);
-			topic.setTopicImagesId(imageid);
-			copy(newtopic_image, imageFile);
+		if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
+//			String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
+			String FileName =MD5.md5(imageFileName)+ getExtention(thumbFileName);
+	        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+	        int imageid= getImgAttribute(newtopic_image,FileName);
+	        topic.setTopicImagesId(imageid);
+	        copy(newtopic_image, imageFile);
 		}
 		topicDAO.save(topic);
-
-		return null;
+		
+		return SUCCESS;
+		
 	}
 
 	/*
@@ -270,42 +267,39 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 	/*
 	 * 复制原文件到新文件
 	 */
-	private static void copy(File src, File dst) {
-		try {
-			InputStream in = null;
-			OutputStream out = null;
-			try {
-				in = new BufferedInputStream(new FileInputStream(src),
-						BUFFER_SIZE);
-				out = new BufferedOutputStream(new FileOutputStream(dst),
-						BUFFER_SIZE);
-				byte[] buffer = new byte[BUFFER_SIZE];
-				while (in.read(buffer) > 0) {
-					out.write(buffer);
-				}
-			} finally {
-				if (null != in) {
-					in.close();
-				}
-				if (null != out) {
-					out.close();
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	   private static void copy(File src, File dst)  {
+	        try  {
+	           InputStream in = null ;
+	           OutputStream out = null ;
+	            try  {                
+	               in = new BufferedInputStream(new FileInputStream(src), BUFFER_SIZE);
+	               out = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE);
+	                byte [] buffer = new byte [BUFFER_SIZE];
+	                while (in.read(buffer) > 0 )  {
+	                   out.write(buffer);
+	               } 
+	            } finally  {
+	                if ( null != in)  {
+	                   in.close();
+	               } 
+	                 if ( null != out)  {
+	                   out.close();
+	               } 
+	           } 
+	        } catch (Exception e)  {
+	           e.printStackTrace();
+	       } 
+	   } 
 
-	/**
-	 * 获得文件类型
-	 * 
-	 * @param fileName
-	 * @return
-	 */
-	private static String getExtention(String fileName) {
-		int pos = fileName.lastIndexOf(".");
-		return fileName.substring(pos);
-	}
+	   /**
+	    * 获得文件类型
+	    * @param fileName
+	    * @return
+	    */
+	    private static String getExtention(String fileName)  {
+	        int pos = fileName.lastIndexOf(".");
+	        return fileName.substring(pos);
+	   } 
 
 	/*
 	 * (non-Javadoc)

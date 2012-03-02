@@ -17,7 +17,7 @@ public interface Constant {
 	public static final String TOPIC_KEYWORDS = "topic_keywords";  //专题关键词
 	
 	
-	
+	public static final String BASE_SERVER = "http://192.168.14.24:8080/Love_Beauty/";  //
 	public static final String BASE_IMAGEURL = "http://192.168.14.24:8080/img/";  //
 	public static final String BASE_IMAGESTORAGE = "D:\\eclipseworkspace\\.metadata\\.me_tcat\\webapps\\img\\";  //
 	

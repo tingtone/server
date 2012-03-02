@@ -87,7 +87,7 @@ public class TopicDAO extends HibernateDaoSupport {
 				+ ", value: " + value);
 		try {
 			String queryString = "from Topic as model where model."
-					+ propertyName + "= ? order by " + TOPIC_RANK + " desc";
+					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -168,7 +168,6 @@ public class TopicDAO extends HibernateDaoSupport {
 	public static TopicDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (TopicDAO) ctx.getBean("TopicDAO");
 	}
-
 	/**
 	 * 自定义更新数据库 更新专题信息（名字，关键词，缩略图和大图）
 	 * 

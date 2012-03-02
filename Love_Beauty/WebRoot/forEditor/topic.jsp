@@ -41,30 +41,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="jquery1.4.2.js" type="text/javascript"></script>
 	<script type="text/javascript">
    
- /*  /*
-    *通过大分类获得专题名称
-    
-	function GetTopic(cla){
-			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopic";
-			var params = {"cla":cla};
-			var topic="";
-			$.ajax({
-				type:"POST",
-				data:params,
-				dataType: "json",
-				url: url,
-				success: function(json) {
-				if(json == null){
-					alert("json null");
-				}else{
-					for(var i=0;i<json.length;i++){
-						topic+="<option value='+json[i]['topic_name']+'>"+json[i]['topic_name']+"</option>";
-					}
-				}
-				$('#topicname').html(topic.toString());
-				}
-			});
-	}*/
 	/*
 	 *删除的确认框
 	 */
@@ -86,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     *通过大分类获得专题详细信息
     */
 	function GetTopic_Detail(cid){
-			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopicsOfCategory";
+			var url=BASE_SERVER+"/topic_getTopicsOfCategory";
 			var params = {"cid":cid};
 			var topic="";
 			$.ajax({
@@ -104,7 +80,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					//topic+="<td><input type='hidden' name='tid' value='"+json[i]['topicId']+"'/>专题名: <input name='topic_name' value='"+json[i]['topicName']+"'/></td><td>专题关键词：<input name='topic_keywords' value='"+json[i]['topicKeywords']+"'/></td><td>专题缩略图：<img src='"+json[i]['topicThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td> <td>专题大图：<img src='"+json[i]['topicImages']+"'/>更改：<input type='file' name='newtopic_image'></td><td><input name='submit' type='submit' value='前移'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><a target='_blank' href='forEditor/topic_goods.jsp?tid="+json[i]['topicId']+"&tname="+json[i]['topicName']+"'>对应商品</a></td>" ;
 					topic+="<td><input type='hidden' name='tid' value='"+json[i]['topicId']+"'/>专题名: <input name='topic_name' value='"+json[i]['topicName']+"'/></td><td>专题关键词：<input name='topic_keywords' value='"+json[i]['topicKeywords']+"'/></td><td>专题缩略图：<img src='"+json[i]['topicThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td> <td>专题大图：<img src='"+json[i]['topicImages']+"'/>更改：<input type='file' name='newtopic_image'></td><td><input name='submit' type='submit' value='前移'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
 					
-					topic+="</tr></tbody></form><br/>";
+					topic+="</tr></tbody></table></form>";
 					}
 				}
 				$('#topic_detail').html(topic.toString());

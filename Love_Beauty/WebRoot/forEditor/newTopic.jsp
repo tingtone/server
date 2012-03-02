@@ -3,12 +3,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<%@ page import="main.com.yourantao.aimeili.bean.Brand" %>
-<%@ page import="main.com.yourantao.aimeili.bean.BrandDAO" %>
-<%@ page import="org.hibernate.classic.Session" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.springframework.context.ApplicationContext" %>
-<%@ page import="org.springframework.context.support.ClassPathXmlApplicationContext" %>
+<%@ page import="main.com.yourantao.aimeili.conf.Constant" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -43,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     *通过大分类获得专题名称
     */
 	function GetTopic(cla){
-			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopic";
+			var url=BASE_SERVER+"/topic_getTopic";
 			var params = {"cla":cla};
 			var topic="";
 			$.ajax({

@@ -18,7 +18,7 @@ import com.opensymphony.xwork2.ActionSupport;
 
 @SuppressWarnings("serial")
 public abstract class BaseAction extends ActionSupport {
-	private static Logger log = LoggerFactory.getLogger(BaseAction.class);
+	private static Logger LOG = LoggerFactory.getLogger(BaseAction.class);
 	/**
 	 * 原始值为"text/x-json;charset=UTF-8"，为方便调试改为如下值：
 	 */
@@ -28,31 +28,17 @@ public abstract class BaseAction extends ActionSupport {
 	private static final String ENCODE = "UTF-8";
 	private static final String C1 = "(";
 	private static final String C2 = ")";
-	
+
 	protected String sessionId;
 	protected String url;
-	
-	private String jsonpcallback = null;
-	private HttpServletResponse response;
-	private HttpServletRequest request;
 
-	public BaseAction() {
-		response = ServletActionContext.getResponse();
-		response.setCharacterEncoding(ENCODE);
-		response.setContentType(CONTENT_TYPE);
-		response.setHeader(HEADER, CACHE);
-		
-		request = ServletActionContext.getRequest();
-		try {
-			request.setCharacterEncoding(ENCODE);
-		} catch (UnsupportedEncodingException e) {
-			log.error("request.setCharacterEncoding error! ", e);
-		}
-	}
+	private String jsonpcallback = null;
 
 	/**
 	 * 获得request中Integer类型的参数
-	 * @param paraName 参数的名字
+	 * 
+	 * @param paraName
+	 *            参数的名字
 	 * @return 参数的值，未找到参数时返回null
 	 */
 	protected Integer getIntegerParameter(String paraName) {
@@ -65,19 +51,39 @@ public abstract class BaseAction extends ActionSupport {
 		return ret;
 	}
 
+	/**
+	 * 获得request中String类型的参数
+	 * 
+	 * @param paraName
+	 *            参数的名字
+	 * @return 参数的值，未找到参数时返回null
+	 */
+	protected String getStringParameter(String paraName) {
+		String ret = null;
+		try {
+			ret = String.valueOf(getReqeust().getParameter(paraName));
+		} catch (Exception e) {
+			return null;
+		}
+		return ret;
+	}
+
 	protected void responseFlush() {
 		try {
+			HttpServletResponse response = ServletActionContext.getResponse();
 			response.getOutputStream().flush();
 			response.getOutputStream().close();
 			response.flushBuffer();
 		} catch (IOException e) {
-			log.error("response flush error!", e);
+			LOG.error("response flush error!", e);
 		}
 	}
-	
+
 	/**
 	 * 将对象转化为json，向表现层输出
-	 * @param jsonObject 要输出的对象
+	 * 
+	 * @param jsonObject
+	 *            要输出的对象
 	 */
 	protected void printObject(Object jsonObject) {
 		JSONObject json = JSONObject.fromObject(jsonObject);
@@ -90,7 +96,9 @@ public abstract class BaseAction extends ActionSupport {
 
 	/**
 	 * 将对象数组转化为json，向表现层输出
-	 * @param jsonArray 要输出的对象数组
+	 * 
+	 * @param jsonArray
+	 *            要输出的对象数组
 	 */
 	protected void printArray(Object jsonArray) {
 		JSONArray json = JSONArray.fromObject(jsonArray);
@@ -100,22 +108,32 @@ public abstract class BaseAction extends ActionSupport {
 			outputString(json.toString());
 		}
 	}
-	
+
 	private void outputString(String str) {
 		PrintWriter out = null;
 		try {
-			out = response.getWriter();
+			out = getResponse().getWriter();
 			out.print(str);
 		} catch (IOException e) {
-			log.error(e.getMessage(), e);
+			LOG.error(e.getMessage(), e);
 		}
 	}
 
 	protected HttpServletRequest getReqeust() {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		try {
+			request.setCharacterEncoding(ENCODE);
+		} catch (UnsupportedEncodingException e) {
+			LOG.error("request.setCharacterEncoding error! ", e);
+		}
 		return request;
 	}
 
 	protected HttpServletResponse getResponse() {
+		HttpServletResponse response = ServletActionContext.getResponse();
+		response.setCharacterEncoding(ENCODE);
+		response.setContentType(CONTENT_TYPE);
+		response.setHeader(HEADER, CACHE);
 		return response;
 	}
 

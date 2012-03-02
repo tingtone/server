@@ -28,5 +28,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <%@include file="/top.jsp"%>
   	
 <b style="text-align: 30px;color: blue;">操作成功！</b>
+<input value="返回" type="button" onclick="javascript:history.go(-1);"/>"
   </body>
 </html>
