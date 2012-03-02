@@ -332,6 +332,7 @@
 		<property name="beanNames">
 			<list>
 				<value>*Action</value>
+				<value>*Server</value>
 			</list>
 		</property>
 		<property name="interceptorNames">

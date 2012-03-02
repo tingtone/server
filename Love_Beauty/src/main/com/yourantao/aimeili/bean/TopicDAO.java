@@ -1,18 +1,12 @@
 package main.com.yourantao.aimeili.bean;
 
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.List;
 
-import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -176,27 +170,11 @@ public class TopicDAO extends HibernateDaoSupport {
 	}
 
 	/**
-	 * 自定义删除操作 只根据专题的id删除该专题
-	 * 
-	 * @param topic
-	 */
-	public void deleteById(Topic topic) {
-		Transaction trans = getSession().beginTransaction();
-		String hql = "delete from Topic where topic_id=" + topic.getTopicId();
-		Query queryupdate = getSession().createQuery(hql);
-		int ret = queryupdate.executeUpdate();
-		trans.commit();
-
-	}
-
-	/**
 	 * 自定义更新数据库 更新专题信息（名字，关键词，缩略图和大图）
 	 * 
 	 * @param topic
 	 */
 	public void updateTopic(Topic topic) {
-
-		Transaction trans = getSession().beginTransaction();
 		String hql = "update Topic set ";
 		String hqlset = "";
 		log.info(topic.getTopicName());
@@ -216,35 +194,6 @@ public class TopicDAO extends HibernateDaoSupport {
 			hql += " where topic_id=" + topic.getTopicId();
 			Query queryupdate = getSession().createQuery(hql);
 			int ret = queryupdate.executeUpdate();
-			trans.commit();
 		}
-
-		// getHibernateTemplate().execute(new HibernateCallback(){
-		// public Object doInHibernate(Session session)
-		// throws HibernateException, SQLException {
-		// String hql="update topic set ";
-		// String hqlset="";
-		// log.info(topic.getTopicName());
-		// if(topic.getTopicName()!="")
-		// hqlset+="topic_name='"+topic.getTopicName()+"' ,";
-		// if(topic.getTopicKeywords()!="")
-		// hqlset+="topic_keywords='"+topic.getTopicKeywords()+"' ,";
-		// if(topic.getTopicImagesId()!=null)
-		// hqlset+="topic_images_id='"+topic.getTopicImagesId()+"' ,";
-		// if(topic.getTopicThumbId()!=null)
-		// hqlset+="topic_thumb_id='"+topic.getTopicThumbId()+"' ,";
-		// if(hqlset.equals("")){
-		// return null;
-		// }else{
-		// hql+=hqlset;
-		// hql=hql.substring(0, hql.length()-1);
-		// hql+=" where topic_id='"+topic.getTopicId()+"'";
-		// return session.createQuery(hql);
-		// }
-		// }
-		//
-		//              
-		// });
-
 	}
 }

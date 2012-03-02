@@ -3,9 +3,6 @@ package main.com.yourantao.aimeili.action;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,27 +17,53 @@ import org.slf4j.LoggerFactory;
 import com.opensymphony.xwork2.ActionSupport;
 
 @SuppressWarnings("serial")
-public class BaseAction extends ActionSupport {
-	private static Logger logger = LoggerFactory.getLogger(BaseAction.class);
-
-	protected static final String encode = "UTF-8";
-//	private static final String JSONCONTENTTYPE = "text/x-json;charset=UTF-8 ";
-	private static final String JSONCONTENTTYPE = "text;charset=UTF-8 ";
+public abstract class BaseAction extends ActionSupport {
+	private static Logger log = LoggerFactory.getLogger(BaseAction.class);
+	/**
+	 * 原始值为"text/x-json;charset=UTF-8"，为方便调试改为如下值：
+	 */
+	private static final String CONTENT_TYPE = "text;charset=UTF-8";
 	private static final String HEADER = "Cache-Control";
 	private static final String CACHE = "no-cache";
-	private String jsonpcallback = null;
-
-	private static final String c1 = "(";
-	private static final String c2 = ")";
-
-	private HttpServletResponse response;
-	private HttpServletRequest request;
-	// protected PrintWriter out;
+	private static final String ENCODE = "UTF-8";
+	private static final String C1 = "(";
+	private static final String C2 = ")";
+	
 	protected String sessionId;
 	protected String url;
-	protected Map<String, String> jsonMap = new HashMap<String, String>();
+	
+	private String jsonpcallback = null;
+	private HttpServletResponse response;
+	private HttpServletRequest request;
 
-	// protected UserService service = new UserService();
+	public BaseAction() {
+		response = ServletActionContext.getResponse();
+		response.setCharacterEncoding(ENCODE);
+		response.setContentType(CONTENT_TYPE);
+		response.setHeader(HEADER, CACHE);
+		
+		request = ServletActionContext.getRequest();
+		try {
+			request.setCharacterEncoding(ENCODE);
+		} catch (UnsupportedEncodingException e) {
+			log.error("request.setCharacterEncoding error! ", e);
+		}
+	}
+
+	/**
+	 * 获得request中Integer类型的参数
+	 * @param paraName 参数的名字
+	 * @return 参数的值，未找到参数时返回null
+	 */
+	protected Integer getIntegerParameter(String paraName) {
+		int ret = 0;
+		try {
+			ret = Integer.valueOf(getReqeust().getParameter(paraName));
+		} catch (Exception e) {
+			return null;
+		}
+		return ret;
+	}
 
 	protected void responseFlush() {
 		try {
@@ -48,71 +71,51 @@ public class BaseAction extends ActionSupport {
 			response.getOutputStream().close();
 			response.flushBuffer();
 		} catch (IOException e) {
-			logger.error("response flush error : " + e.getMessage());
+			log.error("response flush error!", e);
+		}
+	}
+	
+	/**
+	 * 将对象转化为json，向表现层输出
+	 * @param jsonObject 要输出的对象
+	 */
+	protected void printObject(Object jsonObject) {
+		JSONObject json = JSONObject.fromObject(jsonObject);
+		if (jsonpcallback != null) {
+			outputString(jsonpcallback + C1 + json.toString() + C2);
+		} else {
+			outputString(json.toString());
 		}
 	}
 
 	/**
-	 * 打印json
-	 * 
-	 * @param str
+	 * 将对象数组转化为json，向表现层输出
+	 * @param jsonArray 要输出的对象数组
 	 */
+	protected void printArray(Object jsonArray) {
+		JSONArray json = JSONArray.fromObject(jsonArray);
+		if (jsonpcallback != null) {
+			outputString(jsonpcallback + C1 + json.toString() + C2);
+		} else {
+			outputString(json.toString());
+		}
+	}
+	
 	private void outputString(String str) {
-		response = getResponse();
-		response.setCharacterEncoding(encode);
-		response.setContentType(JSONCONTENTTYPE);
-		response.setHeader(HEADER, CACHE);
 		PrintWriter out = null;
 		try {
 			out = response.getWriter();
 			out.print(str);
 		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		} finally {
-			out.flush();
-			out.close();
-		}
-	}
-
-	/**
-	 * 打印json
-	 * 
-	 * @param jsonObject
-	 */
-	protected void printObject(Object jsonObject) {
-		JSONObject json = JSONObject.fromObject(jsonObject);
-		if (jsonpcallback != null) {
-			outputString(jsonpcallback + c1 + json.toString() + c2);
-		} else {
-			outputString(json.toString());
-		}
-	}
-
-	protected void printArray(Object jsonArray) {
-		JSONArray json = JSONArray.fromObject(jsonArray);
-		if (jsonpcallback != null) {
-			outputString(jsonpcallback + c1 + json.toString() + c2);
-		} else {
-			outputString(json.toString());
+			log.error(e.getMessage(), e);
 		}
 	}
 
 	protected HttpServletRequest getReqeust() {
-		try {
-			//设置为utf-8格式，为避免乱码，action应该用post方式，不用get
-			request=ServletActionContext.getRequest();
-			request.setCharacterEncoding(encode);
-		} catch (UnsupportedEncodingException e) {
-			logger.error("request.setCharacterEncoding  error");
-		}
 		return request;
 	}
 
 	protected HttpServletResponse getResponse() {
-		if (response == null) {
-			response = ServletActionContext.getResponse();
-			response.setCharacterEncoding(encode);
-		}
 		return response;
 	}
 

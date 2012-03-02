@@ -3,7 +3,7 @@
 <struts>
  <package name="lovebeauty" namespace="/"  extends="struts-default">
 		<!-- 专题页 -->
-		<action name="topic_*" class="main.com.yourantao.aimeili.action.TopicAction" method="{1}">
+		<action name="topic_*" class="TopicAction" method="{1}">
 			<result name="topic_goods">/forEditor/topic_goods.jsp</result>
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
