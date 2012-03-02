@@ -24,7 +24,7 @@ public class ImageDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(ImageDAO.class);
 	// property constants
 	public static final String IMG_URL = "imgUrl";
-	public static final String IMG_CRC = "imgCrc";
+	public static final String IMG_MD5 = "imgMd5";
 	public static final String IMG_WIDTH = "imgWidth";
 	public static final String IMG_HEIGHT = "imgHeight";
 	public static final String IMG_SIZE = "imgSize";
@@ -98,8 +98,8 @@ public class ImageDAO extends HibernateDaoSupport {
 		return findByProperty(IMG_URL, imgUrl);
 	}
 
-	public List findByImgCrc(Object imgCrc) {
-		return findByProperty(IMG_CRC, imgCrc);
+	public List findByImgMd5(Object imgMd5) {
+		return findByProperty(IMG_MD5, imgMd5);
 	}
 
 	public List findByImgWidth(Object imgWidth) {
