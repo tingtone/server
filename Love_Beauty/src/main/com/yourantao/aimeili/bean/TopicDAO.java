@@ -1,5 +1,6 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.hibernate.LockMode;
@@ -168,9 +169,9 @@ public class TopicDAO extends HibernateDaoSupport {
 	public static TopicDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (TopicDAO) ctx.getBean("TopicDAO");
 	}
+	
 	/**
-	 * 自定义更新数据库 更新专题信息（名字，关键词，缩略图和大图）
-	 * 
+	 * 自定义更新数据库 更新专题信息（名字，关键词，缩略图和大图） 
 	 * @param topic
 	 */
 	public void updateTopic(Topic topic) {
@@ -195,4 +196,16 @@ public class TopicDAO extends HibernateDaoSupport {
 			int ret = queryupdate.executeUpdate();
 		}
 	}
+	
+//	public void update(Topic topic) {
+//		Class daoClass = getClass();
+//		Field[] fields = daoClass.getFields();
+//		for(Field field : fields) {
+//			Object value = field.get(null);
+//			if(value == null)
+//				continue;
+//			String key = field.getName();
+//			String value = topic.getClass().getMethod(key).invoke(topic);
+//		}
+//	}
 }
