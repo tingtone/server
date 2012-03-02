@@ -1,18 +1,15 @@
 package main.com.yourantao.aimeili.bean;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
-import org.hibernate.HibernateException;
+
 import org.hibernate.LockMode;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -93,7 +90,7 @@ public class TopicDAO extends HibernateDaoSupport {
 				+ ", value: " + value);
 		try {
 			String queryString = "from Topic as model where model."
-					+ propertyName + "= ? order by " + TOPIC_RANK + " desc";
+					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -174,7 +171,6 @@ public class TopicDAO extends HibernateDaoSupport {
 	public static TopicDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (TopicDAO) ctx.getBean("TopicDAO");
 	}
-
 	/**
 	 * 自定义删除操作 只根据专题的id删除该专题
 	 * 

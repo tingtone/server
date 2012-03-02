@@ -122,12 +122,12 @@ public class TopicAction extends BaseAction implements Constant {
 			topicView.setTopicKeywords(topic.getTopicKeywords());
 			topicView.setTopicName(topic.getTopicName());
 			if(thumb!=null){
-				topicView.setTopicThumb(thumb.getImgUrl());
+				topicView.setTopicThumb(BASE_IMAGEURL+thumb.getImgUrl());
 			}else{
 				topicView.setTopicThumb("");
 			}
 			if(image!=null){
-				topicView.setTopicImages(image.getImgUrl());
+				topicView.setTopicImages(BASE_IMAGEURL+image.getImgUrl());
 			}else{
 				topicView.setTopicImages("");
 			}
@@ -183,7 +183,7 @@ public class TopicAction extends BaseAction implements Constant {
 		}else if(updateType.equals("更新")){    //需要对每个进行更新
 			if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
 //				String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
-				String FileName =thumbFileName;
+				String FileName =MD5.md5(thumbFileName)+ getExtention(thumbFileName);
 		        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
 		        int imageid=getImgAttribute(newtopic_thumb,FileName);
 		        topic.setTopicThumbId(imageid);
@@ -191,7 +191,7 @@ public class TopicAction extends BaseAction implements Constant {
 			}
 			if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
 //				String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
-				String FileName =imageFileName;
+				String FileName =MD5.md5(imageFileName)+ getExtention(thumbFileName);
 		        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
 		        int imageid= getImgAttribute(newtopic_image,FileName);
 		        topic.setTopicImagesId(imageid);
@@ -231,12 +231,12 @@ public class TopicAction extends BaseAction implements Constant {
 		
 		topic.setTopicName(getReqeust().getParameter(TOPIC_NAME));
 		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
-		topic.setCategoryId(getIntegerParameter(getReqeust().getParameter(CATEGORY_ID)));
+		topic.setCategoryId(getIntegerParameter(CATEGORY_ID));
 		topic.setAddTime(Timestamp.valueOf(sdFormat.format(new Date())));
-		topic.setTopicRank(0);
+		topic.setTopicRank(System.currentTimeMillis());
 		if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
 //			String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
-			String FileName =thumbFileName;
+			String FileName =MD5.md5(thumbFileName)+ getExtention(thumbFileName);  //MD5加密;
 	        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
 	        int imageid=getImgAttribute(newtopic_thumb,FileName);
 	        topic.setTopicThumbId(imageid);
@@ -244,7 +244,7 @@ public class TopicAction extends BaseAction implements Constant {
 		}
 		if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
 //			String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
-			String FileName =imageFileName;
+			String FileName =MD5.md5(imageFileName)+ getExtention(thumbFileName);
 	        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
 	        int imageid= getImgAttribute(newtopic_image,FileName);
 	        topic.setTopicImagesId(imageid);
@@ -252,7 +252,8 @@ public class TopicAction extends BaseAction implements Constant {
 		}
 		topicDAO.save(topic);
 		
-		return null;
+		return SUCCESS;
+		
 	}
 	
 	
@@ -266,7 +267,7 @@ public class TopicAction extends BaseAction implements Constant {
 		ApplicationContext ac = Config.getACInstant();
 		ImageDAO imageDAO=ImageDAO.getFromApplicationContext(ac);
 		
-		String imgurl=BASE_IMAGEURL+fileName;   //保存的图片url
+		String imgurl=fileName;   //保存的图片名称
 //		 byte[] bytes= imgurl.getBytes();   //对长的url进行crc32编码
 //	        CRC32 crc32 = new CRC32();
 //	        crc32.update(bytes);
@@ -316,8 +317,8 @@ public class TopicAction extends BaseAction implements Constant {
 	           InputStream in = null ;
 	           OutputStream out = null ;
 	            try  {                
-	               in = new BufferedInputStream( new FileInputStream(src), BUFFER_SIZE);
-	               out = new BufferedOutputStream( new FileOutputStream(dst), BUFFER_SIZE);
+	               in = new BufferedInputStream(new FileInputStream(src), BUFFER_SIZE);
+	               out = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE);
 	                byte [] buffer = new byte [BUFFER_SIZE];
 	                while (in.read(buffer) > 0 )  {
 	                   out.write(buffer);

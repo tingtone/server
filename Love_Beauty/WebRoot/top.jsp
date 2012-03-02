@@ -10,6 +10,11 @@
 			}
 	
 	</style>
+<script type="text/javascript">
+		
+	var BASE_SERVER="http://192.168.14.24:8080/Love_Beauty";
+	//var BASE_SERVER="http://127.0.0.1:8080/Love_Beauty";
+</script>
   <div class="topbar">
   <a href="forEditor/topic.jsp">专题页</a>
   <a href="forEditor/Product.jsp">商品信息</a>

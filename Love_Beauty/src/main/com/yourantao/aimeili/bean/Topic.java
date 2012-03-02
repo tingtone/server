@@ -15,7 +15,7 @@ public class Topic implements java.io.Serializable {
 	private Integer categoryId;
 	private String topicKeywords;
 	private Integer topicImagesId;
-	private Integer topicRank;
+	private Long topicRank;
 	private Timestamp addTime;
 	private Integer topicThumbId;
 
@@ -27,7 +27,7 @@ public class Topic implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Topic(String topicName, Integer categoryId, String topicKeywords,
-			Integer topicRank, Timestamp addTime) {
+			Long topicRank, Timestamp addTime) {
 		this.topicName = topicName;
 		this.categoryId = categoryId;
 		this.topicKeywords = topicKeywords;
@@ -37,7 +37,7 @@ public class Topic implements java.io.Serializable {
 
 	/** full constructor */
 	public Topic(String topicName, Integer categoryId, String topicKeywords,
-			Integer topicImagesId, Integer topicRank, Timestamp addTime,
+			Integer topicImagesId, Long topicRank, Timestamp addTime,
 			Integer topicThumbId) {
 		this.topicName = topicName;
 		this.categoryId = categoryId;
@@ -90,11 +90,11 @@ public class Topic implements java.io.Serializable {
 		this.topicImagesId = topicImagesId;
 	}
 
-	public Integer getTopicRank() {
+	public Long getTopicRank() {
 		return this.topicRank;
 	}
 
-	public void setTopicRank(Integer topicRank) {
+	public void setTopicRank(Long topicRank) {
 		this.topicRank = topicRank;
 	}
 
