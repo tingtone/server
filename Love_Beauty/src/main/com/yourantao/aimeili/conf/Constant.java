@@ -12,6 +12,8 @@ public interface Constant {
 	
 	public static final String CATEGORY_ID = "cid";  //分类ID
 	public static final String TOPIC_ID = "tid";  //专题ID
+	public static final String TOPIC_ID1 = "tid1";
+	public static final String TOPIC_ID2 = "tid2";
 	public static final String GOODS_ID = "gid";  //商品ID
 	public static final String TOPIC_NAME = "topic_name";  //专题名称
 	public static final String TOPIC_KEYWORDS = "topic_keywords";  //专题关键词

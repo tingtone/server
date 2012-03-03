@@ -26,6 +26,7 @@ import main.com.yourantao.aimeili.bean.TopicGoodsDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
+import main.com.yourantao.aimeili.util.RankGenerator;
 import main.com.yourantao.aimeili.vo.TopicView;
 
 import org.slf4j.Logger;
@@ -38,8 +39,7 @@ import org.springframework.context.ApplicationContext;
  * @author mac 创建时间： 2012-2-29 下午05:25:19 修改时间：2012-2-29 下午05:25:19 具体描述： TODO
  */
 @SuppressWarnings("serial")
-public class TopicAction extends BaseAction implements TopicActionInterface,
-		Constant {
+public class TopicAction extends BaseAction implements Constant, TopicInterface {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(TopicAction.class);
 	private static final int BUFFER_SIZE = 16 * 1024;
@@ -54,14 +54,15 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 	private String thumbFileName; // 上传文件名1
 
 	private TopicDAO topicDAO;
+	private TopicGoodsDAO topicGoodsDAO;
 	private ImageDAO imageDAO;
+	private RankGenerator rankGenerator;
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#getTopicsOfCategory
-	 * ()
+	 * main.com.yourantao.aimeili.action.TopicInterface#getTopicsOfCategory()
 	 */
 	public String getTopicsOfCategory() {
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
@@ -78,14 +79,14 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 			topicView.setTopicId(topic.getTopicId());
 			topicView.setTopicKeywords(topic.getTopicKeywords());
 			topicView.setTopicName(topic.getTopicName());
-			if(thumb!=null){
-				topicView.setTopicThumb(BASE_IMAGEURL+thumb.getImgUrl());
-			}else{
+			if (thumb != null) {
+				topicView.setTopicThumb(BASE_IMAGEURL + thumb.getImgUrl());
+			} else {
 				topicView.setTopicThumb("");
 			}
-			if(image!=null){
-				topicView.setTopicImages(BASE_IMAGEURL+image.getImgUrl());
-			}else{
+			if (image != null) {
+				topicView.setTopicImages(BASE_IMAGEURL + image.getImgUrl());
+			} else {
 				topicView.setTopicImages("");
 			}
 			result.add(topicView);
@@ -98,17 +99,13 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#getTopicGoods()
+	 * @see main.com.yourantao.aimeili.action.TopicInterface#getTopicGoods()
 	 */
 	public String getTopicGoods() {
 		Integer topicId = getIntegerParameter(TOPIC_ID);
 		if (topicId == null)
 			return null;
 
-		ApplicationContext ac = Config.getACInstant();
-		TopicGoodsDAO topicGoodsDAO = TopicGoodsDAO
-				.getFromApplicationContext(ac);
 		List goods = topicGoodsDAO.findByTopicId(topicId);
 		printArray(goods);
 
@@ -118,7 +115,43 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see main.com.yourantao.aimeili.action.TopicActionInterface#updateTopic()
+	 * @see main.com.yourantao.aimeili.action.TopicInterface#exchange()
+	 */
+	public String exchange() {
+		Integer topicId1 = getIntegerParameter(TOPIC_ID1);
+		Integer topicId2 = getIntegerParameter(TOPIC_ID2);
+		if (topicId1 == null || topicId2 == null)
+			return null;
+
+		Topic topic1 = topicDAO.findById(topicId1);
+		Topic topic2 = topicDAO.findById(topicId2);
+		Long rank = topic1.getTopicRank();
+		topic1.setTopicRank(topic2.getTopicRank());
+		topic2.setTopicRank(rank);
+
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.TopicInterface#top()
+	 */
+	public String top() {
+		Integer topicId = getIntegerParameter(TOPIC_ID);
+		if (topicId == null)
+			return null;
+
+		Topic topic = topicDAO.findById(topicId);
+		topic.setTopicRank(rankGenerator.generateRank());
+
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.TopicInterface#updateTopic()
 	 */
 	public String updateTopic() {
 		Topic topic = new Topic();
@@ -135,27 +168,30 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 		String topicKerwords = getReqeust().getParameter("topic_keywords");
 		String updateType = getReqeust().getParameter("submit");
 		getReqeust().getAttribute("newtopic_thumb");
-		if(updateType.equals("前移")){
-			
-		}else if(updateType.equals("后移")){
-			
-			
-		}else if(updateType.equals("更新")){    //需要对每个进行更新
-			if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
-//				String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
-				String FileName =MD5.md5(thumbFileName)+ getExtention(thumbFileName);
-		        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
-		        int imageid=getImgAttribute(newtopic_thumb,FileName);
-		        topic.setTopicThumbId(imageid);
-		        copy(newtopic_thumb, thumbFile);
+		if (updateType.equals("前移")) {
+
+		} else if (updateType.equals("后移")) {
+
+		} else if (updateType.equals("更新")) { // 需要对每个进行更新
+			if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
+				// String FileName =thumbFileName+ new Date().getTime() +
+				// getExtention(thumbFileName);
+				String FileName = MD5.md5(thumbFileName)
+						+ getExtention(thumbFileName);
+				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				int imageid = getImgAttribute(newtopic_thumb, FileName);
+				topic.setTopicThumbId(imageid);
+				copy(newtopic_thumb, thumbFile);
 			}
-			if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
-//				String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
-				String FileName =MD5.md5(imageFileName)+ getExtention(thumbFileName);
-		        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
-		        int imageid= getImgAttribute(newtopic_image,FileName);
-		        topic.setTopicImagesId(imageid);
-		        copy(newtopic_image, imageFile);
+			if (imageFileName != null && !imageFileName.equals("")) { // 上传大图，并存储
+				// String FileName =imageFileName+ new Date().getTime() +
+				// getExtention(imageFileName);
+				String FileName = MD5.md5(imageFileName)
+						+ getExtention(thumbFileName);
+				File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+				int imageid = getImgAttribute(newtopic_image, FileName);
+				topic.setTopicImagesId(imageid);
+				copy(newtopic_image, imageFile);
 			}
 			topicDAO.updateTopic(topic);
 			return SUCCESS;
@@ -178,7 +214,7 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see main.com.yourantao.aimeili.action.TopicActionInterface#insertTopic()
+	 * @see main.com.yourantao.aimeili.action.TopicInterface#insertTopic()
 	 */
 	public String insertTopic() {
 
@@ -190,27 +226,31 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
 		topic.setCategoryId(getIntegerParameter(CATEGORY_ID));
 		topic.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));
-		topic.setTopicRank(System.currentTimeMillis());
-		if(thumbFileName!=null &&!thumbFileName.equals("")){    //上传缩略图，并存储
-//			String FileName =thumbFileName+ new Date().getTime() + getExtention(thumbFileName);
-			String FileName =MD5.md5(thumbFileName)+ getExtention(thumbFileName);  //MD5加密;
-	        File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
-	        int imageid=getImgAttribute(newtopic_thumb,FileName);
-	        topic.setTopicThumbId(imageid);
-	        copy(newtopic_thumb, thumbFile);
+		topic.setTopicRank(rankGenerator.generateRank());
+		if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
+			// String FileName =thumbFileName+ new Date().getTime() +
+			// getExtention(thumbFileName);
+			String FileName = MD5.md5(thumbFileName)
+					+ getExtention(thumbFileName); // MD5加密;
+			File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+			int imageid = getImgAttribute(newtopic_thumb, FileName);
+			topic.setTopicThumbId(imageid);
+			copy(newtopic_thumb, thumbFile);
 		}
-		if(imageFileName!=null &&!imageFileName.equals("")){  //上传大图，并存储
-//			String FileName =imageFileName+ new Date().getTime() + getExtention(imageFileName);
-			String FileName =MD5.md5(imageFileName)+ getExtention(thumbFileName);
-	        File imageFile = new File(BASE_IMAGESTORAGE + FileName);
-	        int imageid= getImgAttribute(newtopic_image,FileName);
-	        topic.setTopicImagesId(imageid);
-	        copy(newtopic_image, imageFile);
+		if (imageFileName != null && !imageFileName.equals("")) { // 上传大图，并存储
+			// String FileName =imageFileName+ new Date().getTime() +
+			// getExtention(imageFileName);
+			String FileName = MD5.md5(imageFileName)
+					+ getExtention(thumbFileName);
+			File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+			int imageid = getImgAttribute(newtopic_image, FileName);
+			topic.setTopicImagesId(imageid);
+			copy(newtopic_image, imageFile);
 		}
 		topicDAO.save(topic);
-		
+
 		return SUCCESS;
-		
+
 	}
 
 	/*
@@ -264,157 +304,108 @@ public class TopicAction extends BaseAction implements TopicActionInterface,
 		return 0;
 	}
 
-	/*
+	/**
 	 * 复制原文件到新文件
 	 */
-	   private static void copy(File src, File dst)  {
-	        try  {
-	           InputStream in = null ;
-	           OutputStream out = null ;
-	            try  {                
-	               in = new BufferedInputStream(new FileInputStream(src), BUFFER_SIZE);
-	               out = new BufferedOutputStream(new FileOutputStream(dst), BUFFER_SIZE);
-	                byte [] buffer = new byte [BUFFER_SIZE];
-	                while (in.read(buffer) > 0 )  {
-	                   out.write(buffer);
-	               } 
-	            } finally  {
-	                if ( null != in)  {
-	                   in.close();
-	               } 
-	                 if ( null != out)  {
-	                   out.close();
-	               } 
-	           } 
-	        } catch (Exception e)  {
-	           e.printStackTrace();
-	       } 
-	   } 
+	private static void copy(File src, File dst) {
+		try {
+			InputStream in = null;
+			OutputStream out = null;
+			try {
+				in = new BufferedInputStream(new FileInputStream(src),
+						BUFFER_SIZE);
+				out = new BufferedOutputStream(new FileOutputStream(dst),
+						BUFFER_SIZE);
+				byte[] buffer = new byte[BUFFER_SIZE];
+				while (in.read(buffer) > 0) {
+					out.write(buffer);
+				}
+			} finally {
+				if (null != in) {
+					in.close();
+				}
+				if (null != out) {
+					out.close();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-	   /**
-	    * 获得文件类型
-	    * @param fileName
-	    * @return
-	    */
-	    private static String getExtention(String fileName)  {
-	        int pos = fileName.lastIndexOf(".");
-	        return fileName.substring(pos);
-	   } 
-
-	/*
-	 * (non-Javadoc)
+	/**
+	 * 获得文件类型
 	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#setTopicDAO(main
-	 * .com.yourantao.aimeili.bean.TopicDAO)
+	 * @param fileName
+	 * @return
 	 */
+	private static String getExtention(String fileName) {
+		int pos = fileName.lastIndexOf(".");
+		return fileName.substring(pos);
+	}
+
 	public void setTopicDAO(TopicDAO topicDAO) {
 		this.topicDAO = topicDAO;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see main.com.yourantao.aimeili.action.TopicActionInterface#getTopicDAO()
-	 */
 	public TopicDAO getTopicDAO() {
 		return topicDAO;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#setImageDAO(main
-	 * .com.yourantao.aimeili.bean.ImageDAO)
-	 */
 	public void setImageDAO(ImageDAO imageDAO) {
 		this.imageDAO = imageDAO;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see main.com.yourantao.aimeili.action.TopicActionInterface#getImageDAO()
-	 */
 	public ImageDAO getImageDAO() {
 		return imageDAO;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seemain.com.yourantao.aimeili.action.TopicActionInterface#
-	 * setNewtopic_thumbContentType(java.lang.String)
-	 */
 	public void setNewtopic_thumbContentType(String thumbContentType) {
 		System.out.println("thumbContentType : " + thumbContentType);
 		this.thumbContentType = thumbContentType;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seemain.com.yourantao.aimeili.action.TopicActionInterface#
-	 * setNewtopic_thumbFileName(java.lang.String)
-	 */
 	public void setNewtopic_thumbFileName(String thumbFileName) {
 		System.out.println("thumbFileName : " + thumbFileName);
 		this.thumbFileName = thumbFileName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#setNewtopic_thumb
-	 * (java.io.File)
-	 */
 	public void setNewtopic_thumb(File newtopic_thumb) {
 		this.newtopic_thumb = newtopic_thumb;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seemain.com.yourantao.aimeili.action.TopicActionInterface#
-	 * setNewtopic_imageContentType(java.lang.String)
-	 */
 	public void setNewtopic_imageContentType(String imageContentType) {
 		System.out.println("imageContentType : " + imageContentType);
 		this.imageContentType = imageContentType;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @seemain.com.yourantao.aimeili.action.TopicActionInterface#
-	 * setNewtopic_imageFileName(java.lang.String)
-	 */
 	public void setNewtopic_imageFileName(String imageFileName) {
 		System.out.println("imageFileName : " + imageFileName);
 		this.imageFileName = imageFileName;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#setNewtopic_image
-	 * (java.io.File)
-	 */
 	public void setNewtopic_image(File newtopic_image) {
 		this.newtopic_image = newtopic_image;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.TopicActionInterface#getImageFileName()
-	 */
 	public String getImageFileName() {
 		return imageFileName;
+	}
+
+	public void setRankGenerator(RankGenerator rankGenerator) {
+		this.rankGenerator = rankGenerator;
+	}
+
+	public RankGenerator getRankGenerator() {
+		return rankGenerator;
+	}
+
+	public void setTopicGoodsDAO(TopicGoodsDAO topicGoodsDAO) {
+		this.topicGoodsDAO = topicGoodsDAO;
+	}
+
+	public TopicGoodsDAO getTopicGoodsDAO() {
+		return topicGoodsDAO;
 	}
 
 }

@@ -15,7 +15,8 @@
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver">
 		</property>
-		<property name="url" value="jdbc:mysql://localhost/beauty"></property>
+		<property name="url"
+			value="jdbc:mysql://localhost/beauty?characterEncoding=UTF-8"></property>
 		<property name="username" value="${username}"></property>
 		<property name="password" value="${password}"></property>
 	</bean>
@@ -29,12 +30,9 @@
 				<prop key="hibernate.dialect">
 					org.hibernate.dialect.MySQLDialect
 				</prop>
-				<prop key="hibernate.show_sql">
-					true
-				</prop>
-				<prop key="hibernate.format_sql">
-					true
-				</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.use_sql_comments">false</prop>
 			</props>
 		</property>
 		<property name="mappingResources">
@@ -300,12 +298,20 @@
 		</property>
 	</bean>
 
+	<bean id="RankGenerator" class="main.com.yourantao.aimeili.util.RankGenerator">
+	</bean>
 	<bean id="TopicAction" class="main.com.yourantao.aimeili.action.TopicAction">
 		<property name="topicDAO">
 			<ref bean="TopicDAO" />
 		</property>
+		<property name="topicGoodsDAO">
+			<ref bean="TopicGoodsDAO" />
+		</property>
 		<property name="imageDAO">
 			<ref bean="ImageDAO" />
+		</property>
+		<property name="rankGenerator">
+			<ref bean="RankGenerator" />
 		</property>
 	</bean>
 
