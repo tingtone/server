@@ -187,7 +187,7 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 				// String FileName =imageFileName+ new Date().getTime() +
 				// getExtention(imageFileName);
 				String FileName = MD5.md5(imageFileName)
-						+ getExtention(thumbFileName);
+						+ getExtention(imageFileName);
 				File imageFile = new File(BASE_IMAGESTORAGE + FileName);
 				int imageid = getImgAttribute(newtopic_image, FileName);
 				topic.setTopicImagesId(imageid);
@@ -261,7 +261,7 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 		ApplicationContext ac = Config.getACInstant();
 		ImageDAO imageDAO = ImageDAO.getFromApplicationContext(ac);
 
-		String imgurl = BASE_IMAGEURL + fileName; // 保存的图片url
+		String imgurl = fileName; // 保存的图片url
 		// byte[] bytes= imgurl.getBytes(); //对长的url进行crc32编码
 		// CRC32 crc32 = new CRC32();
 		// crc32.update(bytes);
@@ -344,21 +344,7 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 		return fileName.substring(pos);
 	}
 
-	public void setTopicDAO(TopicDAO topicDAO) {
-		this.topicDAO = topicDAO;
-	}
-
-	public TopicDAO getTopicDAO() {
-		return topicDAO;
-	}
-
-	public void setImageDAO(ImageDAO imageDAO) {
-		this.imageDAO = imageDAO;
-	}
-
-	public ImageDAO getImageDAO() {
-		return imageDAO;
-	}
+	// structs
 
 	public void setNewtopic_thumbContentType(String thumbContentType) {
 		System.out.println("thumbContentType : " + thumbContentType);
@@ -388,9 +374,7 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 		this.newtopic_image = newtopic_image;
 	}
 
-	public String getImageFileName() {
-		return imageFileName;
-	}
+	// spring
 
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
@@ -398,6 +382,22 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 
 	public RankGenerator getRankGenerator() {
 		return rankGenerator;
+	}
+
+	public void setTopicDAO(TopicDAO topicDAO) {
+		this.topicDAO = topicDAO;
+	}
+
+	public TopicDAO getTopicDAO() {
+		return topicDAO;
+	}
+
+	public void setImageDAO(ImageDAO imageDAO) {
+		this.imageDAO = imageDAO;
+	}
+
+	public ImageDAO getImageDAO() {
+		return imageDAO;
 	}
 
 	public void setTopicGoodsDAO(TopicGoodsDAO topicGoodsDAO) {

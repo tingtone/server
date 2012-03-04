@@ -1,5 +1,7 @@
 package main.com.yourantao.aimeili.action;
 
+import java.io.File;
+
 public interface TopicInterface {
 
 	/**
@@ -38,4 +40,17 @@ public interface TopicInterface {
 	 */
 	public abstract String insertTopic();
 
+	// structs
+	
+	public void setNewtopic_thumbContentType(String thumbContentType);
+
+	public void setNewtopic_thumbFileName(String thumbFileName);
+
+	public void setNewtopic_thumb(File newtopic_thumb);
+
+	public void setNewtopic_imageContentType(String imageContentType);
+
+	public void setNewtopic_imageFileName(String imageFileName);
+
+	public void setNewtopic_image(File newtopic_image);
 }
