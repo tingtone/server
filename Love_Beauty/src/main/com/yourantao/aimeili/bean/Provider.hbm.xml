@@ -15,8 +15,8 @@
                 <comment>供应商名称</comment>
             </column>
         </property>
-        <property name="providerThumb" type="java.lang.String">
-            <column name="provider_thumb" length="64" not-null="true">
+        <property name="providerThumbId" type="java.lang.Integer">
+            <column name="provider_thumb_id" not-null="true">
                 <comment>供应商缩略图</comment>
             </column>
         </property>

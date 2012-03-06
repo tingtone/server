@@ -10,7 +10,7 @@ public class Provider implements java.io.Serializable {
 
 	private Integer providerId;
 	private String providerName;
-	private String providerThumb;
+	private Integer providerThumbId;
 	private String providerDescription;
 	private String providerService;
 	private String providerDeliver;
@@ -22,11 +22,11 @@ public class Provider implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Provider(String providerName, String providerThumb,
+	public Provider(String providerName, Integer providerThumbId,
 			String providerDescription, String providerService,
 			String providerDeliver) {
 		this.providerName = providerName;
-		this.providerThumb = providerThumb;
+		this.providerThumbId = providerThumbId;
 		this.providerDescription = providerDescription;
 		this.providerService = providerService;
 		this.providerDeliver = providerDeliver;
@@ -50,12 +50,12 @@ public class Provider implements java.io.Serializable {
 		this.providerName = providerName;
 	}
 
-	public String getProviderThumb() {
-		return this.providerThumb;
+	public Integer getProviderThumbId() {
+		return this.providerThumbId;
 	}
 
-	public void setProviderThumb(String providerThumb) {
-		this.providerThumb = providerThumb;
+	public void setProviderThumbId(Integer providerThumbId) {
+		this.providerThumbId = providerThumbId;
 	}
 
 	public String getProviderDescription() {

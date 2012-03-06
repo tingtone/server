@@ -24,10 +24,11 @@ public class GoodsDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory.getLogger(GoodsDAO.class);
 	// property constants
 	public static final String BRAND_ID = "brandId";
+	public static final String SERIES_ID = "seriesId";
 	public static final String CATEGORY_ID = "categoryId";
 	public static final String GOODS_NAME = "goodsName";
-	public static final String GOODS_THUMB = "goodsThumb";
-	public static final String GOODS_IMAGES = "goodsImages";
+	public static final String GOODS_THUMB_ID = "goodsThumbId";
+	public static final String GOODS_IMAGES_ID = "goodsImagesId";
 	public static final String GOODS_SCORE = "goodsScore";
 	public static final String GOODS_FORSKIN = "goodsForskin";
 	public static final String GOODS_NOTFORSKIN = "goodsNotforskin";
@@ -108,6 +109,10 @@ public class GoodsDAO extends HibernateDaoSupport {
 		return findByProperty(BRAND_ID, brandId);
 	}
 
+	public List findBySeriesId(Object seriesId) {
+		return findByProperty(SERIES_ID, seriesId);
+	}
+
 	public List findByCategoryId(Object categoryId) {
 		return findByProperty(CATEGORY_ID, categoryId);
 	}
@@ -116,12 +121,12 @@ public class GoodsDAO extends HibernateDaoSupport {
 		return findByProperty(GOODS_NAME, goodsName);
 	}
 
-	public List findByGoodsThumb(Object goodsThumb) {
-		return findByProperty(GOODS_THUMB, goodsThumb);
+	public List findByGoodsThumbId(Object goodsThumbId) {
+		return findByProperty(GOODS_THUMB_ID, goodsThumbId);
 	}
 
-	public List findByGoodsImages(Object goodsImages) {
-		return findByProperty(GOODS_IMAGES, goodsImages);
+	public List findByGoodsImagesId(Object goodsImagesId) {
+		return findByProperty(GOODS_IMAGES_ID, goodsImagesId);
 	}
 
 	public List findByGoodsScore(Object goodsScore) {

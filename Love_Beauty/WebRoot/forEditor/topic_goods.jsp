@@ -54,12 +54,17 @@ String tname=request.getParameter("topic_name");
 				if(json == null){
 					alert("json null");
 				}else{
-					 topicGoods+="<tbody>";
 					for(var i=0;i<json.length;i++){
 						var goodsId=json[i]['goods']['goodsId'];
-						topicGoods+="<tr><form action='topic_updateTopicGoods' enctype='multipart/form-data'>";
-						topicGoods+="<td>商品号：<input type='text' name='goods_id' value='"+goodsId+"'/>商品名: <input name='goods_name' value='"+json[i]['goods']['goodsName']+"'/></td><td><input name='submit' type='submit' value='前移'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input type='button' gid='"+goodsId+"' onclick=\"$('#goods"+goodsId+"').show();\" value='显示商品详情' id='showGoods'/></td>" ;
-						topicGoods+="</form></tr>";
+						topicGoods+="<form action='topic_updateTopicGoods' enctype='multipart/form-data'>";
+						topicGoods+="<table class='tabel'><tbody><tr>"
+						if(i==0){topicGoods+="<td>商品号：<input type='text' name='goods_id' value='"+goodsId+"'/>商品名: <input name='goods_name' value='"+json[i]['goods']['goodsName']+"'/></td><td><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input type='button' gid='"+goodsId+"' onclick=\"$('#goods"+goodsId+"').show();\" value='显示商品详情' id='showGoods'/></td>" ;
+						}
+						else if(i==json.length-1){topicGoods+="<td>商品号：<input type='text' name='goods_id' value='"+goodsId+"'/>商品名: <input name='goods_name' value='"+json[i]['goods']['goodsName']+"'/></td><td><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='删除'/><input type='button' gid='"+goodsId+"' onclick=\"$('#goods"+goodsId+"').show();\" value='显示商品详情' id='showGoods'/></td>" ;
+						}
+						else{topicGoods+="<td>商品号：<input type='text' name='goods_id' value='"+goodsId+"'/>商品名: <input name='goods_name' value='"+json[i]['goods']['goodsName']+"'/></td><td><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input type='button' gid='"+goodsId+"' onclick=\"$('#goods"+goodsId+"').show();\" value='显示商品详情' id='showGoods'/></td>" ;
+						}
+						topicGoods+="</tr></tbody></form>";
 						
 						goodsDetail+="<div style='display:none;' id='goods"+goodsId+"'>";
 						goodsDetail+="商品名称："+json[i]['goods']['goodsName'] +"<br/> ";
@@ -76,9 +81,8 @@ String tname=request.getParameter("topic_name");
 						goodsDetail+="商品状态："+json[i]['goods']['goodsStatus']+" <br/> ";
 						goodsDetail+="</div>";
 					}
-					 topicGoods+="</tbody>";
 				}
-				$('#topic_goods').html(topicGoods.toString());
+				$('#goods_list').html(topicGoods.toString());
 				$('#goods_detail').html(goodsDetail.toString());
 				
 				}
@@ -98,8 +102,8 @@ String tname=request.getParameter("topic_name");
   	<input id="topic_id" type="hidden" name="topic_id" value="<%=tid%>"/>专题： <%=tname %><br/>
   	商品id号：<input type="text" name="newGoods"/> <input type="button" value="新增对应商品"/>
   	
- <table class="tabel" id="topic_goods">
- </table>
+ <div id="goods_list">
+</div>
  
  <div id="goods_detail" >
  

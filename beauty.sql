@@ -35,7 +35,7 @@ CREATE TABLE `brand` (
 
 LOCK TABLES `brand` WRITE;
 /*!40000 ALTER TABLE `brand` DISABLE KEYS */;
-INSERT INTO `brand` VALUES (2,'雅诗兰黛 ','雅诗兰黛 ','','',0);
+INSERT INTO `brand` VALUES (2,'雅诗兰黛 ','Estee Lauder','','',0);
 INSERT INTO `brand` VALUES (3,'maybelline','美宝莲','othername test','测试描述',1);
 INSERT INTO `brand` VALUES (4,'资生堂 ','','','',1);
 INSERT INTO `brand` VALUES (5,'OLAY','玉兰油\r','','',0);
@@ -66,7 +66,7 @@ CREATE TABLE `category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '类别ID',
   `category_name` varchar(32) NOT NULL COMMENT '类别名称',
   `category_description` text NOT NULL COMMENT '类别描述',
-  `category_rank` int(11) NOT NULL COMMENT '类别的排序值，越大的优先级越高',
+  `category_rank` bigint(30) NOT NULL DEFAULT '0' COMMENT '类别的排序值，越大的优先级越高',
   `parent_catid` int(11) NOT NULL COMMENT '父类别的id',
   `cat_layer` tinyint(3) NOT NULL COMMENT '类别所在层数，如1、2、3等',
   PRIMARY KEY (`category_id`)
@@ -295,10 +295,11 @@ DROP TABLE IF EXISTS `goods`;
 CREATE TABLE `goods` (
   `goods_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `brand_id` int(10) unsigned NOT NULL COMMENT '品牌ID',
+  `series_id` int(11) NOT NULL DEFAULT '0' COMMENT '系列ID',
   `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
   `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
-  `goods_thumb` text NOT NULL COMMENT '商品缩略图',
-  `goods_images` text NOT NULL COMMENT '商品细节图',
+  `goods_thumb_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品缩略图',
+  `goods_images_id` text NOT NULL COMMENT '商品细节图',
   `goods_score` float NOT NULL COMMENT '商品评分',
   `goods_forskin` set('干性','油性','混合性','中性','敏感性') NOT NULL DEFAULT '' COMMENT '商品适用的肤质',
   `goods_notforskin` set('干性','油性','混合性','中性','敏感性') DEFAULT '' COMMENT '商品不适合的肤质',
@@ -321,8 +322,8 @@ CREATE TABLE `goods` (
 
 LOCK TABLES `goods` WRITE;
 /*!40000 ALTER TABLE `goods` DISABLE KEYS */;
-INSERT INTO `goods` VALUES (1,2,1,'test1','test','test',100,'敏感性','干性','干性','40岁以上','test','test',0,0,'2012-02-02','2012-02-02',3,1);
-INSERT INTO `goods` VALUES (2,1,1,'test2','test','test',100,'敏感性','敏感性','敏感性','40岁以上','test','test',0,0,'2012-02-01','2012-02-01',3,1);
+INSERT INTO `goods` VALUES (1,2,0,52,'test1',33,'0',100,'敏感性','干性','干性','40岁以上','test','test34534543521321321',0,0,'2012-03-06 10:49:02','2012-02-02',6,1);
+INSERT INTO `goods` VALUES (2,3,0,52,'test2',37,'0',100,'敏感性','敏感性','敏感性','40岁以上','test121212','test34',0,0,'2012-02-01','2012-03-06 15:47:56',6,1);
 /*!40000 ALTER TABLE `goods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1358,6 +1359,27 @@ LOCK TABLES `goods_efficacy` WRITE;
 UNLOCK TABLES;
 
 #
+# Source for table goods_images
+#
+
+DROP TABLE IF EXISTS `goods_images`;
+CREATE TABLE `goods_images` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+  `img_id` int(11) NOT NULL DEFAULT '0' COMMENT '图片ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# Dumping data for table goods_images
+#
+
+LOCK TABLES `goods_images` WRITE;
+/*!40000 ALTER TABLE `goods_images` DISABLE KEYS */;
+/*!40000 ALTER TABLE `goods_images` ENABLE KEYS */;
+UNLOCK TABLES;
+
+#
 # Source for table goods_map
 #
 
@@ -1790,7 +1812,7 @@ CREATE TABLE `image` (
   `Img_type` int(2) DEFAULT NULL COMMENT '图片的使用类型（0-网上图片 1-编辑图片）',
   `creatTime` datetime DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`Img_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table image
@@ -1798,9 +1820,12 @@ CREATE TABLE `image` (
 
 LOCK TABLES `image` WRITE;
 /*!40000 ALTER TABLE `image` DISABLE KEYS */;
-INSERT INTO `image` VALUES (23,'kthJ65iAX0PSmGW0bY9lDQ==.png','RiKQP3n9DTz5Z4c/EQjrJA==',65,65,12809,1,'2012-03-02 17:15:15');
-INSERT INTO `image` VALUES (24,'VfasXoSYE4xYH+a0eDZTtg==.png','s5/9p6uoaGaR1e9LjeM27g==',65,65,12797,1,'2012-03-02 17:15:15');
-INSERT INTO `image` VALUES (25,'sM2DxhP1CCbAagP5nszUvg==.png','2PSUPSyAsKhqHXAEt3Eodw==',65,65,12964,1,'2012-03-02 17:34:50');
+INSERT INTO `image` VALUES (33,'kthj65iax0psmgw0by9ldq==.png','sc/++A45nzltKcI3kBDWnQ==',65,65,12809,1,'2012-03-05 18:56:01');
+INSERT INTO `image` VALUES (34,'sm2dxhp1ccbaagp5nszuvg==.png','Kb3kETL3iVpGQrQEZY4jJA==',65,65,12964,1,'2012-03-05 18:56:01');
+INSERT INTO `image` VALUES (35,'7krkmkysiqcl4k8rehaa==.png','bVk2y3PzqLB6/gfIcy1//A==',65,65,12770,1,'2012-03-05 18:56:20');
+INSERT INTO `image` VALUES (36,'5qpkjnidnfhoxpq+rxrvoa==.png','hdVuGauLN5SxZ0u16rfyWw==',65,65,12922,1,'2012-03-05 18:56:20');
+INSERT INTO `image` VALUES (37,'wplczpqarsogyzgbgfrfug==.png','X2Mess+nXqPbMCVyQ8v9dg==',65,65,12644,1,'2012-03-06 11:15:09');
+INSERT INTO `image` VALUES (38,'njyupc8giwcnai+zlzzsg==.png','aylRArik3QJa7lgNOXw14w==',65,65,12861,1,'2012-03-06 15:19:39');
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1888,7 +1913,7 @@ DROP TABLE IF EXISTS `provider`;
 CREATE TABLE `provider` (
   `provider_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '供应商ID',
   `provider_name` varchar(32) NOT NULL COMMENT '供应商名称',
-  `provider_thumb` varchar(64) NOT NULL COMMENT '供应商缩略图',
+  `provider_thumb_id` int(11) NOT NULL DEFAULT '0' COMMENT '供应商缩略图',
   `provider_description` text NOT NULL COMMENT '供应商简介',
   `provider_service` text NOT NULL COMMENT '供应商客服与售后信息',
   `provider_deliver` text NOT NULL COMMENT '供应商发货与运费信息',
@@ -1901,12 +1926,12 @@ CREATE TABLE `provider` (
 
 LOCK TABLES `provider` WRITE;
 /*!40000 ALTER TABLE `provider` DISABLE KEYS */;
-INSERT INTO `provider` VALUES (1,'no5','provider_thumb','http://www.no5.com.cn/','provider_service','provider_deliver');
-INSERT INTO `provider` VALUES (2,'lafaso','provider_thumb','http://www.lafaso.com/','provider_service','provider_deliver');
-INSERT INTO `provider` VALUES (3,'jumei','provider_thumb','http://mall.jumei.com/','provider_service','provider_deliver');
-INSERT INTO `provider` VALUES (4,'360buy','provider_thumb','http://www.360buy.com/beauty.html','provider_service','provider_deliver');
-INSERT INTO `provider` VALUES (5,'dangdang','provider_thumb','http://cosmetic.dangdang.com/','provider_service','provider_deliver');
-INSERT INTO `provider` VALUES (6,'amazon','provider_thumb','http://www.amazon.cn/%E9%AB%98%E6%A1%A3%E5%8C%96%E5%A6%86%E5%93%81/b/ref=sa_menu_bty5?ie=UTF8&node=746776051','provider_service','provider_deliver');
+INSERT INTO `provider` VALUES (1,'no5',0,'http://www.no5.com.cn/','provider_service','provider_deliver');
+INSERT INTO `provider` VALUES (2,'lafaso',0,'http://www.lafaso.com/','provider_service','provider_deliver');
+INSERT INTO `provider` VALUES (3,'jumei',0,'http://mall.jumei.com/','provider_service','provider_deliver');
+INSERT INTO `provider` VALUES (4,'360buy',0,'http://www.360buy.com/beauty.html','provider_service','provider_deliver');
+INSERT INTO `provider` VALUES (5,'dangdang',0,'http://cosmetic.dangdang.com/','provider_service','provider_deliver');
+INSERT INTO `provider` VALUES (6,'amazon',0,'http://www.amazon.cn/%E9%AB%98%E6%A1%A3%E5%8C%96%E5%A6%86%E5%93%81/b/ref=sa_menu_bty5?ie=UTF8&node=746776051','provider_service','provider_deliver');
 /*!40000 ALTER TABLE `provider` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2051,6 +2076,36 @@ LOCK TABLES `report_goods` WRITE;
 UNLOCK TABLES;
 
 #
+# Source for table series
+#
+
+DROP TABLE IF EXISTS `series`;
+CREATE TABLE `series` (
+  `series_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '品牌系列ID',
+  `series_name` varchar(128) NOT NULL COMMENT '品牌系列名称',
+  `brand_id` int(11) NOT NULL COMMENT '品牌ID',
+  `series_description` text COMMENT '系列描述',
+  PRIMARY KEY (`series_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+#
+# Dumping data for table series
+#
+
+LOCK TABLES `series` WRITE;
+/*!40000 ALTER TABLE `series` DISABLE KEYS */;
+INSERT INTO `series` VALUES (1,'白金滋养系列',2,NULL);
+INSERT INTO `series` VALUES (2,'密集焕白系列',2,NULL);
+INSERT INTO `series` VALUES (3,'特润修护系列',2,NULL);
+INSERT INTO `series` VALUES (4,'焕采系列',2,NULL);
+INSERT INTO `series` VALUES (5,'红石榴鲜活系列',2,NULL);
+INSERT INTO `series` VALUES (6,'其他护肤系列',2,NULL);
+INSERT INTO `series` VALUES (7,'彩妆系列',2,NULL);
+INSERT INTO `series` VALUES (8,'香水系列',2,NULL);
+/*!40000 ALTER TABLE `series` ENABLE KEYS */;
+UNLOCK TABLES;
+
+#
 # Source for table shopping_cart
 #
 
@@ -2137,7 +2192,7 @@ CREATE TABLE `topic` (
   PRIMARY KEY (`topic_id`),
   KEY `NewIndex1` (`category_id`),
   KEY `NewIndex2` (`topic_rank`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table topic
@@ -2145,11 +2200,10 @@ CREATE TABLE `topic` (
 
 LOCK TABLES `topic` WRITE;
 /*!40000 ALTER TABLE `topic` DISABLE KEYS */;
-INSERT INTO `topic` VALUES (3,'测试专题1',1,'干燥，保湿',0,0,'2012-03-01 11:30:30',0);
-INSERT INTO `topic` VALUES (5,'添加测试2',1,'护肤，保湿',0,0,'2012-03-02 14:53:18',0);
-INSERT INTO `topic` VALUES (6,'添加测试2',1,'护肤，保湿',0,0,'2012-03-02 14:54:12',0);
-INSERT INTO `topic` VALUES (7,'添加测试2',1,'护肤，保湿',0,0,'2012-03-02 14:56:14',0);
-INSERT INTO `topic` VALUES (11,'123',1,'123',25,1330680887734,'2012-03-02 17:34:47',25);
+INSERT INTO `topic` VALUES (3,'测试专题1',1,'干燥，保湿33',0,1362868588264449,'2012-03-01 11:30:30',0);
+INSERT INTO `topic` VALUES (5,'添加测试2',1,'护肤，保湿',34,1362876466545665,'2012-03-02 14:53:18',33);
+INSERT INTO `topic` VALUES (6,'添加测试2',1,'护肤，保湿11',0,1362867907559427,'2012-03-02 14:54:12',0);
+INSERT INTO `topic` VALUES (11,'123',1,'123',36,1362868926551041,'2012-03-02 17:34:47',35);
 /*!40000 ALTER TABLE `topic` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -2163,6 +2217,7 @@ CREATE TABLE `topic_goods` (
   `goods_id` int(10) unsigned NOT NULL COMMENT '商品ID',
   `goods_note` text NOT NULL COMMENT '商品在专题中的额外描述信息',
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '代理主键，没什么用',
+  `topic_goods_rank` bigint(20) NOT NULL DEFAULT '0' COMMENT '专题中的商品排序',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 CHECKSUM=1 DELAY_KEY_WRITE=1 ROW_FORMAT=DYNAMIC;
 
@@ -2172,8 +2227,8 @@ CREATE TABLE `topic_goods` (
 
 LOCK TABLES `topic_goods` WRITE;
 /*!40000 ALTER TABLE `topic_goods` DISABLE KEYS */;
-INSERT INTO `topic_goods` VALUES (3,1,'',1);
-INSERT INTO `topic_goods` VALUES (3,2,'',2);
+INSERT INTO `topic_goods` VALUES (7,1,'',1,0);
+INSERT INTO `topic_goods` VALUES (7,2,'',2,0);
 /*!40000 ALTER TABLE `topic_goods` ENABLE KEYS */;
 UNLOCK TABLES;
 

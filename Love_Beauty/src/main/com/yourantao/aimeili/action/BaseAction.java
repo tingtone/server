@@ -1,18 +1,37 @@
 package main.com.yourantao.aimeili.action;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import main.com.yourantao.aimeili.bean.Image;
+import main.com.yourantao.aimeili.bean.ImageDAO;
+import main.com.yourantao.aimeili.conf.Config;
+import main.com.yourantao.aimeili.util.MD5;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.struts2.ServletActionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -31,6 +50,9 @@ public abstract class BaseAction extends ActionSupport {
 
 	protected String sessionId;
 	protected String url;
+	protected static final int BUFFER_SIZE = 16 * 1024;
+	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"yyyy-MM-dd HH:mm:ss");
 
 	private String jsonpcallback = null;
 
@@ -49,6 +71,17 @@ public abstract class BaseAction extends ActionSupport {
 			return null;
 		}
 		return ret;
+	}
+	
+	/**
+	 * 获得文件类型
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	protected static String getExtention(String fileName) {
+		int pos = fileName.lastIndexOf(".");
+		return fileName.substring(pos);
 	}
 
 	/**
@@ -136,6 +169,85 @@ public abstract class BaseAction extends ActionSupport {
 		response.setHeader(HEADER, CACHE);
 		return response;
 	}
+	
+	/**
+	 * 获得图片信息，并更新或新增 return imgid
+	 */
+	protected int getImgAttribute(File imgfile, String fileName) {
+		Image image = new Image();
+		ApplicationContext ac = Config.getACInstant();
+		ImageDAO imageDAO = ImageDAO.getFromApplicationContext(ac);
+
+		String imgurl = fileName; // 保存的图片url
+		// byte[] bytes= imgurl.getBytes(); //对长的url进行crc32编码
+		// CRC32 crc32 = new CRC32();
+		// crc32.update(bytes);
+		String imgurl_md5 = MD5.md5(imgurl); // MD5加密
+
+		try {
+			BufferedImage buff = ImageIO.read(imgfile);
+			image.setImgHeight(buff.getHeight());
+			image.setImgSize(imgfile.length());
+			image.setImgWidth(buff.getWidth());
+			image.setImgMd5(imgurl_md5);
+			image.setImgType(1); // 1代表是编辑给的图片
+			image.setImgUrl(imgurl);
+			image.setCreatTime(Timestamp.valueOf(dateFormat
+							.format(new Date())));
+
+			List<Image> list = imageDAO.findByImgMd5(imgurl_md5); // 用md5校验值查询是否有图片存在
+			if (list.isEmpty()) {
+				LOG.info("list is empty insert!");
+				imageDAO.save(image);
+				return image.getImgId();
+				// 插入该图片信息
+			} else {
+				image.setImgId((Integer) list.get(0).getImgId());
+				LOG.info("list is not empty update!");
+				// imageDAO.getHibernateTemplate().update(image);
+				return image.getImgId();
+				// 更新该图片信息
+			}
+			/* 保存入库 */
+		} catch (FileNotFoundException e) {
+			LOG.error("文件未能找到");
+			e.printStackTrace();
+		} catch (IOException e) {
+			LOG.error("IO操作失败");
+			e.printStackTrace();
+		}
+		return 0;
+	}
+
+	/**
+	 * 复制原文件到新文件
+	 */
+	protected static void copy(File src, File dst) {
+		try {
+			InputStream in = null;
+			OutputStream out = null;
+			try {
+				in = new BufferedInputStream(new FileInputStream(src),
+						BUFFER_SIZE);
+				out = new BufferedOutputStream(new FileOutputStream(dst),
+						BUFFER_SIZE);
+				byte[] buffer = new byte[BUFFER_SIZE];
+				while (in.read(buffer) > 0) {
+					out.write(buffer);
+				}
+			} finally {
+				if (null != in) {
+					in.close();
+				}
+				if (null != out) {
+					out.close();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public String getUrl() {
 		return url;

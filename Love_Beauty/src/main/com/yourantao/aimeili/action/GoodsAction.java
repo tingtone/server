@@ -1,5 +1,301 @@
 package main.com.yourantao.aimeili.action;
 
-public class GoodsAction extends BaseAction{
+import java.io.File;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import main.com.yourantao.aimeili.bean.Brand;
+import main.com.yourantao.aimeili.bean.BrandDAO;
+import main.com.yourantao.aimeili.bean.CategoryDAO;
+import main.com.yourantao.aimeili.bean.Goods;
+import main.com.yourantao.aimeili.bean.GoodsDAO;
+import main.com.yourantao.aimeili.bean.Image;
+import main.com.yourantao.aimeili.bean.ImageDAO;
+import main.com.yourantao.aimeili.bean.Series;
+import main.com.yourantao.aimeili.bean.SeriesDAO;
+import main.com.yourantao.aimeili.bean.Topic;
+import main.com.yourantao.aimeili.bean.TopicDAO;
+import main.com.yourantao.aimeili.bean.TopicGoodsDAO;
+import main.com.yourantao.aimeili.conf.Config;
+import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.util.MD5;
+import main.com.yourantao.aimeili.util.RankGenerator;
+import main.com.yourantao.aimeili.util.StringTool;
+import main.com.yourantao.aimeili.vo.GoodsView;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+
+@SuppressWarnings("serial")
+public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
+	private static final Logger log = LoggerFactory.getLogger(GoodsAction.class);
+	
+	private File newtopic_thumb; // 上传文件1
+	private File newtopic_image; // 上传文件1
+	private String imageContentType;// 上传文件类型2
+	private String imageFileName; // 上传文件名2
+	private String thumbContentType;// 上传文件类型1
+	private String thumbFileName; // 上传文件名1
+	
+	
+	private GoodsDAO goodsDAO;
+	private CategoryDAO categoryDAO;
+	private ImageDAO imageDAO;
+	private RankGenerator rankGenerator;
+	private BrandDAO brandDAO;
+	private SeriesDAO seriesDAO;
+	
+	
+	
+	// struts
+
+	
+	public void setNewtopic_thumbContentType(String thumbContentType) {
+		System.out.println("thumbContentType : " + thumbContentType);
+		this.thumbContentType = thumbContentType;
+	}
+
+	public void setNewtopic_thumbFileName(String thumbFileName) {
+		System.out.println("thumbFileName : " + thumbFileName);
+		this.thumbFileName = thumbFileName;
+	}
+
+	public void setNewtopic_thumb(File newtopic_thumb) {
+		this.newtopic_thumb = newtopic_thumb;
+	}
+
+	public void setNewtopic_imageContentType(String imageContentType) {
+		System.out.println("imageContentType : " + imageContentType);
+		this.imageContentType = imageContentType;
+	}
+
+	public void setNewtopic_imageFileName(String imageFileName) {
+		System.out.println("imageFileName : " + imageFileName);
+		this.imageFileName = imageFileName;
+	}
+
+	public void setNewtopic_image(File newtopic_image) {
+		this.newtopic_image = newtopic_image;
+	}
+
+	// spring
+	
+	
+	
+	public void setRankGenerator(RankGenerator rankGenerator) {
+		this.rankGenerator = rankGenerator;
+	}
+
+	public BrandDAO getBrandDAO() {
+		return brandDAO;
+	}
+
+	public void setBrandDAO(BrandDAO brandDAO) {
+		this.brandDAO = brandDAO;
+	}
+
+	public SeriesDAO getSeriesDAO() {
+		return seriesDAO;
+	}
+
+	public void setSeriesDAO(SeriesDAO seriesDAO) {
+		this.seriesDAO = seriesDAO;
+	}
+
+	public GoodsDAO getGoodsDAO() {
+		return goodsDAO;
+	}
+
+	public void setGoodsDAO(GoodsDAO goodsDAO) {
+		this.goodsDAO = goodsDAO;
+	}
+
+	public CategoryDAO getCategoryDAO() {
+		return categoryDAO;
+	}
+
+	public void setCategoryDAO(CategoryDAO categoryDAO) {
+		this.categoryDAO = categoryDAO;
+	}
+
+	public RankGenerator getRankGenerator() {
+		return rankGenerator;
+	}
+
+	public void setImageDAO(ImageDAO imageDAO) {
+		this.imageDAO = imageDAO;
+	}
+
+	public ImageDAO getImageDAO() {
+		return imageDAO;
+	}
+
+	
+	@Override
+	public String getGoodsList() {
+		Integer categoryId = getIntegerParameter(CATEGORY_ID);
+		if (categoryId == null)
+			return null;
+		List<Goods> goodsList = goodsDAO.findByCategoryId(categoryId);
+		List<GoodsView> result=new ArrayList<GoodsView>();
+		for (Goods goods : goodsList) {
+			GoodsView goodsView=new GoodsView();
+			goodsView.setGoodsId(goods.getGoodsId());
+			goodsView.setGoodsAge(goods.getGoodsAge());
+			goodsView.setGoodsDescription(goods.getGoodsDescription());
+			goodsView.setGoodsForskin(goods.getGoodsForskin());
+			goodsView.setGoodsName(goods.getGoodsName());
+			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+			goodsView.setGoodsScore(goods.getGoodsScore());
+			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+			goodsView.setGoodsStatus(goods.getGoodsStatus());
+			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+			if (thumb != null) {
+				goodsView.setGoodsThumb(BASE_IMAGEURL + thumb.getImgUrl());
+			} else {
+				goodsView.setGoodsThumb("");
+			}
+			if (goods.getBrandId() != null) {
+				Brand brand=brandDAO.findById(goods.getBrandId());
+				goodsView.setGoodsBrandName(brand.getBrandName());
+			} 
+			if (goods.getSeriesId() != null) {  
+				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+					goodsView.setGoodsSeriesName("无");
+				}else{
+					Series series=seriesDAO.findById(goods.getSeriesId());
+					goodsView.setGoodsSeriesName(series.getSeriesName());
+				}
+			}
+			result.add(goodsView);
+		}
+		printArray(result);
+		return null;
+	}
+
+	/**
+	 * see interface
+	 */
+	@Override
+	public String updateGoods() {
+		/*用spring新加的bean后，dao会自动持久化，不用在重新初始化*/
+//		ApplicationContext ac = Config.getACInstant();
+//		TopicGoodsDAO topicGoodsDAO = TopicGoodsDAO
+//				.getFromApplicationContext(ac);
+//		TopicDAO topicDAO = TopicDAO.getFromApplicationContext(ac);
+		Integer goodsId = getIntegerParameter(GOODS_ID);
+		Goods goods=goodsDAO.findById(goodsId);
+		
+		String goodsName = getReqeust().getParameter("goodsName");
+		String goodsScore = getReqeust().getParameter("goodsScore");
+		String goodsForskin = getReqeust().getParameter("goodsForskin");
+		String goodsNotforskin = getReqeust().getParameter("goodsNotforskin");
+		String goodsNoticeforskin = getReqeust().getParameter("goodsNoticeforskin");
+		String goodsAge = getReqeust().getParameter("goodsAge");
+		String goodsDescription = getReqeust().getParameter("goodsDescription");
+		String goodsSpecification = getReqeust().getParameter("goodsSpecification");
+		
+		goods.setGoodsId(goodsId);
+		String updateType = getReqeust().getParameter("submit");
+		getReqeust().getAttribute("newtopic_thumb");
+		if (updateType.equals("更新")) { // 需要对每个进行更新
+			if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
+				String FileName = MD5.md5(thumbFileName)
+						+ getExtention(thumbFileName);
+				FileName=StringTool.filterWord(FileName);
+				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				int imageid = getImgAttribute(newtopic_thumb, FileName);
+				goods.setGoodsThumbId(imageid);
+				copy(newtopic_thumb, thumbFile);
+			}
+			goods.setGoodsName(goodsName);
+			goods.setGoodsScore(Float.parseFloat(goodsScore));
+			goods.setGoodsForskin(goodsForskin);
+			goods.setGoodsNotforskin(goodsNotforskin);
+			goods.setGoodsNoticeforskin(goodsNoticeforskin);
+			goods.setGoodsAge(goodsAge);
+			goods.setGoodsDescription(goodsDescription);
+			goods.setGoodsLastUpdate(Timestamp.valueOf(dateFormat.format(new Date())));  //更新时间设置为当前更新时间
+			goods.setGoodsSpecification(goodsSpecification);
+			goods.setGoodsStatus((short)6);   //6表示已经审核
+			goodsDAO.merge(goods);
+			return SUCCESS;
+		} else if (updateType.equals("删除")) { // 删除
+			goodsDAO.delete(goodsDAO.findById(goodsId));
+			return "back";
+		} else if (updateType.equals("对应真实商品")) { // 查看对应商品
+			return "real_goods";
+		}else if(updateType.equals("商品细节图")){  //商品细节图的增删改查
+			return "goods_images";
+		}
+
+		return ERROR;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#insertGoods()
+	 */
+	@Override
+	public String insertGoods() {
+		Goods goods=new Goods();
+		Integer categoryId=0;
+		for(int j=4;j>0;j--){
+			if(getReqeust().getParameter("category"+j)!=null && !getReqeust().getParameter("category"+j).equals("0")){
+				categoryId=getIntegerParameter("category"+j);
+				break;
+			}
+		}
+		
+		
+		
+		goods.setBrandId(getIntegerParameter(BRAND_ID));
+		goods.setSeriesId(getIntegerParameter(SERIES_ID));
+		goods.setCategoryId(categoryId);
+		goods.setGoodsAddTime(Timestamp.valueOf(dateFormat.format(new Date())));
+		goods.setGoodsAge(getReqeust().getParameter("goodsAge"));
+		goods.setGoodsBuyCount(0);
+		goods.setGoodsViewCount(0);
+		goods.setGoodsDescription(getReqeust().getParameter("goodsDescription"));
+		goods.setGoodsForskin(getReqeust().getParameter("goodsForskin"));
+		goods.setGoodsLastUpdate(Timestamp.valueOf(dateFormat.format(new Date())));
+		goods.setGoodsName(getReqeust().getParameter("goodsName"));
+		goods.setGoodsNotforskin(getReqeust().getParameter("goodsNotforskin"));
+		goods.setGoodsNoticeforskin(getReqeust().getParameter("goodsNoticeforskin"));
+		goods.setGoodsRank(0);   //暂时初始化为0，商品的排序规则较复杂，以后再做
+		if(getReqeust().getParameter("goodsScore")==null || getReqeust().getParameter("goodsScore").equals("")){
+			goods.setGoodsScore((float)0);
+		}else{
+			goods.setGoodsScore(Float.valueOf(getReqeust().getParameter("goodsScore")));
+		}
+		
+		goods.setGoodsSpecification(getReqeust().getParameter("goodsSpecification"));
+		goods.setGoodsStatus((short)3);
+		
+		
+		if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
+			// String FileName =thumbFileName+ new Date().getTime() +
+			// getExtention(thumbFileName);
+			String FileName = MD5.md5(thumbFileName)
+					+ getExtention(thumbFileName); // MD5加密;
+			FileName=StringTool.filterWord(FileName);
+			File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+			int imageid = getImgAttribute(newtopic_thumb, FileName);
+			goods.setGoodsThumbId(imageid);
+			copy(newtopic_thumb, thumbFile);
+		}else{
+			goods.setGoodsThumbId(0);    //非空字段默认值为0
+		}
+		goods.setGoodsImagesId("");
+		
+		goodsDAO.save(goods);
+
+		return SUCCESS;
+	}
 
 }

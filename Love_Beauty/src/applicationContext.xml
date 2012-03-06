@@ -133,7 +133,9 @@
 				<value>
 					main/com/yourantao/aimeili/bean/Image.hbm.xml
 				</value>
-			</list>
+				<value>
+					main/com/yourantao/aimeili/bean/Series.hbm.xml
+				</value></list>
 		</property>
 	</bean>
 
@@ -314,9 +316,44 @@
 			<ref bean="RankGenerator" />
 		</property>
 	</bean>
+	
+	<bean id="GoodsAction" class="main.com.yourantao.aimeili.action.GoodsAction">
+		<property name="goodsDAO">
+			<ref bean="GoodsDAO" />
+		</property>
+		<property name="categoryDAO">
+			<ref bean="CategoryDAO" />
+		</property>
+		<property name="imageDAO">
+			<ref bean="ImageDAO" />
+		</property>
+		<property name="rankGenerator">
+			<ref bean="RankGenerator" />
+		</property>
+		<property name="seriesDAO">
+			<ref bean="SeriesDAO" />
+		</property>
+		<property name="brandDAO">
+			<ref bean="BrandDAO" />
+		</property>
+	</bean>
+	
+	<bean id="CategoryAction" class="main.com.yourantao.aimeili.action.CategoryAction">
+		<property name="categoryDAO">
+			<ref bean="CategoryDAO" />
+		</property>
+	</bean>
+	
+	<bean id="BrandAction" class="main.com.yourantao.aimeili.action.BrandAction">
+		<property name="brandDAO">
+			<ref bean="BrandDAO" />
+		</property>
+		<property name="seriesDAO">
+			<ref bean="SeriesDAO" />
+		</property>
+	</bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
@@ -347,4 +384,9 @@
 			</list>
 		</property>
 	</bean>
-</beans>
+	<bean id="SeriesDAO"
+		class="main.com.yourantao.aimeili.bean.SeriesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean></beans>

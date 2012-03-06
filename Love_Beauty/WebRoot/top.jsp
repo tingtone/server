@@ -17,7 +17,7 @@
 </script>
   <div class="topbar">
   <a href="forEditor/topic.jsp">专题页</a>
-  <a href="forEditor/Product.jsp">商品信息</a>
+  <a href="forEditor/goods.jsp">商品信息</a>
   <a href="forEditor/brand.jsp">品牌</a>
   </div>
 

@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
- <package name="lovebeauty" namespace="/"  extends="struts-default">
+ <package name="lovebeauty" extends="struts-default">
 		<!-- 专题页 -->
-		<action name="topic_*" class="TopicAction" method="{1}">
+		<action name="topic_*"  class="TopicAction"  method="{1}">
 			<result name="topic_goods">/forEditor/topic_goods.jsp</result>
+			<result name="back">/forEditor/topic.jsp</result>
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-
+		
+		
+		<!-- 商品页 -->
+		<action name="goods_*"  class="GoodsAction"  method="{1}">
+			<result name="real_goods">/forEditor/goods2realgoods.jsp</result>
+			<result name="back">/forEditor/goods.jsp</result>
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="goods_images">/forEditor/goodsImages.jsp</result>
+		</action>
+		
+		<!--  分类 -->
+		<action name="category_*"  class="CategoryAction"  method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		
+		<!--  品牌 -->
+		<action name="brand_*"  class="BrandAction"  method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
 
 		<!-- 登录 
 		<action name="login" class="main.com.yourantao.aimeili.action.LoginAction">

@@ -9,32 +9,29 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * Provider entities. Transaction control of the save(), update() and delete()
+ * Series entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see main.com.yourantao.aimeili.bean.Provider
+ * @see main.com.yourantao.aimeili.bean.Series
  * @author MyEclipse Persistence Tools
  */
 
-public class ProviderDAO extends HibernateDaoSupport {
-	private static final Logger log = LoggerFactory
-			.getLogger(ProviderDAO.class);
+public class SeriesDAO extends HibernateDaoSupport {
+	private static final Logger log = LoggerFactory.getLogger(SeriesDAO.class);
 	// property constants
-	public static final String PROVIDER_NAME = "providerName";
-	public static final String PROVIDER_THUMB_ID = "providerThumbId";
-	public static final String PROVIDER_DESCRIPTION = "providerDescription";
-	public static final String PROVIDER_SERVICE = "providerService";
-	public static final String PROVIDER_DELIVER = "providerDeliver";
+	public static final String SERIES_NAME = "seriesName";
+	public static final String BRAND_ID = "brandId";
+	public static final String SERIES_DESCRIPTION = "seriesDescription";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(Provider transientInstance) {
-		log.debug("saving Provider instance");
+	public void save(Series transientInstance) {
+		log.debug("saving Series instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -44,8 +41,8 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(Provider persistentInstance) {
-		log.debug("deleting Provider instance");
+	public void delete(Series persistentInstance) {
+		log.debug("deleting Series instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -55,11 +52,11 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public Provider findById(java.lang.Integer id) {
-		log.debug("getting Provider instance with id: " + id);
+	public Series findById(java.lang.Integer id) {
+		log.debug("getting Series instance with id: " + id);
 		try {
-			Provider instance = (Provider) getHibernateTemplate().get(
-					"main.com.yourantao.aimeili.bean.Provider", id);
+			Series instance = (Series) getHibernateTemplate().get(
+					"main.com.yourantao.aimeili.bean.Series", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -67,8 +64,8 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(Provider instance) {
-		log.debug("finding Provider instance by example");
+	public List findByExample(Series instance) {
+		log.debug("finding Series instance by example");
 		try {
 			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: "
@@ -81,10 +78,10 @@ public class ProviderDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding Provider instance with property: " + propertyName
+		log.debug("finding Series instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from Provider as model where model."
+			String queryString = "from Series as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -93,30 +90,22 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByProviderName(Object providerName) {
-		return findByProperty(PROVIDER_NAME, providerName);
+	public List findBySeriesName(Object seriesName) {
+		return findByProperty(SERIES_NAME, seriesName);
 	}
 
-	public List findByProviderThumbId(Object providerThumbId) {
-		return findByProperty(PROVIDER_THUMB_ID, providerThumbId);
+	public List findByBrandId(Object brandId) {
+		return findByProperty(BRAND_ID, brandId);
 	}
 
-	public List findByProviderDescription(Object providerDescription) {
-		return findByProperty(PROVIDER_DESCRIPTION, providerDescription);
-	}
-
-	public List findByProviderService(Object providerService) {
-		return findByProperty(PROVIDER_SERVICE, providerService);
-	}
-
-	public List findByProviderDeliver(Object providerDeliver) {
-		return findByProperty(PROVIDER_DELIVER, providerDeliver);
+	public List findBySeriesDescription(Object seriesDescription) {
+		return findByProperty(SERIES_DESCRIPTION, seriesDescription);
 	}
 
 	public List findAll() {
-		log.debug("finding all Provider instances");
+		log.debug("finding all Series instances");
 		try {
-			String queryString = "from Provider";
+			String queryString = "from Series";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -124,10 +113,10 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public Provider merge(Provider detachedInstance) {
-		log.debug("merging Provider instance");
+	public Series merge(Series detachedInstance) {
+		log.debug("merging Series instance");
 		try {
-			Provider result = (Provider) getHibernateTemplate().merge(
+			Series result = (Series) getHibernateTemplate().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -137,8 +126,8 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(Provider instance) {
-		log.debug("attaching dirty Provider instance");
+	public void attachDirty(Series instance) {
+		log.debug("attaching dirty Series instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -148,8 +137,8 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(Provider instance) {
-		log.debug("attaching clean Provider instance");
+	public void attachClean(Series instance) {
+		log.debug("attaching clean Series instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -159,7 +148,7 @@ public class ProviderDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static ProviderDAO getFromApplicationContext(ApplicationContext ctx) {
-		return (ProviderDAO) ctx.getBean("ProviderDAO");
+	public static SeriesDAO getFromApplicationContext(ApplicationContext ctx) {
+		return (SeriesDAO) ctx.getBean("SeriesDAO");
 	}
 }

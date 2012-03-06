@@ -15,6 +15,11 @@
                 <comment>品牌ID</comment>
             </column>
         </property>
+        <property name="seriesId" type="java.lang.Integer">
+            <column name="series_id" not-null="true">
+                <comment>系列ID</comment>
+            </column>
+        </property>
         <property name="categoryId" type="java.lang.Integer">
             <column name="category_id" not-null="true">
                 <comment>分类ID</comment>
@@ -25,13 +30,13 @@
                 <comment>商品名称</comment>
             </column>
         </property>
-        <property name="goodsThumb" type="java.lang.String">
-            <column name="goods_thumb" length="64" not-null="true">
+        <property name="goodsThumbId" type="java.lang.Integer">
+            <column name="goods_thumb_id" not-null="true">
                 <comment>商品缩略图</comment>
             </column>
         </property>
-        <property name="goodsImages" type="java.lang.String">
-            <column name="goods_images" length="65535" not-null="true">
+        <property name="goodsImagesId" type="java.lang.String">
+            <column name="goods_images_id" length="65535" not-null="true">
                 <comment>商品细节图</comment>
             </column>
         </property>
