@@ -42,7 +42,7 @@
 		<script type="text/javascript">
 
 function GetGoodsImage(gid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getGoodsImage";
+	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getGoodsImages";
 	var params = {
 		"gid" : gid
 	};
@@ -57,14 +57,10 @@ function GetGoodsImage(gid) {
 				alert("json null");
 			} else {
 				for ( var i = 0; i < json.length; i++) {
-					goods_image += "<img src='" + json[i]['categoryName'] + "'</option>";
+					goods_image += "<img src='" + json[i] +"'/>更改：<input type='file' name='newtopic_thumb'><input type='submit' name='submit' value='删除'/><br/>";
 				}
 			}
-			flag++;
-			$('#category' + flag).html(category.toString());
-			for ( var i = flag + 1; i <= 4; i++) {
-				$('#category' + i).empty();
-			}
+			$('#goods_images').html(goods_image.toString());
 		}
 	});
 }
@@ -74,7 +70,6 @@ $(document).ready(function() {
 	
 	GetGoodsImage($('#goods_id').val());
 
-	});
 });
 </script>
 	</head>
@@ -83,7 +78,9 @@ $(document).ready(function() {
 		<%@include file="/top.jsp"%>
 		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/>
   		<input name="new_image" type="file" value="新增对应图片"/>
+  		<br/>
 对应图片：		
+
 <div id="goods_images">
 
  </div>

@@ -2,7 +2,6 @@ package main.com.yourantao.aimeili.action;
 
 import java.io.File;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,14 +11,12 @@ import main.com.yourantao.aimeili.bean.BrandDAO;
 import main.com.yourantao.aimeili.bean.CategoryDAO;
 import main.com.yourantao.aimeili.bean.Goods;
 import main.com.yourantao.aimeili.bean.GoodsDAO;
+import main.com.yourantao.aimeili.bean.GoodsImages;
+import main.com.yourantao.aimeili.bean.GoodsImagesDAO;
 import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.bean.Series;
 import main.com.yourantao.aimeili.bean.SeriesDAO;
-import main.com.yourantao.aimeili.bean.Topic;
-import main.com.yourantao.aimeili.bean.TopicDAO;
-import main.com.yourantao.aimeili.bean.TopicGoodsDAO;
-import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
@@ -28,7 +25,6 @@ import main.com.yourantao.aimeili.vo.GoodsView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 
 @SuppressWarnings("serial")
 public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
@@ -48,6 +44,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private RankGenerator rankGenerator;
 	private BrandDAO brandDAO;
 	private SeriesDAO seriesDAO;
+	private GoodsImagesDAO goodsImagesDAO;
 	
 	
 	
@@ -88,6 +85,14 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
+	}
+
+	public GoodsImagesDAO getGoodsImagesDAO() {
+		return goodsImagesDAO;
+	}
+
+	public void setGoodsImagesDAO(GoodsImagesDAO goodsImagesDAO) {
+		this.goodsImagesDAO = goodsImagesDAO;
 	}
 
 	public BrandDAO getBrandDAO() {
@@ -134,7 +139,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		return imageDAO;
 	}
 
-	
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsList()
+	 */
 	@Override
 	public String getGoodsList() {
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
@@ -233,7 +241,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		}else if(updateType.equals("商品细节图")){  //商品细节图的增删改查
 			return "goods_images";
 		}
-
 		return ERROR;
 	}
 
@@ -251,8 +258,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 				break;
 			}
 		}
-		
-		
 		
 		goods.setBrandId(getIntegerParameter(BRAND_ID));
 		goods.setSeriesId(getIntegerParameter(SERIES_ID));
@@ -291,11 +296,30 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		}else{
 			goods.setGoodsThumbId(0);    //非空字段默认值为0
 		}
-		goods.setGoodsImagesId("");
 		
 		goodsDAO.save(goods);
 
 		return SUCCESS;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsImage()
+	 */
+	@Override
+	public String getGoodsImages() {
+		Integer goods_id = getIntegerParameter(GOODS_ID);
+		if (goods_id == null)
+			return null;
+		List<GoodsImages> goodsimages = goodsImagesDAO.findByGoodsId(goods_id);
+		List<String> imageUrl=new ArrayList<String>();
+		for (GoodsImages goodsImages : goodsimages) {
+			Image image=imageDAO.findById(goodsImages.getImgId());
+			imageUrl.add(BASE_IMAGEURL+image.getImgUrl());
+		}
+		printArray(imageUrl);
+
+		return null;
 	}
 
 }

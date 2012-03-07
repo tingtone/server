@@ -32,6 +32,10 @@
 	.tabel b input{
 		width: 10px;
 	}
+	.forskin, .notforskin, .noticeskin, .goodsage{
+		margin-right:5px;
+		background-color: #AACCEE;
+	}
 	
 	</style>
 		<script src="jquery1.4.2.js" type="text/javascript">
@@ -94,10 +98,10 @@ function GetGoods(cid) {
 						goodsDetail+="<tr><td>商品品牌：<input name='goodsBrand' type='text' value='"+json[i]['goodsBrandName']+"'/>系列：<input name='goodsSeries' type='text' value='"+json[i]['goodsSeriesName']+"'/></td></tr>";
 						goodsDetail+="<tr><td>商品缩略图：<img src='"+json[i]['goodsThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td></td></tr> ";
 						goodsDetail+="<tr><td>商品评分：<input name='goodsScore' type='text' value='"+json[i]['goodsScore']+"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品适用肤质：<input name='goodsForskin' type='text' value='"+json[i]['goodsForskin'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品不适用肤质：<input name='goodsNotforskin' type='text' value='"+json[i]['goodsNotforskin'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品需注意肤质：<input name='goodsNoticeforskin' type='text' value='"+json[i]['goodsNoticeforskin'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品年龄范围：<input name='goodsAge' type='text' value='"+json[i]['goodsAge']+"'/></td></tr> ";
+						goodsDetail+="<tr><td>商品适用肤质：<input id='goodsForskin"+i+"' name='goodsForskin' type='text' value='"+json[i]['goodsForskin'] +"'/><span class='forskin' i='"+i+"'>干性</span><span class='forskin' i='"+i+"'>油性</span><span class='forskin' i='"+i+"'>混合性</span><span class='forskin' i='"+i+"'>中性</span><span class='forskin' i='"+i+"'>敏感性</span></td></tr> ";
+						goodsDetail+="<tr><td>商品不适用肤质：<input id='goodsNotforskin"+i+"' name='goodsNotforskin' type='text' value='"+json[i]['goodsNotforskin'] +"'/><span class='notforskin' i='"+i+"'>干性</span><span class='notforskin' i='"+i+"'>油性</span><span class='notforskin' i='"+i+"'>混合性</span><span class='notforskin' i='"+i+"'>中性</span><span class='notforskin' i='"+i+"'>敏感性</span></td></tr> ";
+						goodsDetail+="<tr><td>商品需注意肤质：<input id='goodsNoticeforskin"+i+"' name='goodsNoticeforskin' type='text' value='"+json[i]['goodsNoticeforskin'] +"'/><span class='noticeskin' i='"+i+"'>干性</span><span class='noticeskin' i='"+i+"'>油性</span><span class='noticeskin' i='"+i+"'>混合性</span><span class='noticeskin' i='"+i+"'>中性</span><span class='noticeskin' i='"+i+"'>敏感性</span></td></tr> ";
+						goodsDetail+="<tr><td>商品年龄范围：<input id='goodsAge"+i+"' name='goodsAge' type='text' value='"+json[i]['goodsAge']+"'/><span class='goodsage' i='"+i+"'>20岁以下</span><span class='goodsage' i='"+i+"'>20-25岁</span><span class='goodsage' i='"+i+"'>26-30岁</span><span class='goodsage' i='"+i+"'>30-35岁</span><span class='goodsage' i='"+i+"'>36-40岁</span><span class='goodsage' i='"+i+"'>40岁以上</span></td></tr> ";
 						goodsDetail+="<tr><td>商品特点及成分：<input name='goodsDescription'  type='text' value='"+json[i]['goodsDescription'] +"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品用法：<input name='goodsSpecification' type='text' value='"+json[i]['goodsSpecification']+"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品状态：<input name='goodsStatus' type='text' value='"+json[i]['goodsStatus']+"'/></td></tr> ";
@@ -122,6 +126,46 @@ $(document).ready(function() {
 		GetGoods(cid);
 
 	});
+	
+	$('.forskin').live("click",function(){
+		var str=$(this).text();
+		var i=$(this).attr('i');
+		if($('#goodsForskin'+i).val()==""){
+		$('#goodsForskin'+i).val(str);
+		}else if($('#goodsForskin'+i).val().indexOf(str)<0){
+		$('#goodsForskin'+i).val($('#goodsForskin'+i).val()+","+str);
+		}
+	});
+	$('.notforskin').live("click",function(){
+		var str=$(this).text();
+		var i=$(this).attr('i');
+		if($('#goodsNotforskin'+i).val()==""){
+		$('#goodsNotforskin'+i).val(str);
+		}
+		else if($('#goodsNotforskin'+i).val().indexOf(str)<0){
+		$('#goodsNotforskin'+i).val($('#goodsNotforskin'+i).val()+","+str);
+		}
+	});
+	$('.noticeskin').live("click",function(){
+		var str=$(this).text();
+		var i=$(this).attr('i');
+		if($('#goodsNoticeforskin'+i).val()==""){
+		$('#goodsNoticeforskin'+i).val(str);
+		}else if($('#goodsNoticeforskin'+i).val().indexOf(str)<0){
+		$('#goodsNoticeforskin'+i).val($('#goodsNoticeforskin'+i).val()+","+str);
+		}
+	});
+	
+	$('.goodsage').live("click",function(){
+		var str=$(this).text();
+		var i=$(this).attr('i');
+		if($('#goodsAge'+i).val()==""){
+		$('#goodsAge'+i).val(str);
+		}else if($('#goodsAge'+i).val().indexOf(str)<0){
+		$('#goodsAge'+i).val($('#goodsAge'+i).val()+","+str);
+		}
+	});
+	
 });
 </script>
 	</head>

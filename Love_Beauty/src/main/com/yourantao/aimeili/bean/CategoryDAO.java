@@ -24,6 +24,7 @@ public class CategoryDAO extends HibernateDaoSupport {
 			.getLogger(CategoryDAO.class);
 	// property constants
 	public static final String CATEGORY_NAME = "categoryName";
+	public static final String CATEGORY_IMAGE_ID = "categoryImageId";
 	public static final String CATEGORY_DESCRIPTION = "categoryDescription";
 	public static final String CATEGORY_RANK = "categoryRank";
 	public static final String PARENT_CATID = "parentCatid";
@@ -95,6 +96,10 @@ public class CategoryDAO extends HibernateDaoSupport {
 
 	public List findByCategoryName(Object categoryName) {
 		return findByProperty(CATEGORY_NAME, categoryName);
+	}
+
+	public List findByCategoryImageId(Object categoryImageId) {
+		return findByProperty(CATEGORY_IMAGE_ID, categoryImageId);
 	}
 
 	public List findByCategoryDescription(Object categoryDescription) {

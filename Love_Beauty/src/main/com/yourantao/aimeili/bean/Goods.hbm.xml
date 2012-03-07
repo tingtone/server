@@ -35,11 +35,6 @@
                 <comment>商品缩略图</comment>
             </column>
         </property>
-        <property name="goodsImagesId" type="java.lang.String">
-            <column name="goods_images_id" length="65535" not-null="true">
-                <comment>商品细节图</comment>
-            </column>
-        </property>
         <property name="goodsScore" type="java.lang.Float">
             <column name="goods_score" precision="12" scale="0" not-null="true">
                 <comment>商品评分</comment>

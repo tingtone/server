@@ -35,5 +35,10 @@
                 <comment>品牌的排序值，越大的i优先级越高</comment>
             </column>
         </property>
+        <property name="brandImageId" type="java.lang.Integer">
+            <column name="brand_image_id" not-null="true">
+                <comment>品牌图片ID</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

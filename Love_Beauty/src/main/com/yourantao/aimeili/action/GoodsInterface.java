@@ -21,16 +21,21 @@ public interface GoodsInterface {
 	 */
 	public String insertGoods();
 	
+	/**
+	 * 获得商品详情图
+	 * @return
+	 */
+	public String getGoodsImages();
+	
+	public void setNewtopic_thumbContentType(String thumbContentType);
 
-	public void setNewtopic_thumbContentType(String thumbContentType) ;
+	public void setNewtopic_thumbFileName(String thumbFileName);
 
-	public void setNewtopic_thumbFileName(String thumbFileName) ;
+	public void setNewtopic_thumb(File newtopic_thumb);
 
-	public void setNewtopic_thumb(File newtopic_thumb) ;
+	public void setNewtopic_imageContentType(String imageContentType);
 
-	public void setNewtopic_imageContentType(String imageContentType) ;
+	public void setNewtopic_imageFileName(String imageFileName);
 
-	public void setNewtopic_imageFileName(String imageFileName) ;
-
-	public void setNewtopic_image(File newtopic_image) ;
+	public void setNewtopic_image(File newtopic_image);
 }

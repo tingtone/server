@@ -24,10 +24,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		text-align: center;
 		font-size: 15px;
 		color: red;
-		border: 1px solid purple;
+		
 	}
 	.tabel td{
 		border: 1px solid blue;
+	}
+	
+	.forskin, .notforskin, .noticeskin ,.goodsage{
+		margin-right:5px;
+		background-color: #AACCEE;
 	}
 	
 	</style>
@@ -125,7 +130,41 @@ function GetSeries(bid) {
 	$('#brand').change(function() {
 		var bid = $(this).val();
 		GetSeries(bid);
-
+	});
+	
+	$('.forskin').click(function(){
+		var str=$(this).text();
+		if($('#goodsForskin').val()==""){
+		$('#goodsForskin').val(str);
+		}else if($('#goodsForskin').val().indexOf(str)<0){
+		$('#goodsForskin').val($('#goodsForskin').val()+","+str);
+		}
+	});
+	$('.notforskin').click(function(){
+		var str=$(this).text();
+		if($('#goodsNotforskin').val()==""){
+		$('#goodsNotforskin').val(str);
+		}
+		else if($('#goodsNotforskin').val().indexOf(str)<0){
+		$('#goodsNotforskin').val($('#goodsNotforskin').val()+","+str);
+		}
+	});
+	$('.noticeskin').click(function(){
+		var str=$(this).text();
+		if($('#goodsNoticeforskin').val()==""){
+		$('#goodsNoticeforskin').val(str);
+		}else if($('#goodsNoticeforskin').val().indexOf(str)<0){
+		$('#goodsNoticeforskin').val($('#goodsNoticeforskin').val()+","+str);
+		}
+	});
+	
+	$('.goodsage').click(function(){
+		var str=$(this).text();
+		if($('#goodsAge').val()==""){
+		$('#goodsAge').val(str);
+		}else if($('#goodsAge').val().indexOf(str)<0){
+		$('#goodsAge').val($('#goodsAge').val()+","+str);
+		}
 	});
 	
 });
@@ -180,10 +219,10 @@ function GetSeries(bid) {
  <tr><td>商品名称：<input name='goodsName' type='text' /></td></tr>
 						<tr><td>商品缩略图：<input type='file' name='newtopic_thumb'></td></tr> 
 						<tr><td>商品评分：<input name='goodsScore' type='text' /></td></tr> 
-						<tr><td>商品适用肤质：<input name='goodsForskin' type='text' /></td></tr> 
-						<tr><td>商品不适用肤质：<input name='goodsNotforskin' type='text' /></td></tr> 
-						<tr><td>商品需注意肤质：<input name='goodsNoticeforskin' type='text'/></td></tr> 
-						<tr><td>商品年龄范围：<input name='goodsAge' type='text'/></td></tr> 
+						<tr><td>商品适用肤质：<input id='goodsForskin' name='goodsForskin' type='text' /></td><td><span class='forskin'>干性</span><span class='forskin'>油性</span><span class='forskin'>混合性</span><span class='forskin'>中性</span><span class='forskin'>敏感性</span></td></tr> 
+						<tr><td>商品不适用肤质：<input id='goodsNotforskin' name='goodsNotforskin' type='text' /></td><td><span class='notforskin'>干性</span><span class='notforskin'>油性</span><span class='notforskin'>混合性</span><span class='notforskin'>中性</span><span class='notforskin'>敏感性</span></td></tr> 
+						<tr><td>商品需注意肤质：<input id='goodsNoticeforskin' name='goodsNoticeforskin' type='text'/></td><td><span class='noticeskin'>干性</span><span class='noticeskin'>油性</span><span class='noticeskin'>混合性</span><span class='noticeskin'>中性</span><span class='noticeskin'>敏感性</span></td></tr> 
+						<tr><td>商品年龄范围：<input id='goodsAge' name='goodsAge' type='text'/></td><td><span class='goodsage'>20岁以下</span><span class='goodsage'>20-25岁</span><span class='goodsage'>26-30岁</span><span class='goodsage'>30-35岁</span><span class='goodsage'>36-40岁</span><span class='goodsage'>40岁以上</span></td></tr> 
 						<tr><td>商品特点及成分：<input name='goodsDescription'  type='text' /></td></tr> 
 						<tr><td>商品用法：<input name='goodsSpecification' type='text' /></td></tr> 
  <tr>

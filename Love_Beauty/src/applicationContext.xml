@@ -135,6 +135,9 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/Series.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/GoodsImages.hbm.xml
 				</value></list>
 		</property>
 	</bean>
@@ -336,11 +339,17 @@
 		<property name="brandDAO">
 			<ref bean="BrandDAO" />
 		</property>
+		<property name="goodsImagesDAO">
+			<ref bean="GoodsImagesDAO" />
+		</property>
 	</bean>
 	
 	<bean id="CategoryAction" class="main.com.yourantao.aimeili.action.CategoryAction">
 		<property name="categoryDAO">
 			<ref bean="CategoryDAO" />
+		</property>
+		<property name="imageDAO">
+			<ref bean="ImageDAO" />
 		</property>
 	</bean>
 	
@@ -386,6 +395,12 @@
 	</bean>
 	<bean id="SeriesDAO"
 		class="main.com.yourantao.aimeili.bean.SeriesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GoodsImagesDAO"
+		class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

@@ -1,6 +1,5 @@
 package main.com.yourantao.aimeili.vo;
 
-import java.sql.Timestamp;
 
 /**
  * 商品显示类

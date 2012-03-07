@@ -19,7 +19,7 @@
   <a href="forEditor/topic.jsp">专题页</a>
   <a href="forEditor/goods.jsp">商品信息</a>
   <a href="forEditor/brand.jsp">品牌</a>
+  <a href="forEditor/category.jsp">分类信息</a>
   </div>
-
 
 

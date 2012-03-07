@@ -26,6 +26,7 @@ CREATE TABLE `brand` (
   `brand_other_names` varchar(64) NOT NULL COMMENT '品牌其他的名字，该字段用于录入时的比对，不会呈现给用户看',
   `brand_description` text NOT NULL COMMENT '品牌描述',
   `brand_rank` int(11) NOT NULL COMMENT '品牌的排序值，越大的i优先级越高',
+  `brand_image_id` int(11) NOT NULL DEFAULT '0' COMMENT '品牌图片ID',
   PRIMARY KEY (`brand_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
@@ -35,25 +36,25 @@ CREATE TABLE `brand` (
 
 LOCK TABLES `brand` WRITE;
 /*!40000 ALTER TABLE `brand` DISABLE KEYS */;
-INSERT INTO `brand` VALUES (2,'雅诗兰黛 ','Estee Lauder','','',0);
-INSERT INTO `brand` VALUES (3,'maybelline','美宝莲','othername test','测试描述',1);
-INSERT INTO `brand` VALUES (4,'资生堂 ','','','',1);
-INSERT INTO `brand` VALUES (5,'OLAY','玉兰油\r','','',0);
-INSERT INTO `brand` VALUES (6,'Mentholatum','曼秀雷敦','','',0);
-INSERT INTO `brand` VALUES (7,'dior','迪奥','','',0);
-INSERT INTO `brand` VALUES (8,'maxfactor','蜜丝佛陀','','',0);
-INSERT INTO `brand` VALUES (9,'chanel','香奈儿\r','','',0);
-INSERT INTO `brand` VALUES (10,'kose','高丝','','',0);
-INSERT INTO `brand` VALUES (11,'dove','多芬','','',0);
-INSERT INTO `brand` VALUES (12,'娥佩兰','娥佩兰','','',0);
-INSERT INTO `brand` VALUES (13,'火烈鸟','火烈鸟','','',0);
-INSERT INTO `brand` VALUES (14,'芭茉儿','芭茉儿','','',0);
-INSERT INTO `brand` VALUES (15,'碧欧泉','碧欧泉','','',0);
-INSERT INTO `brand` VALUES (16,'百雀羚','','','',0);
-INSERT INTO `brand` VALUES (17,'佰草集','','','',0);
-INSERT INTO `brand` VALUES (18,'婵真','婵真','','',0);
-INSERT INTO `brand` VALUES (19,'御泥坊','御泥坊','','',0);
-INSERT INTO `brand` VALUES (20,'美即','美即','','',0);
+INSERT INTO `brand` VALUES (2,'Estee Lauder','雅诗兰黛 ','','',0,0);
+INSERT INTO `brand` VALUES (3,'maybelline','美宝莲','othername test','测试描述',1,0);
+INSERT INTO `brand` VALUES (4,'资生堂 ','','','',1,0);
+INSERT INTO `brand` VALUES (5,'OLAY','玉兰油\r','','',0,0);
+INSERT INTO `brand` VALUES (6,'Mentholatum','曼秀雷敦','','',0,0);
+INSERT INTO `brand` VALUES (7,'dior','迪奥','','',0,0);
+INSERT INTO `brand` VALUES (8,'maxfactor','蜜丝佛陀','','',0,0);
+INSERT INTO `brand` VALUES (9,'chanel','香奈儿\r','','',0,0);
+INSERT INTO `brand` VALUES (10,'kose','高丝','','',0,0);
+INSERT INTO `brand` VALUES (11,'dove','多芬','','',0,0);
+INSERT INTO `brand` VALUES (12,'娥佩兰','娥佩兰','','',0,0);
+INSERT INTO `brand` VALUES (13,'火烈鸟','火烈鸟','','',0,0);
+INSERT INTO `brand` VALUES (14,'芭茉儿','芭茉儿','','',0,0);
+INSERT INTO `brand` VALUES (15,'碧欧泉','碧欧泉','','',0,0);
+INSERT INTO `brand` VALUES (16,'百雀羚','','','',0,0);
+INSERT INTO `brand` VALUES (17,'佰草集','','','',0,0);
+INSERT INTO `brand` VALUES (18,'婵真','婵真','','',0,0);
+INSERT INTO `brand` VALUES (19,'御泥坊','御泥坊','','',0,0);
+INSERT INTO `brand` VALUES (20,'美即','美即','','',0,0);
 /*!40000 ALTER TABLE `brand` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,6 +66,7 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category` (
   `category_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '类别ID',
   `category_name` varchar(32) NOT NULL COMMENT '类别名称',
+  `category_image_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类图片id',
   `category_description` text NOT NULL COMMENT '类别描述',
   `category_rank` bigint(30) NOT NULL DEFAULT '0' COMMENT '类别的排序值，越大的优先级越高',
   `parent_catid` int(11) NOT NULL COMMENT '父类别的id',
@@ -78,74 +80,75 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'护肤','',1,0,0);
-INSERT INTO `category` VALUES (2,'妆扮','',2,0,0);
-INSERT INTO `category` VALUES (3,'美发','',3,0,0);
-INSERT INTO `category` VALUES (4,'美体','',4,0,0);
-INSERT INTO `category` VALUES (5,'日护理','',5,1,1);
-INSERT INTO `category` VALUES (6,'周护理','',6,1,1);
-INSERT INTO `category` VALUES (8,'卸妆','',0,5,2);
-INSERT INTO `category` VALUES (9,'洁面','',0,5,2);
-INSERT INTO `category` VALUES (10,'化妆水','',0,5,2);
-INSERT INTO `category` VALUES (11,'乳液/面霜','',0,5,2);
-INSERT INTO `category` VALUES (13,'精华','',0,5,2);
-INSERT INTO `category` VALUES (14,'眼霜/精华','',0,5,2);
-INSERT INTO `category` VALUES (15,'润唇膏','',0,5,2);
-INSERT INTO `category` VALUES (16,'喷雾\r\n喷雾\r\n喷雾','',0,5,2);
-INSERT INTO `category` VALUES (17,'防晒','',0,5,2);
-INSERT INTO `category` VALUES (18,'精油','',0,5,2);
-INSERT INTO `category` VALUES (19,'面膜','',0,6,2);
-INSERT INTO `category` VALUES (20,'按摩霜','',0,6,2);
-INSERT INTO `category` VALUES (21,'去角质','',0,6,2);
-INSERT INTO `category` VALUES (22,'妆底','',0,2,1);
-INSERT INTO `category` VALUES (23,'眼部妆容','',0,2,1);
-INSERT INTO `category` VALUES (24,'唇部妆容','',0,2,1);
-INSERT INTO `category` VALUES (26,'面颊妆容','',0,2,1);
-INSERT INTO `category` VALUES (27,'沐浴清洁','',0,4,1);
-INSERT INTO `category` VALUES (28,'身体乳/霜','',0,4,1);
-INSERT INTO `category` VALUES (29,'手部护理','',0,4,1);
-INSERT INTO `category` VALUES (30,'足部护理','',0,4,1);
-INSERT INTO `category` VALUES (32,'洗发','',0,3,1);
-INSERT INTO `category` VALUES (33,'护法','',0,3,1);
-INSERT INTO `category` VALUES (34,'染发','',0,3,1);
-INSERT INTO `category` VALUES (35,'造型','',0,3,1);
-INSERT INTO `category` VALUES (36,'妆底隔离','',0,22,2);
-INSERT INTO `category` VALUES (37,'遮瑕膏','',0,22,2);
-INSERT INTO `category` VALUES (38,'粉底液','',0,22,2);
-INSERT INTO `category` VALUES (39,'粉底霜','',0,22,2);
-INSERT INTO `category` VALUES (40,'粉饼','',0,22,2);
-INSERT INTO `category` VALUES (41,'粉蜜（散粉）','',0,22,2);
-INSERT INTO `category` VALUES (42,'眼部底霜','',0,23,2);
-INSERT INTO `category` VALUES (43,'眼影','',0,23,2);
-INSERT INTO `category` VALUES (44,'眼线','',0,23,2);
-INSERT INTO `category` VALUES (45,'假睫毛','',0,23,2);
-INSERT INTO `category` VALUES (46,'睫毛膏','',0,23,2);
-INSERT INTO `category` VALUES (47,'眉笔','',0,23,2);
-INSERT INTO `category` VALUES (48,'唇彩','',0,24,2);
-INSERT INTO `category` VALUES (49,'唇线笔','',0,24,2);
-INSERT INTO `category` VALUES (50,'唇膏','',0,24,2);
-INSERT INTO `category` VALUES (51,'腮红（胭脂）','',0,26,2);
-INSERT INTO `category` VALUES (52,'卸妆油','',0,8,3);
-INSERT INTO `category` VALUES (53,'卸妆水','',0,8,3);
-INSERT INTO `category` VALUES (54,'卸妆乳','',0,8,3);
-INSERT INTO `category` VALUES (55,'全脸','',0,8,3);
-INSERT INTO `category` VALUES (56,'眼唇','',0,8,3);
-INSERT INTO `category` VALUES (57,'洁面乳','',0,9,3);
-INSERT INTO `category` VALUES (58,'洁面啫喱','',0,9,3);
-INSERT INTO `category` VALUES (59,'洁面摩丝','',0,9,3);
-INSERT INTO `category` VALUES (60,'洁面粉','',0,9,3);
-INSERT INTO `category` VALUES (61,'洁面皂','',0,9,3);
-INSERT INTO `category` VALUES (62,'深层清洁','',0,9,3);
-INSERT INTO `category` VALUES (63,'补水保湿','',0,9,3);
-INSERT INTO `category` VALUES (64,'美白/淡斑','',0,9,3);
-INSERT INTO `category` VALUES (65,'控油','',0,9,3);
-INSERT INTO `category` VALUES (66,'日','',0,11,3);
-INSERT INTO `category` VALUES (67,'夜','',0,11,3);
-INSERT INTO `category` VALUES (68,'轻盈防晒','',0,17,3);
-INSERT INTO `category` VALUES (69,'高度防晒','',0,17,3);
-INSERT INTO `category` VALUES (70,'面膜帖','',0,19,3);
-INSERT INTO `category` VALUES (71,'水洗式','',0,19,3);
-INSERT INTO `category` VALUES (72,'睡眠免洗','',0,19,3);
+INSERT INTO `category` VALUES (1,'护肤',33,'',1,0,0);
+INSERT INTO `category` VALUES (2,'妆扮',0,'',2,0,0);
+INSERT INTO `category` VALUES (3,'美发',0,'',3,0,0);
+INSERT INTO `category` VALUES (4,'美体',0,'',4,0,0);
+INSERT INTO `category` VALUES (5,'日护理',0,'',5,1,1);
+INSERT INTO `category` VALUES (6,'周护理',0,'',6,1,1);
+INSERT INTO `category` VALUES (8,'卸妆',0,'',0,5,2);
+INSERT INTO `category` VALUES (9,'洁面',0,'',0,5,2);
+INSERT INTO `category` VALUES (10,'化妆水',0,'',0,5,2);
+INSERT INTO `category` VALUES (11,'乳液/面霜',0,'',0,5,2);
+INSERT INTO `category` VALUES (13,'精华',0,'',0,5,2);
+INSERT INTO `category` VALUES (14,'眼霜/精华',0,'',0,5,2);
+INSERT INTO `category` VALUES (15,'润唇膏',0,'',0,5,2);
+INSERT INTO `category` VALUES (16,'喷雾\r\n喷雾\r\n喷雾',0,'',0,5,2);
+INSERT INTO `category` VALUES (17,'防晒',0,'',0,5,2);
+INSERT INTO `category` VALUES (18,'精油',0,'',0,5,2);
+INSERT INTO `category` VALUES (19,'面膜',0,'',0,6,2);
+INSERT INTO `category` VALUES (20,'按摩霜',0,'',0,6,2);
+INSERT INTO `category` VALUES (21,'去角质',0,'',0,6,2);
+INSERT INTO `category` VALUES (22,'妆底',0,'',0,2,1);
+INSERT INTO `category` VALUES (23,'眼部妆容',0,'',0,2,1);
+INSERT INTO `category` VALUES (24,'唇部妆容',0,'',0,2,1);
+INSERT INTO `category` VALUES (26,'面颊妆容',0,'',0,2,1);
+INSERT INTO `category` VALUES (27,'沐浴清洁',0,'',0,4,1);
+INSERT INTO `category` VALUES (28,'身体乳/霜',0,'',0,4,1);
+INSERT INTO `category` VALUES (29,'手部护理',0,'',0,4,1);
+INSERT INTO `category` VALUES (30,'足部护理',0,'',0,4,1);
+INSERT INTO `category` VALUES (32,'洗发',0,'',0,3,1);
+INSERT INTO `category` VALUES (33,'护法',0,'',0,3,1);
+INSERT INTO `category` VALUES (34,'染发',0,'',0,3,1);
+INSERT INTO `category` VALUES (35,'造型',0,'',0,3,1);
+INSERT INTO `category` VALUES (36,'妆底隔离',0,'',0,22,2);
+INSERT INTO `category` VALUES (37,'遮瑕膏',0,'',0,22,2);
+INSERT INTO `category` VALUES (38,'粉底液',0,'',0,22,2);
+INSERT INTO `category` VALUES (39,'粉底霜',0,'',0,22,2);
+INSERT INTO `category` VALUES (40,'粉饼',0,'',0,22,2);
+INSERT INTO `category` VALUES (41,'粉蜜（散粉）',0,'',0,22,2);
+INSERT INTO `category` VALUES (42,'眼部底霜',0,'',0,23,2);
+INSERT INTO `category` VALUES (43,'眼影',0,'',0,23,2);
+INSERT INTO `category` VALUES (44,'眼线',0,'',0,23,2);
+INSERT INTO `category` VALUES (45,'假睫毛',0,'',0,23,2);
+INSERT INTO `category` VALUES (46,'睫毛膏',0,'',0,23,2);
+INSERT INTO `category` VALUES (47,'眉笔',0,'',0,23,2);
+INSERT INTO `category` VALUES (48,'唇彩',0,'',0,24,2);
+INSERT INTO `category` VALUES (49,'唇线笔',0,'',0,24,2);
+INSERT INTO `category` VALUES (50,'唇膏',0,'',0,24,2);
+INSERT INTO `category` VALUES (51,'腮红（胭脂）',0,'',0,26,2);
+INSERT INTO `category` VALUES (52,'卸妆油',38,'卸妆油的描述',0,8,3);
+INSERT INTO `category` VALUES (53,'卸妆水',0,'',0,8,3);
+INSERT INTO `category` VALUES (54,'卸妆乳',0,'',0,8,3);
+INSERT INTO `category` VALUES (55,'全脸',0,'',0,8,3);
+INSERT INTO `category` VALUES (56,'眼唇',0,'',0,8,3);
+INSERT INTO `category` VALUES (57,'洁面乳',0,'',0,9,3);
+INSERT INTO `category` VALUES (58,'洁面啫喱',0,'',0,9,3);
+INSERT INTO `category` VALUES (59,'洁面摩丝',0,'',0,9,3);
+INSERT INTO `category` VALUES (60,'洁面粉',0,'',0,9,3);
+INSERT INTO `category` VALUES (61,'洁面皂',0,'',0,9,3);
+INSERT INTO `category` VALUES (62,'深层清洁',0,'',0,9,3);
+INSERT INTO `category` VALUES (63,'补水保湿',0,'',0,9,3);
+INSERT INTO `category` VALUES (64,'美白/淡斑',0,'',0,9,3);
+INSERT INTO `category` VALUES (65,'控油',0,'',0,9,3);
+INSERT INTO `category` VALUES (66,'日',0,'',0,11,3);
+INSERT INTO `category` VALUES (67,'夜',0,'',0,11,3);
+INSERT INTO `category` VALUES (68,'轻盈防晒',0,'',0,17,3);
+INSERT INTO `category` VALUES (69,'高度防晒',0,'',0,17,3);
+INSERT INTO `category` VALUES (70,'面膜帖',0,'',0,19,3);
+INSERT INTO `category` VALUES (71,'水洗式',0,'',0,19,3);
+INSERT INTO `category` VALUES (72,'睡眠免洗',0,'',0,19,3);
+INSERT INTO `category` VALUES (74,'新增的卸妆下的子分类',34,'描述',0,8,3);
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,7 +302,6 @@ CREATE TABLE `goods` (
   `category_id` int(10) unsigned NOT NULL COMMENT '分类ID',
   `goods_name` varchar(64) NOT NULL COMMENT '商品名称',
   `goods_thumb_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品缩略图',
-  `goods_images_id` text NOT NULL COMMENT '商品细节图',
   `goods_score` float NOT NULL COMMENT '商品评分',
   `goods_forskin` set('干性','油性','混合性','中性','敏感性') NOT NULL DEFAULT '' COMMENT '商品适用的肤质',
   `goods_notforskin` set('干性','油性','混合性','中性','敏感性') DEFAULT '' COMMENT '商品不适合的肤质',
@@ -314,7 +316,7 @@ CREATE TABLE `goods` (
   `goods_status` tinyint(3) unsigned NOT NULL DEFAULT '3' COMMENT '商品的状态，0表示不可用，3表示新添加待审核，6表示已审核',
   `goods_rank` int(10) NOT NULL COMMENT '商品的排序值，越大的优先级越高',
   PRIMARY KEY (`goods_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 #
 # Dumping data for table goods
@@ -322,8 +324,11 @@ CREATE TABLE `goods` (
 
 LOCK TABLES `goods` WRITE;
 /*!40000 ALTER TABLE `goods` DISABLE KEYS */;
-INSERT INTO `goods` VALUES (1,2,0,52,'test1',33,'0',100,'敏感性','干性','干性','40岁以上','test','test34534543521321321',0,0,'2012-03-06 10:49:02','2012-02-02',6,1);
-INSERT INTO `goods` VALUES (2,3,0,52,'test2',37,'0',100,'敏感性','敏感性','敏感性','40岁以上','test121212','test34',0,0,'2012-02-01','2012-03-06 15:47:56',6,1);
+INSERT INTO `goods` VALUES (1,2,0,52,'test1',33,100,'油性,敏感性','干性','干性','40岁以上','test','test34534543521321321',0,0,'2012-03-06 10:49:02','2012-02-02',6,1);
+INSERT INTO `goods` VALUES (2,3,0,52,'test2',37,100,'敏感性','敏感性','敏感性','40岁以上','test121212','test34',0,0,'2012-02-01','2012-03-06 15:47:56',6,1);
+INSERT INTO `goods` VALUES (4,2,1,52,'应用测试2222',0,100,'干性,中性,敏感性','油性,混合性','干性,混合性,中性,敏感性','','','',0,0,'2012-03-07 11:47:53','2012-03-07 13:24:41',6,0);
+INSERT INTO `goods` VALUES (5,2,3,8,'测试添加数据2',37,1000,'干性','油性,混合性','干性,油性,混合性,敏感性','','','',0,0,'2012-03-07 13:30:26','2012-03-07 13:30:26',3,0);
+INSERT INTO `goods` VALUES (6,2,1,52,'111',41,123,'干性,油性,混合性,中性','干性','干性','20-25岁','','',0,0,'2012-03-07 20:51:25','2012-03-07 20:51:25',3,0);
 /*!40000 ALTER TABLE `goods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1376,6 +1381,13 @@ CREATE TABLE `goods_images` (
 
 LOCK TABLES `goods_images` WRITE;
 /*!40000 ALTER TABLE `goods_images` DISABLE KEYS */;
+INSERT INTO `goods_images` VALUES (1,1,33);
+INSERT INTO `goods_images` VALUES (2,2,33);
+INSERT INTO `goods_images` VALUES (3,1,34);
+INSERT INTO `goods_images` VALUES (4,1,35);
+INSERT INTO `goods_images` VALUES (5,4,33);
+INSERT INTO `goods_images` VALUES (6,4,34);
+INSERT INTO `goods_images` VALUES (7,4,35);
 /*!40000 ALTER TABLE `goods_images` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1812,7 +1824,7 @@ CREATE TABLE `image` (
   `Img_type` int(2) DEFAULT NULL COMMENT '图片的使用类型（0-网上图片 1-编辑图片）',
   `creatTime` datetime DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`Img_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 #
 # Dumping data for table image
@@ -1826,6 +1838,9 @@ INSERT INTO `image` VALUES (35,'7krkmkysiqcl4k8rehaa==.png','bVk2y3PzqLB6/gfIcy1
 INSERT INTO `image` VALUES (36,'5qpkjnidnfhoxpq+rxrvoa==.png','hdVuGauLN5SxZ0u16rfyWw==',65,65,12922,1,'2012-03-05 18:56:20');
 INSERT INTO `image` VALUES (37,'wplczpqarsogyzgbgfrfug==.png','X2Mess+nXqPbMCVyQ8v9dg==',65,65,12644,1,'2012-03-06 11:15:09');
 INSERT INTO `image` VALUES (38,'njyupc8giwcnai+zlzzsg==.png','aylRArik3QJa7lgNOXw14w==',65,65,12861,1,'2012-03-06 15:19:39');
+INSERT INTO `image` VALUES (39,'z2d62qi1ivzw77eejkeoqg==.png','X/NbRy4e0HR/DtO0zz9Gvg==',65,65,12771,1,'2012-03-07 11:47:53');
+INSERT INTO `image` VALUES (40,'oea5kchvknekrhq59tg0a==.png','4x6ydV2C9WMBiaWEVlMaqA==',65,65,12849,1,'2012-03-07 17:16:51');
+INSERT INTO `image` VALUES (41,'ys5ymko6ya3xgijk+u0rq==.png','SWYSqzFMXGGuzgBUdWESog==',65,65,12768,1,'2012-03-07 20:51:25');
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 UNLOCK TABLES;
 

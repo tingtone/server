@@ -14,6 +14,7 @@ public class Brand implements java.io.Serializable {
 	private String brandOtherNames;
 	private String brandDescription;
 	private Integer brandRank;
+	private Integer brandImageId;
 
 	// Constructors
 
@@ -23,12 +24,13 @@ public class Brand implements java.io.Serializable {
 
 	/** full constructor */
 	public Brand(String brandName, String brandAlias, String brandOtherNames,
-			String brandDescription, Integer brandRank) {
+			String brandDescription, Integer brandRank, Integer brandImageId) {
 		this.brandName = brandName;
 		this.brandAlias = brandAlias;
 		this.brandOtherNames = brandOtherNames;
 		this.brandDescription = brandDescription;
 		this.brandRank = brandRank;
+		this.brandImageId = brandImageId;
 	}
 
 	// Property accessors
@@ -79,6 +81,14 @@ public class Brand implements java.io.Serializable {
 
 	public void setBrandRank(Integer brandRank) {
 		this.brandRank = brandRank;
+	}
+
+	public Integer getBrandImageId() {
+		return this.brandImageId;
+	}
+
+	public void setBrandImageId(Integer brandImageId) {
+		this.brandImageId = brandImageId;
 	}
 
 }

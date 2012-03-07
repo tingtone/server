@@ -28,7 +28,6 @@ public class GoodsDAO extends HibernateDaoSupport {
 	public static final String CATEGORY_ID = "categoryId";
 	public static final String GOODS_NAME = "goodsName";
 	public static final String GOODS_THUMB_ID = "goodsThumbId";
-	public static final String GOODS_IMAGES_ID = "goodsImagesId";
 	public static final String GOODS_SCORE = "goodsScore";
 	public static final String GOODS_FORSKIN = "goodsForskin";
 	public static final String GOODS_NOTFORSKIN = "goodsNotforskin";
@@ -123,10 +122,6 @@ public class GoodsDAO extends HibernateDaoSupport {
 
 	public List findByGoodsThumbId(Object goodsThumbId) {
 		return findByProperty(GOODS_THUMB_ID, goodsThumbId);
-	}
-
-	public List findByGoodsImagesId(Object goodsImagesId) {
-		return findByProperty(GOODS_IMAGES_ID, goodsImagesId);
 	}
 
 	public List findByGoodsScore(Object goodsScore) {

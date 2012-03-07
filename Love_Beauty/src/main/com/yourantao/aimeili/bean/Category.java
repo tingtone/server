@@ -10,8 +10,9 @@ public class Category implements java.io.Serializable {
 
 	private Integer categoryId;
 	private String categoryName;
+	private Integer categoryImageId;
 	private String categoryDescription;
-	private Integer categoryRank;
+	private Long categoryRank;
 	private Integer parentCatid;
 	private Short catLayer;
 
@@ -22,9 +23,11 @@ public class Category implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Category(String categoryName, String categoryDescription,
-			Integer categoryRank, Integer parentCatid, Short catLayer) {
+	public Category(String categoryName, Integer categoryImageId,
+			String categoryDescription, Long categoryRank, Integer parentCatid,
+			Short catLayer) {
 		this.categoryName = categoryName;
+		this.categoryImageId = categoryImageId;
 		this.categoryDescription = categoryDescription;
 		this.categoryRank = categoryRank;
 		this.parentCatid = parentCatid;
@@ -49,6 +52,14 @@ public class Category implements java.io.Serializable {
 		this.categoryName = categoryName;
 	}
 
+	public Integer getCategoryImageId() {
+		return this.categoryImageId;
+	}
+
+	public void setCategoryImageId(Integer categoryImageId) {
+		this.categoryImageId = categoryImageId;
+	}
+
 	public String getCategoryDescription() {
 		return this.categoryDescription;
 	}
@@ -57,11 +68,11 @@ public class Category implements java.io.Serializable {
 		this.categoryDescription = categoryDescription;
 	}
 
-	public Integer getCategoryRank() {
+	public Long getCategoryRank() {
 		return this.categoryRank;
 	}
 
-	public void setCategoryRank(Integer categoryRank) {
+	public void setCategoryRank(Long categoryRank) {
 		this.categoryRank = categoryRank;
 	}
 

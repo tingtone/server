@@ -15,12 +15,15 @@
                 <comment>类别名称</comment>
             </column>
         </property>
+        <property name="categoryImageId" type="java.lang.Integer">
+            <column name="category_image_id" not-null="true" />
+        </property>
         <property name="categoryDescription" type="java.lang.String">
             <column name="category_description" length="65535" not-null="true">
                 <comment>类别描述</comment>
             </column>
         </property>
-        <property name="categoryRank" type="java.lang.Integer">
+        <property name="categoryRank" type="java.lang.Long">
             <column name="category_rank" not-null="true">
                 <comment>类别的排序值，越大的优先级越高</comment>
             </column>

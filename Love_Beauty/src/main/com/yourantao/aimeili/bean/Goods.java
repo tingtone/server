@@ -16,7 +16,6 @@ public class Goods implements java.io.Serializable {
 	private Integer categoryId;
 	private String goodsName;
 	private Integer goodsThumbId;
-	private String goodsImagesId;
 	private Float goodsScore;
 	private String goodsForskin;
 	private String goodsNotforskin;
@@ -39,18 +38,16 @@ public class Goods implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Goods(Integer brandId, Integer seriesId, Integer categoryId,
-			String goodsName, Integer goodsThumbId, String goodsImagesId,
-			Float goodsScore, String goodsForskin, String goodsAge,
-			String goodsDescription, String goodsSpecification,
-			Integer goodsBuyCount, Integer goodsViewCount,
-			Timestamp goodsAddTime, Timestamp goodsLastUpdate,
-			Short goodsStatus, Integer goodsRank) {
+			String goodsName, Integer goodsThumbId, Float goodsScore,
+			String goodsForskin, String goodsAge, String goodsDescription,
+			String goodsSpecification, Integer goodsBuyCount,
+			Integer goodsViewCount, Timestamp goodsAddTime,
+			Timestamp goodsLastUpdate, Short goodsStatus, Integer goodsRank) {
 		this.brandId = brandId;
 		this.seriesId = seriesId;
 		this.categoryId = categoryId;
 		this.goodsName = goodsName;
 		this.goodsThumbId = goodsThumbId;
-		this.goodsImagesId = goodsImagesId;
 		this.goodsScore = goodsScore;
 		this.goodsForskin = goodsForskin;
 		this.goodsAge = goodsAge;
@@ -66,8 +63,8 @@ public class Goods implements java.io.Serializable {
 
 	/** full constructor */
 	public Goods(Integer brandId, Integer seriesId, Integer categoryId,
-			String goodsName, Integer goodsThumbId, String goodsImagesId,
-			Float goodsScore, String goodsForskin, String goodsNotforskin,
+			String goodsName, Integer goodsThumbId, Float goodsScore,
+			String goodsForskin, String goodsNotforskin,
 			String goodsNoticeforskin, String goodsAge,
 			String goodsDescription, String goodsSpecification,
 			Integer goodsBuyCount, Integer goodsViewCount,
@@ -78,7 +75,6 @@ public class Goods implements java.io.Serializable {
 		this.categoryId = categoryId;
 		this.goodsName = goodsName;
 		this.goodsThumbId = goodsThumbId;
-		this.goodsImagesId = goodsImagesId;
 		this.goodsScore = goodsScore;
 		this.goodsForskin = goodsForskin;
 		this.goodsNotforskin = goodsNotforskin;
@@ -142,14 +138,6 @@ public class Goods implements java.io.Serializable {
 
 	public void setGoodsThumbId(Integer goodsThumbId) {
 		this.goodsThumbId = goodsThumbId;
-	}
-
-	public String getGoodsImagesId() {
-		return this.goodsImagesId;
-	}
-
-	public void setGoodsImagesId(String goodsImagesId) {
-		this.goodsImagesId = goodsImagesId;
 	}
 
 	public Float getGoodsScore() {

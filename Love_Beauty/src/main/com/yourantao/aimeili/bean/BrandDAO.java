@@ -27,6 +27,7 @@ public class BrandDAO extends HibernateDaoSupport {
 	public static final String BRAND_OTHER_NAMES = "brandOtherNames";
 	public static final String BRAND_DESCRIPTION = "brandDescription";
 	public static final String BRAND_RANK = "brandRank";
+	public static final String BRAND_IMAGE_ID = "brandImageId";
 
 	protected void initDao() {
 		// do nothing
@@ -112,6 +113,10 @@ public class BrandDAO extends HibernateDaoSupport {
 		return findByProperty(BRAND_RANK, brandRank);
 	}
 
+	public List findByBrandImageId(Object brandImageId) {
+		return findByProperty(BRAND_IMAGE_ID, brandImageId);
+	}
+
 	public List findAll() {
 		log.debug("finding all Brand instances");
 		try {
@@ -161,7 +166,6 @@ public class BrandDAO extends HibernateDaoSupport {
 	public static BrandDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (BrandDAO) ctx.getBean("BrandDAO");
 	}
-	
 	/**
 	 * 自定义的方法，查找rank>0的
 	 * @return
@@ -184,5 +188,4 @@ public class BrandDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
-	
 }
