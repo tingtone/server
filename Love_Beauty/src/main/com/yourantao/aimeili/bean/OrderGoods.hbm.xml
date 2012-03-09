@@ -6,18 +6,23 @@
 -->
 <hibernate-mapping>
     <class name="main.com.yourantao.aimeili.bean.OrderGoods" table="order_goods" catalog="beauty">
-        <id name="orderId" type="java.lang.Integer">
-            <column name="order_id" />
-            <generator class="assigned" />
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
         </id>
-        <property name="goodsId" type="java.lang.Integer">
-            <column name="goods_id" not-null="true">
-                <comment>商品ID</comment>
+        <property name="orderId" type="java.lang.Integer">
+            <column name="order_id" not-null="true">
+                <comment>è®¢å�•ID</comment>
+            </column>
+        </property>
+        <property name="goodsRealId" type="java.lang.Integer">
+            <column name="goods_real_id" not-null="true">
+                <comment>å•†å"�ID</comment>
             </column>
         </property>
         <property name="count" type="java.lang.Integer">
             <column name="count" not-null="true">
-                <comment>商品数量</comment>
+                <comment>å•†å"�æ•°é‡�</comment>
             </column>
         </property>
     </class>

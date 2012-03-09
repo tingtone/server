@@ -6,19 +6,29 @@
 -->
 <hibernate-mapping>
     <class name="main.com.yourantao.aimeili.bean.ProviderLocations" table="provider_locations" catalog="beauty">
-        <composite-id name="id" class="main.com.yourantao.aimeili.bean.ProviderLocationsId">
-            <key-property name="providerId" type="java.lang.Integer">
-                <column name="provider_id" />
-            </key-property>
-            <key-property name="province" type="java.lang.String">
-                <column name="province" length="32" />
-            </key-property>
-            <key-property name="city" type="java.lang.String">
-                <column name="city" length="32" />
-            </key-property>
-            <key-property name="distric" type="java.lang.String">
-                <column name="distric" length="32" />
-            </key-property>
-        </composite-id>
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="providerId" type="java.lang.Integer">
+            <column name="provider_id" not-null="true">
+                <comment>ä¾›åº"å•†ID</comment>
+            </column>
+        </property>
+        <property name="province" type="java.lang.String">
+            <column name="province" length="32" not-null="true">
+                <comment>çœ�</comment>
+            </column>
+        </property>
+        <property name="city" type="java.lang.String">
+            <column name="city" length="32" not-null="true">
+                <comment>å¸'</comment>
+            </column>
+        </property>
+        <property name="distric" type="java.lang.String">
+            <column name="distric" length="32" not-null="true">
+                <comment>åŒºã€�åŽ¿</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

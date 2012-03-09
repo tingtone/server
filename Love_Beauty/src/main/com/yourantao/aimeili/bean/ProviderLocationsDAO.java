@@ -22,8 +22,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class ProviderLocationsDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(ProviderLocationsDAO.class);
-
 	// property constants
+	public static final String PROVIDER_ID = "providerId";
+	public static final String PROVINCE = "province";
+	public static final String CITY = "city";
+	public static final String DISTRIC = "distric";
 
 	protected void initDao() {
 		// do nothing
@@ -51,8 +54,7 @@ public class ProviderLocationsDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public ProviderLocations findById(
-			main.com.yourantao.aimeili.bean.ProviderLocationsId id) {
+	public ProviderLocations findById(java.lang.Integer id) {
 		log.debug("getting ProviderLocations instance with id: " + id);
 		try {
 			ProviderLocations instance = (ProviderLocations) getHibernateTemplate()
@@ -89,6 +91,22 @@ public class ProviderLocationsDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByProviderId(Object providerId) {
+		return findByProperty(PROVIDER_ID, providerId);
+	}
+
+	public List findByProvince(Object province) {
+		return findByProperty(PROVINCE, province);
+	}
+
+	public List findByCity(Object city) {
+		return findByProperty(CITY, city);
+	}
+
+	public List findByDistric(Object distric) {
+		return findByProperty(DISTRIC, distric);
 	}
 
 	public List findAll() {

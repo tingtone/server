@@ -23,6 +23,7 @@ public class OrderGoodsDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(OrderGoodsDAO.class);
 	// property constants
+	public static final String ORDER_ID = "orderId";
 	public static final String GOODS_REAL_ID = "goodsRealId";
 	public static final String COUNT = "count";
 
@@ -88,6 +89,10 @@ public class OrderGoodsDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByOrderId(Object orderId) {
+		return findByProperty(ORDER_ID, orderId);
 	}
 
 	public List findByGoodsRealId(Object goodsRealId) {

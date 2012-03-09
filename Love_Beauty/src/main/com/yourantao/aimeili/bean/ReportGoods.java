@@ -8,7 +8,10 @@ public class ReportGoods implements java.io.Serializable {
 
 	// Fields
 
-	private ReportGoodsId id;
+	private Integer id;
+	private Integer reportId;
+	private Integer goodsId;
+	private Float goodsScore;
 
 	// Constructors
 
@@ -17,18 +20,44 @@ public class ReportGoods implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ReportGoods(ReportGoodsId id) {
-		this.id = id;
+	public ReportGoods(Integer reportId, Integer goodsId, Float goodsScore) {
+		this.reportId = reportId;
+		this.goodsId = goodsId;
+		this.goodsScore = goodsScore;
 	}
 
 	// Property accessors
 
-	public ReportGoodsId getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(ReportGoodsId id) {
+	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getReportId() {
+		return this.reportId;
+	}
+
+	public void setReportId(Integer reportId) {
+		this.reportId = reportId;
+	}
+
+	public Integer getGoodsId() {
+		return this.goodsId;
+	}
+
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
+	}
+
+	public Float getGoodsScore() {
+		return this.goodsScore;
+	}
+
+	public void setGoodsScore(Float goodsScore) {
+		this.goodsScore = goodsScore;
 	}
 
 }

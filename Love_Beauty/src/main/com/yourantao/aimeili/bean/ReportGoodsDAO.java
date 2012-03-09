@@ -22,8 +22,10 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class ReportGoodsDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(ReportGoodsDAO.class);
-
 	// property constants
+	public static final String REPORT_ID = "reportId";
+	public static final String GOODS_ID = "goodsId";
+	public static final String GOODS_SCORE = "goodsScore";
 
 	protected void initDao() {
 		// do nothing
@@ -51,7 +53,7 @@ public class ReportGoodsDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public ReportGoods findById(main.com.yourantao.aimeili.bean.ReportGoodsId id) {
+	public ReportGoods findById(java.lang.Integer id) {
 		log.debug("getting ReportGoods instance with id: " + id);
 		try {
 			ReportGoods instance = (ReportGoods) getHibernateTemplate().get(
@@ -87,6 +89,18 @@ public class ReportGoodsDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByReportId(Object reportId) {
+		return findByProperty(REPORT_ID, reportId);
+	}
+
+	public List findByGoodsId(Object goodsId) {
+		return findByProperty(GOODS_ID, goodsId);
+	}
+
+	public List findByGoodsScore(Object goodsScore) {
+		return findByProperty(GOODS_SCORE, goodsScore);
 	}
 
 	public List findAll() {

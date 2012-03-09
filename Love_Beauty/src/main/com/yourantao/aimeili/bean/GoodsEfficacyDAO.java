@@ -22,8 +22,9 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class GoodsEfficacyDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(GoodsEfficacyDAO.class);
-
 	// property constants
+	public static final String EFFICACY_ID = "efficacyId";
+	public static final String GOODS_ID = "goodsId";
 
 	protected void initDao() {
 		// do nothing
@@ -51,8 +52,7 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public GoodsEfficacy findById(
-			main.com.yourantao.aimeili.bean.GoodsEfficacyId id) {
+	public GoodsEfficacy findById(java.lang.Integer id) {
 		log.debug("getting GoodsEfficacy instance with id: " + id);
 		try {
 			GoodsEfficacy instance = (GoodsEfficacy) getHibernateTemplate()
@@ -88,6 +88,14 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByEfficacyId(Object efficacyId) {
+		return findByProperty(EFFICACY_ID, efficacyId);
+	}
+
+	public List findByGoodsId(Object goodsId) {
+		return findByProperty(GOODS_ID, goodsId);
 	}
 
 	public List findAll() {

@@ -8,7 +8,9 @@ public class GoodsEfficacy implements java.io.Serializable {
 
 	// Fields
 
-	private GoodsEfficacyId id;
+	private Integer id;
+	private Integer efficacyId;
+	private Integer goodsId;
 
 	// Constructors
 
@@ -17,18 +19,35 @@ public class GoodsEfficacy implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public GoodsEfficacy(GoodsEfficacyId id) {
-		this.id = id;
+	public GoodsEfficacy(Integer efficacyId, Integer goodsId) {
+		this.efficacyId = efficacyId;
+		this.goodsId = goodsId;
 	}
 
 	// Property accessors
 
-	public GoodsEfficacyId getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(GoodsEfficacyId id) {
+	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getEfficacyId() {
+		return this.efficacyId;
+	}
+
+	public void setEfficacyId(Integer efficacyId) {
+		this.efficacyId = efficacyId;
+	}
+
+	public Integer getGoodsId() {
+		return this.goodsId;
+	}
+
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
 	}
 
 }

@@ -22,8 +22,10 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class ShoppingCartDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(ShoppingCartDAO.class);
-
 	// property constants
+	public static final String USER_ID = "userId";
+	public static final String GOODS_REAL_ID = "goodsRealId";
+	public static final String COUNT = "count";
 
 	protected void initDao() {
 		// do nothing
@@ -51,8 +53,7 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public ShoppingCart findById(
-			main.com.yourantao.aimeili.bean.ShoppingCartId id) {
+	public ShoppingCart findById(java.lang.Integer id) {
 		log.debug("getting ShoppingCart instance with id: " + id);
 		try {
 			ShoppingCart instance = (ShoppingCart) getHibernateTemplate().get(
@@ -88,6 +89,18 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByUserId(Object userId) {
+		return findByProperty(USER_ID, userId);
+	}
+
+	public List findByGoodsRealId(Object goodsRealId) {
+		return findByProperty(GOODS_REAL_ID, goodsRealId);
+	}
+
+	public List findByCount(Object count) {
+		return findByProperty(COUNT, count);
 	}
 
 	public List findAll() {

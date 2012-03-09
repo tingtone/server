@@ -6,22 +6,34 @@
 -->
 <hibernate-mapping>
     <class name="main.com.yourantao.aimeili.bean.ShowComment" table="show_comment" catalog="beauty">
-        <composite-id name="id" class="main.com.yourantao.aimeili.bean.ShowCommentId">
-            <key-property name="showId" type="java.lang.Integer">
-                <column name="show_id" />
-            </key-property>
-            <key-property name="userId" type="java.lang.Integer">
-                <column name="user_id" />
-            </key-property>
-            <key-property name="contentType" type="java.lang.Short">
-                <column name="content_type" />
-            </key-property>
-            <key-property name="commentContent" type="java.lang.String">
-                <column name="comment_content" length="65535" />
-            </key-property>
-            <key-property name="addTime" type="java.sql.Timestamp">
-                <column name="add_time" length="0" />
-            </key-property>
-        </composite-id>
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="showId" type="java.lang.Integer">
+            <column name="show_id" not-null="true">
+                <comment>show ID</comment>
+            </column>
+        </property>
+        <property name="userId" type="java.lang.Integer">
+            <column name="user_id" not-null="true">
+                <comment>ç"¨æˆ·ID</comment>
+            </column>
+        </property>
+        <property name="contentType" type="java.lang.Short">
+            <column name="content_type" not-null="true">
+                <comment>è¯"è®ºå†…å®¹çš"ç±»åž‹ï¼Œå¦'0è¡¨ç¤ºæ-‡å­-ï¼Œ1è¡¨ç¤ºå½•éŸ³ç­‰</comment>
+            </column>
+        </property>
+        <property name="commentContent" type="java.lang.String">
+            <column name="comment_content" length="65535" not-null="true">
+                <comment>è¯"è®ºçš"å†…å®¹</comment>
+            </column>
+        </property>
+        <property name="addTime" type="java.sql.Timestamp">
+            <column name="add_time" length="0" not-null="true">
+                <comment>æ·»åŠ&#160;æ-¶é-´</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

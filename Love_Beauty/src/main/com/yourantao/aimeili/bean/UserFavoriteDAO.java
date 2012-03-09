@@ -1,5 +1,6 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.slf4j.Logger;
@@ -22,8 +23,11 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class UserFavoriteDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(UserFavoriteDAO.class);
-
 	// property constants
+	public static final String FAVORITE_ID = "favoriteId";
+	public static final String USER_ID = "userId";
+	public static final String FAVORITE_TYPE = "favoriteType";
+	public static final String RELATED_ID = "relatedId";
 
 	protected void initDao() {
 		// do nothing
@@ -51,8 +55,7 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public UserFavorite findById(
-			main.com.yourantao.aimeili.bean.UserFavoriteId id) {
+	public UserFavorite findById(java.lang.Integer id) {
 		log.debug("getting UserFavorite instance with id: " + id);
 		try {
 			UserFavorite instance = (UserFavorite) getHibernateTemplate().get(
@@ -88,6 +91,22 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByFavoriteId(Object favoriteId) {
+		return findByProperty(FAVORITE_ID, favoriteId);
+	}
+
+	public List findByUserId(Object userId) {
+		return findByProperty(USER_ID, userId);
+	}
+
+	public List findByFavoriteType(Object favoriteType) {
+		return findByProperty(FAVORITE_TYPE, favoriteType);
+	}
+
+	public List findByRelatedId(Object relatedId) {
+		return findByProperty(RELATED_ID, relatedId);
 	}
 
 	public List findAll() {

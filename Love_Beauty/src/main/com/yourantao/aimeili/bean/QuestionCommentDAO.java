@@ -1,5 +1,6 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.slf4j.Logger;
@@ -22,8 +23,12 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 public class QuestionCommentDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(QuestionCommentDAO.class);
-
 	// property constants
+	public static final String QUESTION_ID = "questionId";
+	public static final String USER_ID = "userId";
+	public static final String CONTENT_TYPE = "contentType";
+	public static final String COMMENT_CONTENT = "commentContent";
+	public static final String COIN = "coin";
 
 	protected void initDao() {
 		// do nothing
@@ -51,8 +56,7 @@ public class QuestionCommentDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public QuestionComment findById(
-			main.com.yourantao.aimeili.bean.QuestionCommentId id) {
+	public QuestionComment findById(java.lang.Integer id) {
 		log.debug("getting QuestionComment instance with id: " + id);
 		try {
 			QuestionComment instance = (QuestionComment) getHibernateTemplate()
@@ -88,6 +92,26 @@ public class QuestionCommentDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByQuestionId(Object questionId) {
+		return findByProperty(QUESTION_ID, questionId);
+	}
+
+	public List findByUserId(Object userId) {
+		return findByProperty(USER_ID, userId);
+	}
+
+	public List findByContentType(Object contentType) {
+		return findByProperty(CONTENT_TYPE, contentType);
+	}
+
+	public List findByCommentContent(Object commentContent) {
+		return findByProperty(COMMENT_CONTENT, commentContent);
+	}
+
+	public List findByCoin(Object coin) {
+		return findByProperty(COIN, coin);
 	}
 
 	public List findAll() {

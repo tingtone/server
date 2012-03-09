@@ -8,8 +8,9 @@ public class OrderGoods implements java.io.Serializable {
 
 	// Fields
 
+	private Integer id;
 	private Integer orderId;
-	private Integer goodsId;
+	private Integer goodsRealId;
 	private Integer count;
 
 	// Constructors
@@ -19,13 +20,21 @@ public class OrderGoods implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public OrderGoods(Integer orderId, Integer goodsId, Integer count) {
+	public OrderGoods(Integer orderId, Integer goodsRealId, Integer count) {
 		this.orderId = orderId;
-		this.goodsId = goodsId;
+		this.goodsRealId = goodsRealId;
 		this.count = count;
 	}
 
 	// Property accessors
+
+	public Integer getId() {
+		return this.id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getOrderId() {
 		return this.orderId;
@@ -35,12 +44,12 @@ public class OrderGoods implements java.io.Serializable {
 		this.orderId = orderId;
 	}
 
-	public Integer getGoodsId() {
-		return this.goodsId;
+	public Integer getGoodsRealId() {
+		return this.goodsRealId;
 	}
 
-	public void setGoodsId(Integer goodsId) {
-		this.goodsId = goodsId;
+	public void setGoodsRealId(Integer goodsRealId) {
+		this.goodsRealId = goodsRealId;
 	}
 
 	public Integer getCount() {
