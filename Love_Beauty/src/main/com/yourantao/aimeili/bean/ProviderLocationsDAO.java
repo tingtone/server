@@ -2,6 +2,9 @@ package main.com.yourantao.aimeili.bean;
 
 import java.util.List;
 import org.hibernate.LockMode;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -158,5 +161,43 @@ public class ProviderLocationsDAO extends HibernateDaoSupport {
 	public static ProviderLocationsDAO getFromApplicationContext(
 			ApplicationContext ctx) {
 		return (ProviderLocationsDAO) ctx.getBean("ProviderLocationsDAO");
+	}
+	/**
+	 * 
+	 * @param instance
+	 * @param level
+	 * @return
+	 */
+	public List findByExample2(ProviderLocations instance, int level)
+	{
+		log.debug("finding ProviderLocations instance by example2");
+		try {
+			
+			String hql ="";
+			
+			hql += "from ProviderLocations where providerId=" + instance.getProviderId();
+			switch(level)
+			{
+				case 3:
+					hql += " and city='" + instance.getCity() + "'";
+				case 2:
+					hql += " and province='" + instance.getProvince()+ "'";
+				default:
+					//hql += ";";
+			}
+			List<ProviderLocations> results = (List<ProviderLocations>)getHibernateTemplate().find(hql);
+			//DetachedCriteria detachedCriteria = DetachedCriteria.forClass(ProviderLocations.class);
+			/*
+			DetachedCriteria baseCriteria = DetachedCriteria.forClass(ProviderLocations.class)
+				.add(Restrictions.eq("providerId", instance.getProviderId()));
+			List results = getHibernateTemplate().findByCriteria(baseCriteria);
+			*/
+			return results;
+			
+		} catch (RuntimeException re) {
+			log.error("find by example2 failed", re);
+
+			throw re;
+		}
 	}
 }

@@ -19,9 +19,14 @@ public interface Constant {
 	public static final String BRAND_ID = "bid";  //品牌id
 	public static final String SERIES_ID="sid";//系列id
 	
+	public static final String PROVIDER_ID = "pid";	//商铺的ID
+	public static final String PROVIDER_DESCRIPTION = "pdes";	//商铺的描述
+	public static final String PROVIDER_SERVICE = "pservice";		//商铺的售后服务
+	public static final String PROVIDER_DELIVER = "pdeliver";		//商铺的发货情况
+	public static final String PROVIDER_LOCATION_LEVEL = "plevel";		//获取商铺位置的层级
 	
 	public static final String BASE_SERVER = "http://192.168.14.24:8080/Love_Beauty/";  //服务链接地址
-	public static final String BASE_IMAGEURL = "http://192.168.14.24:8080/img/";  //图片服务器链接地址
+	public static final String BASE_IMAGEURL = "http://192.168.24.24:8080/img/";  //图片服务器链接地址
 	public static final String BASE_IMAGESTORAGE = "D:\\eclipseworkspace\\.metadata\\.me_tcat\\webapps\\img\\";  //本地存储文件位置
 	
 	public static final String JINGDONG_UNIONID = "16798";  //京东销售联盟ID（需要重新申请）
