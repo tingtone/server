@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 	var level=1;
 	function GetProviderLocation(pid){
-			var url="http://localhost:8080/Love_Beauty/provider_getProviderLocations";
+			var url=BASE_SERVER+"/provider_getProviderLocations";
 			//parameter name undefined
 			//这里判断level从而得知相关数据
 			var params;

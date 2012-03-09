@@ -22,7 +22,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script src="jquery1.4.2.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	function GetProvider_Detail(pid){
-			var url="http://localhost:8080/Love_Beauty/provider_getProvider";
+			var url=BASE_SERVER+"/provider_getProvider";
 			//parameter name undefined
 			var params = {"pid":pid};
 			var provider="";
