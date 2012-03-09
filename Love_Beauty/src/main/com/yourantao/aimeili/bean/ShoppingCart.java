@@ -12,6 +12,7 @@ public class ShoppingCart implements java.io.Serializable {
 	private Integer userId;
 	private Integer goodsRealId;
 	private Integer count;
+	private Short cartStatus;
 
 	// Constructors
 
@@ -20,10 +21,12 @@ public class ShoppingCart implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ShoppingCart(Integer userId, Integer goodsRealId, Integer count) {
+	public ShoppingCart(Integer userId, Integer goodsRealId, Integer count,
+			Short cartStatus) {
 		this.userId = userId;
 		this.goodsRealId = goodsRealId;
 		this.count = count;
+		this.cartStatus = cartStatus;
 	}
 
 	// Property accessors
@@ -58,6 +61,14 @@ public class ShoppingCart implements java.io.Serializable {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public Short getCartStatus() {
+		return this.cartStatus;
+	}
+
+	public void setCartStatus(Short cartStatus) {
+		this.cartStatus = cartStatus;
 	}
 
 }

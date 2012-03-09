@@ -12,17 +12,22 @@
         </id>
         <property name="userId" type="java.lang.Integer">
             <column name="user_id" not-null="true">
-                <comment>ç"¨æˆ·ID</comment>
+                <comment>用户ID</comment>
             </column>
         </property>
         <property name="goodsRealId" type="java.lang.Integer">
             <column name="goods_real_id" not-null="true">
-                <comment>å•†å"�ID</comment>
+                <comment>商品ID</comment>
             </column>
         </property>
         <property name="count" type="java.lang.Integer">
             <column name="count" not-null="true">
-                <comment>å•†å"�çš"æ•°é‡�</comment>
+                <comment>商品的数量</comment>
+            </column>
+        </property>
+        <property name="cartStatus" type="java.lang.Short">
+            <column name="cart_status" not-null="true">
+                <comment>0表示忽略，3表示可用</comment>
             </column>
         </property>
     </class>

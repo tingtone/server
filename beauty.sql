@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2012 年 03 月 09 日 02:25
+-- 生成日期: 2012 年 03 月 09 日 02:55
 -- 服务器版本: 5.5.20
 -- PHP 版本: 5.3.10
 
@@ -2022,6 +2022,7 @@ CREATE TABLE IF NOT EXISTS `shopping_cart` (
   `user_id` int(10) unsigned NOT NULL COMMENT '用户ID',
   `goods_real_id` int(10) unsigned NOT NULL COMMENT '商品ID',
   `count` int(10) unsigned NOT NULL DEFAULT '1' COMMENT '商品的数量',
+  `cart_status` tinyint(3) unsigned NOT NULL DEFAULT '3' COMMENT '0表示忽略，3表示可用',
   PRIMARY KEY (`cart_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

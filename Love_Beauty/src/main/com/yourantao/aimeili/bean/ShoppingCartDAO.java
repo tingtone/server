@@ -26,6 +26,7 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 	public static final String USER_ID = "userId";
 	public static final String GOODS_REAL_ID = "goodsRealId";
 	public static final String COUNT = "count";
+	public static final String CART_STATUS = "cartStatus";
 
 	protected void initDao() {
 		// do nothing
@@ -101,6 +102,10 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 
 	public List findByCount(Object count) {
 		return findByProperty(COUNT, count);
+	}
+
+	public List findByCartStatus(Object cartStatus) {
+		return findByProperty(CART_STATUS, cartStatus);
 	}
 
 	public List findAll() {
