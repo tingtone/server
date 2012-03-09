@@ -6,8 +6,8 @@
 -->
 <hibernate-mapping>
     <class name="main.com.yourantao.aimeili.bean.ShowComment" table="show_comment" catalog="beauty">
-        <id name="id" type="java.lang.Integer">
-            <column name="id" />
+        <id name="commentId" type="java.lang.Integer">
+            <column name="comment_id" />
             <generator class="identity" />
         </id>
         <property name="showId" type="java.lang.Integer">

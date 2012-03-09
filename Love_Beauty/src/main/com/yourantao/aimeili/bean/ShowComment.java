@@ -10,7 +10,7 @@ public class ShowComment implements java.io.Serializable {
 
 	// Fields
 
-	private Integer id;
+	private Integer commentId;
 	private Integer showId;
 	private Integer userId;
 	private Short contentType;
@@ -35,12 +35,12 @@ public class ShowComment implements java.io.Serializable {
 
 	// Property accessors
 
-	public Integer getId() {
-		return this.id;
+	public Integer getCommentId() {
+		return this.commentId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setCommentId(Integer commentId) {
+		this.commentId = commentId;
 	}
 
 	public Integer getShowId() {
