@@ -13,6 +13,10 @@ import main.com.yourantao.aimeili.bean.Goods;
 import main.com.yourantao.aimeili.bean.GoodsDAO;
 import main.com.yourantao.aimeili.bean.GoodsImages;
 import main.com.yourantao.aimeili.bean.GoodsImagesDAO;
+import main.com.yourantao.aimeili.bean.GoodsMap;
+import main.com.yourantao.aimeili.bean.GoodsMapDAO;
+import main.com.yourantao.aimeili.bean.GoodsReal;
+import main.com.yourantao.aimeili.bean.GoodsRealDAO;
 import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.bean.Series;
@@ -21,6 +25,7 @@ import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
 import main.com.yourantao.aimeili.util.StringTool;
+import main.com.yourantao.aimeili.vo.GoodsImageView;
 import main.com.yourantao.aimeili.vo.GoodsView;
 
 import org.slf4j.Logger;
@@ -30,8 +35,8 @@ import org.slf4j.LoggerFactory;
 public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private static final Logger log = LoggerFactory.getLogger(GoodsAction.class);
 	
-	private File newtopic_thumb; // 上传文件1
-	private File newtopic_image; // 上传文件1
+	private File newGoods_thumb; // 上传文件1
+	private File newGoods_image; // 上传文件1
 	private String imageContentType;// 上传文件类型2
 	private String imageFileName; // 上传文件名2
 	private String thumbContentType;// 上传文件类型1
@@ -45,38 +50,40 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private BrandDAO brandDAO;
 	private SeriesDAO seriesDAO;
 	private GoodsImagesDAO goodsImagesDAO;
+	private GoodsMapDAO goodsMapDAO;
+	private GoodsRealDAO goodsRealDAO;
 	
 	
 	
 	// struts
 
 	
-	public void setNewtopic_thumbContentType(String thumbContentType) {
+	public void setNewGoods_thumbContentType(String thumbContentType) {
 		System.out.println("thumbContentType : " + thumbContentType);
 		this.thumbContentType = thumbContentType;
 	}
 
-	public void setNewtopic_thumbFileName(String thumbFileName) {
+	public void setNewGoods_thumbFileName(String thumbFileName) {
 		System.out.println("thumbFileName : " + thumbFileName);
 		this.thumbFileName = thumbFileName;
 	}
 
-	public void setNewtopic_thumb(File newtopic_thumb) {
-		this.newtopic_thumb = newtopic_thumb;
+	public void setNewGoods_thumb(File newtopic_thumb) {
+		this.newGoods_thumb = newtopic_thumb;
 	}
 
-	public void setNewtopic_imageContentType(String imageContentType) {
+	public void setNewGoods_imageContentType(String imageContentType) {
 		System.out.println("imageContentType : " + imageContentType);
 		this.imageContentType = imageContentType;
 	}
 
-	public void setNewtopic_imageFileName(String imageFileName) {
+	public void setNewGoods_imageFileName(String imageFileName) {
 		System.out.println("imageFileName : " + imageFileName);
 		this.imageFileName = imageFileName;
 	}
 
-	public void setNewtopic_image(File newtopic_image) {
-		this.newtopic_image = newtopic_image;
+	public void setNewGoods_image(File newtopic_image) {
+		this.newGoods_image = newtopic_image;
 	}
 
 	// spring
@@ -85,6 +92,22 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
+	}
+
+	public GoodsRealDAO getGoodsRealDAO() {
+		return goodsRealDAO;
+	}
+
+	public void setGoodsRealDAO(GoodsRealDAO goodsRealDAO) {
+		this.goodsRealDAO = goodsRealDAO;
+	}
+
+	public GoodsMapDAO getGoodsMapDAO() {
+		return goodsMapDAO;
+	}
+
+	public void setGoodsMapDAO(GoodsMapDAO goodsMapDAO) {
+		this.goodsMapDAO = goodsMapDAO;
 	}
 
 	public GoodsImagesDAO getGoodsImagesDAO() {
@@ -210,16 +233,15 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		
 		goods.setGoodsId(goodsId);
 		String updateType = getReqeust().getParameter("submit");
-		getReqeust().getAttribute("newtopic_thumb");
 		if (updateType.equals("更新")) { // 需要对每个进行更新
 			if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(thumbFileName)
 						+ getExtention(thumbFileName);
 				FileName=StringTool.filterWord(FileName);
 				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
-				int imageid = getImgAttribute(newtopic_thumb, FileName);
+				int imageid = getImgAttribute(newGoods_thumb, FileName);
 				goods.setGoodsThumbId(imageid);
-				copy(newtopic_thumb, thumbFile);
+				copy(newGoods_thumb, thumbFile);
 			}
 			goods.setGoodsName(goodsName);
 			goods.setGoodsScore(Float.parseFloat(goodsScore));
@@ -235,7 +257,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			return SUCCESS;
 		} else if (updateType.equals("删除")) { // 删除
 			goodsDAO.delete(goodsDAO.findById(goodsId));
-			return "back";
+			return "back_goods";
 		} else if (updateType.equals("对应真实商品")) { // 查看对应商品
 			return "real_goods";
 		}else if(updateType.equals("商品细节图")){  //商品细节图的增删改查
@@ -290,9 +312,9 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 					+ getExtention(thumbFileName); // MD5加密;
 			FileName=StringTool.filterWord(FileName);
 			File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
-			int imageid = getImgAttribute(newtopic_thumb, FileName);
+			int imageid = getImgAttribute(newGoods_thumb, FileName);
 			goods.setGoodsThumbId(imageid);
-			copy(newtopic_thumb, thumbFile);
+			copy(newGoods_thumb, thumbFile);
 		}else{
 			goods.setGoodsThumbId(0);    //非空字段默认值为0
 		}
@@ -312,13 +334,74 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		if (goods_id == null)
 			return null;
 		List<GoodsImages> goodsimages = goodsImagesDAO.findByGoodsId(goods_id);
-		List<String> imageUrl=new ArrayList<String>();
+		List<GoodsImageView> result=new ArrayList<GoodsImageView>();
 		for (GoodsImages goodsImages : goodsimages) {
 			Image image=imageDAO.findById(goodsImages.getImgId());
-			imageUrl.add(BASE_IMAGEURL+image.getImgUrl());
+			GoodsImageView goodsImageView=new GoodsImageView();
+			goodsImageView.setId(goodsImages.getId());
+			goodsImageView.setImageId(image.getImgId());
+			goodsImageView.setImageURL(BASE_IMAGEURL+image.getImgUrl());
+			result.add(goodsImageView);
 		}
-		printArray(imageUrl);
+		printArray(result);
 
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#GoodsImages()
+	 */
+	@Override
+	public String updateGoodsImages() {
+		String updateType = getReqeust().getParameter("submit");
+		if (updateType.equals("更新")) { // 更新图片
+			GoodsImages goodsImages=goodsImagesDAO.findById(getIntegerParameter("id"));
+			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
+				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
+				FileName=StringTool.filterWord(FileName);
+				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				int imageid = getImgAttribute(newGoods_image, FileName);
+				goodsImages.setImgId(imageid);    //只更新对应号码就行
+				copy(newGoods_image, thumbFile);
+			}
+			return SUCCESS;
+		}else if(updateType.equals("删除")){
+			GoodsImages goodsImages=goodsImagesDAO.findById(getIntegerParameter("id"));
+			goodsImagesDAO.delete(goodsImages);
+			return SUCCESS;
+		}
+		else if(updateType.equals("新增对应图片")){
+			GoodsImages goodsImages=new GoodsImages();
+			goodsImages.setGoodsId(getIntegerParameter(GOODS_ID));
+			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
+				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
+				FileName=StringTool.filterWord(FileName);
+				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				int imageid = getImgAttribute(newGoods_image, FileName);
+				goodsImages.setImgId(imageid);    //只更新对应号码就行
+				copy(newGoods_image, thumbFile);
+			}
+			goodsImagesDAO.save(goodsImages);
+			return SUCCESS;
+		}
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsMapList()
+	 */
+	@Override
+	public String getGoodsMapList() {
+		int goodsId = getIntegerParameter(GOODS_ID);
+		List<GoodsMap> GoodsMapList = goodsMapDAO.findByGoodsId(goodsId);
+		List<GoodsReal> result=new ArrayList<GoodsReal>();
+		for (GoodsMap goodsMap : GoodsMapList) {
+			GoodsReal goodsReal=goodsRealDAO.findById(goodsMap.getGoodsRealId());
+			result.add(goodsReal);
+		}
+		printArray(result);
 		return null;
 	}
 

@@ -44,7 +44,7 @@
 
 var flag;
 function GetSubCategory(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/category_getSubCategories";
+	var url = BASE_SERVER+"/category_getSubCategories";
 	var params = {
 		"cid" : cid
 	};
@@ -75,7 +75,7 @@ function GetSubCategory(cid) {
 
 //通过cid获得商品详情
 function GetGoods(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getGoodsList";
+	var url = BASE_SERVER+"/goods_getGoodsList";
 	var params = {
 		"cid" : cid
 	};
@@ -90,13 +90,13 @@ function GetGoods(cid) {
 				alert("json null");
 			} else {
 				for(var i=0;i<json.length;i++){
+					goodsDetail+=(i+1)+"：";
 						goodsDetail+="<form action='goods_updateGoods' enctype='multipart/form-data' method='post'>";
 						goodsDetail+="<table class='tabel'><tbody><tr>"
-						
 						goodsDetail+="<input type='hidden' name='cid' value='"+cid+"'/><input type='hidden' name='gid' value='"+json[i]['goodsId']+"'/><input type='hidden' name='bid' value='"+json[i]['brandId']+"'/>";
 						goodsDetail+="<tr><td>商品名称：<input name='goodsName' type='text' value='"+json[i]['goodsName']+"'/></td></tr>";
 						goodsDetail+="<tr><td>商品品牌：<input name='goodsBrand' type='text' value='"+json[i]['goodsBrandName']+"'/>系列：<input name='goodsSeries' type='text' value='"+json[i]['goodsSeriesName']+"'/></td></tr>";
-						goodsDetail+="<tr><td>商品缩略图：<img src='"+json[i]['goodsThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td></td></tr> ";
+						goodsDetail+="<tr><td>商品缩略图：<img src='"+json[i]['goodsThumb']+"'/>更改：<input type='file' name='newGoods_thumb'></td></td></tr> ";
 						goodsDetail+="<tr><td>商品评分：<input name='goodsScore' type='text' value='"+json[i]['goodsScore']+"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品适用肤质：<input id='goodsForskin"+i+"' name='goodsForskin' type='text' value='"+json[i]['goodsForskin'] +"'/><span class='forskin' i='"+i+"'>干性</span><span class='forskin' i='"+i+"'>油性</span><span class='forskin' i='"+i+"'>混合性</span><span class='forskin' i='"+i+"'>中性</span><span class='forskin' i='"+i+"'>敏感性</span></td></tr> ";
 						goodsDetail+="<tr><td>商品不适用肤质：<input id='goodsNotforskin"+i+"' name='goodsNotforskin' type='text' value='"+json[i]['goodsNotforskin'] +"'/><span class='notforskin' i='"+i+"'>干性</span><span class='notforskin' i='"+i+"'>油性</span><span class='notforskin' i='"+i+"'>混合性</span><span class='notforskin' i='"+i+"'>中性</span><span class='notforskin' i='"+i+"'>敏感性</span></td></tr> ";

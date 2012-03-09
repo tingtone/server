@@ -10,9 +10,9 @@
             <column name="comment_id" />
             <generator class="identity" />
         </id>
-        <property name="goodsId" type="java.lang.Integer">
-            <column name="goods_id" not-null="true">
-                <comment>商品评论</comment>
+        <property name="goodsRealId" type="java.lang.Integer">
+            <column name="goods_real_id" not-null="true">
+                <comment>商品ID号</comment>
             </column>
         </property>
         <property name="commentator" type="java.lang.String">
@@ -27,7 +27,7 @@
         </property>
         <property name="commentLevel" type="java.lang.Short">
             <column name="comment_level" not-null="true">
-                <comment>评论的等级，如0为好评、1为中评、2为差评</comment>
+                <comment>评论的星级，1,2,3,4,5</comment>
             </column>
         </property>
         <property name="commentRank" type="java.lang.Integer">

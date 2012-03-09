@@ -4,6 +4,8 @@
 	String basePath = request.getScheme() + "://"
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
+			String gid=request.getParameter("gid");
+	String gname=request.getParameter("goodsName");
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -21,10 +23,13 @@
 		text-align: center;
 		font-size: 15px;
 		color: red;
-		border: 1px solid purple;
+		border: 4px solid gray;
+		width: 600px;
 	}
 	.tabel td{
 		border: 1px solid blue;
+		margin: 0;
+		padding: 0;
 	}
 	.tabel b{
 		border: 1px solid blue;
@@ -38,42 +43,33 @@
 </script>
 		<script type="text/javascript">
 
-var flag;
-function GetSubCategory(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/category_getSubCategories";
-	var params = {
-		"cid" : cid
-	};
-	var category = "";
-	$.ajax( {
-		type : "POST",
-		data : params,
-		dataType : "json",
-		url : url,
-		success : function(json) {
-			if (json == null) {
-				alert("json null");
-			} else {
-					category +="<option value='0'></option>";
-				for ( var i = 0; i < json.length; i++) {
-					category += "<option value='" + json[i]['categoryId']
-							+ "'>" + json[i]['categoryName'] + "</option>";
-				}
-			}
-			flag++;
-			$('#category' + flag).html(category.toString());
-			for ( var i = flag + 1; i <= 4; i++) {
-				$('#category' + i).empty();
-			}
+function transProvider(pid){
+
+	if(pid=="1"){
+		return  "no5";
+	}else if(pid=="2"){
+		return "lafaso";	
 		}
-	});
+		else if(pid=="3"){
+		return "jumei";	
+		}
+		else if(pid=="4"){
+		return "360buy";	
+		}
+		else if(pid=="5"){
+		return "dangdang";	
+		}
+		else if(pid=="6"){
+		return "amazon";	
+		}
 }
 
-//通过cid获得商品详情
-function GetGoods(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getGoodsList";
+
+//通过gid获得商品对应关系
+function GetGoodsMap(gid) {
+	var url = BASE_SERVER+"/goods_getGoodsMapList";
 	var params = {
-		"cid" : cid
+		"gid" : gid
 	};
 	var goodsDetail = "";
 	$.ajax( {
@@ -86,97 +82,45 @@ function GetGoods(cid) {
 				alert("json null");
 			} else {
 				for(var i=0;i<json.length;i++){
+				goodsDetail+=(i+1)+"：";
 						goodsDetail+="<form action='goods_updateGoods' enctype='multipart/form-data'>";
 						goodsDetail+="<table class='tabel'><tbody><tr>"
-						
-						goodsDetail+="<input type='hidden' name='cid' value='"+cid+"'/><input type='hidden' name='tid' value='"+json[i]['goodsId']+"'/>";
-						goodsDetail+="<tr><td>商品名称：<input name='goodsScore' type='text' value='"+json[i]['goodsName']+"'/></td></tr>";
-						goodsDetail+="<tr><td>商品缩略图：<img src='"+json[i]['goodsThumb']+"'/>更改：<input type='file' name='newtopic_thumb'></td></td></tr> ";
-						goodsDetail+="<tr><td>商品细节图：<img src='"+json[i]['goodsImages'] +"'/>更改：<input type='file' name='newtopic_image'></td></td></tr> ";
-						goodsDetail+="<tr><td>商品评分：<input name='goodsScore' type='text' value='"+json[i]['goodsScore']+"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品适用肤质：<input name='goodsForskin' type='text' value='"+json[i]['goodsForskin'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品不适用肤质：<input name='goodsNotforskin' type='text' value='"+json[i]['goodsNotforskin'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品需注意肤质：<input name='goodsNoticeforskin' type='text' value='"+json[i]['goodsNoticeforskin'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品年龄范围：<input name='goodsAge' type='text' value='"+json[i]['goodsAge']+"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品特点及成分：<input name='goodsDescription'  type='text' value='"+json[i]['goodsDescription'] +"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品用法：<input name='goodsSpecification' type='text' value='"+json[i]['goodsSpecification']+"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品添加时间：<input name='goodsAddTime' type='text' value='"+json[i]['goodsAddTime']+"'/></td></tr> ";
-						goodsDetail+="<tr><td>商品状态：<input name='goodsStatus' type='text' value='"+json[i]['goodsStatus']+"'/></td></tr> ";
-						goodsDetail+="<tr><td><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><input type='submit' name='submit' value='对应真实商品'/></td></tr> ";
+						goodsDetail+="<tr><td>供应商："+transProvider(json[i]['providerId'])+"</td></tr>"
+						goodsDetail+="<tr><td>商品名称："+json[i]['goodsName']+"  商品ID号："+json[i]['goodsRealId']+"</td></tr>";
+						goodsDetail+="<tr><td>品牌名："+json[i]['brandName']+"  系列名："+json[i]['seriesName']+"</td></tr>";
+						goodsDetail+="<tr><td>商品价格："+json[i]['goodsPrice']+"</td></tr>";
+						goodsDetail+="<tr><td>商品分类名："+json[i]['categoryName']+"</td></tr>";
+						goodsDetail+="<tr><td>商品缩略图：<a href='"+ json[i]['goodsUrl']+"' target='_blank'><img src='"+json[i]['goodsThumb']+"'/>点击查看</a></td></tr> ";
+						goodsDetail+="<tr><td>商品细节图：<img src='"+json[i]['goodsImages'] +"'/></td></tr> ";
+						goodsDetail+="<tr><td>商品评分："+json[i]['goodsScore']+"</td></tr> ";
+						goodsDetail+="<tr><td>商品适用肤质："+json[i]['goodsForskin'] +"</td></tr> ";
+						goodsDetail+="<tr><td>商品不适用肤质："+json[i]['goodsNotforskin'] +"</td></tr> ";
+						goodsDetail+="<tr><td>商品需注意肤质："+json[i]['goodsNoticeforskin'] +"</td></tr> ";
+						goodsDetail+="<tr><td>商品年龄范围："+json[i]['goodsAge']+"</td></tr> ";
+						goodsDetail+="<tr><td>商品特点及成分："+json[i]['goodsDescription'] +"</td></tr> ";
+						goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
+						goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
+						goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
 						goodsDetail+="</tbody></table></form>";
 					}
 			}
-			$('#goods_detail').html(goodsDetail.toString());
-			for ( var i = flag + 1; i <= 4; i++) {
-				$('#category' + i).html("");
-			}
+			$('#real_goods_detail').html(goodsDetail.toString());
 		}
 	});
 }
 
 $(document).ready(function() {
 	
-	$('.category').change(function() {
-		flag = $(this).attr('flag');
-		var cid = $(this).val();
-		GetSubCategory(cid);
-		GetGoods(cid);
-
-	});
+	GetGoodsMap($('#goods_id').val());
 });
 </script>
 	</head>
 
 	<body>
 		<%@include file="/top.jsp"%>
-		<table border="1">
-			<tbody>
-				<tr>
-					<td>
-						一级分类：
-						<select class="category" flag="1" id="category1">
-						<option value="0">
-								
-							</option>
-							<option value="1">
-								护肤
-							</option>
-							<option value="2">
-								妆扮
-							</option>
-							<option value="3">
-								美体
-							</option>
-							<option value="4">
-								美发
-							</option>
-						</select>
-					</td>
-
-					<td>
-						二级分类：
-						<select class="category" flag="2" id="category2">
-						</select>
-					</td>
-					<td>
-						三级分类：
-						<select class="category" flag="3" id="category3">
-						</select>
-					</td>
-					<td>
-						四级分类：
-						<select class="category" flag="4" id="category4">
-						</select>
-					</td>
-				</tr>
-				<tr>
-
-				</tr>
-			</tbody>
-		</table>
-		
-<div id="goods_detail">
-	
+		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/><br/>
+		添加对应商品id号：<input type="text" name="real_gid">
+	<div id="real_goods_detail">
 
  </div>
 		

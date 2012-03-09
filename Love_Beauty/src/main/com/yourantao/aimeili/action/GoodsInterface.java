@@ -27,15 +27,27 @@ public interface GoodsInterface {
 	 */
 	public String getGoodsImages();
 	
-	public void setNewtopic_thumbContentType(String thumbContentType);
+	/**
+	 * 更新商品详情图
+	 * @return
+	 */
+	public String updateGoodsImages();
+	
+	/**
+	 * 获得商品对应关系的真实商品
+	 * @return
+	 */
+	public String getGoodsMapList();
+	
+	public void setNewGoods_thumbContentType(String thumbContentType);
 
-	public void setNewtopic_thumbFileName(String thumbFileName);
+	public void setNewGoods_thumbFileName(String thumbFileName);
 
-	public void setNewtopic_thumb(File newtopic_thumb);
+	public void setNewGoods_thumb(File newtopic_thumb);
 
-	public void setNewtopic_imageContentType(String imageContentType);
+	public void setNewGoods_imageContentType(String imageContentType);
 
-	public void setNewtopic_imageFileName(String imageFileName);
+	public void setNewGoods_imageFileName(String imageFileName);
 
-	public void setNewtopic_image(File newtopic_image);
+	public void setNewGoods_image(File newtopic_image);
 }

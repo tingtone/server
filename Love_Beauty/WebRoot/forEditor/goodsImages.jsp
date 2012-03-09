@@ -42,7 +42,7 @@
 		<script type="text/javascript">
 
 function GetGoodsImage(gid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getGoodsImages";
+	var url = BASE_SERVER+"/goods_getGoodsImages";
 	var params = {
 		"gid" : gid
 	};
@@ -57,7 +57,9 @@ function GetGoodsImage(gid) {
 				alert("json null");
 			} else {
 				for ( var i = 0; i < json.length; i++) {
-					goods_image += "<img src='" + json[i] +"'/>更改：<input type='file' name='newtopic_thumb'><input type='submit' name='submit' value='删除'/><br/>";
+					goods_image +="<form action='goods_updateGoodsImages' enctype='multipart/form-data' method='post'>";
+					goods_image += "<input type='hidden' name='id' value='"+json[i]['id']+"'><img src='" + json[i]['imageURL'] +"'/>更改：<input type='file' name='newGoods_image'><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><br/>";
+					goods_image+="</form>";
 				}
 			}
 			$('#goods_images').html(goods_image.toString());
@@ -76,14 +78,15 @@ $(document).ready(function() {
 
 	<body>
 		<%@include file="/top.jsp"%>
-		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/>
-  		<input name="new_image" type="file" value="新增对应图片"/>
+		<form action='goods_updateGoodsImages' enctype='multipart/form-data' method='post'>
+		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/><br/>
+  		新增图片：<input name="newGoods_image" type="file"/><input type="submit" name="submit" value="新增对应图片">
+  		</form>
   		<br/>
 对应图片：		
 
 <div id="goods_images">
 
  </div>
-		
 	</body>
 </html>

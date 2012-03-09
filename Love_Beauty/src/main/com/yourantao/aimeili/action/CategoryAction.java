@@ -108,9 +108,6 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 			category.setCategoryDescription(getReqeust().getParameter("category_description"));
 			category.setCategoryName(getReqeust().getParameter("category_name"));
 			return SUCCESS;
-		} else if (updateType.equals("删除")) { // 删除
-			categoryDAO.delete(categoryDAO.findById(category_id));
-			return SUCCESS;
 		} 
 		return ERROR;
 	}

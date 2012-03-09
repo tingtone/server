@@ -38,7 +38,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	var flag;
 	//获得子分类
 function GetSubCategory(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/category_getSubCategories";
+	var url = BASE_SERVER+"/category_getSubCategories";
 	var params = {
 		"cid" : cid
 	};
@@ -68,7 +68,7 @@ function GetSubCategory(cid) {
 }
 
 function GetCategoryDetail(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/category_getCategoryDetail";
+	var url = BASE_SERVER+"/category_getCategoryDetail";
 	var params = {
 		"cid" : cid
 	};
@@ -83,7 +83,7 @@ function GetCategoryDetail(cid) {
 				alert("json null");
 			} else {
 					category+="<table class='tabel'><tbody><tr>";
-					category+="<td><input type='hidden' name='cid' value='"+json['categoryId']+"'/>分类名: <input name='category_name' value='"+json['categoryName']+"'/></td><td>分类对应图片：<img src='"+json['categoryImageName']+"'/>更改：<input type='file' name='category_image'></td><td>分类描述：<input name='category_description' value='"+json['categoryDescription']+"'/></td><td><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/></td>" ;
+					category+="<td><input type='hidden' name='cid' value='"+json['categoryId']+"'/>分类名: <input name='category_name' value='"+json['categoryName']+"'/></td><td>分类对应图片：<img src='"+json['categoryImageName']+"'/>更改：<input type='file' name='category_image'></td><td>分类描述：<input name='category_description' value='"+json['categoryDescription']+"'/></td><td><input name='submit' type='submit' value='更新'/></td>" ;
 					category+="</tr></tbody></table>";
 			$('#category_detail').html(category.toString());
 			}

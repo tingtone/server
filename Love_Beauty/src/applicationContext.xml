@@ -342,6 +342,13 @@
 		<property name="goodsImagesDAO">
 			<ref bean="GoodsImagesDAO" />
 		</property>
+		<property name="goodsMapDAO">
+			<ref bean="GoodsMapDAO" />
+		</property>
+		<property name="goodsRealDAO">
+			<ref bean="GoodsRealDAO" />
+		</property>
+		
 	</bean>
 	
 	<bean id="CategoryAction" class="main.com.yourantao.aimeili.action.CategoryAction">

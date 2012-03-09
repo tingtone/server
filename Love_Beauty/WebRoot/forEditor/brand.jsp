@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
    
 	function GetTopic(){
-			var url="http://192.168.14.24:8080/Love_Beauty/topic_getTopic";
+			var url=BASE_SERVER+"/topic_getTopic";
 			var params = {"action":"get"};
 			var topic="";
 			$.ajax({

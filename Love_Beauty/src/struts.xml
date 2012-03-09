@@ -14,7 +14,7 @@
 		<!-- 商品页 -->
 		<action name="goods_*"  class="GoodsAction"  method="{1}">
 			<result name="real_goods">/forEditor/goods2realgoods.jsp</result>
-			<result name="back">/forEditor/goods.jsp</result>
+			<result name="back_goods">/forEditor/goods.jsp</result>
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 			<result name="goods_images">/forEditor/goodsImages.jsp</result>

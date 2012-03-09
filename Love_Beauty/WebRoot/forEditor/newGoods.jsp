@@ -42,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  var flag;
  //获得子分类
 function GetSubCategory(cid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/category_getSubCategories";
+	var url = BASE_SERVER+"/category_getSubCategories";
 	var params = {
 		"cid" : cid
 	};
@@ -217,7 +217,7 @@ function GetSeries(bid) {
  		<td>系列：<select class="series" id="series" name="sid"></select></td></tr>
  
  <tr><td>商品名称：<input name='goodsName' type='text' /></td></tr>
-						<tr><td>商品缩略图：<input type='file' name='newtopic_thumb'></td></tr> 
+						<tr><td>商品缩略图：<input type='file' name='newGoods_thumb'></td></tr> 
 						<tr><td>商品评分：<input name='goodsScore' type='text' /></td></tr> 
 						<tr><td>商品适用肤质：<input id='goodsForskin' name='goodsForskin' type='text' /></td><td><span class='forskin'>干性</span><span class='forskin'>油性</span><span class='forskin'>混合性</span><span class='forskin'>中性</span><span class='forskin'>敏感性</span></td></tr> 
 						<tr><td>商品不适用肤质：<input id='goodsNotforskin' name='goodsNotforskin' type='text' /></td><td><span class='notforskin'>干性</span><span class='notforskin'>油性</span><span class='notforskin'>混合性</span><span class='notforskin'>中性</span><span class='notforskin'>敏感性</span></td></tr> 

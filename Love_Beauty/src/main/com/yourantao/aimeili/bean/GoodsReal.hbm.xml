@@ -26,10 +26,19 @@
             </column>
         </property>
         <property name="brandName" type="java.lang.String">
-            <column name="brand_name" length="32" not-null="true" />
+            <column name="brand_name" length="32" not-null="true">
+                <comment>品牌名</comment>
+            </column>
         </property>
         <property name="categoryName" type="java.lang.String">
-            <column name="category_name" length="32" not-null="true" />
+            <column name="category_name" length="32" not-null="true">
+                <comment>分类名</comment>
+            </column>
+        </property>
+        <property name="seriesName" type="java.lang.String">
+            <column name="series_name" length="128" not-null="true">
+                <comment>系列名</comment>
+            </column>
         </property>
         <property name="goodsName" type="java.lang.String">
             <column name="goods_name" length="64" not-null="true">
@@ -49,6 +58,11 @@
         <property name="goodsPrice" type="java.lang.Float">
             <column name="goods_price" precision="12" scale="0" not-null="true">
                 <comment>商品价格</comment>
+            </column>
+        </property>
+        <property name="goodsContent" type="java.lang.String">
+            <column name="goods_content" length="64">
+                <comment>商品规格，根据不同的商品类型单位不同，可空</comment>
             </column>
         </property>
         <property name="goodsUrl" type="java.lang.String">
