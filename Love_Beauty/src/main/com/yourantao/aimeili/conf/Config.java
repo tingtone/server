@@ -21,6 +21,9 @@ public class Config {
 	public static ApplicationContext ac;
 	public static Properties properties;
 
+	private static final String springPath = "applicationContext.xml";
+	private static final String configPath = "C:/Users/kfirst/Workspaces/MyEclipse 8.6/.metadata/.me_tcat/webapps/Love_Beauty/WEB-INF/classes/config.properties";
+
 	// 配置文件中的key值
 	public static final String BASE_SERVER = "BASE_SERVER"; // 服务链接地址
 	public static final String BASE_IMAGEURL = "BASE_IMAGEURL"; // 图片服务器链接地址
@@ -34,13 +37,9 @@ public class Config {
 	/*
 	 * 数据库初始化
 	 */
-	public static void init(String springPath, String configPath) {
+	public static void init() {
 		ac = new ClassPathXmlApplicationContext(springPath);
-		if (ac == null)
-			ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 		properties = new Properties();
-		if (configPath == null)
-			configPath = "config.properties";
 		try {
 			properties.load(new FileInputStream(configPath));
 		} catch (FileNotFoundException e) {

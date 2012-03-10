@@ -35,10 +35,7 @@ public class SystemInit implements ServletContextListener {
 			log.error("   begin.....................error.");
 			String path = System.getProperty("testpath");
 			log.info("path={}", path);
-			Config
-					.init(
-							"applicationContext.xml",
-							"C:/Users/kfirst/Workspaces/MyEclipse 8.6/.metadata/.me_tcat/webapps/Love_Beauty/WEB-INF/classes/config.properties");
+			Config.init();
 			Log log1 = LogFactory.getLog("myTest1");
 			log1.debug(" 测试");
 		} catch (Exception e) {
