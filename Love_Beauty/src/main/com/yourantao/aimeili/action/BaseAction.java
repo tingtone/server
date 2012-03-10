@@ -25,6 +25,7 @@ import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.util.MD5;
+import main.com.yourantao.aimeili.util.RankGenerator;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -50,6 +51,9 @@ public abstract class BaseAction extends ActionSupport {
 
 	protected String sessionId;
 	protected String url;
+	protected RankGenerator rankGenerator;
+	protected ImageDAO imageDAO;
+
 	protected static final int BUFFER_SIZE = 16 * 1024;
 	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
@@ -71,17 +75,6 @@ public abstract class BaseAction extends ActionSupport {
 			return null;
 		}
 		return ret;
-	}
-	
-	/**
-	 * 获得文件类型
-	 * 
-	 * @param fileName
-	 * @return
-	 */
-	protected static String getExtention(String fileName) {
-		int pos = fileName.lastIndexOf(".");
-		return fileName.substring(pos);
 	}
 
 	/**
@@ -169,19 +162,16 @@ public abstract class BaseAction extends ActionSupport {
 		response.setHeader(HEADER, CACHE);
 		return response;
 	}
-	
+
 	/**
 	 * 获得图片信息，并更新或新增 return imgid
 	 */
 	protected int getImgAttribute(File imgfile, String fileName) {
 		Image image = new Image();
-		ApplicationContext ac = Config.getACInstant();
+		ApplicationContext ac = Config.getInstant();
 		ImageDAO imageDAO = ImageDAO.getFromApplicationContext(ac);
 
 		String imgurl = fileName; // 保存的图片url
-		// byte[] bytes= imgurl.getBytes(); //对长的url进行crc32编码
-		// CRC32 crc32 = new CRC32();
-		// crc32.update(bytes);
 		String imgurl_md5 = MD5.md5(imgurl); // MD5加密
 
 		try {
@@ -192,8 +182,7 @@ public abstract class BaseAction extends ActionSupport {
 			image.setImgMd5(imgurl_md5);
 			image.setImgType(1); // 1代表是编辑给的图片
 			image.setImgUrl(imgurl);
-			image.setCreatTime(Timestamp.valueOf(dateFormat
-							.format(new Date())));
+			image.setCreatTime(new Timestamp(System.currentTimeMillis()));
 
 			List<Image> list = imageDAO.findByImgMd5(imgurl_md5); // 用md5校验值查询是否有图片存在
 			if (list.isEmpty()) {
@@ -217,6 +206,69 @@ public abstract class BaseAction extends ActionSupport {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	/**
+	 * 从给定的文件中生成Image实体类。
+	 * <p>
+	 * <strong> 注意：该给定的文件会被复制到指定的存储路径，给定的文件不会被删除。 </strong>
+	 * </p>
+	 * 
+	 * @param imageFile
+	 *            给定的文件
+	 * @param imageType
+	 *            给定的文件
+	 * @param duplicate
+	 *            是否允许重复，true表示允许，本方法通过对文件内容做MD5判重。
+	 * @return
+	 */
+	protected Image getImage(File imageFile, int imageType, boolean duplicate) {
+		Image image = new Image();
+		BufferedImage buff = null;
+		try {
+			buff = ImageIO.read(imageFile);
+		} catch (IOException e) {
+			LOG.error("ImageIO.read error!", e);
+			return null;
+		}
+		String md5 = MD5.md5(buff.toString());
+		if (!duplicate) {
+			List<Image> images = imageDAO.findByImgMd5(md5);
+			if (!images.isEmpty()) {
+				if (images.size() != 1)
+					LOG.warn("Image MD5 duplicated! MD5: [" + md5 + "]");
+				return images.get(0);
+			}
+		}
+		String path = generateFile(imageFile);
+		image.setImgHeight(buff.getHeight());
+		image.setImgWidth(buff.getWidth());
+		image.setImgSize(imageFile.length());
+		image.setImgMd5(md5);
+		image.setImgType(imageType);
+		image.setImgUrl(path);
+		image.setCreatTime(new Timestamp(System.currentTimeMillis()));
+		return image;
+	}
+
+	private String generateFile(File imageFile) {
+		String path = MD5.md5(String.valueOf(rankGenerator.generateRank()))
+				+ getExtention(imageFile.getName());
+		copy(imageFile, new File(Config.get(Config.BASE_IMAGESTORAGE) + path));
+		return path;
+	}
+
+	/**
+	 * 获得文件类型
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	protected static String getExtention(String fileName) {
+		int pos = fileName.lastIndexOf(".");
+		if (pos == -1)
+			return "";
+		return fileName.substring(pos);
 	}
 
 	/**
@@ -247,7 +299,6 @@ public abstract class BaseAction extends ActionSupport {
 			e.printStackTrace();
 		}
 	}
-	
 
 	public String getUrl() {
 		return url;
@@ -273,4 +324,19 @@ public abstract class BaseAction extends ActionSupport {
 		this.sessionId = sessionId;
 	}
 
+	public RankGenerator getRankGenerator() {
+		return rankGenerator;
+	}
+
+	public void setRankGenerator(RankGenerator rankGenerator) {
+		this.rankGenerator = rankGenerator;
+	}
+
+	public ImageDAO getImageDAO() {
+		return imageDAO;
+	}
+
+	public void setImageDAO(ImageDAO imageDAO) {
+		this.imageDAO = imageDAO;
+	}
 }

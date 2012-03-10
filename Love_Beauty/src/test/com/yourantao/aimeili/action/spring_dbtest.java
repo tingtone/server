@@ -42,7 +42,7 @@ public class spring_dbtest {
 		String pathString1=System.getProperty("user.dir");
 		System.out.println(pathString1);
 		
-		ApplicationContext ac=Config.getACInstant();
+		ApplicationContext ac=Config.getInstant();
 		  BrandDAO td = BrandDAO.getFromApplicationContext(ac);
 		  
 		  Brand brand=td.findById(1);//查询

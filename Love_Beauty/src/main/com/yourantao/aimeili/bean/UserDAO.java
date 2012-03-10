@@ -29,7 +29,7 @@ public class UserDAO extends HibernateDaoSupport {
 	public static final String VERIFIED = "verified";
 	public static final String SEX = "sex";
 	public static final String MOBILE = "mobile";
-	public static final String IMAGE = "image";
+	public static final String IMAGE_ID = "imageId";
 	public static final String DESCRIPTION = "description";
 	public static final String SKIN = "skin";
 	public static final String HAIR = "hair";
@@ -121,8 +121,8 @@ public class UserDAO extends HibernateDaoSupport {
 		return findByProperty(MOBILE, mobile);
 	}
 
-	public List findByImage(Object image) {
-		return findByProperty(IMAGE, image);
+	public List findByImageId(Object imageId) {
+		return findByProperty(IMAGE_ID, imageId);
 	}
 
 	public List findByDescription(Object description) {

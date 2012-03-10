@@ -33,7 +33,7 @@ public class ProductServer implements Constant {
 	}
 
 	public JSONArray getGoodsList() {
-		ApplicationContext ac = Config.getACInstant();
+		ApplicationContext ac = Config.getInstant();
 		GoodsDAO goodsDAO = GoodsDAO.getFromApplicationContext(ac);
 		ImageDAO imageDAO= ImageDAO.getFromApplicationContext(ac);
 		BrandDAO brandDAO=BrandDAO.getFromApplicationContext(ac);
@@ -57,7 +57,7 @@ public class ProductServer implements Constant {
 				goodsView.setGoodsStatus(goods.getGoodsStatus());
 				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 				if (thumb != null) {
-					goodsView.setGoodsThumb(BASE_IMAGEURL + thumb.getImgUrl());
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
 				} else {
 					goodsView.setGoodsThumb("");
 				}

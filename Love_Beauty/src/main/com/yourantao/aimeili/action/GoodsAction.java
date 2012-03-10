@@ -21,6 +21,10 @@ import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.bean.Series;
 import main.com.yourantao.aimeili.bean.SeriesDAO;
+import main.com.yourantao.aimeili.bean.User;
+import main.com.yourantao.aimeili.bean.UserDAO;
+import main.com.yourantao.aimeili.bean.UserLogin;
+import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
@@ -30,6 +34,7 @@ import main.com.yourantao.aimeili.vo.GoodsView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 @SuppressWarnings("serial")
 public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
@@ -187,7 +192,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				goodsView.setGoodsThumb(BASE_IMAGEURL + thumb.getImgUrl());
+				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
 			} else {
 				goodsView.setGoodsThumb("");
 			}
@@ -238,7 +243,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 				String FileName = MD5.md5(thumbFileName)
 						+ getExtention(thumbFileName);
 				FileName=StringTool.filterWord(FileName);
-				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newGoods_thumb, FileName);
 				goods.setGoodsThumbId(imageid);
 				copy(newGoods_thumb, thumbFile);
@@ -311,7 +316,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName); // MD5加密;
 			FileName=StringTool.filterWord(FileName);
-			File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 			int imageid = getImgAttribute(newGoods_thumb, FileName);
 			goods.setGoodsThumbId(imageid);
 			copy(newGoods_thumb, thumbFile);
@@ -340,7 +345,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			GoodsImageView goodsImageView=new GoodsImageView();
 			goodsImageView.setId(goodsImages.getId());
 			goodsImageView.setImageId(image.getImgId());
-			goodsImageView.setImageURL(BASE_IMAGEURL+image.getImgUrl());
+			goodsImageView.setImageURL(Config.get(Config.BASE_IMAGEURL)+image.getImgUrl());
 			result.add(goodsImageView);
 		}
 		printArray(result);
@@ -360,7 +365,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
 				FileName=StringTool.filterWord(FileName);
-				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newGoods_image, FileName);
 				goodsImages.setImgId(imageid);    //只更新对应号码就行
 				copy(newGoods_image, thumbFile);
@@ -377,7 +382,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
 				FileName=StringTool.filterWord(FileName);
-				File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newGoods_image, FileName);
 				goodsImages.setImgId(imageid);    //只更新对应号码就行
 				copy(newGoods_image, thumbFile);
@@ -404,5 +409,4 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		printArray(result);
 		return null;
 	}
-
 }

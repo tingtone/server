@@ -14,11 +14,18 @@ public class UserLogin implements java.io.Serializable {
 	private String passwordQuestion;
 	private String passwordAnswer;
 	private String uuid;
+	
+	private User user;
 
 	// Constructors
 
 	/** default constructor */
 	public UserLogin() {
+		userName = "";
+		password = "";
+		passwordQuestion = "";
+		passwordAnswer = "";
+		uuid = "";
 	}
 
 	/** full constructor */
@@ -80,6 +87,14 @@ public class UserLogin implements java.io.Serializable {
 
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 }

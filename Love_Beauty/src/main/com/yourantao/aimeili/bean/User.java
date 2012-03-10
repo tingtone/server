@@ -18,7 +18,7 @@ public class User implements java.io.Serializable {
 	private String sex;
 	private Date birthday;
 	private String mobile;
-	private String image;
+	private Integer imageId;
 	private String description;
 	private String skin;
 	private String hair;
@@ -26,16 +26,27 @@ public class User implements java.io.Serializable {
 	private Integer coin;
 	private Short vip;
 	private Timestamp regTime;
+	
+	private UserLogin login;
 
 	// Constructors
 
 	/** default constructor */
 	public User() {
+		email = "";
+		verified = 0;
+		birthday = new Date(0);
+		mobile = "";
+		description = "";
+		point = 0;
+		coin = 0;
+		vip = 0;
+		regTime = new Timestamp(System.currentTimeMillis());
 	}
 
 	/** full constructor */
 	public User(String nickName, String email, Short verified, String sex,
-			Date birthday, String mobile, String image, String description,
+			Date birthday, String mobile, Integer imageId, String description,
 			String skin, String hair, Integer point, Integer coin, Short vip,
 			Timestamp regTime) {
 		this.nickName = nickName;
@@ -44,7 +55,7 @@ public class User implements java.io.Serializable {
 		this.sex = sex;
 		this.birthday = birthday;
 		this.mobile = mobile;
-		this.image = image;
+		this.setImageId(imageId);
 		this.description = description;
 		this.skin = skin;
 		this.hair = hair;
@@ -112,14 +123,6 @@ public class User implements java.io.Serializable {
 		this.mobile = mobile;
 	}
 
-	public String getImage() {
-		return this.image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
 	public String getDescription() {
 		return this.description;
 	}
@@ -174,6 +177,23 @@ public class User implements java.io.Serializable {
 
 	public void setRegTime(Timestamp regTime) {
 		this.regTime = regTime;
+	}
+
+	public void setLogin(UserLogin login) {
+		this.login = login;
+		login.setUser(this);
+	}
+
+	public UserLogin getLogin() {
+		return login;
+	}
+
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+
+	public Integer getImageId() {
+		return imageId;
 	}
 
 }

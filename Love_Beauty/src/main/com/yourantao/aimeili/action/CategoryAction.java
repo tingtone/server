@@ -7,6 +7,7 @@ import main.com.yourantao.aimeili.bean.Category;
 import main.com.yourantao.aimeili.bean.CategoryDAO;
 import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
+import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.StringTool;
@@ -85,7 +86,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
 				String FileName = MD5.md5(newImageFileName)+ getExtention(newImageFileName);
 				FileName=StringTool.filterWord(FileName);
-				File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newCategory_image, FileName);
 				category.setCategoryImageId(imageid);
 				copy(newCategory_image, imageFile);
@@ -100,7 +101,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 				// getExtention(imageFileName);
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
 				FileName=StringTool.filterWord(FileName);
-				File imageFile = new File(BASE_IMAGESTORAGE + FileName);
+				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(category_image, FileName);
 				category.setCategoryImageId(imageid);
 				copy(category_image, imageFile);
@@ -125,7 +126,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 			if(category.getCategoryImageId()!=0)  //0是默认值，即无对应图片，需要添加
 			{
 				Image image = imageDAO.findById(category.getCategoryImageId());
-				result.setCategoryImageName(BASE_IMAGEURL+image.getImgUrl());
+				result.setCategoryImageName(Config.get(Config.BASE_IMAGEURL)+image.getImgUrl());
 			}
 			
 			result.setCategoryDescription(category.getCategoryDescription());

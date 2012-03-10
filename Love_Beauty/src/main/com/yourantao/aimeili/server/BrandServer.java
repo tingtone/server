@@ -43,7 +43,7 @@ public class BrandServer implements Constant {
 	 */
 	public JSONArray getBrandList() {
 		List<Brand> brands = new ArrayList<Brand>();
-		ApplicationContext ac = Config.getACInstant();
+		ApplicationContext ac = Config.getInstant();
 		BrandDAO td = BrandDAO.getFromApplicationContext(ac);
 		brands = td.findRank();
 		JSONArray jsonArray = JSONArray.fromObject(brands);

@@ -35,7 +35,7 @@ public class TopicServer implements Constant {
 		if (topicId == null)
 			return null;
 		
-		ApplicationContext ac = Config.getACInstant();
+		ApplicationContext ac = Config.getInstant();
 		TopicGoodsDAO topicGoodsDAO = TopicGoodsDAO.getFromApplicationContext(ac);
 		List goods = topicGoodsDAO.findByTopicId(topicId);
 		JSONArray jsonArray = JSONArray.fromObject(goods);

@@ -3,11 +3,11 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean
+	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:mysql.properties</value>
+				<value>classpath:config.properties</value>
 			</list>
 		</property>
 		<property name="fileEncoding" value="utf-8" />
@@ -138,7 +138,8 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/GoodsImages.hbm.xml
-				</value></list>
+				</value>
+			</list>
 		</property>
 	</bean>
 
@@ -305,13 +306,9 @@
 
 	<bean id="RankGenerator" class="main.com.yourantao.aimeili.util.RankGenerator">
 	</bean>
-	<bean id="TopicAction" class="main.com.yourantao.aimeili.action.TopicAction">
-		<property name="topicDAO">
-			<ref bean="TopicDAO" />
-		</property>
-		<property name="topicGoodsDAO">
-			<ref bean="TopicGoodsDAO" />
-		</property>
+
+	<bean id="BaseAction" class="main.com.yourantao.aimeili.action.BaseAction"
+		abstract="true">
 		<property name="imageDAO">
 			<ref bean="ImageDAO" />
 		</property>
@@ -319,7 +316,17 @@
 			<ref bean="RankGenerator" />
 		</property>
 	</bean>
-	
+
+	<bean id="TopicAction" class="main.com.yourantao.aimeili.action.TopicAction"
+		parent="BaseAction">
+		<property name="topicDAO">
+			<ref bean="TopicDAO" />
+		</property>
+		<property name="topicGoodsDAO">
+			<ref bean="TopicGoodsDAO" />
+		</property>
+	</bean>
+
 	<bean id="GoodsAction" class="main.com.yourantao.aimeili.action.GoodsAction">
 		<property name="goodsDAO">
 			<ref bean="GoodsDAO" />
@@ -348,9 +355,9 @@
 		<property name="goodsRealDAO">
 			<ref bean="GoodsRealDAO" />
 		</property>
-		
+
 	</bean>
-	
+
 	<bean id="CategoryAction" class="main.com.yourantao.aimeili.action.CategoryAction">
 		<property name="categoryDAO">
 			<ref bean="CategoryDAO" />
@@ -359,7 +366,7 @@
 			<ref bean="ImageDAO" />
 		</property>
 	</bean>
-	
+
 	<bean id="BrandAction" class="main.com.yourantao.aimeili.action.BrandAction">
 		<property name="brandDAO">
 			<ref bean="BrandDAO" />
@@ -369,7 +376,8 @@
 		</property>
 	</bean>
 
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
@@ -400,15 +408,14 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="SeriesDAO"
-		class="main.com.yourantao.aimeili.bean.SeriesDAO">
+	<bean id="SeriesDAO" class="main.com.yourantao.aimeili.bean.SeriesDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-	<bean id="GoodsImagesDAO"
-		class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
+	<bean id="GoodsImagesDAO" class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
-	</bean></beans>
+	</bean>
+</beans>
