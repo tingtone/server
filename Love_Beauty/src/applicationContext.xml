@@ -376,8 +376,20 @@
 		</property>
 	</bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+	<!-- added by wander -->
+	<bean id="ProviderAction" class="main.com.yourantao.aimeili.action.ProviderAction">
+		<property name="providerDAO">
+			<ref bean="ProviderDAO" />
+		</property>
+		<property name="providerLocationsDAO">
+			<ref bean="ProviderLocationsDAO" />
+		</property>
+		<property name="imageDAO">
+			<ref bean="ImageDAO" />
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

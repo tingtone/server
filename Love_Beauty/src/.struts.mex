@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Struts2Diagram version="2.0">
+  <package name="lovebeauty" location="165,220" size="1400,315">
+    <action name="topic_*" location="1185,61" size="150,104">
+      <result name="topic_goods">
+        <resourceEdge source="topic_goods" routing="0" target="topic_goods.jsp" />
+      </result>
+      <result name="back">
+        <resourceEdge source="back" routing="0" target="topic.jsp" />
+      </result>
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+    </action>
+    <action name="goods_*" location="100,50" size="150,125">
+      <result name="real_goods">
+        <resourceEdge source="real_goods" routing="0" target="goods2realgoods.jsp" />
+      </result>
+      <result name="back_goods">
+        <resourceEdge source="back_goods" routing="0" target="goods.jsp" />
+      </result>
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+      <result name="goods_images">
+        <resourceEdge source="goods_images" routing="0" target="goodsImages.jsp" />
+      </result>
+    </action>
+    <action name="category_*" location="100,222" size="150,62">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+    </action>
+    <action name="brand_*" location="765,222" size="150,62">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+    </action>
+  </package>
+  <webResource name="topic_goods.jsp" path="/forEditor/topic_goods.jsp" location="1616,275" size="150,55" />
+  <webResource name="topic.jsp" path="/forEditor/topic.jsp" location="1112,590" size="150,55" />
+  <webResource name="success.jsp" path="/success.jsp" location="955,695" size="150,55" />
+  <webResource name="error.jsp" path="/error.jsp" location="10,415" size="150,55" />
+  <webResource name="goods2realgoods.jsp" path="/forEditor/goods2realgoods.jsp" location="234,65" size="150,55" />
+  <webResource name="goods.jsp" path="/forEditor/goods.jsp" location="548,65" size="150,55" />
+  <webResource name="goodsImages.jsp" path="/forEditor/goodsImages.jsp" location="771,65" size="150,55" />
+</Struts2Diagram>
+
