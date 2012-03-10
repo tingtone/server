@@ -27,7 +27,6 @@ import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
-import main.com.yourantao.aimeili.util.StringTool;
 import main.com.yourantao.aimeili.vo.TopicView;
 
 import org.apache.struts2.convention.StringTools;

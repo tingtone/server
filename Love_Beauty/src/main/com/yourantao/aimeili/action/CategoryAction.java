@@ -10,7 +10,6 @@ import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
-import main.com.yourantao.aimeili.util.StringTool;
 import main.com.yourantao.aimeili.vo.CategoryView;
 
 import org.slf4j.Logger;
