@@ -142,7 +142,7 @@ public class ProviderAction extends BaseAction implements Constant,
 		Image thumb = imageDAO.findById(provider.getProviderThumbId()); //缩略图
 		
 		if(thumb != null)
-			providerView.setProviderThumb(BASE_IMAGEURL + thumb.getImgUrl());
+			providerView.setProviderThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
 		else
 			providerView.setProviderThumb("");
 
@@ -169,7 +169,7 @@ public class ProviderAction extends BaseAction implements Constant,
 			System.out.println("in update provider-------thumb");
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName);
-			File thumbFile = new File(BASE_IMAGESTORAGE + FileName);
+			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 			int imageid = getImgAttribute(newprovider_thumb, FileName);
 			provider.setProviderThumbId(imageid);
 			copy(newprovider_thumb, thumbFile);
