@@ -231,7 +231,7 @@ public abstract class BaseAction extends ActionSupport {
 			LOG.error("ImageIO.read error!", e);
 			return null;
 		}
-		String md5 = MD5.md5(buff.toString());
+		String md5 = MD5.md5(imageFile);
 		if (!duplicate) {
 			List<Image> images = imageDAO.findByImgMd5(md5);
 			if (!images.isEmpty()) {
@@ -240,7 +240,7 @@ public abstract class BaseAction extends ActionSupport {
 				return images.get(0);
 			}
 		}
-		String path = generateFile(imageFile);
+		String path = storeImageFile(imageFile);
 		image.setImgHeight(buff.getHeight());
 		image.setImgWidth(buff.getWidth());
 		image.setImgSize(imageFile.length());
@@ -248,14 +248,20 @@ public abstract class BaseAction extends ActionSupport {
 		image.setImgType(imageType);
 		image.setImgUrl(path);
 		image.setCreatTime(new Timestamp(System.currentTimeMillis()));
+		imageDAO.save(image);
 		return image;
 	}
 
-	private String generateFile(File imageFile) {
+	private String storeImageFile(File imageFile) {
 		String path = MD5.md5(String.valueOf(rankGenerator.generateRank()))
 				+ getExtention(imageFile.getName());
-		copy(imageFile, new File(Config.get(Config.BASE_IMAGESTORAGE) + path));
-		return path;
+		String base = Config.get(Config.BASE_IMAGESTORAGE);
+		String dir = path.charAt(0) + "/";
+		new File(base + dir).mkdir();
+		dir += path.charAt(1) + "/";
+		new File(base + dir).mkdir();
+		copy(imageFile, new File(base + dir + path));
+		return dir + path;
 	}
 
 	/**

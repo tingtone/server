@@ -160,7 +160,6 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 				// getExtention(thumbFileName);
 				String FileName = MD5.md5(thumbFileName)
 						+ getExtention(thumbFileName);
-				FileName=StringTool.filterWord(FileName);
 				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newtopic_thumb, FileName);
 				topic.setTopicThumbId(imageid);
@@ -171,7 +170,6 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 				// getExtention(imageFileName);
 				String FileName = MD5.md5(imageFileName)
 						+ getExtention(imageFileName);
-				FileName=StringTool.filterWord(FileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newtopic_image, FileName);
 				topic.setTopicImagesId(imageid);
@@ -206,7 +204,6 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 			// getExtention(thumbFileName);
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName); // MD5加密;
-			FileName=StringTool.filterWord(FileName);
 			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 			int imageid = getImgAttribute(newtopic_thumb, FileName);
 			topic.setTopicThumbId(imageid);
@@ -217,7 +214,6 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 			// getExtention(imageFileName);
 			String FileName = MD5.md5(imageFileName)
 					+ getExtention(thumbFileName);
-			FileName=StringTool.filterWord(FileName);
 			File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 			int imageid = getImgAttribute(newtopic_image, FileName);
 			topic.setTopicImagesId(imageid);

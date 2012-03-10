@@ -242,7 +242,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(thumbFileName)
 						+ getExtention(thumbFileName);
-				FileName=StringTool.filterWord(FileName);
 				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newGoods_thumb, FileName);
 				goods.setGoodsThumbId(imageid);
@@ -315,7 +314,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			// getExtention(thumbFileName);
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName); // MD5加密;
-			FileName=StringTool.filterWord(FileName);
 			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 			int imageid = getImgAttribute(newGoods_thumb, FileName);
 			goods.setGoodsThumbId(imageid);
@@ -364,7 +362,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			GoodsImages goodsImages=goodsImagesDAO.findById(getIntegerParameter("id"));
 			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
-				FileName=StringTool.filterWord(FileName);
 				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newGoods_image, FileName);
 				goodsImages.setImgId(imageid);    //只更新对应号码就行
@@ -381,7 +378,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			goodsImages.setGoodsId(getIntegerParameter(GOODS_ID));
 			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
-				FileName=StringTool.filterWord(FileName);
 				File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newGoods_image, FileName);
 				goodsImages.setImgId(imageid);    //只更新对应号码就行

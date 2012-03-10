@@ -85,7 +85,6 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 			category.setCategoryRank((long)0);         //分类的排序待定！！
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
 				String FileName = MD5.md5(newImageFileName)+ getExtention(newImageFileName);
-				FileName=StringTool.filterWord(FileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(newCategory_image, FileName);
 				category.setCategoryImageId(imageid);
@@ -100,7 +99,6 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 				// String FileName =imageFileName+ new Date().getTime() +
 				// getExtention(imageFileName);
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
-				FileName=StringTool.filterWord(FileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
 				int imageid = getImgAttribute(category_image, FileName);
 				category.setCategoryImageId(imageid);
