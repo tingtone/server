@@ -52,9 +52,10 @@ public class OrderAction extends BaseAction implements Constant{
 		}
 		public String getOrderTracking()
 		{
-			String orderRelatedNUM = getStringParameter("");//undefined constant
+			String orderRelatedNum = getStringParameter("");//undefined constant
 			//这里开始从某个地方获取特定的订单追踪信息
 			//
+			
 			return null;
 		}
 		/**
