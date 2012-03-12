@@ -13,7 +13,7 @@
 	<head>
 		<base href="<%=basePath%>">
 
-		<title>商品对应的真实商品</title>
+		<title> 查看真实商品</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
@@ -67,57 +67,13 @@ function transProvider(pid){
 		}
 }
 
-//获得品牌
-function GetBrands() {
-	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getBrands";
-	var brand = "";
-	$.ajax({
-		type : "POST",
-		dataType : "json",
-		url : url,
-		success : function(json) {
-			if (json == null) {
-				alert("json null");
-			} else {
-				brand +="<option value='0'></option>";
-				for ( var i = 0; i < json.length; i++) {
-					brand += "<option value='" + json[i]['brandId']+ "'>" + json[i]['brandName'] + "</option>";
-				}
-			}
-			$('#brand').html(brand);
-		}
-	});
-}
-//获得系列
-function GetSeries(bid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getSeries";
-	var series = "";
-	var params = {
-		"bid" : bid
-	};
-	$.ajax({
-		type : "POST",
-		data : params,
-		dataType : "json",
-		url : url,
-		success : function(json) {
-			if (json == null) {
-				alert("json null");
-			} else {
-				for ( var i = 0; i < json.length; i++) {
-					series += "<option value='" + json[i]['seriesId']+ "'>" + json[i]['seriesName'] + "</option>";
-				}
-			}
-			$('#series').html(series);
-		}
-	});
-}
 
 //通过gid获得商品对应关系
-function GetGoodsMap(gid) {
-	var url = BASE_SERVER+"/goods_getGoodsMapList";
+function GetRealGoodsListBySeries(bid,sid) {
+	var url = BASE_SERVER+"/goods_GetRealGoodsListBySeries";
 	var params = {
-		"gid" : gid
+		"sid" : sid,
+		"bid" : bid
 	};
 	var goodsDetail = "";
 	$.ajax( {
@@ -126,8 +82,8 @@ function GetGoodsMap(gid) {
 		dataType : "json",
 		url : url,
 		success : function(json) {
-			if (json == null) {
-				alert("json null");
+			if (json == null ||json.length==0) {
+				goodsDetail+="无数据";
 			} else {
 				for(var i=0;i<json.length;i++){
 				var goodsimage=json[i]['goodsImages'];
@@ -482,18 +438,76 @@ function unserialize(ss) {
     return __unserialize();
 }
 
+//获得品牌
+function GetBrands() {
+	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getBrands";
+	var brand = "";
+	$.ajax({
+		type : "POST",
+		dataType : "json",
+		url : url,
+		success : function(json) {
+			if (json == null) {
+				alert("json null");
+			} else {
+				brand +="<option value='0'></option>";
+				for ( var i = 0; i < json.length; i++) {
+					brand += "<option value='" + json[i]['brandId']+ "'>" + json[i]['brandName'] + "</option>";
+				}
+			}
+			$('#brand').html(brand);
+		}
+	});
+}
+//获得系列
+function GetSeries(bid) {
+	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getSeries";
+	var series = "";
+	var params = {
+		"bid" : bid
+	};
+	$.ajax({
+		type : "POST",
+		data : params,
+		dataType : "json",
+		url : url,
+		success : function(json) {
+			if (json == null) {
+				alert("json null");
+			} else {
+				for ( var i = 0; i < json.length; i++) {
+					series += "<option value='" + json[i]['seriesId']+ "'>" + json[i]['seriesName'] + "</option>";
+				}
+			}
+			$('#series').html(series);
+		}
+	});
+}
 
 $(document).ready(function() {
 	
-	GetGoodsMap($('#goods_id').val());
+	GetBrands();
+	$('#brand').change(function() {
+		var bid = $(this).val();
+		GetSeries(bid);
+	});
+	$('#realgoods').click(function() {
+		var bid = $('#brand').val();
+		var sid = $('#series').val();
+		GetRealGoodsListBySeries(bid,sid);
+	});
+	
 });
 </script>
 	</head>
 
 	<body>
 		<%@include file="/top.jsp"%>
-		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/><br/>
-		添加对应商品id号：<input type="text" name="real_gid">  <a href='forEditor/realgoods.jsp'>查看真实商品</a>
+		<table class="tabel" >
+ <tbody>
+ <tr><td>商品品牌：<select class="brand" id="brand" name="bid"></select></td>
+ 		<td>系列：<select class="series" id="series" name="sid"></select></td><td><input id="realgoods" type="button" value="查看该系列（品牌）真实商品"/></td></tr>
+ 		</tbody></table>
 	<div id="real_goods_detail">
 
  </div>
