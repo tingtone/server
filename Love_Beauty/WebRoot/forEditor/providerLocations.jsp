@@ -116,6 +116,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	</script>
 </head>
 <body>
+	<%@include file="/top.jsp"%>
 	<form name="locationForm" action="provider_updateOrAddProviderLocations" enctype="application/x-www-form-urlencoded" method="post">
 	<select id="providerId" name="pid">
    		<option value="1">NO5时尚广场</option>

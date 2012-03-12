@@ -90,6 +90,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
 <body>
+	<%@include file="/top.jsp"%>
 	<select id="providerId">
 		<option value="1">NO5时尚广场</option>
 		<option value="2">乐蜂网</option>

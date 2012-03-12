@@ -388,7 +388,21 @@
 			<ref bean="ImageDAO" />
 		</property>
 	</bean>
-
+	
+	<bean id="ShoppingCartAction" class="main.com.yourantao.aimeili.action.ShoppingCartAction">
+		<property name="shoppingCartDAO">
+			<ref bean="ShoppingCartDAO" />
+		</property>
+	</bean>
+	<bean id="OrderAction" class="main.com.yourantao.aimeili.action.OrderAction">
+		<property name="orderDAO">
+			<ref bean="OrderDAO" />
+		</property>
+		<property name="orderGoodsDAO">
+			<ref bean="OrderGoodsDAO" />
+		</property>
+	</bean>
+	<!-- end -->
 	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
