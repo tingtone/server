@@ -39,6 +39,12 @@ public interface GoodsInterface {
 	 */
 	public String getGoodsMapList();
 	
+	/**
+	 * 通过品牌或者系列获得真实商品
+	 * @return
+	 */
+	public String GetRealGoodsListBySeries();
+	
 	public void setNewGoods_thumbContentType(String thumbContentType);
 
 	public void setNewGoods_thumbFileName(String thumbFileName);

@@ -3,6 +3,7 @@ package main.com.yourantao.aimeili.bean;
 import java.sql.Timestamp;
 import java.util.List;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -272,5 +273,22 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 
 	public static GoodsRealDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (GoodsRealDAO) ctx.getBean("GoodsRealDAO");
+	}
+	
+	/**
+	 * 自定义查找数据库，like品牌名
+	 * 
+	 * @param brandName
+	 */
+	public List<GoodsReal> findRealGoodsByBrandName(String brandName) {
+		log.info("自定义查找数据库，brandName like '%{}%'",brandName);
+		try {
+			String queryString = "from GoodsReal as model where model."
+					+ BRAND_NAME + " like '%"+brandName+"%'";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
 	}
 }

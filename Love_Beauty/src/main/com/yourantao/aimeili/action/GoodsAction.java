@@ -404,4 +404,24 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		printArray(result);
 		return null;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#GetRealGoodsListBySeries()
+	 */
+	@Override
+	public String GetRealGoodsListBySeries() {
+		List<GoodsReal> result=null;
+		if(getReqeust().getParameter("sid")!=null &&!getReqeust().getParameter("sid").equals("null") &&!getReqeust().getParameter("sid").equals("0")){  //如果有系列号，按系列号取商品数据
+			int sid=getIntegerParameter("sid");
+			Series series=seriesDAO.findById(sid);
+			result=goodsRealDAO.findBySeriesName(series.getSeriesName());
+		}else{   //按品牌取商品
+			int bid=getIntegerParameter("bid");
+			Brand brand=brandDAO.findById(bid);
+			result=goodsRealDAO.findRealGoodsByBrandName(brand.getBrandName());
+		}
+		printArray(result);
+		return null;
+	}
 }
