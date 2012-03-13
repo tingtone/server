@@ -393,6 +393,9 @@
 		<property name="shoppingCartDAO">
 			<ref bean="ShoppingCartDAO" />
 		</property>
+		<property name="goodsRealDAO">
+			<ref bean="GoodsRealDAO" />
+		</property>
 	</bean>
 	<bean id="OrderAction" class="main.com.yourantao.aimeili.action.OrderAction">
 		<property name="orderDAO">
@@ -400,6 +403,9 @@
 		</property>
 		<property name="orderGoodsDAO">
 			<ref bean="OrderGoodsDAO" />
+		</property>
+		<property name="goodsRealDAO">
+			<ref bean="GoodsRealDAO" />
 		</property>
 	</bean>
 	<!-- end -->

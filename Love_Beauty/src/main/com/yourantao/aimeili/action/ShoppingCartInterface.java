@@ -1,5 +1,6 @@
 package main.com.yourantao.aimeili.action;
 
+import main.com.yourantao.aimeili.bean.GoodsRealDAO;
 import main.com.yourantao.aimeili.bean.ShoppingCartDAO;
 
 public interface ShoppingCartInterface {
@@ -8,7 +9,8 @@ public interface ShoppingCartInterface {
 	public abstract ShoppingCartDAO getShoppingCartDAO();
 
 	public abstract void setShoppingCartDAO(ShoppingCartDAO shoppingCartDAO);
-
+	public abstract GoodsRealDAO getGoodsRealDAO();
+	public abstract void setGoodsRealDAO(GoodsRealDAO goodsRealDAO);
 	/**
 	 * 获取购物车内容
 	 * @return
