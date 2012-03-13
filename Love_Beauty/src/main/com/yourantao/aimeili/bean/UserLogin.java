@@ -14,7 +14,7 @@ public class UserLogin implements java.io.Serializable {
 	private String passwordQuestion;
 	private String passwordAnswer;
 	private String uuid;
-	
+
 	private User user;
 
 	// Constructors

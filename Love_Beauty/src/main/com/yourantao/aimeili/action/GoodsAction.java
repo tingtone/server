@@ -23,11 +23,15 @@ import main.com.yourantao.aimeili.bean.Series;
 import main.com.yourantao.aimeili.bean.SeriesDAO;
 import main.com.yourantao.aimeili.bean.User;
 import main.com.yourantao.aimeili.bean.UserDAO;
+import main.com.yourantao.aimeili.bean.UserFavorite;
+import main.com.yourantao.aimeili.bean.UserFavoriteDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
+import main.com.yourantao.aimeili.bean.UserLoginDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
+import main.com.yourantao.aimeili.util.TransTool;
 import main.com.yourantao.aimeili.vo.GoodsImageView;
 import main.com.yourantao.aimeili.vo.GoodsView;
 
@@ -56,7 +60,9 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private GoodsImagesDAO goodsImagesDAO;
 	private GoodsMapDAO goodsMapDAO;
 	private GoodsRealDAO goodsRealDAO;
-	
+	private UserDAO userDAO;
+	private UserFavoriteDAO userFavoriteDAO;
+	private UserLoginDAO userLoginDAO;
 	
 	
 	// struts
@@ -96,6 +102,30 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
+	}
+
+	public UserLoginDAO getUserLoginDAO() {
+		return userLoginDAO;
+	}
+
+	public void setUserLoginDAO(UserLoginDAO userLoginDAO) {
+		this.userLoginDAO = userLoginDAO;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
+	public UserFavoriteDAO getUserFavoriteDAO() {
+		return userFavoriteDAO;
+	}
+
+	public void setUserFavoriteDAO(UserFavoriteDAO userFavoriteDAO) {
+		this.userFavoriteDAO = userFavoriteDAO;
 	}
 
 	public GoodsRealDAO getGoodsRealDAO() {
@@ -166,12 +196,81 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		return imageDAO;
 	}
 
+	/* for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListByFav()
+	 */
+	@Override
+	public String getGoodsListByFav() {
+		String msg="";
+		String uuid=getReqeust().getParameter("uuid");
+		if(uuid==null){
+			msg="{'msg':'没有设备号'}";
+			outputString(msg);
+			return null;
+		}
+		List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+		Integer uid=userLogin.get(0).getUserId();
+		if(uid==null || uid==0){
+			msg="{'msg':'设备号未登记'}";
+			outputString(msg);
+			return null;
+		}
+		List<UserFavorite> userfavlist=userFavoriteDAO.findByUserId(uid);
+		if(userfavlist.size()==0){   //没有收藏
+			msg="{'msg':'没有收藏商品'}";
+			outputString(msg);
+			return null;
+		}else{                //有收藏，取得相应商品
+			List<UserFavorite> userFavorites=userFavoriteDAO.findByUserId(uid);
+			List<GoodsView> result=new ArrayList<GoodsView>();
+				
+			for (UserFavorite userFavorite : userFavorites) {
+				Goods goods=goodsDAO.findById(userFavorite.getRelatedId());
+				GoodsView goodsView=new GoodsView();
+				goodsView.setGoodsId(goods.getGoodsId());
+				goodsView.setGoodsAge(goods.getGoodsAge());
+				goodsView.setGoodsDescription(goods.getGoodsDescription());
+				goodsView.setGoodsForskin(goods.getGoodsForskin());
+				goodsView.setGoodsName(goods.getGoodsName());
+				goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+				goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+				goodsView.setGoodsScore(goods.getGoodsScore());
+				goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+				goodsView.setGoodsStatus(goods.getGoodsStatus());
+				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+				if (thumb != null) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+				} else {
+					goodsView.setGoodsThumb("");
+				}
+				if (goods.getBrandId() != null) {
+					Brand brand=brandDAO.findById(goods.getBrandId());
+					goodsView.setGoodsBrandName(brand.getBrandName());
+				} 
+				if (goods.getSeriesId() != null) {  
+					if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+						goodsView.setGoodsSeriesName("无");
+					}else{
+						Series series=seriesDAO.findById(goods.getSeriesId());
+						goodsView.setGoodsSeriesName(series.getSeriesName());
+					}
+				}
+				result.add(goodsView);
+			}
+			printArray(result);
+			return null;
+		}
+	}
+	
+	
+	
 	/*
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsList()
 	 */
 	@Override
-	public String getGoodsList() {
+	public String getGoodsListByCat() {
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
 		if (categoryId == null)
 			return null;
@@ -225,7 +324,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 //		TopicDAO topicDAO = TopicDAO.getFromApplicationContext(ac);
 		Integer goodsId = getIntegerParameter(GOODS_ID);
 		Goods goods=goodsDAO.findById(goodsId);
-		
 		String goodsName = getReqeust().getParameter("goodsName");
 		String goodsScore = getReqeust().getParameter("goodsScore");
 		String goodsForskin = getReqeust().getParameter("goodsForskin");
@@ -234,7 +332,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		String goodsAge = getReqeust().getParameter("goodsAge");
 		String goodsDescription = getReqeust().getParameter("goodsDescription");
 		String goodsSpecification = getReqeust().getParameter("goodsSpecification");
-		
 		goods.setGoodsId(goodsId);
 		String updateType = getReqeust().getParameter("submit");
 		if (updateType.equals("更新")) { // 需要对每个进行更新
@@ -283,7 +380,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 				break;
 			}
 		}
-		
 		goods.setBrandId(getIntegerParameter(BRAND_ID));
 		goods.setSeriesId(getIntegerParameter(SERIES_ID));
 		goods.setCategoryId(categoryId);
@@ -422,6 +518,26 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			result=goodsRealDAO.findRealGoodsByBrandName(brand.getBrandName());
 		}
 		printArray(result);
+		return null;
+	}
+
+	/*for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListBySkin()
+	 */
+	@Override
+	public String getGoodsListBySkin() {
+		String msg="";
+		String skin=getReqeust().getParameter("skin");
+		if(skin==null){
+			msg="{'msg':'没有肤质结果'}";
+			return null;
+		}
+		String skinName=TransTool.transSkin(skin);
+		List<GoodsView> result=new ArrayList<GoodsView>();
+		List<Goods> goodslist=goodsDAO.findBySkin(skinName); //获取适合肤质，不适合，需要注意的
+		
+		
 		return null;
 	}
 }

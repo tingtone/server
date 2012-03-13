@@ -10,11 +10,21 @@ public interface GoodsInterface {
 	public String updateGoods();
 	
 	/**
-	 * 获得商品列表
+	 * 我的护肤品中获得适合，不适合和需要注意的
+	 */
+	public String getGoodsListBySkin();
+	/**
+	 * 通过分类获得商品列表
+	 * 
 	 * @return
 	 */
-	public String getGoodsList();
+	public String getGoodsListByCat();
 	
+	/**
+	 * 获得收藏商品列表
+	 * @return
+	 */
+	public String getGoodsListByFav();
 	/**
 	 * 添加商品
 	 * @return

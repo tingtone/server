@@ -24,7 +24,6 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(UserFavoriteDAO.class);
 	// property constants
-	public static final String FAVORITE_ID = "favoriteId";
 	public static final String USER_ID = "userId";
 	public static final String FAVORITE_TYPE = "favoriteType";
 	public static final String RELATED_ID = "relatedId";
@@ -93,10 +92,6 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByFavoriteId(Object favoriteId) {
-		return findByProperty(FAVORITE_ID, favoriteId);
-	}
-
 	public List findByUserId(Object userId) {
 		return findByProperty(USER_ID, userId);
 	}
@@ -158,5 +153,23 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 	public static UserFavoriteDAO getFromApplicationContext(
 			ApplicationContext ctx) {
 		return (UserFavoriteDAO) ctx.getBean("UserFavoriteDAO");
+	}
+	
+	
+	/**
+	 * 自定义查找数据库，uid和gid
+	 * 
+	 * @param brandName
+	 */
+	public List<UserFavorite> findByUidAndGid(Integer uid, Integer gid) {
+		log.info("自定义查找数据库，brandName uid= '{}',gid='{}'",uid,gid);
+		try {
+			String queryString = "from UserFavorite as model where model."
+					+ USER_ID + "=? and "+RELATED_ID+"=?";
+			return getHibernateTemplate().find(queryString,new Integer[]{uid, gid});
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
 	}
 }

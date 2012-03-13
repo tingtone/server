@@ -355,6 +355,15 @@
 		<property name="goodsRealDAO">
 			<ref bean="GoodsRealDAO" />
 		</property>
+		<property name="userDAO">
+			<ref bean="UserDAO" />
+		</property>
+		<property name="userLoginDAO">
+			<ref bean="UserLoginDAO" />
+		</property>
+		<property name="userFavoriteDAO">
+			<ref bean="UserFavoriteDAO" />
+		</property>
 
 	</bean>
 
@@ -400,6 +409,17 @@
 		</property>
 		<property name="orderGoodsDAO">
 			<ref bean="OrderGoodsDAO" />
+		</property>
+	</bean>
+	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction">
+		<property name="userDAO">
+			<ref bean="UserDAO" />
+		</property>
+		<property name="userLoginDAO">
+			<ref bean="UserLoginDAO" />
+		</property>
+		<property name="userFavoriteDAO">
+			<ref bean="UserFavoriteDAO" />
 		</property>
 	</bean>
 	<!-- end -->

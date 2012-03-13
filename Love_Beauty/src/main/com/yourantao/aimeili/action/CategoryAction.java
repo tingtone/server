@@ -1,6 +1,7 @@
 package main.com.yourantao.aimeili.action;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import main.com.yourantao.aimeili.bean.Category;
@@ -39,21 +40,22 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 			return null;
 
 		List<Category> categories = categoryDAO.findByParentCatid(categoryId);
-
+		List<CategoryView> result = new ArrayList<CategoryView>();
 		for (Category category : categories) {
+			CategoryView categoryView=new CategoryView();
+			if(category.getCategoryImageId()!=0)  //图片非空
+			{
+				Image image = imageDAO.findById(category.getCategoryImageId());
+				categoryView.setCategoryImageName(Config.get(Config.BASE_IMAGEURL)+image.getImgUrl());
+			}
+			
+			categoryView.setCategoryDescription(category.getCategoryDescription());
+			categoryView.setCategoryId(category.getCategoryId());
+			categoryView.setCategoryName(category.getCategoryName());
+			result.add(categoryView);
 		}
-		printArray(categories);
+		printArray(result);
 
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see main.com.yourantao.aimeili.action.CategoryInterface#insertCategory()
-	 */
-	@Override
-	public String insertCategory() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -64,7 +66,6 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 	@Override
 	public String updateORinsertCategory() {
 		Integer category_id = getIntegerParameter(CATEGORY_ID);
-
 		String updateType = getReqeust().getParameter("submit");
 		if (updateType.equals("添加")) {   //添加新分类
 			Category category = new Category();

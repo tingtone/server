@@ -26,7 +26,8 @@ public class User implements java.io.Serializable {
 	private Integer coin;
 	private Short vip;
 	private Timestamp regTime;
-	
+	private Timestamp lastlogin;
+
 	private UserLogin login;
 
 	// Constructors
@@ -42,13 +43,14 @@ public class User implements java.io.Serializable {
 		coin = 0;
 		vip = 0;
 		regTime = new Timestamp(System.currentTimeMillis());
+		lastlogin = new Timestamp(System.currentTimeMillis());
 	}
 
 	/** full constructor */
 	public User(String nickName, String email, Short verified, String sex,
 			Date birthday, String mobile, Integer imageId, String description,
 			String skin, String hair, Integer point, Integer coin, Short vip,
-			Timestamp regTime) {
+			Timestamp regTime,Timestamp lastlogin) {
 		this.nickName = nickName;
 		this.email = email;
 		this.verified = verified;
@@ -63,9 +65,18 @@ public class User implements java.io.Serializable {
 		this.coin = coin;
 		this.vip = vip;
 		this.regTime = regTime;
+		this.lastlogin = lastlogin;
 	}
 
 	// Property accessors
+
+	public Timestamp getLastlogin() {
+		return lastlogin;
+	}
+
+	public void setLastlogin(Timestamp lastlogin) {
+		this.lastlogin = lastlogin;
+	}
 
 	public Integer getUserId() {
 		return this.userId;

@@ -91,6 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
 <body>
 	<%@include file="/top.jsp"%>
+	<a href="forEditor/providerLocations.jsp">增加可货到付款的地址</a> <br/>
 	<select id="providerId">
 		<option value="1">NO5时尚广场</option>
 		<option value="2">乐蜂网</option>

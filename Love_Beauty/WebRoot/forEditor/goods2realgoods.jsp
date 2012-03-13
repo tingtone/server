@@ -493,7 +493,7 @@ $(document).ready(function() {
 	<body>
 		<%@include file="/top.jsp"%>
 		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/><br/>
-		添加对应商品id号：<input type="text" name="real_gid">  <a href='forEditor/realgoods.jsp'>查看真实商品</a>
+		添加对应商品id号：<input type="text" name="real_gid">  <a href='forEditor/realgoods.jsp' target='_blank'>查看真实商品</a>
 	<div id="real_goods_detail">
 
  </div>
