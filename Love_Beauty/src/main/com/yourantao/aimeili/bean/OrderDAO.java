@@ -25,6 +25,7 @@ public class OrderDAO extends HibernateDaoSupport {
 	// property constants
 	public static final String USER_ID = "userId";
 	public static final String ORDER_NUM = "orderNum";
+	public static final String ORDER_SUM = "orderSum";
 	public static final String ADDRESS_ID = "addressId";
 	public static final String POSTAGE = "postage";
 	public static final String PAYMENT_TYPE = "paymentType";
@@ -106,6 +107,10 @@ public class OrderDAO extends HibernateDaoSupport {
 
 	public List findByOrderNum(Object orderNum) {
 		return findByProperty(ORDER_NUM, orderNum);
+	}
+
+	public List findByOrderSum(Object orderSum) {
+		return findByProperty(ORDER_SUM, orderSum);
 	}
 
 	public List findByAddressId(Object addressId) {
