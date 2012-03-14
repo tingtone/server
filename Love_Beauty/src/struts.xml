@@ -37,6 +37,12 @@
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
+		<!-- 商城 -->
+		<action name="user_*" class="UserAction" method="{1}">
+			<!-- <result name="topic_goods">/forEditor/topic_goods.jsp</result>-->
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
 		<!-- 登录 
 		<action name="login" class="main.com.yourantao.aimeili.action.LoginAction">
 			<result name="index">/mc_index.jsp</result>

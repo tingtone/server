@@ -8,11 +8,6 @@ public interface CategoryInterface {
 	 */
 	public String getSubCategories();
 	
-	/**
-	 * 插入分类信息
-	 * @return
-	 */
-	public String insertCategory();
 	
 	/**
 	 * 更新或插入分类信息

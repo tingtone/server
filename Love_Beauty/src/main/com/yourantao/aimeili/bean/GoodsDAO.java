@@ -1,7 +1,11 @@
 package main.com.yourantao.aimeili.bean;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+
+import main.com.yourantao.aimeili.vo.GoodsView;
+
 import org.hibernate.LockMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,5 +220,23 @@ public class GoodsDAO extends HibernateDaoSupport {
 
 	public static GoodsDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (GoodsDAO) ctx.getBean("GoodsDAO");
+	}
+
+	/**
+	 * 自定义函数，通过肤质获取适合，不适合，需要注意的商品
+	 * @param skinName
+	 * @return
+	 */
+	public List<Goods> findBySkin(String skinName) {
+		try {
+			String queryString = "from Goods as model where model."
+					+ GOODS_FORSKIN + " like '%"+skinName+"%'";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+//		List<Goods> result=new ArrayList<Goods>();
+//		return result;
 	}
 }

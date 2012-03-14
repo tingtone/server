@@ -1,4 +1,4 @@
-package main.com.yourantao.aimeili.action;
+package main.com.yourantao.aimeili.server;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -36,19 +36,9 @@ import org.springframework.context.ApplicationContext;
 
 import com.opensymphony.xwork2.ActionSupport;
 
-/**
- * 基础action
- * 分为给客户端的接口和给编辑的接口
- * 给客户端的接口方式：如有错误，这加入msg标签到json中，如没有错误，需要返回数据的返回数据，不需要的返回空值
- * 
- * @author mac
- * 创建时间： 2012-3-13 下午04:48:16
- * 修改时间：2012-3-13 下午04:48:16
- * 具体描述： TODO
- */
 @SuppressWarnings("serial")
-public abstract class BaseAction extends ActionSupport {
-	private static Logger LOG = LoggerFactory.getLogger(BaseAction.class);
+public abstract class BaseServerAction extends ActionSupport {
+	private static Logger LOG = LoggerFactory.getLogger(BaseServerAction.class);
 	/**
 	 * 原始值为"text/x-json;charset=UTF-8"，为方便调试改为如下值：
 	 */
@@ -145,7 +135,7 @@ public abstract class BaseAction extends ActionSupport {
 		}
 	}
 
-	protected void outputString(String str) {
+	private void outputString(String str) {
 		PrintWriter out = null;
 		try {
 			out = getResponse().getWriter();

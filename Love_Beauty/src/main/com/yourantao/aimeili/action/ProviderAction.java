@@ -162,9 +162,8 @@ public class ProviderAction extends BaseAction implements Constant,
 		String providerService = getStringParameter(PROVIDER_SERVICE);
 		String providerDeliver = getStringParameter(PROVIDER_DELIVER);
 		
-		Provider provider = new Provider();
-		provider.setProviderId(providerId);
-		provider.setProviderThumbId(-1);//为了在底层数据库操作时判断是否需要对thumbId字段进行更新
+		Provider provider = providerDAO.findById(providerId);
+//		provider.setProviderThumbId(-1);//为了在底层数据库操作时判断是否需要对thumbId字段进行更新
 		if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
 			System.out.println("in update provider-------thumb");
 			String FileName = MD5.md5(thumbFileName)
@@ -180,7 +179,7 @@ public class ProviderAction extends BaseAction implements Constant,
 		provider.setProviderDescription(providerDes);
 		provider.setProviderService(providerService);
 		//这里需要换一种新的方式进行处理，是否成功，还没有测试
-		providerDAO.merge(provider);
+//		providerDAO.merge(provider);
 		//int result = providerDAO.updateProvider(provider);
 		//返回结果进行返回
 		return SUCCESS;
@@ -264,6 +263,11 @@ public class ProviderAction extends BaseAction implements Constant,
 		
 		return null;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.ProviderInterface#updateOrAddProviderLocations()
+	 */
 	public String updateOrAddProviderLocations()
 	{
 		int providerId = getIntegerParameter(PROVIDER_ID);

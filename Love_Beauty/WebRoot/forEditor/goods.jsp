@@ -75,7 +75,7 @@ function GetSubCategory(cid) {
 
 //通过cid获得商品详情
 function GetGoods(cid) {
-	var url = BASE_SERVER+"/goods_getGoodsList";
+	var url = BASE_SERVER+"/goods_getGoodsListByCat";
 	var params = {
 		"cid" : cid
 	};

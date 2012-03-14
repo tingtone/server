@@ -6,33 +6,28 @@
 -->
 <hibernate-mapping>
     <class name="main.com.yourantao.aimeili.bean.UserFavorite" table="user_favorite" catalog="beauty">
-        <id name="id" type="java.lang.Integer">
-            <column name="id" />
+        <id name="favoriteId" type="java.lang.Integer">
+            <column name="favorite_id" />
             <generator class="identity" />
         </id>
-        <property name="favoriteId" type="java.lang.Integer">
-            <column name="favorite_id" not-null="true">
-                <comment>æ"¶è-�ID</comment>
-            </column>
-        </property>
         <property name="userId" type="java.lang.Integer">
             <column name="user_id" not-null="true">
-                <comment>ç"¨æˆ·ID</comment>
+                <comment>用户ID</comment>
             </column>
         </property>
         <property name="favoriteType" type="java.lang.Short">
             <column name="favorite_type" not-null="true">
-                <comment>æ"¶è-�çš"ç±»åž‹ï¼Œå¦'0è¡¨ç¤ºå•†å"�æ"¶è-�ã€�1è¡¨ç¤ºæµ‹è¯"æ"¶è-�ç­‰</comment>
+                <comment>收藏的类型，如0表示商品收藏、1表示测评收藏等</comment>
             </column>
         </property>
         <property name="relatedId" type="java.lang.Integer">
             <column name="related_id" not-null="true">
-                <comment>è¯¥æ"¶è-�æ�¡ç›®å¯¹ç"¨çš"IDï¼Œå¦'å•†å"�IDã€�æµ‹è¯"IDç­‰</comment>
+                <comment>该收藏条目对用的ID，如商品ID、测评ID等</comment>
             </column>
         </property>
         <property name="addTime" type="java.sql.Timestamp">
             <column name="add_time" length="0" not-null="true">
-                <comment>æ·»åŠ&#160;æ-¶é-´</comment>
+                <comment>添加时间</comment>
             </column>
         </property>
     </class>
