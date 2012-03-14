@@ -6,13 +6,17 @@ import main.com.yourantao.aimeili.bean.GoodsRealDAO;
 import main.com.yourantao.aimeili.bean.Order;
 import main.com.yourantao.aimeili.bean.OrderDAO;
 import main.com.yourantao.aimeili.bean.OrderGoodsDAO;
+import main.com.yourantao.aimeili.bean.UserAddress;
+import main.com.yourantao.aimeili.bean.UserAddressDAO;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.vo.OrderView;
 
 
 public class OrderAction extends BaseAction implements Constant{
 		private OrderDAO orderDAO;
 		private OrderGoodsDAO orderGoodsDAO;
 		private GoodsRealDAO goodsRealDAO;
+		private UserAddressDAO userAddressDAO;
 		//spring 机制要使用的getter/setter
 		public OrderDAO getOrderDAO() {
 			return orderDAO;
@@ -32,6 +36,12 @@ public class OrderAction extends BaseAction implements Constant{
 		public void setGoodsRealDAO(GoodsRealDAO goodsRealDAO) {
 			this.goodsRealDAO = goodsRealDAO;
 		}
+		public UserAddressDAO getUserAddressDAO() {
+			return userAddressDAO;
+		}
+		public void setUserAddressDAO(UserAddressDAO userAddressDAO) {
+			this.userAddressDAO = userAddressDAO;
+		}
 		/**
 		 * 获取待确认订单
 		 * @return
@@ -44,13 +54,43 @@ public class OrderAction extends BaseAction implements Constant{
 			Order orderExample = new Order();
 			orderExample.setUserId(userId);
 			orderExample.setHandled((short)1);//这里只是查找出部分数据,自己手动写hql
-			String hql = "select orderId,userId,orderNum,addressId,providerId from Order "
+			String hql = "select orderId,orderNum,addressId,providerId from Order "
 				+ "where userId="+ userId +" and finish=0 and handled != 0";
 			//getHibernateTemplate().find(hql);
 			//orderExample.setHandled((short)2);
 			//orderExample.setHandled((short)3);
 			orderExample.setFinish((short)0);//未收货
-			List result = orderDAO.findByExample(orderExample);
+			List result = orderDAO.findByExample(orderExample);//这里假设取出来的就是result
+			for(int index=0; index <result.size(); index++)
+			{
+				OrderView orderView = new OrderView();
+				List tmp = (List) result.get(0);
+				orderView.setOrderId((Integer) tmp.get(0));//
+				orderView.setProvideId((Integer) tmp.get(0));//
+				int handled =(Integer) tmp.get(0);
+				orderView.setOrderHandled(handled);
+				switch(handled)
+				{
+				case 1://管理员未处理
+					//无预计到达时间
+					//无最新订单时间
+					//无最新订单状态
+					break;
+				case 2://管理员电话确认
+					//同上
+					break;
+				case 3://管理员已经处理
+					//所有字段都可以
+					//订单最新状态从何处获取
+					break;
+				default:
+				}
+				UserAddress userAddress = userAddressDAO.findById((Integer)tmp.get(0));
+				orderView.setAddress(
+						userAddress.getProvince()+ userAddress.getCity() 
+					+ userAddress.getDistrict()+ userAddress.getDetail());
+				
+			}
 			//
 			//这样直接返回会有问题,需要进行其他操作
 			printArray(result);
@@ -62,18 +102,14 @@ public class OrderAction extends BaseAction implements Constant{
 			//获取参数
 			int userId = getIntegerParameter(USER_ID);
 			int orderId = getIntegerParameter(ORDER_ID);
-			return null;
-		}
-		/**
-		 * 获取订单中商品
-		 * 摒弃不用
-		 * @return
-		 */
-		public String getOrderProduct()
-		{
-			int orderId = getIntegerParameter(ORDER_ID);
-			List orderGoods =orderGoodsDAO.findByOrderId(orderId);
-			//这样直接返回会有问题,需要进行其他操作
+			//
+			Order order = orderDAO.findById(orderId);
+			if(order.getHandled() == 3)
+			{
+				order.setFinish((short) 3);
+				orderDAO.merge(order);
+				//outputString("");
+			}
 			return null;
 		}
 		/**
@@ -104,6 +140,12 @@ public class OrderAction extends BaseAction implements Constant{
 		 * @return
 		 */
 		public String getHistoryOrder()
+		{
+			//获取参数
+			int userId = getIntegerParameter(USER_ID);
+			return null;
+		}
+		public String addOrder()
 		{
 			//获取参数
 			int userId = getIntegerParameter(USER_ID);

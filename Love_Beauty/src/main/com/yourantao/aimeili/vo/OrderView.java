@@ -4,9 +4,10 @@ import java.util.List;
 
 public class OrderView {
 	private Integer orderId;
+	private int orderHandled;
 	//订单的金额由客户端自己完成
 	//private Float orderMoney;
-	private String orderTime;
+	private String handledTime;
 	private String orderArrivalTime;
 	//订单对应的供应商
 	private int providerId;
@@ -19,17 +20,24 @@ public class OrderView {
 	private String Name;
 	private String Address;
 	private String phoneNumber;
+	
 	public Integer getOrderId() {
 		return orderId;
 	}
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-	public String getOrderTime() {
-		return orderTime;
+	public String getHandledTime() {
+		return handledTime;
 	}
-	public void setOrderTime(String orderTime) {
-		this.orderTime = orderTime;
+	public void setHandledTime(String handledTime) {
+		this.handledTime = handledTime;
+	}
+	public int getProviderId() {
+		return providerId;
+	}
+	public void setProviderId(int providerId) {
+		this.providerId = providerId;
 	}
 	public String getOrderArrivalTime() {
 		return orderArrivalTime;
@@ -78,6 +86,12 @@ public class OrderView {
 	}
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+	public void setOrderHandled(int orderHandled) {
+		this.orderHandled = orderHandled;
+	}
+	public int getOrderHandled() {
+		return orderHandled;
 	}
 	
 }
