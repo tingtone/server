@@ -17,39 +17,62 @@ import main.com.yourantao.aimeili.vo.OrderSimpleView;
 import main.com.yourantao.aimeili.vo.OrderView;
 
 
-public class OrderAction extends BaseAction implements Constant{
+public class OrderAction extends BaseAction implements Constant, OrderInterface{
 		private OrderDAO orderDAO;
 		private OrderGoodsDAO orderGoodsDAO;
 		private GoodsRealDAO goodsRealDAO;
 		private UserAddressDAO userAddressDAO;
 		//spring 机制要使用的getter/setter
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderDAO()
+		 */
 		public OrderDAO getOrderDAO() {
 			return orderDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#setOrderDAO(main.com.yourantao.aimeili.bean.OrderDAO)
+		 */
 		public void setOrderDAO(OrderDAO orderDAO) {
 			this.orderDAO = orderDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderGoodsDAO()
+		 */
 		public OrderGoodsDAO getOrderGoodsDAO() {
 			return orderGoodsDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#setOrderGoodsDAO(main.com.yourantao.aimeili.bean.OrderGoodsDAO)
+		 */
 		public void setOrderGoodsDAO(OrderGoodsDAO orderGoodsDAO) {
 			this.orderGoodsDAO = orderGoodsDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getGoodsRealDAO()
+		 */
 		public GoodsRealDAO getGoodsRealDAO() {
 			return goodsRealDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#setGoodsRealDAO(main.com.yourantao.aimeili.bean.GoodsRealDAO)
+		 */
 		public void setGoodsRealDAO(GoodsRealDAO goodsRealDAO) {
 			this.goodsRealDAO = goodsRealDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getUserAddressDAO()
+		 */
 		public UserAddressDAO getUserAddressDAO() {
 			return userAddressDAO;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#setUserAddressDAO(main.com.yourantao.aimeili.bean.UserAddressDAO)
+		 */
 		public void setUserAddressDAO(UserAddressDAO userAddressDAO) {
 			this.userAddressDAO = userAddressDAO;
 		}
-		/**
-		 * 获取待确认订单
-		 * @return
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getUnconfirmedOrders()
 		 */
 		public String getUnconfirmedOrders()
 		{
@@ -96,6 +119,9 @@ public class OrderAction extends BaseAction implements Constant{
 			//
 			return null;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getUnconfirmOrder()
+		 */
 		public String getUnconfirmOrder()
 		{
 			//获取参数
@@ -168,9 +194,8 @@ public class OrderAction extends BaseAction implements Constant{
 			printObject(orderView);
 			return null;
 		}
-		/**
-		 * 用户进行订单确认
-		 * @return
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#confirmOrders()
 		 */
 		public String confirmOrders()
 		{
@@ -198,9 +223,8 @@ public class OrderAction extends BaseAction implements Constant{
 			}
 			return null;
 		}
-		/**
-		 * 获取订单(这里的订单追踪是针对实际的订单追踪)追踪信息
-		 * @return
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderTracking()
 		 */
 		public String getOrderTracking()
 		{
@@ -211,9 +235,8 @@ public class OrderAction extends BaseAction implements Constant{
 			//
 			return null;
 		}
-		/**
-		 * 获取未完成的订单
-		 * @return
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getUnfinishedOrders()
 		 */
 		public String getUnfinishedOrders()
 		{
@@ -233,9 +256,8 @@ public class OrderAction extends BaseAction implements Constant{
 			}
 			return null;
 		}
-		/**
-		 * 获取成功订单
-		 * @return
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#getHistoryOrder()
 		 */
 		public String getHistoryOrder()
 		{
@@ -244,6 +266,9 @@ public class OrderAction extends BaseAction implements Constant{
 			
 			return null;
 		}
+		/* (non-Javadoc)
+		 * @see main.com.yourantao.aimeili.action.OrderInterface#addOrder()
+		 */
 		public String addOrder()
 		{
 			//获取参数
