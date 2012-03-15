@@ -10,6 +10,8 @@ import main.com.yourantao.aimeili.bean.GoodsDAO;
 import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.Series;
 import main.com.yourantao.aimeili.bean.User;
+import main.com.yourantao.aimeili.bean.UserAddress;
+import main.com.yourantao.aimeili.bean.UserAddressDAO;
 import main.com.yourantao.aimeili.bean.UserDAO;
 import main.com.yourantao.aimeili.bean.UserFavorite;
 import main.com.yourantao.aimeili.bean.UserFavoriteDAO;
@@ -20,6 +22,7 @@ import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.TransTool;
 import main.com.yourantao.aimeili.vo.GoodsView;
 
+import org.junit.runner.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,8 +32,15 @@ public class UserAction extends BaseAction implements UserInterface,Constant{
 	private UserLoginDAO userLoginDAO;
 	private UserFavoriteDAO userFavoriteDAO;
 	private GoodsDAO goodsDAO;
+	private UserAddressDAO userAddressDAO;
 	
 	
+	public UserAddressDAO getUserAddressDAO() {
+		return userAddressDAO;
+	}
+	public void setUserAddressDAO(UserAddressDAO userAddressDAO) {
+		this.userAddressDAO = userAddressDAO;
+	}
 	public GoodsDAO getGoodsDAO() {
 		return goodsDAO;
 	}
@@ -154,6 +164,56 @@ public class UserAction extends BaseAction implements UserInterface,Constant{
 		user.setLogin(userLogin.get(0));
 		
 		outputString(msg);
+		return null;
+	}
+	
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#getUserAddress()
+	 */
+	@Override
+	public String getUserAddress() {
+		
+		int uid=getIntegerParameter(USER_ID);
+		List<UserAddress> userAddresses=userAddressDAO.findByUserId(uid);
+		printArray(userAddresses);
+		return null;
+	}
+	
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#UserUpdateAddress()
+	 */
+	@Override
+	public String userUpdateAddress() {
+		
+		int uaid=getIntegerParameter("uaid");   //送货信息id
+		
+		String location=getReqeust().getParameter("loc");
+		String [] locations=location.split("/");
+		String address=getReqeust().getParameter("add");
+		String userName=getReqeust().getParameter("user");
+		String telphone=getReqeust().getParameter("tel");
+		UserAddress userAddress=userAddressDAO.findById(uaid);
+		userAddress.setCity(locations[1]);
+		userAddress.setProvince(locations[0]);
+		userAddress.setDistrict(locations[2]);
+		userAddress.setDetail(address);
+		userAddress.setReceiver(userName);
+		userAddress.setMobile(telphone);
+		
+		return null;
+	}
+	
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#userInsertAddress()
+	 */
+	@Override
+	public String userInsertAddress() {
 		return null;
 	}
 	

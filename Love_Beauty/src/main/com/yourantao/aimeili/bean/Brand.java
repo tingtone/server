@@ -13,7 +13,7 @@ public class Brand implements java.io.Serializable {
 	private String brandAlias;
 	private String brandOtherNames;
 	private String brandDescription;
-	private Integer brandRank;
+	private Long brandRank;
 	private Integer brandImageId;
 
 	// Constructors
@@ -24,7 +24,7 @@ public class Brand implements java.io.Serializable {
 
 	/** full constructor */
 	public Brand(String brandName, String brandAlias, String brandOtherNames,
-			String brandDescription, Integer brandRank, Integer brandImageId) {
+			String brandDescription, Long brandRank, Integer brandImageId) {
 		this.brandName = brandName;
 		this.brandAlias = brandAlias;
 		this.brandOtherNames = brandOtherNames;
@@ -75,11 +75,11 @@ public class Brand implements java.io.Serializable {
 		this.brandDescription = brandDescription;
 	}
 
-	public Integer getBrandRank() {
+	public Long getBrandRank() {
 		return this.brandRank;
 	}
 
-	public void setBrandRank(Integer brandRank) {
+	public void setBrandRank(Long brandRank) {
 		this.brandRank = brandRank;
 	}
 

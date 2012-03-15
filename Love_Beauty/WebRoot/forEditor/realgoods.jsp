@@ -111,6 +111,8 @@ function GetRealGoodsListBySeries(bid,sid) {
 						goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
 						goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
 						goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
+						goodsDetail+="<tr><td><input rgid='"+json[i]['goodsRealId']+"' type='button' class='comment' value='查看评论'/></td></tr> ";
+						goodsDetail+="<tr><td><div id='comment_"+json[i]['goodsRealId']+"'/></td></tr> ";
 						goodsDetail+="</tbody></table></form>";
 					}
 			}
@@ -484,6 +486,34 @@ function GetSeries(bid) {
 	});
 }
 
+//获得商品评论
+function GetRealGoodsComment(rgid) {
+	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getRealGoodsComment";
+	var realGoodsComment = "";
+	var params = {
+		"rgid" : rgid
+	};
+	$.ajax({
+		type : "POST",
+		data : params,
+		dataType : "json",
+		url : url,
+		success : function(json) {
+			if (json == null) {
+				alert("json null");
+			} else {
+			realGoodsComment +="<table border='1'><tbody>"
+				for ( var i = 0; i < json.length; i++) {
+					realGoodsComment +="<tr><td>评论用户：" + json[i]['commentator']+ "评论内容："+json[i]['commentContent']+"评论等级："+json[i]['commentLevel']+"</td></tr>";
+				}
+				realGoodsComment +="</tbody></table>"
+			}
+			$('#comment_'+rgid).html(realGoodsComment);
+		}
+	});
+}
+
+
 $(document).ready(function() {
 	
 	GetBrands();
@@ -495,6 +525,10 @@ $(document).ready(function() {
 		var bid = $('#brand').val();
 		var sid = $('#series').val();
 		GetRealGoodsListBySeries(bid,sid);
+	});
+	$('.comment').live("click",function(){
+		var rgid=$(this).attr('rgid');
+		GetRealGoodsComment(rgid);
 	});
 	
 });

@@ -15,9 +15,14 @@
                 <comment>功效名称</comment>
             </column>
         </property>
-        <property name="efficacyRank" type="java.lang.Integer">
+        <property name="efficacyRank" type="java.lang.Long">
             <column name="efficacy_rank" not-null="true">
                 <comment>功效的排序值，越大的优先级越高</comment>
+            </column>
+        </property>
+        <property name="efficacyImageId" type="java.lang.Integer">
+            <column name="efficacy_image_id" not-null="true">
+                <comment>功效缩略图ID</comment>
             </column>
         </property>
     </class>

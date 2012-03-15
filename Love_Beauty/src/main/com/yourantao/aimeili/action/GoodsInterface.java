@@ -13,6 +13,11 @@ public interface GoodsInterface {
 	 * 我的护肤品中获得适合，不适合和需要注意的
 	 */
 	public String getGoodsListBySkin();
+	
+	/**
+	 * 获得真实商品的评论
+	 */
+	public String getRealGoodsComment();
 	/**
 	 * 通过分类获得商品列表
 	 * 

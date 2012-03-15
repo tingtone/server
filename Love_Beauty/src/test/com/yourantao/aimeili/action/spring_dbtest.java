@@ -56,7 +56,7 @@ public class spring_dbtest {
 		  brand1.setBrandAlias("aaa");
 		  brand1.setBrandDescription("测试描述");
 		  brand1.setBrandOtherNames("othername test");
-		  brand1.setBrandRank(1);
+		  brand1.setBrandRank((long)1);
 		  td.save(brand1);//增加
 		  log.debug(brand1.getBrandName());
 		  System.out.println(brand1.getBrandName());

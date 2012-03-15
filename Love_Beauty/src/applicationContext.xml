@@ -364,6 +364,9 @@
 		<property name="userFavoriteDAO">
 			<ref bean="UserFavoriteDAO" />
 		</property>
+		<property name="goodsCommentDAO">
+			<ref bean="GoodsCommentDAO" />
+		</property>
 
 	</bean>
 
@@ -382,6 +385,18 @@
 		</property>
 		<property name="seriesDAO">
 			<ref bean="SeriesDAO" />
+		</property>
+		<property name="imageDAO">
+			<ref bean="ImageDAO" />
+		</property>
+	</bean>
+	
+	<bean id="EfficacyAction" class="main.com.yourantao.aimeili.action.EfficacyAction">
+		<property name="efficacyDAO">
+			<ref bean="EfficacyDAO" />
+		</property>
+		<property name="imageDAO">
+			<ref bean="ImageDAO" />
 		</property>
 	</bean>
 

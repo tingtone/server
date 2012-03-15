@@ -15,18 +15,18 @@
                 <comment>用户ID</comment>
             </column>
         </property>
-        <property name="province" type="java.lang.Short">
-            <column name="province" not-null="true">
+        <property name="province" type="java.lang.String">
+            <column name="province" length="15" not-null="true">
                 <comment>省</comment>
             </column>
         </property>
-        <property name="city" type="java.lang.Short">
-            <column name="city" not-null="true">
+        <property name="city" type="java.lang.String">
+            <column name="city" length="30" not-null="true">
                 <comment>市</comment>
             </column>
         </property>
-        <property name="district" type="java.lang.Short">
-            <column name="district" not-null="true">
+        <property name="district" type="java.lang.String">
+            <column name="district" length="100" not-null="true">
                 <comment>区、县</comment>
             </column>
         </property>
