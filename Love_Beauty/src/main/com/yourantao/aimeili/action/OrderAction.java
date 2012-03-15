@@ -17,7 +17,7 @@ import main.com.yourantao.aimeili.vo.OrderSimpleView;
 import main.com.yourantao.aimeili.vo.OrderView;
 
 
-public class OrderAction extends BaseAction implements Constant, OrderInterface{
+public class OrderAction extends BaseAction implements Constant{
 		private OrderDAO orderDAO;
 		private OrderGoodsDAO orderGoodsDAO;
 		private GoodsRealDAO goodsRealDAO;
