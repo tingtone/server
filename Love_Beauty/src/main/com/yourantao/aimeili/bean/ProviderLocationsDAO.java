@@ -183,12 +183,7 @@ public class ProviderLocationsDAO extends HibernateDaoSupport {
 					//hql += ";";
 			}
 			List<ProviderLocations> results = (List<ProviderLocations>)getHibernateTemplate().find(hql);
-			//DetachedCriteria detachedCriteria = DetachedCriteria.forClass(ProviderLocations.class);
-			/*
-			DetachedCriteria baseCriteria = DetachedCriteria.forClass(ProviderLocations.class)
-				.add(Restrictions.eq("providerId", instance.getProviderId()));
-			List results = getHibernateTemplate().findByCriteria(baseCriteria);
-			*/
+			
 			return results;
 			
 		} catch (RuntimeException re) {

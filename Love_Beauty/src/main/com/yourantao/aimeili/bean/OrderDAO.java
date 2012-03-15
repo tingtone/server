@@ -202,4 +202,14 @@ public class OrderDAO extends HibernateDaoSupport {
 	public static OrderDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (OrderDAO) ctx.getBean("OrderDAO");
 	}
+	/**
+	 * 自定义查找用户待确认订单
+	 */
+	public List findUnconfirmedOrdersByUserId(int userId)
+	{
+		String hql = "from Order "
+			+ "where userId="+ userId +" and finish=0 and handled != 0 and finish = 0";
+		List<Order> results = (List<Order>)getHibernateTemplate().find(hql);
+		return results;
+	}
 }

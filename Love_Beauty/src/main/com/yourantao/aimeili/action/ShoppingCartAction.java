@@ -4,6 +4,9 @@ package main.com.yourantao.aimeili.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import main.com.yourantao.aimeili.bean.GoodsReal;
 import main.com.yourantao.aimeili.bean.GoodsRealDAO;
 import main.com.yourantao.aimeili.bean.ShoppingCart;
@@ -13,6 +16,7 @@ import main.com.yourantao.aimeili.vo.ShoppingCartView;
 
 
 public class ShoppingCartAction extends BaseAction implements Constant, ShoppingCartInterface{
+		private static final Logger LOG = LoggerFactory.getLogger(ShoppingCartAction.class);
 		private ShoppingCartDAO shoppingCartDAO;
 		private GoodsRealDAO goodsRealDAO;
 		//spring 机制要用到getter/setter
@@ -43,20 +47,17 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		
 		public String getShoppingCart()
 		{
-			//这里可以提供额外的获取功能，比如说提供了商城的ID
 			int userId = getIntegerParameter(USER_ID);
-			ShoppingCart shoppingCartExample = new ShoppingCart();
-			shoppingCartExample.setUserId(userId);
-			List results = shoppingCartDAO.findByExample(shoppingCartExample);
+			List<ShoppingCart> results = shoppingCartDAO.findByUserId(userId);
 			//对结果进行进一步处理
 			List<ShoppingCartView> shoppingCartViewList = new ArrayList<ShoppingCartView>();
-			for(int index=0; index < results.size(); index++)
+			for(ShoppingCart shoppingCart: results)
 			{
-				ShoppingCart shoppingCart= (ShoppingCart) results.get(0);
 				//去goods表中查询
 				GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart.getGoodsRealId());
 				
 				ShoppingCartView shoppingCartView = new ShoppingCartView();
+				//shoppingCartView.set
 				shoppingCartView.setCartId(shoppingCart.getCartId());
 				shoppingCartView.setCount(shoppingCart.getCount());
 				shoppingCartView.setGoodsName(goodsReal.getGoodsName());
@@ -75,6 +76,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		 */
 		public String addGoods()
 		{
+			String msg = "";
 			//获取参数
 			int userId = getIntegerParameter(USER_ID);
 			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
@@ -83,9 +85,11 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			ShoppingCart shoppingCart = new ShoppingCart();
 			shoppingCart.setUserId(userId);
 			shoppingCart.setGoodsRealId(goodsRealId);
+			//这个以后可以删除
 			shoppingCart.setCartStatus((short) 3);
 			//保存
 			shoppingCartDAO.save(shoppingCart);
+			outputString("{'cartId':'"+shoppingCart.getCartId() +"'}");
 			return null;
 			
 		}
@@ -95,28 +99,20 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		 */
 		public String modifyQuantity()
 		{
-			int cartId = getIntegerParameter(SHOPPINGCART_ID); //undefined constant
-			int count = getIntegerParameter(GOODS_COUNT);//undefined constant
+			//获取参数
+			int cartId = getIntegerParameter(SHOPPINGCART_ID);
+			int count = getIntegerParameter(GOODS_COUNT);
 			
 			ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
-			//
+			if(shoppingCart == null)
+			{
+				outputString("{'msg':'不存在这样的购物车'}");
+				return null;
+			}
 			shoppingCart.setCount(count);
 			//这里可能会出错
 			shoppingCartDAO.merge(shoppingCart);
-			return null;
-		}
-		/* (non-Javadoc)
-		 * @see main.com.yourantao.aimeili.action.ShoppingCartInterface#changeStatus()
-		 */
-		public String changeStatus()
-		{
-			int cartId = getIntegerParameter(""); //undefined constant
-			short status = ((short)(int)getIntegerParameter("")); //undefined constant
-			ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
-			//
-			shoppingCart.setCartStatus(status);
-			//这里可能会出错
-			shoppingCartDAO.merge(shoppingCart);
+			outputString("");
 			return null;
 		}
 		/* (non-Javadoc)
@@ -124,26 +120,34 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		 */
 		public String deleteGoods()
 		{
+			String msg ="";
 			int cartId = getIntegerParameter(SHOPPINGCART_ID);
 			int userId = getIntegerParameter(USER_ID);
 			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 			
 			ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
 			//判断要删除的记录是否相匹配
-			if(shoppingCart.getUserId().equals(userId))
+			if(shoppingCart.getUserId() != userId )
+			{
+				msg = "{'msg':'购物车与用户不匹配'}";
+			}
+			else if(shoppingCart.getGoodsRealId() == goodsRealId)
+			{
+				msg = "{'msg':'购物车与商品不匹配'}";
+			}
+			else
 			{
 				shoppingCartDAO.delete(shoppingCart);
-				return null;//返回成功
 			}
-			//
-			return null;//返回失败
+			outputString(msg);
+			return null;
 		}
 		/* (non-Javadoc)
 		 * @see main.com.yourantao.aimeili.action.ShoppingCartInterface#deleteAllGoods()
 		 */
 		public String deleteAllGoods()
 		{
-			//int cartId = getIntegerParameter(""); //undefined constant
+			String msg = "";
 			int userId = getIntegerParameter(USER_ID);
 			//通过userId就要删除所有的商品,这是不安全的
 			List results = shoppingCartDAO.findByUserId(userId);
@@ -151,6 +155,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			{
 				shoppingCartDAO.delete((ShoppingCart)results.get(index));
 			}
+			outputString(msg);
 			return null;
 		}
 }

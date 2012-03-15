@@ -38,13 +38,7 @@ import main.com.yourantao.aimeili.vo.ProviderView;
 
 public class ProviderAction extends BaseAction implements Constant,
 		ProviderInterface {
-	private static final Logger LOG = LoggerFactory
-	.getLogger(TopicAction.class);
-	
-	//可能不需要放在这里
-	private static final int BUFFER_SIZE = 16 * 1024;
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-	"yyyy-MM-dd HH:mm:ss");
+	private static final Logger LOG = LoggerFactory.getLogger(ProviderAction.class);
 	
 	//下面是重要的
 	private File newprovider_thumb; // 上传缩略图
@@ -158,14 +152,14 @@ public class ProviderAction extends BaseAction implements Constant,
 		Integer providerId = getIntegerParameter(PROVIDER_ID);
 		if(providerId == null)
 			return null;
-		String providerDes = getStringParameter(PROVIDER_DESCRIPTION);
-		String providerService = getStringParameter(PROVIDER_SERVICE);
-		String providerDeliver = getStringParameter(PROVIDER_DELIVER);
+		String providerDes = getStringParameter("pdes");
+		String providerService = getStringParameter("pservice");
+		String providerDeliver = getStringParameter("pdeliver");
 		
 		Provider provider = providerDAO.findById(providerId);
 //		provider.setProviderThumbId(-1);//为了在底层数据库操作时判断是否需要对thumbId字段进行更新
 		if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
-			System.out.println("in update provider-------thumb");
+			//System.out.println("in update provider-------thumb");
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName);
 			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
@@ -196,7 +190,7 @@ public class ProviderAction extends BaseAction implements Constant,
 		
 		providerLocations.setProviderId(providerId);
 		//Constant.java	PROVIDER_LOCATION_LEVEL = plevel
-		Integer providerLocationsLevel = getIntegerParameter(PROVIDER_LOCATION_LEVEL);
+		Integer providerLocationsLevel = getIntegerParameter("plevel");
 		//System.out.println(providerLocationsLevel);
 		if(providerId == null || providerLocationsLevel == null)
 			return null;
