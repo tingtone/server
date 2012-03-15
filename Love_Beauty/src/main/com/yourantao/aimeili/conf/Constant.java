@@ -18,11 +18,13 @@ public interface Constant {
 	public static final String TOPIC_KEYWORDS = "topic_keywords";  //专题关键词
 	public static final String BRAND_ID = "bid";  //品牌id
 	public static final String SERIES_ID="sid";//系列id
+	public static final String EFFICACY_ID="eid";//功效id
 	public static final String PROVIDER_ID = "pid";	//商铺的ID
 	public static final String PROVIDER_DESCRIPTION = "pdes";	//商铺的描述
 	public static final String PROVIDER_SERVICE = "pservice";		//商铺的售后服务
 	public static final String PROVIDER_DELIVER = "pdeliver";		//商铺的发货情况
 	public static final String PROVIDER_LOCATION_LEVEL = "plevel";		//获取商铺位置的层级
+	public static final String REALGOOS_ID="rgid";     //真实商品ID
 	public static final String USER_ID = "uid";			//用户的ID
 	public static final String ORDER_ID = "oid";		//订单的ID
 	public static final String GOODS_REAL_ID = "grid";	//实际商品的ID
