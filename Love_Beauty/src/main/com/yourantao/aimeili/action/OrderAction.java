@@ -529,6 +529,7 @@ public class OrderAction extends BaseAction implements Constant{
 				orderGoodsDAO.delete(orderGoods);//使用是否正确待定
 			}
 			//判断订单中是否还有商品
+			//
 			
 			//
 			outputString(msg);
@@ -558,6 +559,17 @@ public class OrderAction extends BaseAction implements Constant{
 			int addressId = getIntegerParameter("");//
 			//订单的其他信息
 			//见addOrder方法中的提交完整订单时获取的数据
+			Order order = orderDAO.findById(orderId);
+			if(order.getUserId() != userId || order.getHandled() != 0)
+			{
+				outputString("{'msg':'订单不匹配'}");
+				return null;
+			}
+			//
+			order.setAddressId(addressId);
+			order.setHandled((short)1);
+			//order.setHandledTime();
+			orderDAO.merge(order);
 			return null;
 		}
 		//以下是用户地址相关的操作
