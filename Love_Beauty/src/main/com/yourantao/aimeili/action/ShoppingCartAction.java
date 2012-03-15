@@ -47,11 +47,24 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		
 		public String getShoppingCart()
 		{
-			int userId = getIntegerParameter(USER_ID);
-			List<ShoppingCart> results = shoppingCartDAO.findByUserId(userId);
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
+			if(userId  == null)
+			{
+				outputString("{'msg':'用户不存在'}");
+				return null;
+			}
+			if(providerId != null)
+			{
+				//获取购物车中指定商城的商品
+				ShoppingCart shoppingCartExample = new ShoppingCart();
+				shoppingCartExample.setUserId(userId);
+				//shoppingCartExample.set
+			}
+			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByUserId(userId);
 			//对结果进行进一步处理
 			List<ShoppingCartView> shoppingCartViewList = new ArrayList<ShoppingCartView>();
-			for(ShoppingCart shoppingCart: results)
+			for(ShoppingCart shoppingCart: shoppingCartList)
 			{
 				//去goods表中查询
 				GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart.getGoodsRealId());
@@ -85,11 +98,11 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			ShoppingCart shoppingCart = new ShoppingCart();
 			shoppingCart.setUserId(userId);
 			shoppingCart.setGoodsRealId(goodsRealId);
-			//这个以后可以删除
-			shoppingCart.setCartStatus((short) 3);
 			//保存
 			shoppingCartDAO.save(shoppingCart);
-			outputString("{'cartId':'"+shoppingCart.getCartId() +"'}");
+			//根据新的约定修改成下面一种方式
+			//outputString("{'cartId':'"+shoppingCart.getCartId() +"'}");
+			outputString(msg);
 			return null;
 			
 		}
@@ -99,20 +112,32 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		 */
 		public String modifyQuantity()
 		{
+			String msg = "";
 			//获取参数
-			int cartId = getIntegerParameter(SHOPPINGCART_ID);
-			int count = getIntegerParameter(GOODS_COUNT);
+			//int cartId = getIntegerParameter(SHOPPINGCART_ID);
 			
-			ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
-			if(shoppingCart == null)
+			int count = getIntegerParameter(GOODS_COUNT);
+			int userId = getIntegerParameter(USER_ID);
+			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+			ShoppingCart shoppingCartExample = new ShoppingCart();
+			shoppingCartExample.setGoodsRealId(goodsRealId);
+			shoppingCartExample.setUserId(userId);
+			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByExample(shoppingCartExample);
+			if(shoppingCartList.size()== 0)
 			{
-				outputString("{'msg':'不存在这样的购物车'}");
-				return null;
+				msg = "{'msg':'购物车中不存在这样的商品'}";
 			}
-			shoppingCart.setCount(count);
-			//这里可能会出错
-			shoppingCartDAO.merge(shoppingCart);
-			outputString("");
+			else if(shoppingCartList.size() == 1)
+			{
+				ShoppingCart shoppingCart = shoppingCartList.get(0);
+				shoppingCart.setCount(count);
+				shoppingCartDAO.merge(shoppingCart);
+			}
+			else
+			{
+				msg = "{'msg':'存在多个相同商品'}";
+			}
+			outputString(msg);
 			return null;
 		}
 		/* (non-Javadoc)

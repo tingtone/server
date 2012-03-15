@@ -586,6 +586,7 @@ public class OrderAction extends BaseAction implements Constant{
 		}
 		/**
 		 * 更新订单中的总金额信息
+		 * 暂时未使用
 		 * @return
 		 */
 		public String updateOrderSum()
