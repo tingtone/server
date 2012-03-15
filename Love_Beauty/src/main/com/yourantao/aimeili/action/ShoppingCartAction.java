@@ -54,14 +54,19 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 				outputString("{'msg':'用户不存在'}");
 				return null;
 			}
+			List<ShoppingCart> shoppingCartList;
 			if(providerId != null)
 			{
 				//获取购物车中指定商城的商品
 				ShoppingCart shoppingCartExample = new ShoppingCart();
 				shoppingCartExample.setUserId(userId);
-				//shoppingCartExample.set
+				shoppingCartExample.setProviderId(providerId);
+				shoppingCartList = shoppingCartDAO.findByExample(shoppingCartExample);
 			}
-			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByUserId(userId);
+			else
+			{
+				shoppingCartList = shoppingCartDAO.findByUserId(userId);
+			}
 			//对结果进行进一步处理
 			List<ShoppingCartView> shoppingCartViewList = new ArrayList<ShoppingCartView>();
 			for(ShoppingCart shoppingCart: shoppingCartList)
@@ -70,8 +75,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 				GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart.getGoodsRealId());
 				
 				ShoppingCartView shoppingCartView = new ShoppingCartView();
-				//shoppingCartView.set
-				shoppingCartView.setCartId(shoppingCart.getCartId());
+				shoppingCartView.setProviderId(goodsReal.getProviderId());
 				shoppingCartView.setCount(shoppingCart.getCount());
 				shoppingCartView.setGoodsName(goodsReal.getGoodsName());
 				shoppingCartView.setGoodsThumb(goodsReal.getGoodsThumb());
@@ -91,17 +95,35 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg = "";
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-			int count = getIntegerParameter(GOODS_COUNT);
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+			Integer count = getIntegerParameter(GOODS_COUNT);
+			//验证参数
+			if(userId == null || goodsRealId == null || count == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
+			else if(count == 0)
+			{
+				outputString("{'msg':'参数值出错'}");
+				return null;
+			}
 			//设置对象状态
 			ShoppingCart shoppingCart = new ShoppingCart();
 			shoppingCart.setUserId(userId);
 			shoppingCart.setGoodsRealId(goodsRealId);
-			//保存
-			shoppingCartDAO.save(shoppingCart);
-			//根据新的约定修改成下面一种方式
-			//outputString("{'cartId':'"+shoppingCart.getCartId() +"'}");
+			//先查找是否已经存在对应的购物车记录
+			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByExample(shoppingCart);
+			if(shoppingCartList.size() != 0)
+			{
+				msg = "{'msg':'购物车中已经存在商品'}";
+			}
+			else
+			{
+				//保存
+				shoppingCartDAO.save(shoppingCart);
+			}
 			outputString(msg);
 			return null;
 			
@@ -114,11 +136,20 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg = "";
 			//获取参数
-			//int cartId = getIntegerParameter(SHOPPINGCART_ID);
-			
-			int count = getIntegerParameter(GOODS_COUNT);
-			int userId = getIntegerParameter(USER_ID);
-			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+			Integer count = getIntegerParameter(GOODS_COUNT);
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+			//验证参数
+			if(userId == null || goodsRealId == null || count == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
+			else if(count == 0)
+			{
+				outputString("{'msg':'参数值出错'}");
+				return null;
+			}
 			ShoppingCart shoppingCartExample = new ShoppingCart();
 			shoppingCartExample.setGoodsRealId(goodsRealId);
 			shoppingCartExample.setUserId(userId);
@@ -146,23 +177,32 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		public String deleteGoods()
 		{
 			String msg ="";
-			int cartId = getIntegerParameter(SHOPPINGCART_ID);
-			int userId = getIntegerParameter(USER_ID);
-			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-			
-			ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
-			//判断要删除的记录是否相匹配
-			if(shoppingCart.getUserId() != userId )
+			//获取参数
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
+			//验证参数
+			if(userId == null || goodsRealId == null || providerId == null)
 			{
-				msg = "{'msg':'购物车与用户不匹配'}";
+				outputString("{'msg':'参数个数不足'}");
+				return null;
 			}
-			else if(shoppingCart.getGoodsRealId() == goodsRealId)
+			ShoppingCart shoppingCartExample = new ShoppingCart();
+			shoppingCartExample.setUserId(userId);
+			shoppingCartExample.setGoodsRealId(goodsRealId);
+			shoppingCartExample.setProviderId(providerId);
+			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByExample(shoppingCartExample);
+			if(shoppingCartList.size() == 0)
 			{
-				msg = "{'msg':'购物车与商品不匹配'}";
+				msg = "{'msg':'购物车不存在这样的商品'}";
+			}
+			else if(shoppingCartList.size() > 1)
+			{
+				shoppingCartDAO.delete(shoppingCartList.get(0));
 			}
 			else
 			{
-				shoppingCartDAO.delete(shoppingCart);
+				msg = "{'msg':'购物车中存在多件商品'}";
 			}
 			outputString(msg);
 			return null;
@@ -173,12 +213,20 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		public String deleteAllGoods()
 		{
 			String msg = "";
-			int userId = getIntegerParameter(USER_ID);
-			//通过userId就要删除所有的商品,这是不安全的
-			List results = shoppingCartDAO.findByUserId(userId);
-			for(int index =0; index < results.size(); index++ )
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
+			//验证参数
+			if(userId == null || providerId == null)
 			{
-				shoppingCartDAO.delete((ShoppingCart)results.get(index));
+				outputString("{'msg':'参数个数不足'}");
+			}
+			ShoppingCart shoppingCartExample = new ShoppingCart();
+			shoppingCartExample.setUserId(userId);
+			shoppingCartExample.setProviderId(providerId);
+			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByUserId(userId);
+			for(ShoppingCart shoppingCart: shoppingCartList)
+			{
+				shoppingCartDAO.delete(shoppingCart);
 			}
 			outputString(msg);
 			return null;

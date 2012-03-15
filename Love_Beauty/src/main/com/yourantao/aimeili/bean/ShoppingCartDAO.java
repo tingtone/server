@@ -158,4 +158,8 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 			ApplicationContext ctx) {
 		return (ShoppingCartDAO) ctx.getBean("ShoppingCartDAO");
 	}
+	public boolean deleteCart(int userId, int goodsRealId, int providerId)
+	{
+		return true;
+	}
 }

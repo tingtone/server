@@ -95,11 +95,16 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnconfirmedOrders()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
+			Integer userId = getIntegerParameter(USER_ID);
+			if(userId == null)
+			{
+				outputString("{'msg':'参数个数不对'}");
+				return null;
+			}
 			//需要定义什么样的状态是待确认的订单
-			List<Order> result = orderDAO.findUnconfirmedOrdersByUserId(userId);
+			List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
 			List<OrderSimpleView> orderSimpleViewList= new ArrayList<OrderSimpleView>();
-			for(Order order:result)
+			for(Order order: orderList)
 			{
 				OrderSimpleView orderSimpleView = new OrderSimpleView();
 				int handled =order.getHandled();
@@ -135,9 +140,14 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnconfirmedOrder()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int orderId = getIntegerParameter(ORDER_ID);
-			//
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer orderId = getIntegerParameter(ORDER_ID);
+			//验证参数
+			if(userId == null || orderId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			Order order = orderDAO.findById(orderId);
 			//进行验证
 			if(order.getUserId() != userId)
@@ -147,8 +157,8 @@ public class OrderAction extends BaseAction implements Constant{
 			}
 			//
 			OrderView orderView = new OrderView();
-			orderView.setOrderId(order.getOrderId());//
-			orderView.setProviderId(order.getProviderId());//
+			orderView.setOrderId(order.getOrderId());
+			orderView.setProviderId(order.getProviderId());
 			orderView.setOrderNum(order.getOrderNum());
 			int handled = order.getHandled();
 			orderView.setOrderHandled(handled);
@@ -213,19 +223,19 @@ public class OrderAction extends BaseAction implements Constant{
 		public String confirmOrders()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int orderId = getIntegerParameter(ORDER_ID);
-			String orderNum = getStringParameter(ORDER_NUM);//这个是否需要
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer orderId = getIntegerParameter(ORDER_ID);
+			//验证参数
+			if(userId == null || orderId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			Order order = orderDAO.findById(orderId);
 			//验证是否合法
 			if(order.getUserId() != userId )
 			{
 				outputString("{'msg':'订单与用户不匹配'}");
-				return null;
-			}
-			else if(!order.getOrderNum().equals(orderNum))
-			{
-				outputString("{'msg':'订单与订单号不匹配'}");
 				return null;
 			}
 			if(order.getHandled() == 3)
@@ -247,9 +257,14 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getOrderTracking()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int orderId = getIntegerParameter(ORDER_ID);
-			String orderNum = getStringParameter(ORDER_NUM);
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer orderId = getIntegerParameter(ORDER_ID);
+			//验证参数
+			if(userId == null || orderId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			Order order = orderDAO.findById(orderId);
 			//验证是否合法
 			if(order.getUserId() != userId )
@@ -257,12 +272,7 @@ public class OrderAction extends BaseAction implements Constant{
 				outputString("{'msg':'订单与用户不匹配'}");
 				return null;
 			}
-			else if(!order.getOrderNum().equals(orderNum))
-			{
-				outputString("{'msg':'订单与订单号不匹配'}");
-				return null;
-			}
-			//下面是从某处获取所有的订单信息
+			//下面是从某处获取所有的订单追踪信息
 			OrderTraceView orderTraceView = new OrderTraceView();
 			List<String> timeList = new ArrayList<String>();
 			List<String> desList = new ArrayList<String>();
@@ -282,9 +292,13 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnfinishedOrders()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			//需要定义什么样的状态是未完成的订单
-			
+			Integer userId = getIntegerParameter(USER_ID);
+			//验证参数
+			if(userId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
 			List<OrderSimpleView> orderSimpleViewList= new ArrayList<OrderSimpleView>();
 			for(Order order: orderList)
@@ -321,9 +335,14 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnfinishedOrder()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int orderId = getIntegerParameter(ORDER_ID);
-			//String orderNum = getStringParameter(ORDER_NUM);
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer orderId = getIntegerParameter(ORDER_ID);
+			//验证参数
+			if(userId == null || orderId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			Order order = orderDAO.findById(orderId);
 			//进行验证?
 			if(order.getUserId() != userId)
@@ -351,8 +370,7 @@ public class OrderAction extends BaseAction implements Constant{
 			for(OrderGoods orderGoods: orderGoodsList)
 			{
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getGoodsRealId());
-				
-				//
+
 				//sumary += (goodsReal.getGoodsPrice()* orderGoods.getCount());
 				
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
@@ -379,63 +397,69 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getHistoryOrders()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
+			Integer userId = getIntegerParameter(USER_ID);
+			//验证参数
+			if(userId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			//需要定义什么样的状态是待确认的订单
 			Order orderExample = new Order();
 			orderExample.setUserId(userId);
-			orderExample.setHandled((short)3);//这里只是查找出部分数据,自己手动写hql
-			//String hql = "select orderId,orderNum,addressId,providerId from Order "
-				//+ "where userId="+ userId +" and finish=3 and handled = 3";
-			//getHibernateTemplate().find(hql);
-			//orderExample.setHandled((short)2);
-			//orderExample.setHandled((short)3);
+			orderExample.setHandled((short)3);
 			orderExample.setFinish((short)3);//收货
-			List result = orderDAO.findByExample(orderExample);
+			List<Order> orderList = orderDAO.findByExample(orderExample);
 			List<OrderSimpleView> orderSimpleViewList= new ArrayList<OrderSimpleView>();
-			for(int index=0; index <result.size(); index++)
+			for(Order order: orderList)
 			{
 				OrderSimpleView orderSimpleView = new OrderSimpleView();
-				List tmp = (List) result.get(0);//指定index
-				int handled =(Integer) tmp.get(0);//指定index
+
+				int handled =order.getHandled();//指定index
 				orderSimpleView.setOrderHandled(handled);
 				
-				orderSimpleView.setTime((String)tmp.get(0));//设置对应时间,这个时间可以代表多个含义
-				//下面计算订单中所有商品	的金额
-				List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId((Integer)tmp.get(0));
-				float sumary = (float) 0.0;
+				orderSimpleView.setTime(order.getHandledTime().toString());//设置对应时间,这个时间可以代表多个含义
+				/*下面计算订单中所有商品	的金额
+				List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order.getOrderId());
 				for(int index2 = 0; index2 < orderGoodsList.size(); index2++)
 				{
 					OrderGoods orderGoods = orderGoodsList.get(index2);
 					GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getGoodsRealId());
-					sumary += (orderGoods.getCount()*goodsReal.getGoodsPrice());
-				}
-				//orderSimpleView.setOrderSumary(sumary);
-				orderSimpleView.setOrderSumary((Float)tmp.get(0));//指定index
-				//orderView.setOrderSumary(order.getOrderSum());
+				}*/
+				orderSimpleView.setOrderSumary(order.getOrderSum());
 
 				//添加某一个araayList中
 				orderSimpleViewList.add(orderSimpleView);
 			}
 			printArray(orderSimpleViewList);
-			//
 			return null;
 		}
 		public String getHistoryOrder()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int orderId = getIntegerParameter(ORDER_ID);
-			//
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer orderId = getIntegerParameter(ORDER_ID);
+			//验证参数
+			if(userId == null || orderId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			Order order = orderDAO.findById(orderId);
-			//进行验证?
-			//
+			//进行验证
+			if(order.getUserId() != userId)
+			{
+				outputString("{'msg':'订单与用户不匹配'}");
+				return null;
+			}
+			
 			OrderView orderView = new OrderView();
 			orderView.setOrderId(order.getOrderId());//
 			orderView.setProviderId(order.getProviderId());//
-			orderView.setOrderNum(order.getOrderNum());
+			//orderView.setOrderNum(order.getOrderNum());
 			//int handled = order.getHandled();
 			//orderView.setOrderHandled(handled);
-			//orderView.setHandledTime(order.getHandledTime().toString());
+			orderView.setHandledTime(order.getHandledTime().toString());
 			
 			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order.getOrderId());
 			List<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
@@ -468,16 +492,19 @@ public class OrderAction extends BaseAction implements Constant{
 		{
 			String msg="";
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
-			int providerId = getIntegerParameter(PROVIDER_ID);
-			//若存在addressId说明这是在下单
-			//如果addressId为null说明只是保存订单
-			Integer addressId = getIntegerParameter("");//
+			Integer userId = getIntegerParameter(USER_ID);
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
+			Integer addressId = getIntegerParameter(ADDRESS_ID);
 			//复杂参数
 			String cartIdString = getStringParameter("cartidlist");
-			String[] cartIdList = cartIdString.split(",");
-			/*String goodsRealIdString = getStringParameter("idlist");
+			String goodsRealIdString = getStringParameter("idlist");
 			String countString = getStringParameter("countlist");
+			if(userId == null || providerId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
+			String[] cartIdList = cartIdString.split(",");
 			String[] goodsRealIdList= goodsRealIdString.split(",");
 			String[] countList = countString.split(",");
 			if(goodsRealIdList.length != countList.length)
@@ -485,12 +512,14 @@ public class OrderAction extends BaseAction implements Constant{
 				outputString("{'msg':'goods与count不匹配'}");
 				return null;
 			}
-			*/
+			
 			//下单
 			Order order = new Order();
 			order.setUserId(userId);
 			order.setFinish((short)0);//设置未收货
 			order.setProviderId(providerId);
+			//若存在addressId说明这是在下单
+			//如果addressId为null说明只是保存订单
 			if(addressId == null)
 			{
 				//说明这是一个未完成订单
@@ -518,15 +547,23 @@ public class OrderAction extends BaseAction implements Constant{
 			}
 			//通过某种方式保存记录,并获得orderId
 			orderDAO.merge(order);
+			//从购物车转到订单中
 			float sumary = (float)0;
 			for(int index = 0; index < cartIdList.length; index++)
 			{
-				ShoppingCart shoppingCart = shoppingCartDAO.findById(Integer.valueOf(cartIdList[index]));
-				OrderGoods orderGoods = new OrderGoods();
-				orderGoods.setCount(shoppingCart.getCount());
-				orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
-				orderGoods.setOrderId(order.getOrderId());//这里需要已经知道orderId
-				orderGoodsDAO.save(orderGoods);
+				
+				//从购物车中删除商品
+				//这里直接使用SQL语句删除对应的购物车中商品
+				boolean status = shoppingCartDAO.deleteCart(userId, goodsRealIdList[index], providerId);
+				if(status)
+				{
+					ShoppingCart shoppingCart = shoppingCartDAO.findById(Integer.valueOf(cartIdList[index]));
+					OrderGoods orderGoods = new OrderGoods();
+					orderGoods.setCount(shoppingCart.getCount());
+					orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
+					orderGoods.setOrderId(order.getOrderId());//这里需要已经知道orderId
+					orderGoodsDAO.save(orderGoods);
+				}
 			}
 			if(addressId != null)
 			{
