@@ -112,7 +112,6 @@ function GetRealGoodsListBySeries(bid,sid) {
 						goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
 						goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
 						goodsDetail+="<tr><td><input rgid='"+json[i]['goodsRealId']+"' type='button' class='comment' value='查看评论'/></td></tr> ";
-						goodsDetail+="<tr><td><div id='comment_"+json[i]['goodsRealId']+"'/></td></tr> ";
 						goodsDetail+="</tbody></table></form>";
 					}
 			}
@@ -502,13 +501,11 @@ function GetRealGoodsComment(rgid) {
 			if (json == null) {
 				alert("json null");
 			} else {
-			realGoodsComment +="<table border='1'><tbody>"
 				for ( var i = 0; i < json.length; i++) {
-					realGoodsComment +="<tr><td>评论用户：" + json[i]['commentator']+ "评论内容："+json[i]['commentContent']+"评论等级："+json[i]['commentLevel']+"</td></tr>";
+					series += "<option value='" + json[i]['seriesId']+ "'>" + json[i]['seriesName'] + "</option>";
 				}
-				realGoodsComment +="</tbody></table>"
 			}
-			$('#comment_'+rgid).html(realGoodsComment);
+			$('#series').html(series);
 		}
 	});
 }

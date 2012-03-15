@@ -10,7 +10,8 @@ public class Efficacy implements java.io.Serializable {
 
 	private Integer efficacyId;
 	private String efficacyName;
-	private Integer efficacyRank;
+	private Long efficacyRank;
+	private Integer efficacyImageId;
 
 	// Constructors
 
@@ -19,9 +20,11 @@ public class Efficacy implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Efficacy(String efficacyName, Integer efficacyRank) {
+	public Efficacy(String efficacyName, Long efficacyRank,
+			Integer efficacyImageId) {
 		this.efficacyName = efficacyName;
 		this.efficacyRank = efficacyRank;
+		this.efficacyImageId = efficacyImageId;
 	}
 
 	// Property accessors
@@ -42,12 +45,20 @@ public class Efficacy implements java.io.Serializable {
 		this.efficacyName = efficacyName;
 	}
 
-	public Integer getEfficacyRank() {
+	public Long getEfficacyRank() {
 		return this.efficacyRank;
 	}
 
-	public void setEfficacyRank(Integer efficacyRank) {
+	public void setEfficacyRank(Long efficacyRank) {
 		this.efficacyRank = efficacyRank;
+	}
+
+	public Integer getEfficacyImageId() {
+		return this.efficacyImageId;
+	}
+
+	public void setEfficacyImageId(Integer efficacyImageId) {
+		this.efficacyImageId = efficacyImageId;
 	}
 
 }

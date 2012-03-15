@@ -21,7 +21,7 @@
             </column>
         </property>
         <property name="brandOtherNames" type="java.lang.String">
-            <column name="brand_other_names" length="64" not-null="true">
+            <column name="brand_other_names" length="64">
                 <comment>品牌其他的名字，该字段用于录入时的比对，不会呈现给用户看</comment>
             </column>
         </property>
@@ -30,7 +30,7 @@
                 <comment>品牌描述</comment>
             </column>
         </property>
-        <property name="brandRank" type="java.lang.Integer">
+        <property name="brandRank" type="java.lang.Long">
             <column name="brand_rank" not-null="true">
                 <comment>品牌的排序值，越大的i优先级越高</comment>
             </column>

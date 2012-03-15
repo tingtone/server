@@ -10,9 +10,9 @@ public class UserAddress implements java.io.Serializable {
 
 	private Integer addressId;
 	private Integer userId;
-	private Short province;
-	private Short city;
-	private Short district;
+	private String province;
+	private String city;
+	private String district;
 	private String detail;
 	private String mobile;
 	private String telephone;
@@ -27,8 +27,8 @@ public class UserAddress implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public UserAddress(Integer userId, Short province, Short city,
-			Short district, String detail, String mobile, String telephone,
+	public UserAddress(Integer userId, String province, String city,
+			String district, String detail, String mobile, String telephone,
 			String receiver, String zipCode, Short default_) {
 		this.userId = userId;
 		this.province = province;
@@ -60,27 +60,27 @@ public class UserAddress implements java.io.Serializable {
 		this.userId = userId;
 	}
 
-	public Short getProvince() {
+	public String getProvince() {
 		return this.province;
 	}
 
-	public void setProvince(Short province) {
+	public void setProvince(String province) {
 		this.province = province;
 	}
 
-	public Short getCity() {
+	public String getCity() {
 		return this.city;
 	}
 
-	public void setCity(Short city) {
+	public void setCity(String city) {
 		this.city = city;
 	}
 
-	public Short getDistrict() {
+	public String getDistrict() {
 		return this.district;
 	}
 
-	public void setDistrict(Short district) {
+	public void setDistrict(String district) {
 		this.district = district;
 	}
 

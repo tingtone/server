@@ -10,6 +10,8 @@ import main.com.yourantao.aimeili.bean.Brand;
 import main.com.yourantao.aimeili.bean.BrandDAO;
 import main.com.yourantao.aimeili.bean.CategoryDAO;
 import main.com.yourantao.aimeili.bean.Goods;
+import main.com.yourantao.aimeili.bean.GoodsComment;
+import main.com.yourantao.aimeili.bean.GoodsCommentDAO;
 import main.com.yourantao.aimeili.bean.GoodsDAO;
 import main.com.yourantao.aimeili.bean.GoodsImages;
 import main.com.yourantao.aimeili.bean.GoodsImagesDAO;
@@ -33,11 +35,14 @@ import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
 import main.com.yourantao.aimeili.util.TransTool;
 import main.com.yourantao.aimeili.vo.GoodsImageView;
+import main.com.yourantao.aimeili.vo.GoodsSkinView;
 import main.com.yourantao.aimeili.vo.GoodsView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+
+import sun.security.action.GetIntegerAction;
 
 @SuppressWarnings("serial")
 public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
@@ -63,6 +68,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private UserDAO userDAO;
 	private UserFavoriteDAO userFavoriteDAO;
 	private UserLoginDAO userLoginDAO;
+	private GoodsCommentDAO goodsCommentDAO;
 	
 	
 	// struts
@@ -102,6 +108,14 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
+	}
+
+	public GoodsCommentDAO getGoodsCommentDAO() {
+		return goodsCommentDAO;
+	}
+
+	public void setGoodsCommentDAO(GoodsCommentDAO goodsCommentDAO) {
+		this.goodsCommentDAO = goodsCommentDAO;
 	}
 
 	public UserLoginDAO getUserLoginDAO() {
@@ -222,10 +236,9 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			outputString(msg);
 			return null;
 		}else{                //有收藏，取得相应商品
-			List<UserFavorite> userFavorites=userFavoriteDAO.findByUserId(uid);
 			List<GoodsView> result=new ArrayList<GoodsView>();
 				
-			for (UserFavorite userFavorite : userFavorites) {
+			for (UserFavorite userFavorite : userfavlist) {
 				Goods goods=goodsDAO.findById(userFavorite.getRelatedId());
 				GoodsView goodsView=new GoodsView();
 				goodsView.setGoodsId(goods.getGoodsId());
@@ -366,7 +379,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		return ERROR;
 	}
 
-	/*
+	/* for Editor
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.GoodsInterface#insertGoods()
 	 */
@@ -534,10 +547,68 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			return null;
 		}
 		String skinName=TransTool.transSkin(skin);
-		List<GoodsView> result=new ArrayList<GoodsView>();
+		List<GoodsView> skinResult=new ArrayList<GoodsView>();
+		List<GoodsView> notSkinResult=new ArrayList<GoodsView>();
+		List<GoodsView> noticeSkinResult=new ArrayList<GoodsView>();
 		List<Goods> goodslist=goodsDAO.findBySkin(skinName); //获取适合肤质，不适合，需要注意的
-		
-		
+		for (Goods goods : goodslist) {
+			GoodsView goodsView=new GoodsView();
+			goodsView.setGoodsId(goods.getGoodsId());
+			goodsView.setGoodsAge(goods.getGoodsAge());
+			goodsView.setGoodsDescription(goods.getGoodsDescription());
+			goodsView.setGoodsForskin(goods.getGoodsForskin());
+			goodsView.setGoodsName(goods.getGoodsName());
+			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+			goodsView.setGoodsScore(goods.getGoodsScore());
+			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+			goodsView.setGoodsStatus(goods.getGoodsStatus());
+			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+			if (thumb != null) {
+				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+			} else {
+				goodsView.setGoodsThumb("");
+			}
+			if (goods.getBrandId() != null) {
+				Brand brand=brandDAO.findById(goods.getBrandId());
+				goodsView.setGoodsBrandName(brand.getBrandName());
+			} 
+			if (goods.getSeriesId() != null) {  
+				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+					goodsView.setGoodsSeriesName("无");
+				}else{
+					Series series=seriesDAO.findById(goods.getSeriesId());
+					goodsView.setGoodsSeriesName(series.getSeriesName());
+				}
+			}
+			if(goods.getGoodsForskin().contains(skinName)){ //适合肤质
+				skinResult.add(goodsView);
+			}
+			if(goods.getGoodsNotforskin().contains(skinName)){
+				notSkinResult.add(goodsView);
+			}
+			if(goods.getGoodsNoticeforskin().contains(skinName)){
+				noticeSkinResult.add(goodsView);
+			}
+		}
+		GoodsSkinView result=new GoodsSkinView();
+		result.setSkinResult(skinResult);
+		result.setNotSkinResult(notSkinResult);
+		result.setNoticeSkinResult(noticeSkinResult);
+		printObject(result);
+		return null;
+	}
+
+	/*
+	 * forClient and Editor
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getRealGoodsComment()
+	 */
+	@Override
+	public String getRealGoodsComment() {
+		int rgid=getIntegerParameter(REALGOOS_ID);
+		List<GoodsComment> goodsComments=goodsCommentDAO.findByGoodsRealId(rgid);
+		printArray(goodsComments);
 		return null;
 	}
 }

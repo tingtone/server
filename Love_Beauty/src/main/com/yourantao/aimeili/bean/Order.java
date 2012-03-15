@@ -13,6 +13,7 @@ public class Order implements java.io.Serializable {
 	private Integer orderId;
 	private Integer userId;
 	private String orderNum;
+	private Float orderSum;
 	private Integer addressId;
 	private Float postage;
 	private String paymentType;
@@ -32,7 +33,7 @@ public class Order implements java.io.Serializable {
 	public Order() {
 	}
 
-	/** full constructor */
+	/** minimal constructor */
 	public Order(Integer userId, String orderNum, Integer addressId,
 			Float postage, String paymentType, String deliverType,
 			String deliverTime, Short invoice, Timestamp addTime, Short finish,
@@ -40,6 +41,29 @@ public class Order implements java.io.Serializable {
 			Timestamp handledTime) {
 		this.userId = userId;
 		this.orderNum = orderNum;
+		this.addressId = addressId;
+		this.postage = postage;
+		this.paymentType = paymentType;
+		this.deliverType = deliverType;
+		this.deliverTime = deliverTime;
+		this.invoice = invoice;
+		this.addTime = addTime;
+		this.finish = finish;
+		this.providerId = providerId;
+		this.relatedNum = relatedNum;
+		this.handled = handled;
+		this.handledTime = handledTime;
+	}
+
+	/** full constructor */
+	public Order(Integer userId, String orderNum, Float orderSum,
+			Integer addressId, Float postage, String paymentType,
+			String deliverType, String deliverTime, Short invoice,
+			Timestamp addTime, Short finish, Integer providerId,
+			String relatedNum, Short handled, Timestamp handledTime) {
+		this.userId = userId;
+		this.orderNum = orderNum;
+		this.orderSum = orderSum;
 		this.addressId = addressId;
 		this.postage = postage;
 		this.paymentType = paymentType;
@@ -78,6 +102,14 @@ public class Order implements java.io.Serializable {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+
+	public Float getOrderSum() {
+		return this.orderSum;
+	}
+
+	public void setOrderSum(Float orderSum) {
+		this.orderSum = orderSum;
 	}
 
 	public Integer getAddressId() {

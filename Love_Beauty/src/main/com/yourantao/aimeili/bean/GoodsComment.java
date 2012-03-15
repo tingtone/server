@@ -16,6 +16,7 @@ public class GoodsComment implements java.io.Serializable {
 	private String commentContent;
 	private Short commentLevel;
 	private Integer commentRank;
+	private Timestamp commentTime;
 	private Timestamp addTime;
 
 	// Constructors
@@ -27,12 +28,13 @@ public class GoodsComment implements java.io.Serializable {
 	/** full constructor */
 	public GoodsComment(Integer goodsRealId, String commentator,
 			String commentContent, Short commentLevel, Integer commentRank,
-			Timestamp addTime) {
+			Timestamp commentTime, Timestamp addTime) {
 		this.goodsRealId = goodsRealId;
 		this.commentator = commentator;
 		this.commentContent = commentContent;
 		this.commentLevel = commentLevel;
 		this.commentRank = commentRank;
+		this.commentTime = commentTime;
 		this.addTime = addTime;
 	}
 
@@ -84,6 +86,14 @@ public class GoodsComment implements java.io.Serializable {
 
 	public void setCommentRank(Integer commentRank) {
 		this.commentRank = commentRank;
+	}
+
+	public Timestamp getCommentTime() {
+		return this.commentTime;
+	}
+
+	public void setCommentTime(Timestamp commentTime) {
+		this.commentTime = commentTime;
 	}
 
 	public Timestamp getAddTime() {

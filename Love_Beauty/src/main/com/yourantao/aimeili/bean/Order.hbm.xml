@@ -20,6 +20,11 @@
                 <comment>订单号</comment>
             </column>
         </property>
+        <property name="orderSum" type="java.lang.Float">
+            <column name="order_sum" precision="12" scale="0">
+                <comment>本次订单的金额，不含邮费</comment>
+            </column>
+        </property>
         <property name="addressId" type="java.lang.Integer">
             <column name="address_id" not-null="true">
                 <comment>地址ID</comment>
@@ -57,7 +62,7 @@
         </property>
         <property name="finish" type="java.lang.Short">
             <column name="finish" not-null="true">
-                <comment>是否收获</comment>
+                <comment>0:未收货 3:收货</comment>
             </column>
         </property>
         <property name="providerId" type="java.lang.Integer">
@@ -72,7 +77,7 @@
         </property>
         <property name="handled" type="java.lang.Short">
             <column name="handled" not-null="true">
-                <comment>管理员是否处理</comment>
+                <comment>0:未完成1:等待管理员处理2:管理员电话确认3:管理员下单</comment>
             </column>
         </property>
         <property name="handledTime" type="java.sql.Timestamp">

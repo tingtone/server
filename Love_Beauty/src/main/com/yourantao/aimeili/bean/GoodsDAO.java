@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 /**
  * A data access object (DAO) providing persistence and search support for Goods
  * entities. Transaction control of the save(), update() and delete() operations
@@ -229,14 +231,15 @@ public class GoodsDAO extends HibernateDaoSupport {
 	 */
 	public List<Goods> findBySkin(String skinName) {
 		try {
+			skinName="%"+skinName+"%";
 			String queryString = "from Goods as model where model."
-					+ GOODS_FORSKIN + " like '%"+skinName+"%'";
-			return getHibernateTemplate().find(queryString);
+					+ GOODS_FORSKIN + " like ?"
+					+" or "+GOODS_NOTFORSKIN+" like ?"
+					+" or "+GOODS_NOTICEFORSKIN+" like ?";
+			return getHibernateTemplate().find(queryString,new String[]{skinName,skinName,skinName});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
 		}
-//		List<Goods> result=new ArrayList<Goods>();
-//		return result;
 	}
 }

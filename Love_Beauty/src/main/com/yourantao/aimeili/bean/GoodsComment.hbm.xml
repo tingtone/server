@@ -12,7 +12,7 @@
         </id>
         <property name="goodsRealId" type="java.lang.Integer">
             <column name="goods_real_id" not-null="true">
-                <comment>商品ID号</comment>
+                <comment>商品评论</comment>
             </column>
         </property>
         <property name="commentator" type="java.lang.String">
@@ -35,9 +35,14 @@
                 <comment>评论的排序值，越大的优先级越高</comment>
             </column>
         </property>
+        <property name="commentTime" type="java.sql.Timestamp">
+            <column name="comment_time" length="0" not-null="true">
+                <comment>评论时间</comment>
+            </column>
+        </property>
         <property name="addTime" type="java.sql.Timestamp">
             <column name="add_time" length="0" not-null="true">
-                <comment>评论时间</comment>
+                <comment>添加评论时间</comment>
             </column>
         </property>
     </class>

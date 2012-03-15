@@ -84,7 +84,7 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 				+ propertyName + ", value: " + value);
 		try {
 			String queryString = "from UserFavorite as model where model."
-					+ propertyName + "= ?";
+					+ propertyName + "= ? order by model.addTime desc";   //按收藏时间排序
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);

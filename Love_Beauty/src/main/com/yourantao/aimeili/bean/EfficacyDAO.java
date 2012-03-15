@@ -25,6 +25,7 @@ public class EfficacyDAO extends HibernateDaoSupport {
 	// property constants
 	public static final String EFFICACY_NAME = "efficacyName";
 	public static final String EFFICACY_RANK = "efficacyRank";
+	public static final String EFFICACY_IMAGE_ID = "efficacyImageId";
 
 	protected void initDao() {
 		// do nothing
@@ -96,6 +97,10 @@ public class EfficacyDAO extends HibernateDaoSupport {
 
 	public List findByEfficacyRank(Object efficacyRank) {
 		return findByProperty(EFFICACY_RANK, efficacyRank);
+	}
+
+	public List findByEfficacyImageId(Object efficacyImageId) {
+		return findByProperty(EFFICACY_IMAGE_ID, efficacyImageId);
 	}
 
 	public List findAll() {
