@@ -4,42 +4,52 @@ import java.util.List;
 
 public class OrderView {
 	private Integer orderId;
+	private String orderNum;
+	private int orderHandled;
 	//订单的金额由客户端自己完成
-	private Double orderMoney;
-	private String orderTime;
+	private float orderSumary;
+	private String handledTime;
 	private String orderArrivalTime;
 	//订单对应的供应商
-	private int provideId;
+	private int providerId;
 	//订单追踪信息
-	private String trackingTime;
-	private String trackingDesc;
+	private String traceTime;
+	private String traceDesc;
 	//订单商品
-	private List<String> goodsNameList;
-	private List<String> goodsPriceList;
-	private List<String> goodsThumbList;
-	private List<String> goodsCountList;
+	private List<GoodsRealSimpleView> goods;
 	//订单收货人信息
 	private String Name;
 	private String Address;
-	private String phoneNumber;
-	
+	private String mobile;
 	public Integer getOrderId() {
 		return orderId;
 	}
 	public void setOrderId(Integer orderId) {
 		this.orderId = orderId;
 	}
-	public Double getOrderMoney() {
-		return orderMoney;
+	public String getOrderNum() {
+		return orderNum;
 	}
-	public void setOrderMoney(Double orderMoney) {
-		this.orderMoney = orderMoney;
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
 	}
-	public String getOrderTime() {
-		return orderTime;
+	public int getOrderHandled() {
+		return orderHandled;
 	}
-	public void setOrderTime(String orderTime) {
-		this.orderTime = orderTime;
+	public void setOrderHandled(int orderHandled) {
+		this.orderHandled = orderHandled;
+	}
+	public float getOrderSumary() {
+		return orderSumary;
+	}
+	public void setOrderSumary(float orderSumary) {
+		this.orderSumary = orderSumary;
+	}
+	public String getHandledTime() {
+		return handledTime;
+	}
+	public void setHandledTime(String handledTime) {
+		this.handledTime = handledTime;
 	}
 	public String getOrderArrivalTime() {
 		return orderArrivalTime;
@@ -47,47 +57,29 @@ public class OrderView {
 	public void setOrderArrivalTime(String orderArrivalTime) {
 		this.orderArrivalTime = orderArrivalTime;
 	}
-	public int getProvideId() {
-		return provideId;
+	public int getProviderId() {
+		return providerId;
 	}
-	public void setProvideId(int provideId) {
-		this.provideId = provideId;
+	public void setProviderId(int providerId) {
+		this.providerId = providerId;
 	}
-	public String getTrackingTime() {
-		return trackingTime;
+	public String getTraceTime() {
+		return traceTime;
 	}
-	public void setTrackingTime(String trackingTime) {
-		this.trackingTime = trackingTime;
+	public void setTraceTime(String traceTime) {
+		this.traceTime = traceTime;
 	}
-	public String getTrackingDesc() {
-		return trackingDesc;
+	public String getTraceDesc() {
+		return traceDesc;
 	}
-	public void setTrackingDesc(String trackingDesc) {
-		this.trackingDesc = trackingDesc;
+	public void setTraceDesc(String traceDesc) {
+		this.traceDesc = traceDesc;
 	}
-	public List<String> getGoodsNameList() {
-		return goodsNameList;
+	public List<GoodsRealSimpleView> getGoods() {
+		return goods;
 	}
-	public void setGoodsNameList(List<String> goodsNameList) {
-		this.goodsNameList = goodsNameList;
-	}
-	public List<String> getGoodsPriceList() {
-		return goodsPriceList;
-	}
-	public void setGoodsPriceList(List<String> goodsPriceList) {
-		this.goodsPriceList = goodsPriceList;
-	}
-	public List<String> getGoodsThumbList() {
-		return goodsThumbList;
-	}
-	public void setGoodsThumbList(List<String> goodsThumbList) {
-		this.goodsThumbList = goodsThumbList;
-	}
-	public List<String> getGoodsCountList() {
-		return goodsCountList;
-	}
-	public void setGoodsCountList(List<String> goodsCountList) {
-		this.goodsCountList = goodsCountList;
+	public void setGoods(List<GoodsRealSimpleView> goods) {
+		this.goods = goods;
 	}
 	public String getName() {
 		return Name;
@@ -101,11 +93,11 @@ public class OrderView {
 	public void setAddress(String address) {
 		Address = address;
 	}
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getMobile() {
+		return mobile;
 	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 	
 }

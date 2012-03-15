@@ -2,9 +2,6 @@ package main.com.yourantao.aimeili.bean;
 
 import java.util.List;
 import org.hibernate.LockMode;
-import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Example;
-import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
