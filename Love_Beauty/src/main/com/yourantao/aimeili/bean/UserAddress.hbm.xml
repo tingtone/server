@@ -32,7 +32,12 @@
         </property>
         <property name="detail" type="java.lang.String">
             <column name="detail" length="128" not-null="true">
-                <comment>详细地址</comment>
+                <comment>详细地址（如二环以内等）</comment>
+            </column>
+        </property>
+        <property name="userAddress" type="java.lang.String">
+            <column name="user_address" length="300" not-null="true">
+                <comment>用户具体地址</comment>
             </column>
         </property>
         <property name="mobile" type="java.lang.String">
@@ -51,13 +56,13 @@
             </column>
         </property>
         <property name="zipCode" type="java.lang.String">
-            <column name="zip_code" length="16" not-null="true">
+            <column name="zip_code" length="16">
                 <comment>邮编</comment>
             </column>
         </property>
         <property name="default_" type="java.lang.Short">
             <column name="default" not-null="true">
-                <comment>是否为默认地址</comment>
+                <comment>是否为默认地址 0不是 1是</comment>
             </column>
         </property>
     </class>

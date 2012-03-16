@@ -10,10 +10,15 @@ public interface GoodsInterface {
 	public String updateGoods();
 	
 	/**
-	 * 我的护肤品中获得适合，不适合和需要注意的
+	 * 我的护肤品中获得适合，不适合和需要注意的商品列表
 	 */
 	public String getGoodsListBySkin();
 	
+	/**
+	 * 根据分类获得适合，不适合和需要注意的商品列表
+	 * @return
+	 */
+	public String getGoodsListBySkinAndCat();
 	/**
 	 * 获得真实商品的评论
 	 */

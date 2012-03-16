@@ -14,6 +14,7 @@ public class UserAddress implements java.io.Serializable {
 	private String city;
 	private String district;
 	private String detail;
+	private String userAddress;
 	private String mobile;
 	private String telephone;
 	private String receiver;
@@ -26,15 +27,32 @@ public class UserAddress implements java.io.Serializable {
 	public UserAddress() {
 	}
 
-	/** full constructor */
+	/** minimal constructor */
 	public UserAddress(Integer userId, String province, String city,
-			String district, String detail, String mobile, String telephone,
-			String receiver, String zipCode, Short default_) {
+			String district, String detail, String userAddress, String mobile,
+			String telephone, String receiver, Short default_) {
 		this.userId = userId;
 		this.province = province;
 		this.city = city;
 		this.district = district;
 		this.detail = detail;
+		this.userAddress = userAddress;
+		this.mobile = mobile;
+		this.telephone = telephone;
+		this.receiver = receiver;
+		this.default_ = default_;
+	}
+
+	/** full constructor */
+	public UserAddress(Integer userId, String province, String city,
+			String district, String detail, String userAddress, String mobile,
+			String telephone, String receiver, String zipCode, Short default_) {
+		this.userId = userId;
+		this.province = province;
+		this.city = city;
+		this.district = district;
+		this.detail = detail;
+		this.userAddress = userAddress;
 		this.mobile = mobile;
 		this.telephone = telephone;
 		this.receiver = receiver;
@@ -90,6 +108,14 @@ public class UserAddress implements java.io.Serializable {
 
 	public void setDetail(String detail) {
 		this.detail = detail;
+	}
+
+	public String getUserAddress() {
+		return this.userAddress;
+	}
+
+	public void setUserAddress(String userAddress) {
+		this.userAddress = userAddress;
 	}
 
 	public String getMobile() {

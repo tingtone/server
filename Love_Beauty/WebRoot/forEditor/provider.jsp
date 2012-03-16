@@ -74,9 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				dataType: "json",
 				url: url,
 				success: function(json) {
-
-				alert("return from server");
-				
+					alert("return from server");
 				}
 		});
 	}
