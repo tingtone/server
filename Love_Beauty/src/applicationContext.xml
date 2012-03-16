@@ -462,6 +462,12 @@
 		<property name="goodsRealDAO">
 			<ref bean="GoodsRealDAO" />
 		</property>
+		<property name="userAddressDAO">
+			<ref bean="UserAddressDAO" />
+		</property>
+		<property name="shoppingCartDAO">
+			<ref bean="ShoppingCartDAO" />
+		</property>
 	</bean>
 	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction"
 		parent="BaseAction">

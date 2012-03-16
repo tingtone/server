@@ -38,13 +38,7 @@ import main.com.yourantao.aimeili.vo.ProviderView;
 
 public class ProviderAction extends BaseAction implements Constant,
 		ProviderInterface {
-	private static final Logger LOG = LoggerFactory
-	.getLogger(TopicAction.class);
-	
-	//可能不需要放在这里
-	private static final int BUFFER_SIZE = 16 * 1024;
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat(
-	"yyyy-MM-dd HH:mm:ss");
+	private static final Logger LOG = LoggerFactory.getLogger(ProviderAction.class);
 	
 	//下面是重要的
 	private File newprovider_thumb; // 上传缩略图
@@ -158,14 +152,14 @@ public class ProviderAction extends BaseAction implements Constant,
 		Integer providerId = getIntegerParameter(PROVIDER_ID);
 		if(providerId == null)
 			return null;
-		String providerDes = getStringParameter(PROVIDER_DESCRIPTION);
-		String providerService = getStringParameter(PROVIDER_SERVICE);
-		String providerDeliver = getStringParameter(PROVIDER_DELIVER);
+		String providerDes = getStringParameter("pdes");
+		String providerService = getStringParameter("pservice");
+		String providerDeliver = getStringParameter("pdeliver");
 		
 		Provider provider = providerDAO.findById(providerId);
 //		provider.setProviderThumbId(-1);//为了在底层数据库操作时判断是否需要对thumbId字段进行更新
 		if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
-			System.out.println("in update provider-------thumb");
+			//System.out.println("in update provider-------thumb");
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName);
 			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
@@ -179,7 +173,7 @@ public class ProviderAction extends BaseAction implements Constant,
 		provider.setProviderDescription(providerDes);
 		provider.setProviderService(providerService);
 		//这里需要换一种新的方式进行处理，是否成功，还没有测试
-//		providerDAO.merge(provider);
+		providerDAO.merge(provider);
 		//int result = providerDAO.updateProvider(provider);
 		//返回结果进行返回
 		return SUCCESS;
@@ -196,7 +190,7 @@ public class ProviderAction extends BaseAction implements Constant,
 		
 		providerLocations.setProviderId(providerId);
 		//Constant.java	PROVIDER_LOCATION_LEVEL = plevel
-		Integer providerLocationsLevel = getIntegerParameter(PROVIDER_LOCATION_LEVEL);
+		Integer providerLocationsLevel = getIntegerParameter("plevel");
 		//System.out.println(providerLocationsLevel);
 		if(providerId == null || providerLocationsLevel == null)
 			return null;
@@ -268,7 +262,7 @@ public class ProviderAction extends BaseAction implements Constant,
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.ProviderInterface#updateOrAddProviderLocations()
 	 */
-	public String updateOrAddProviderLocations()
+	public String handleProviderLocations()
 	{
 		int providerId = getIntegerParameter(PROVIDER_ID);
 		String updateType = getReqeust().getParameter("submit");
@@ -303,23 +297,35 @@ public class ProviderAction extends BaseAction implements Constant,
 			providerLocationsDAO.save(providerLocations);
 			return SUCCESS;
 		}
-		else if(updateType.equals("update"))
+		else
 		{
 			int loc = districAndId.lastIndexOf(" ");
-			int id = Integer.parseInt(districAndId.substring(loc+1));
+			Integer id = Integer.parseInt(districAndId.substring(loc+1));
+			if(id == null)
+			{
+				return ERROR;
+			}
 			ProviderLocations persistProviderLocations = providerLocationsDAO.findById(id);
-			
-			if(!newProvince.equals(""))
-				persistProviderLocations.setProvince(newProvince);
-			
-			if(!newCity.equals(""))
-				persistProviderLocations.setCity(newCity);
-			
-			if(!newDistric.equals(""))
-				persistProviderLocations.setDistric(newDistric);
-			providerLocationsDAO.merge(persistProviderLocations);
-			return SUCCESS;
+			if(updateType.equals("update"))
+			{
+				if(!newProvince.equals(""))
+					persistProviderLocations.setProvince(newProvince);
+				
+				if(!newCity.equals(""))
+					persistProviderLocations.setCity(newCity);
+				
+				if(!newDistric.equals(""))
+					persistProviderLocations.setDistric(newDistric);
+				providerLocationsDAO.merge(persistProviderLocations);
+				return SUCCESS;
+			}
+			else if(updateType.equals("delete"))
+			{
+				providerLocationsDAO.delete(persistProviderLocations);
+				return SUCCESS;
+			}
 		}
+		
 		return ERROR;
 	}
 

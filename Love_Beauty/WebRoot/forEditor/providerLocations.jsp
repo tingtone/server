@@ -87,9 +87,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        		}
        		else
        		{
-       		alert("button clicked");
+       		alert("至少一个有非空啊");
        		}
        		
+       }
+       function validate2()
+       {
+       	locationForm.submit();
        }
 	$(document).ready(function(){
 			GetProviderLocation($('#providerId').val());
@@ -143,6 +147,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</table>
 		<button name="submit" value="update" onclick="validate()">更新</button>
 		<button name="submit" value="add" onclick="validate()">增加</button>
+		<button name="submit" value="delete" onclick="validate2()">删除</button>
 	</form>
 </body>
 </html>

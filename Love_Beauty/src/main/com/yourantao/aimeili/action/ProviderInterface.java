@@ -42,8 +42,8 @@ public interface ProviderInterface {
 	
 	public  String getProviderLocations();
 	/**
-	 * 修改商城的发货地址或者增加商城的发货地址
+	 * 修改/增加/删除商城的发货地址
 	 */
-	public String updateOrAddProviderLocations();
+	public String handleProviderLocations();
 
 }

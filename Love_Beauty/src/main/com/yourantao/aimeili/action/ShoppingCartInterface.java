@@ -30,12 +30,6 @@ public interface ShoppingCartInterface {
 	public abstract String modifyQuantity();
 
 	/**
-	 * 修改购物车中商品的状态
-	 * @return
-	 */
-	public abstract String changeStatus();
-
-	/**
 	 * 删除购物车中的某一个商品
 	 * @return
 	 */

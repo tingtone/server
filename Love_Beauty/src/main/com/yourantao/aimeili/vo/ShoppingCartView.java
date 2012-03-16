@@ -1,17 +1,18 @@
 package main.com.yourantao.aimeili.vo;
 
 public class ShoppingCartView {
-	private int cartId;
+	private int providerId;
 	private String goodsName;
 	private String goodsThumb;
 	private String goodsContent;
 	private float goodsPrice;
 	private int count;
-	public int getCartId() {
-		return cartId;
+	
+	public int getProviderId() {
+		return providerId;
 	}
-	public void setCartId(int cartId) {
-		this.cartId = cartId;
+	public void setProviderId(int providerId) {
+		this.providerId = providerId;
 	}
 	public String getGoodsName() {
 		return goodsName;
