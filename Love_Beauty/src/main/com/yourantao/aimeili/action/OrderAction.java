@@ -797,73 +797,11 @@ public class OrderAction extends BaseAction implements Constant{
 			orderDAO.merge(order);
 			return null;
 		}
-		//以下是用户地址相关的操作
-		/**
-		 * 增加新的用户地址
-		 */
-		public String addUserAddress()
+
+		//以下是小编的接口
+		public String getOrdersForEditor()
 		{
-			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
-			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
-				return null;
-			}
-			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
-			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
-				return null;
-			}
-			int userId=userLogin.get(0).getUserId();
-			//有几个字段如何处理
-			//province/city/distric
-			//
-			String detail = getStringParameter("");
-			String mobile = getStringParameter("");
-			String telephone = getStringParameter("");
-			String receiver = getStringParameter("");
-			String zipCode = getStringParameter("");
-			Integer isDefault = getIntegerParameter("");
-			UserAddress userAddress = new UserAddress();
-			userAddress.setUserId(userId);
-			//设置其他字段
-			//
-			userAddressDAO.save(userAddress);
-			//addressId字段是否就是自动获得？持久化之后自动获取到了addressId
-			printObject(userAddress);
-			return null;
-		}
-		/**
-		 * 删除地址,这个功能可能导致数据库出现问题
-		 * @return
-		 */
-		public String deleteUserAddress()
-		{
-			String msg="";
-			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
-			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
-				return null;
-			}
-			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
-			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
-				return null;
-			}
-			int userId=userLogin.get(0).getUserId();
-			int addressId = getIntegerParameter(ADDRESS_ID);//
-			UserAddress userAddress = userAddressDAO.findById(addressId);
-			if(userAddress.getUserId() == userId)
-			{
-				userAddressDAO.delete(userAddress);//
-			}
-			else
-			{
-				msg = "{'msg':'地址与用户不匹配'}";
-			}
-			outputString(msg);
-			return null;
 			
+			return null;
 		}
 }

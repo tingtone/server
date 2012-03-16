@@ -91,10 +91,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
        		}
        		
        }
-       function validate2()
-       {
-       	locationForm.submit();
-       }
+       function delete_confirm()   
+	  {   
+	  var r=confirm("确认删除");
+	  if (r==true)   
+	    {   
+	   //删除操作
+	   alert("删除");
+	   	locationForm.submit();
+	    }   
+	  else   
+	    {   
+	     
+	    }   
+	  }   
 	$(document).ready(function(){
 			GetProviderLocation($('#providerId').val());
 			$('#providerId').change(function(){
@@ -147,7 +157,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</table>
 		<button name="submit" value="update" onclick="validate()">更新</button>
 		<button name="submit" value="add" onclick="validate()">增加</button>
-		<button name="submit" value="delete" onclick="validate2()">删除</button>
+		<button name="submit" value="delete" onclick="delete_confirm()">删除</button>
 	</form>
 </body>
 </html>

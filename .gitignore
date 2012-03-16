@@ -5,3 +5,4 @@
 */gen/
 .settings/
 */WebRoot/WEB-INF/classes/
+.myhibernatedata

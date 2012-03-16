@@ -20,26 +20,53 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 <style type="text/css">
-	.tabel{
+	.table{
 		text-align: center;
 		font-size: 15px;
 		color: red;
 		border: 1px solid purple;
 	}
-	.tabel td{
+	.table td{
 		border: 1px solid blue;
 	}
-	.tabel b{
+	.table b{
 		border: 1px solid blue;
 	}
-	.tabel b input{
+	.table b input{
 		width: 10px;
 	}
 	
 	</style>
 	<script src="jquery1.4.2.js" type="text/javascript"></script>
 	<script>
+	function getOrders(ocid)
+	{
+		var url=BASE_SERVER+"/order_getOrdersForEditor";
+		var params = {"ocid",ocid};
+		var order="";
+		$.ajax({
+				type:"POST",
+				data:params,
+				dataType: "json",
+				url: url,
+				success: function(json) {
+				if(json == null){
+					alert("json null");
+				}else{
+					order = json;
+				}
+				$('#result').html(order.toString());
+				}
+			});
+	}
+	$(document).ready(function(){
 	
+			   GetTopic_Detail($('#ordercat').val());
+			   $('#ordercat').change(function(){
+				GetTopic_Detail($('#ordercat').val());
+			   });
+			   
+       });
 	</script>
 </head>
   
@@ -62,5 +89,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  	</tr>
 </tbody>
 </table>
+<div id="result">
+</div>
 </body>
 </html>
