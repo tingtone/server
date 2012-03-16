@@ -242,4 +242,26 @@ public class GoodsDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+
+	/**
+	 * 自定义函数
+	 * 根据肤质和分类号获得商品list
+	 * @param skinName
+	 * @param categoryId
+	 * @return
+	 */
+	public List<Goods> findBySkinAndCat(String skinName, Integer categoryId) {
+		try {
+			skinName="%"+skinName+"%";
+			String queryString = "from Goods as model where model."
+					+ CATEGORY_ID + "= ? and ("
+					+ GOODS_FORSKIN + " like ?"
+					+" or "+GOODS_NOTFORSKIN+" like ?"
+					+" or "+GOODS_NOTICEFORSKIN+" like ? )";
+			return getHibernateTemplate().find(queryString,new Object[]{categoryId,skinName,skinName,skinName});
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }

@@ -611,4 +611,83 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		printArray(goodsComments);
 		return null;
 	}
+
+	/*
+	 * for Client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListBySkinAndCat()
+	 */
+	@Override
+	public String getGoodsListBySkinAndCat() {
+		String msg="";
+		String skin=getReqeust().getParameter("skin");
+		if(skin==null){
+			msg="{'msg':'没有肤质结果'}";
+			outputString(msg);
+			return null;
+		}
+		Integer categoryId = getIntegerParameter(CATEGORY_ID);
+		if (categoryId == null){
+			msg="{'msg':'没有分类号'}";
+			outputString(msg);
+			return null;
+		}
+		String skinName=TransTool.transSkin(skin);
+		List<GoodsView> skinResult=new ArrayList<GoodsView>();
+		List<GoodsView> notSkinResult=new ArrayList<GoodsView>();
+		List<GoodsView> noticeSkinResult=new ArrayList<GoodsView>();
+		List<Goods> goodslist=goodsDAO.findBySkinAndCat(skinName,categoryId); //获取适合肤质，不适合，需要注意的
+		if(goodslist.size()==0){
+			msg="{'msg':'无商品'}";
+			outputString(msg);
+			return null;
+		}
+		
+		for (Goods goods : goodslist) {
+			GoodsView goodsView=new GoodsView();
+			goodsView.setGoodsId(goods.getGoodsId());
+			goodsView.setGoodsAge(goods.getGoodsAge());
+			goodsView.setGoodsDescription(goods.getGoodsDescription());
+			goodsView.setGoodsForskin(goods.getGoodsForskin());
+			goodsView.setGoodsName(goods.getGoodsName());
+			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+			goodsView.setGoodsScore(goods.getGoodsScore());
+			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+			goodsView.setGoodsStatus(goods.getGoodsStatus());
+			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+			if (thumb != null) {
+				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+			} else {
+				goodsView.setGoodsThumb("");
+			}
+			if (goods.getBrandId() != null) {
+				Brand brand=brandDAO.findById(goods.getBrandId());
+				goodsView.setGoodsBrandName(brand.getBrandName());
+			} 
+			if (goods.getSeriesId() != null) {  
+				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+					goodsView.setGoodsSeriesName("无");
+				}else{
+					Series series=seriesDAO.findById(goods.getSeriesId());
+					goodsView.setGoodsSeriesName(series.getSeriesName());
+				}
+			}
+			if(goods.getGoodsForskin().contains(skinName)){ //适合肤质
+				skinResult.add(goodsView);
+			}
+			if(goods.getGoodsNotforskin().contains(skinName)){
+				notSkinResult.add(goodsView);
+			}
+			if(goods.getGoodsNoticeforskin().contains(skinName)){
+				noticeSkinResult.add(goodsView);
+			}
+		}
+		GoodsSkinView result=new GoodsSkinView();
+		result.setSkinResult(skinResult);
+		result.setNotSkinResult(notSkinResult);
+		result.setNoticeSkinResult(noticeSkinResult);
+		printObject(result);
+		return null;
+	}
 }

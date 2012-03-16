@@ -325,7 +325,6 @@ public class ProviderAction extends BaseAction implements Constant,
 				return SUCCESS;
 			}
 		}
-		
 		return ERROR;
 	}
 

@@ -28,6 +28,7 @@ public class UserAddressDAO extends HibernateDaoSupport {
 	public static final String CITY = "city";
 	public static final String DISTRICT = "district";
 	public static final String DETAIL = "detail";
+	public static final String USER_ADDRESS = "userAddress";
 	public static final String MOBILE = "mobile";
 	public static final String TELEPHONE = "telephone";
 	public static final String RECEIVER = "receiver";
@@ -116,6 +117,10 @@ public class UserAddressDAO extends HibernateDaoSupport {
 
 	public List findByDetail(Object detail) {
 		return findByProperty(DETAIL, detail);
+	}
+
+	public List findByUserAddress(Object userAddress) {
+		return findByProperty(USER_ADDRESS, userAddress);
 	}
 
 	public List findByMobile(Object mobile) {

@@ -3,6 +3,7 @@ package main.com.yourantao.aimeili.action;
 import java.io.File;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -308,7 +309,6 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 			rankingView.setRankingImageUrl(Config.get(Config.BASE_IMAGEURL)
 					+ image.getImgUrl());
 		}
-
 		printObject(rankingView);
 		return null;
 	}
