@@ -104,11 +104,13 @@ public class OrderAction extends BaseAction implements Constant{
 				return null;
 			}
 			//应该自己手动写一个HQL语句进行统计
-			//List<Order> orderList = orderDAO.findByUserId(userId);
-			String countString = "{'unconfirmed':'" 
-				+ "','unfinished':'" 
-				+ "','history':'" + "'}";
+			/*List<Integer> countList = orderDAO.getOrderCount(userId);
+			String countString = "{'unconfirmed':'" + countList.get(0)
+				+ "','unfinished':'" + countList.get(1) 
+				+ "','history':'" + countList.get(2)
+				+ "'}"; 
 			outputString(countString);
+			*/
 			return null;
 		}
 		/**

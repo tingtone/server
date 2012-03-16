@@ -19,12 +19,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-
-  </head>
+<style type="text/css">
+	.tabel{
+		text-align: center;
+		font-size: 15px;
+		color: red;
+		border: 1px solid purple;
+	}
+	.tabel td{
+		border: 1px solid blue;
+	}
+	.tabel b{
+		border: 1px solid blue;
+	}
+	.tabel b input{
+		width: 10px;
+	}
+	
+	</style>
+	<script src="jquery1.4.2.js" type="text/javascript"></script>
+	<script>
+	
+	</script>
+</head>
   
   <body>
    <%@include file="/top.jsp"%>
- <table class="tabel" >
+ <table class="table" >
  <tbody>
  	<tr>
  		<td><a href=""></a></td>
