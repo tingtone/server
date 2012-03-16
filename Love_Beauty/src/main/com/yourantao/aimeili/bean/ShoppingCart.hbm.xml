@@ -25,10 +25,5 @@
                 <comment>商品的数量</comment>
             </column>
         </property>
-        <property name="cartStatus" type="java.lang.Short">
-            <column name="cart_status" not-null="true">
-                <comment>0表示忽略，3表示可用</comment>
-            </column>
-        </property>
     </class>
 </hibernate-mapping>

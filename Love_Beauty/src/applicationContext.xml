@@ -320,6 +320,9 @@
 		<property name="imageDAO">
 			<ref bean="ImageDAO" />
 		</property>
+		<property name="userLoginDAO">
+			<ref bean="UserLoginDAO" />
+		</property>
 		<property name="rankGenerator">
 			<ref bean="RankGenerator" />
 		</property>

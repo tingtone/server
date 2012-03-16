@@ -12,9 +12,16 @@ public interface UserInterface {
 	/**
 	 *  for client
 	 * 用户亲戚的肤质登记
-	 * uuid
+	 * uuid rel skin
 	 */
 	public String userInsertRelativeSkin();
+	
+	/**
+	 *  for client
+	 * 用户删除亲戚的肤质
+	 * uuid rel
+	 */
+	public String userDeleteRelativeSkin();
 	
 	/**
 	 *  for client Editor

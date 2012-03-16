@@ -1,5 +1,6 @@
 package main.com.yourantao.aimeili.action;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -192,8 +193,19 @@ public class UserAction extends BaseAction implements UserInterface,Constant{
 	 */
 	@Override
 	public String getUserAddress() {
-		int uid=getIntegerParameter(USER_ID);
-		List<UserAddress> userAddresses=userAddressDAO.findByUserId(uid);
+		//获取参数
+		String uuid=getReqeust().getParameter("uuid");
+		if(uuid==null){
+			outputString("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+		if(userLogin.size()==0){
+			outputString("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId=userLogin.get(0).getUserId();
+		List<UserAddress> userAddresses=userAddressDAO.findByUserId(userId);
 		printArray(userAddresses);
 		return null;
 	}
@@ -330,6 +342,13 @@ public class UserAction extends BaseAction implements UserInterface,Constant{
 			outputString(msg);
 			return null;
 		}
+//		try {
+//			String outStr = new String(relative.getBytes("iso-8859-1"),"UTF-8");   //浏览器页面发来的就为乱码~~
+//			log.error("out:{}",outStr);
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		relative =URLDecoder.decode(relative);
 		skin=TransTool.transSkin(skin);
 		List userRelativeList=userRelativeDAO.findByUidAndRelative(relative,uid);
@@ -382,6 +401,38 @@ public class UserAction extends BaseAction implements UserInterface,Constant{
 		userView.setUserId(uid);
 		userView.setRelativeSkin(relative);
 		printObject(userView);
+		return null;
+	}
+	
+	/*
+	 * for Client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#userDeleteRelativeSkin()
+	 */
+	@Override
+	public String userDeleteRelativeSkin() {
+		String msg="";
+		String uuid=getReqeust().getParameter("uuid");
+		String relative=getReqeust().getParameter("rel");
+		if(uuid==null){
+			msg="{'msg':'没有设备号'}";
+			outputString(msg);
+			return null;
+		}
+		List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+		if(userLogin.size()==0){
+			msg="{'msg':'没有该用户'}";
+			outputString(msg);
+			return null;
+		}
+		int uid=userLogin.get(0).getUserId();
+		if(relative==null){
+			msg="{'msg':'没有亲戚关键词'}";
+			outputString(msg);
+			return null;
+		}
+		List<UserRelative> userRelative=userRelativeDAO.findByUidAndRelative(relative, uid);
+		userRelativeDAO.delete(userRelative.get(0));
 		return null;
 	}
 	
