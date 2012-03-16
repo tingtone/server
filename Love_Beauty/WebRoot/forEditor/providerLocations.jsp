@@ -143,6 +143,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</table>
 		<button name="submit" value="update" onclick="validate()">更新</button>
 		<button name="submit" value="add" onclick="validate()">增加</button>
+		<button name="submit" value="delete" onclick="validate()">删除</button>
 	</form>
 </body>
 </html>

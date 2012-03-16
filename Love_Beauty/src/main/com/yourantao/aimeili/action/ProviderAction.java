@@ -173,7 +173,7 @@ public class ProviderAction extends BaseAction implements Constant,
 		provider.setProviderDescription(providerDes);
 		provider.setProviderService(providerService);
 		//这里需要换一种新的方式进行处理，是否成功，还没有测试
-//		providerDAO.merge(provider);
+		providerDAO.merge(provider);
 		//int result = providerDAO.updateProvider(provider);
 		//返回结果进行返回
 		return SUCCESS;
@@ -262,7 +262,7 @@ public class ProviderAction extends BaseAction implements Constant,
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.ProviderInterface#updateOrAddProviderLocations()
 	 */
-	public String updateOrAddProviderLocations()
+	public String handleProviderLocations()
 	{
 		int providerId = getIntegerParameter(PROVIDER_ID);
 		String updateType = getReqeust().getParameter("submit");
@@ -297,23 +297,35 @@ public class ProviderAction extends BaseAction implements Constant,
 			providerLocationsDAO.save(providerLocations);
 			return SUCCESS;
 		}
-		else if(updateType.equals("update"))
+		else
 		{
 			int loc = districAndId.lastIndexOf(" ");
-			int id = Integer.parseInt(districAndId.substring(loc+1));
+			Integer id = Integer.parseInt(districAndId.substring(loc+1));
+			if(id == null)
+			{
+				return ERROR;
+			}
 			ProviderLocations persistProviderLocations = providerLocationsDAO.findById(id);
-			
-			if(!newProvince.equals(""))
-				persistProviderLocations.setProvince(newProvince);
-			
-			if(!newCity.equals(""))
-				persistProviderLocations.setCity(newCity);
-			
-			if(!newDistric.equals(""))
-				persistProviderLocations.setDistric(newDistric);
-			providerLocationsDAO.merge(persistProviderLocations);
-			return SUCCESS;
+			if(updateType.equals("update"))
+			{
+				if(!newProvince.equals(""))
+					persistProviderLocations.setProvince(newProvince);
+				
+				if(!newCity.equals(""))
+					persistProviderLocations.setCity(newCity);
+				
+				if(!newDistric.equals(""))
+					persistProviderLocations.setDistric(newDistric);
+				providerLocationsDAO.merge(persistProviderLocations);
+				return SUCCESS;
+			}
+			else if(updateType.equals("delete"))
+			{
+				providerLocationsDAO.delete(persistProviderLocations);
+				return SUCCESS;
+			}
 		}
+		
 		return ERROR;
 	}
 

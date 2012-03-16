@@ -90,6 +90,28 @@ public class OrderAction extends BaseAction implements Constant{
 			this.shoppingCartDAO = shoppingCartDAO;
 		}
 		/**
+		 * 获取各种类型订单的数量
+		 * @return
+		 */
+		public String getOrderCount()
+		{
+			//获取参数
+			Integer userId = getIntegerParameter(USER_ID);
+			//验证参数
+			if(userId == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
+			//应该自己手动写一个HQL语句进行统计
+			//List<Order> orderList = orderDAO.findByUserId(userId);
+			String countString = "{'unconfirmed':'" 
+				+ "','unfinished':'" 
+				+ "','history':'" + "'}";
+			outputString(countString);
+			return null;
+		}
+		/**
 		 * 获取未确认的订单
 		 */
 		public String getUnconfirmedOrders()
@@ -496,9 +518,10 @@ public class OrderAction extends BaseAction implements Constant{
 			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			Integer addressId = getIntegerParameter(ADDRESS_ID);
 			//复杂参数
-			String cartIdString = getStringParameter("cartidlist");
+			String cartIdString = getStringParameter("cartidlist");//可能不需要使用
 			String goodsRealIdString = getStringParameter("idlist");
 			String countString = getStringParameter("countlist");
+			String priceString  = getStringParameter("pricelist");
 			if(userId == null || providerId == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
@@ -507,12 +530,18 @@ public class OrderAction extends BaseAction implements Constant{
 			String[] cartIdList = cartIdString.split(",");
 			String[] goodsRealIdList= goodsRealIdString.split(",");
 			String[] countList = countString.split(",");
+			String[] priceList = priceString.split(",");
 			if(goodsRealIdList.length != countList.length)
 			{
 				outputString("{'msg':'goods与count不匹配'}");
 				return null;
 			}
-			
+			else if(goodsRealIdList.length != priceList.length)
+			{
+				outputString("{'':'goods与price不匹配'}");
+				return null;
+			}
+			//下面操作有变化
 			//下单
 			Order order = new Order();
 			order.setUserId(userId);
@@ -536,12 +565,19 @@ public class OrderAction extends BaseAction implements Constant{
 				String paymentType = getStringParameter("");//
 				String deliverType = getStringParameter("");//
 				String deliverTime = getStringParameter("");//
-				int invoice = getIntegerParameter("");//
+				Integer invoice = getIntegerParameter("");//
+				//验证参数
+				if(paymentType == null || invoice == null
+						|| deliverType == null || deliverTime == null)
+				{
+					outputString("{'msg':'参数个数不足'}");
+					return null;
+				}
 				order.setAddressId(addressId);
 				order.setPaymentType("货到付款");
 				order.setDeliverType("送货上门");
 				order.setDeliverTime(deliverTime);
-				order.setInvoice((short) invoice);
+				order.setInvoice((short)(int) invoice);
 				//产生订单号
 				//计算总价格
 			}
@@ -554,6 +590,7 @@ public class OrderAction extends BaseAction implements Constant{
 				
 				//从购物车中删除商品
 				//这里直接使用SQL语句删除对应的购物车中商品
+				/*
 				boolean status = shoppingCartDAO.deleteCart(userId, goodsRealIdList[index], providerId);
 				if(status)
 				{
@@ -564,6 +601,7 @@ public class OrderAction extends BaseAction implements Constant{
 					orderGoods.setOrderId(order.getOrderId());//这里需要已经知道orderId
 					orderGoodsDAO.save(orderGoods);
 				}
+				*/
 			}
 			if(addressId != null)
 			{
