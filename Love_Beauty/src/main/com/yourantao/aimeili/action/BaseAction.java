@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
+import main.com.yourantao.aimeili.bean.UserLoginDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
@@ -63,6 +64,7 @@ public abstract class BaseAction extends ActionSupport {
 	protected String url;
 	protected RankGenerator rankGenerator;
 	protected ImageDAO imageDAO;
+	protected UserLoginDAO userLoginDAO;
 
 	protected static final int BUFFER_SIZE = 16 * 1024;
 	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -355,4 +357,13 @@ public abstract class BaseAction extends ActionSupport {
 	public void setImageDAO(ImageDAO imageDAO) {
 		this.imageDAO = imageDAO;
 	}
+
+	public UserLoginDAO getUserLoginDAO() {
+		return userLoginDAO;
+	}
+
+	public void setUserLoginDAO(UserLoginDAO userLoginDAO) {
+		this.userLoginDAO = userLoginDAO;
+	}
+	
 }

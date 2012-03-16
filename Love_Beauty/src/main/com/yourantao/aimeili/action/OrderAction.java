@@ -18,6 +18,7 @@ import main.com.yourantao.aimeili.bean.ShoppingCart;
 import main.com.yourantao.aimeili.bean.ShoppingCartDAO;
 import main.com.yourantao.aimeili.bean.UserAddress;
 import main.com.yourantao.aimeili.bean.UserAddressDAO;
+import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.vo.GoodsRealSimpleView;
 import main.com.yourantao.aimeili.vo.OrderSimpleView;
@@ -96,13 +97,17 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getOrderCount()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
-			//验证参数
-			if(userId == null)
-			{
-				outputString("{'msg':'参数个数不足'}");
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
 				return null;
 			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int uid=userLogin.get(0).getUserId();
 			//应该自己手动写一个HQL语句进行统计
 			/*List<Integer> countList = orderDAO.getOrderCount(userId);
 			String countString = "{'unconfirmed':'" + countList.get(0)
@@ -119,12 +124,17 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnconfirmedOrders()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
-			if(userId == null)
-			{
-				outputString("{'msg':'参数个数不对'}");
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
 				return null;
 			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			//需要定义什么样的状态是待确认的订单
 			List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
 			List<OrderSimpleView> orderSimpleViewList= new ArrayList<OrderSimpleView>();
@@ -164,12 +174,22 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnconfirmedOrder()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer orderId = getIntegerParameter(ORDER_ID);
 			//验证参数
-			if(userId == null || orderId == null)
+			if(orderId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				outputString("{'msg':'没有订单号'}");
 				return null;
 			}
 			Order order = orderDAO.findById(orderId);
@@ -247,10 +267,20 @@ public class OrderAction extends BaseAction implements Constant{
 		public String confirmOrders()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer orderId = getIntegerParameter(ORDER_ID);
 			//验证参数
-			if(userId == null || orderId == null)
+			if(orderId == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
 				return null;
@@ -316,13 +346,17 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnfinishedOrders()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
-			//验证参数
-			if(userId == null)
-			{
-				outputString("{'msg':'参数个数不足'}");
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
 				return null;
 			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
 			List<OrderSimpleView> orderSimpleViewList= new ArrayList<OrderSimpleView>();
 			for(Order order: orderList)
@@ -359,12 +393,22 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnfinishedOrder()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer orderId = getIntegerParameter(ORDER_ID);
 			//验证参数
-			if(userId == null || orderId == null)
+			if(orderId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				outputString("{'msg':'没有订单号'}");
 				return null;
 			}
 			Order order = orderDAO.findById(orderId);
@@ -421,13 +465,17 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getHistoryOrders()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
-			//验证参数
-			if(userId == null)
-			{
-				outputString("{'msg':'参数个数不足'}");
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
 				return null;
 			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			//需要定义什么样的状态是待确认的订单
 			Order orderExample = new Order();
 			orderExample.setUserId(userId);
@@ -461,12 +509,22 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getHistoryOrder()
 		{
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer orderId = getIntegerParameter(ORDER_ID);
 			//验证参数
-			if(userId == null || orderId == null)
+			if(orderId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				outputString("{'msg':'没有订单号'}");
 				return null;
 			}
 			Order order = orderDAO.findById(orderId);
@@ -516,7 +574,17 @@ public class OrderAction extends BaseAction implements Constant{
 		{
 			String msg="";
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			Integer addressId = getIntegerParameter(ADDRESS_ID);
 			//复杂参数
@@ -524,9 +592,9 @@ public class OrderAction extends BaseAction implements Constant{
 			String goodsRealIdString = getStringParameter("idlist");
 			String countString = getStringParameter("countlist");
 			String priceString  = getStringParameter("pricelist");
-			if(userId == null || providerId == null)
+			if( providerId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				outputString("{'msg':'没有供应商'}");
 				return null;
 			}
 			String[] cartIdList = cartIdString.split(",");
@@ -622,7 +690,17 @@ public class OrderAction extends BaseAction implements Constant{
 		{
 			String msg = "";
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			int orderId = getIntegerParameter(ORDER_ID);
 			int goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 			//验证参数合法性
@@ -669,7 +747,17 @@ public class OrderAction extends BaseAction implements Constant{
 		public String updateOrderSum()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			int orderId = getIntegerParameter(ORDER_ID);
 			
 			return null;
@@ -681,7 +769,17 @@ public class OrderAction extends BaseAction implements Constant{
 		public String addOrderDetail()
 		{
 			//获取参数
-			int userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			int orderId = getIntegerParameter(ORDER_ID);
 			int addressId = getIntegerParameter(ADDRESS_ID);//
 			//订单的其他信息
@@ -699,6 +797,7 @@ public class OrderAction extends BaseAction implements Constant{
 			orderDAO.merge(order);
 			return null;
 		}
+
 		//以下是小编的接口
 		public String getOrdersForEditor()
 		{

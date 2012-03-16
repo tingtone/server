@@ -11,6 +11,7 @@ import main.com.yourantao.aimeili.bean.GoodsReal;
 import main.com.yourantao.aimeili.bean.GoodsRealDAO;
 import main.com.yourantao.aimeili.bean.ShoppingCart;
 import main.com.yourantao.aimeili.bean.ShoppingCartDAO;
+import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.vo.ShoppingCartView;
 
@@ -47,13 +48,19 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		
 		public String getShoppingCart()
 		{
-			Integer userId = getIntegerParameter(USER_ID);
-			Integer providerId = getIntegerParameter(PROVIDER_ID);
-			if(userId  == null)
-			{
-				outputString("{'msg':'用户不存在'}");
+			//获取参数
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
 				return null;
 			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			List<ShoppingCart> shoppingCartList;
 			if(providerId != null)
 			{
@@ -95,11 +102,21 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg = "";
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 			Integer count = getIntegerParameter(GOODS_COUNT);
 			//验证参数
-			if(userId == null || goodsRealId == null || count == null)
+			if( goodsRealId == null || count == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
 				return null;
@@ -137,10 +154,21 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			String msg = "";
 			//获取参数
 			Integer count = getIntegerParameter(GOODS_COUNT);
-			Integer userId = getIntegerParameter(USER_ID);
+			//获取参数
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 			//验证参数
-			if(userId == null || goodsRealId == null || count == null)
+			if(goodsRealId == null || count == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
 				return null;
@@ -178,11 +206,21 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg ="";
 			//获取参数
-			Integer userId = getIntegerParameter(USER_ID);
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			//验证参数
-			if(userId == null || goodsRealId == null || providerId == null)
+			if(goodsRealId == null || providerId == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
 				return null;
@@ -213,12 +251,23 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		public String deleteAllGoods()
 		{
 			String msg = "";
-			Integer userId = getIntegerParameter(USER_ID);
+			//获取参数
+			String uuid=getReqeust().getParameter("uuid");
+			if(uuid==null){
+				outputString("{'msg':'没有设备号'}");
+				return null;
+			}
+			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
+			if(userLogin.size()==0){
+				outputString("{'msg':'没有该用户'}");
+				return null;
+			}
+			int userId=userLogin.get(0).getUserId();
 			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			//验证参数
-			if(userId == null || providerId == null)
+			if(providerId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				outputString("{'msg':'没有供应商'}");
 			}
 			ShoppingCart shoppingCartExample = new ShoppingCart();
 			shoppingCartExample.setUserId(userId);

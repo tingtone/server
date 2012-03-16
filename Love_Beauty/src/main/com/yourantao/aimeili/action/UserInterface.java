@@ -8,6 +8,27 @@ public interface UserInterface {
 	 * uuid
 	 */
 	public String userLoginRegister();
+	
+	/**
+	 *  for client
+	 * 用户亲戚的肤质登记
+	 * uuid rel skin
+	 */
+	public String userInsertRelativeSkin();
+	
+	/**
+	 *  for client
+	 * 用户删除亲戚的肤质
+	 * uuid rel
+	 */
+	public String userDeleteRelativeSkin();
+	
+	/**
+	 *  for client Editor
+	 * 获得用户及其亲戚的肤质
+	 * uuid
+	 */
+	public String getUserAndRelativeSkin();
 
 	/**
 	 * for client
@@ -42,4 +63,10 @@ public interface UserInterface {
 	 * @return
 	 */
 	public String userInsertAddress();
+	/**
+	 * 用户删除送货信息
+	 * @return
+	 */
+	public String deleteUserAddress();
+	
 }

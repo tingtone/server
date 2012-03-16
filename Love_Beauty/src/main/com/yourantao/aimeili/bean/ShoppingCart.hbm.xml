@@ -25,6 +25,7 @@
                 <comment>å•†å"�çš"æ•°é‡�</comment>
             </column>
         </property>
+		
         <property name="providerId" type="java.lang.Integer">
             <column name="provider_id" not-null="true">
                 <comment>ä¾›åº"å•†ç¼-å�·</comment>

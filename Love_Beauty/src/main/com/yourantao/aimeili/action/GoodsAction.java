@@ -606,8 +606,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	 */
 	@Override
 	public String getRealGoodsComment() {
-		int rgid=getIntegerParameter(REALGOOS_ID);
-		List<GoodsComment> goodsComments=goodsCommentDAO.findByGoodsRealId(rgid);
+		int grid=getIntegerParameter(GOODS_REAL_ID);
+		List<GoodsComment> goodsComments=goodsCommentDAO.findByGoodsRealId(grid);
 		printArray(goodsComments);
 		return null;
 	}
