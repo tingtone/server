@@ -47,7 +47,11 @@
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
-		
+		<!-- 订单 -->
+		<action name="order_*" class="" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
 		<!-- 登录 
 		<action name="login" class="main.com.yourantao.aimeili.action.LoginAction">
 			<result name="index">/mc_index.jsp</result>
