@@ -283,7 +283,6 @@ public class UserAction extends BaseAction implements UserInterface,Constant{
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.UserInterface#deleteUserAddress()
 	 */
-	@Override
 	public String deleteUserAddress() {
 		String msg="";
 		//获取参数
