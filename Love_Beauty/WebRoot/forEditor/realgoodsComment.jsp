@@ -111,7 +111,7 @@ function GetRealGoodsListBySeries(bid,sid) {
 						goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
 						goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
 						goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
-						goodsDetail+="<tr><td><input rgid='"+json[i]['goodsRealId']+"' type='button' class='comment' value='查看评论'/></td></tr> ";
+						goodsDetail+="<tr><td><input grid='"+json[i]['goodsRealId']+"' type='button' class='comment' value='查看评论'/></td></tr> ";
 						goodsDetail+="</tbody></table></form>";
 					}
 			}
@@ -441,7 +441,7 @@ function unserialize(ss) {
 
 //获得品牌
 function GetBrands() {
-	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getBrands";
+	var url = BASE_SERVER+"/brand_getBrands";
 	var brand = "";
 	$.ajax({
 		type : "POST",
@@ -462,7 +462,7 @@ function GetBrands() {
 }
 //获得系列
 function GetSeries(bid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getSeries";
+	var url = BASE_SERVER+"/brand_getSeries";
 	var series = "";
 	var params = {
 		"bid" : bid
@@ -486,11 +486,11 @@ function GetSeries(bid) {
 }
 
 //获得商品评论
-function GetRealGoodsComment(rgid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/goods_getRealGoodsComment";
+function GetRealGoodsComment(grid) {
+	var url = BASE_SERVER+"/goods_getRealGoodsComment";
 	var realGoodsComment = "";
 	var params = {
-		"rgid" : rgid
+		"grid" : grid
 	};
 	$.ajax({
 		type : "POST",
@@ -524,8 +524,8 @@ $(document).ready(function() {
 		GetRealGoodsListBySeries(bid,sid);
 	});
 	$('.comment').live("click",function(){
-		var rgid=$(this).attr('rgid');
-		GetRealGoodsComment(rgid);
+		var grid=$(this).attr('grid');
+		GetRealGoodsComment(grid);
 	});
 	
 });

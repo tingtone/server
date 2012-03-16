@@ -69,7 +69,7 @@ function transProvider(pid){
 
 //获得品牌
 function GetBrands() {
-	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getBrands";
+	var url = BASE_SERVER+"/brand_getBrands";
 	var brand = "";
 	$.ajax({
 		type : "POST",
@@ -90,7 +90,7 @@ function GetBrands() {
 }
 //获得系列
 function GetSeries(bid) {
-	var url = "http://192.168.14.24:8080/Love_Beauty/brand_getSeries";
+	var url = BASE_SERVER+"/brand_getSeries";
 	var series = "";
 	var params = {
 		"bid" : bid

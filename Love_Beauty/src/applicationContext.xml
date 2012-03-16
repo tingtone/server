@@ -139,7 +139,15 @@
 				<value>
 					main/com/yourantao/aimeili/bean/GoodsImages.hbm.xml
 				</value>
-			</list>
+				<value>
+					main/com/yourantao/aimeili/bean/Ranking.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/RankingGoods.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/UserRelative.hbm.xml
+				</value></list>
 		</property>
 	</bean>
 
@@ -327,7 +335,8 @@
 		</property>
 	</bean>
 
-	<bean id="GoodsAction" class="main.com.yourantao.aimeili.action.GoodsAction">
+	<bean id="GoodsAction" class="main.com.yourantao.aimeili.action.GoodsAction"
+		parent="BaseAction">
 		<property name="goodsDAO">
 			<ref bean="GoodsDAO" />
 		</property>
@@ -370,7 +379,8 @@
 
 	</bean>
 
-	<bean id="CategoryAction" class="main.com.yourantao.aimeili.action.CategoryAction">
+	<bean id="CategoryAction" class="main.com.yourantao.aimeili.action.CategoryAction"
+		parent="BaseAction">
 		<property name="categoryDAO">
 			<ref bean="CategoryDAO" />
 		</property>
@@ -379,7 +389,8 @@
 		</property>
 	</bean>
 
-	<bean id="BrandAction" class="main.com.yourantao.aimeili.action.BrandAction">
+	<bean id="BrandAction" class="main.com.yourantao.aimeili.action.BrandAction"
+		parent="BaseAction">
 		<property name="brandDAO">
 			<ref bean="BrandDAO" />
 		</property>
@@ -391,7 +402,8 @@
 		</property>
 	</bean>
 	
-	<bean id="EfficacyAction" class="main.com.yourantao.aimeili.action.EfficacyAction">
+	<bean id="EfficacyAction" class="main.com.yourantao.aimeili.action.EfficacyAction"
+		parent="BaseAction">
 		<property name="efficacyDAO">
 			<ref bean="EfficacyDAO" />
 		</property>
@@ -399,9 +411,26 @@
 			<ref bean="ImageDAO" />
 		</property>
 	</bean>
+	
+	<bean id="RankingAction" class="main.com.yourantao.aimeili.action.RankingAction"
+		parent="BaseAction">
+		<property name="rankingDAO">
+			<ref bean="RankingDAO" />
+		</property>
+		<property name="imageDAO">
+			<ref bean="ImageDAO" />
+		</property>
+		<property name="rankingGoodsDAO">
+			<ref bean="RankingGoodsDAO" />
+		</property>
+		<property name="goodsDAO">
+			<ref bean="GoodsDAO" />
+		</property>
+	</bean>
 
 	<!-- added by wander -->
-	<bean id="ProviderAction" class="main.com.yourantao.aimeili.action.ProviderAction">
+	<bean id="ProviderAction" class="main.com.yourantao.aimeili.action.ProviderAction"
+		parent="BaseAction">
 		<property name="providerDAO">
 			<ref bean="ProviderDAO" />
 		</property>
@@ -413,7 +442,8 @@
 		</property>
 	</bean>
 	
-	<bean id="ShoppingCartAction" class="main.com.yourantao.aimeili.action.ShoppingCartAction">
+	<bean id="ShoppingCartAction" class="main.com.yourantao.aimeili.action.ShoppingCartAction"
+		parent="BaseAction">
 		<property name="shoppingCartDAO">
 			<ref bean="ShoppingCartDAO" />
 		</property>
@@ -421,7 +451,8 @@
 			<ref bean="GoodsRealDAO" />
 		</property>
 	</bean>
-	<bean id="OrderAction" class="main.com.yourantao.aimeili.action.OrderAction">
+	<bean id="OrderAction" class="main.com.yourantao.aimeili.action.OrderAction"
+		parent="BaseAction">
 		<property name="orderDAO">
 			<ref bean="OrderDAO" />
 		</property>
@@ -432,7 +463,8 @@
 			<ref bean="GoodsRealDAO" />
 		</property>
 	</bean>
-	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction">
+	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction"
+		parent="BaseAction">
 		<property name="userDAO">
 			<ref bean="UserDAO" />
 		</property>
@@ -441,6 +473,9 @@
 		</property>
 		<property name="userFavoriteDAO">
 			<ref bean="UserFavoriteDAO" />
+		</property>
+		<property name="userRelativeDAO">
+			<ref bean="UserRelativeDAO" />
 		</property>
 	</bean>
 	<!-- end -->
@@ -485,4 +520,21 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
-</beans>
+	<bean id="RankingDAO"
+		class="main.com.yourantao.aimeili.bean.RankingDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RankingGoodsDAO"
+		class="main.com.yourantao.aimeili.bean.RankingGoodsDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserRelativeDAO"
+		class="main.com.yourantao.aimeili.bean.UserRelativeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean></beans>

@@ -48,6 +48,14 @@
 			<result name="error">/error.jsp</result>
 		</action>
 		
+		<!-- 排行榜-->
+		<action name="ranking_*" class="RankingAction" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="ranking">/forEditor/ranking.jsp</result>
+			<result name="ranking_goods">/forEditor/ranking_goods.jsp</result>
+		</action>
+		
 		<!-- 登录 
 		<action name="login" class="main.com.yourantao.aimeili.action.LoginAction">
 			<result name="index">/mc_index.jsp</result>

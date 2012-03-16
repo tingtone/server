@@ -24,7 +24,6 @@ public interface Constant {
 	public static final String PROVIDER_SERVICE = "pservice";		//商铺的售后服务
 	public static final String PROVIDER_DELIVER = "pdeliver";		//商铺的发货情况
 	public static final String PROVIDER_LOCATION_LEVEL = "plevel";		//获取商铺位置的层级
-	public static final String REALGOOS_ID="rgid";     //真实商品ID
 	public static final String USER_ID = "uid";			//用户的ID
 	public static final String ORDER_ID = "oid";		//订单的ID
 	public static final String ORDER_NUM = "ono";			//订单的编号
@@ -32,6 +31,7 @@ public interface Constant {
 	public static final String GOODS_COUNT = "gcount";	//商品的数量
 	public static final String SHOPPINGCART_ID = "scid";	//购物车的ID
 	public static final String ADDRESS_ID = "aid";		//地址ID
+	public static final String RANKING_ID="rid";   //排行榜ID
 	//public static final String ORDER_RELATED_NUM = "";	//订单号
 //	public static final String BASE_SERVER = "http://192.168.14.24:8080/Love_Beauty/";  //服务链接地址
 //	public static final String BASE_IMAGEURL = "http://192.168.14.24:8080/img/";  //图片服务器链接地址

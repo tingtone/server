@@ -197,6 +197,7 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 		printObject(brandView);
 		return null;
 	}
+	
 	// spring
 
 	public BrandDAO getBrandDAO() {

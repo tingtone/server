@@ -5,12 +5,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 String tid=request.getParameter("tid");
 String tname=request.getParameter("topic_name");
 %>
-<%@ page import="main.com.yourantao.aimeili.bean.Brand" %>
-<%@ page import="main.com.yourantao.aimeili.bean.BrandDAO" %>
-<%@ page import="org.hibernate.classic.Session" %>
-<%@ page import="org.hibernate.SessionFactory" %>
-<%@ page import="org.springframework.context.ApplicationContext" %>
-<%@ page import="org.springframework.context.support.ClassPathXmlApplicationContext" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -64,7 +58,7 @@ String tname=request.getParameter("topic_name");
 						}
 						else{topicGoods+="<td>商品号：<input type='text' name='goods_id' value='"+goodsId+"'/>商品名: <input name='goods_name' value='"+json[i]['goods']['goodsName']+"'/></td><td><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input type='button' gid='"+goodsId+"' onclick=\"$('#goods"+goodsId+"').show();\" value='显示商品详情' id='showGoods'/></td>" ;
 						}
-						topicGoods+="</tr></tbody></form>";
+						topicGoods+="</tr></tbody></table></form>";
 						
 						goodsDetail+="<div style='display:none;' id='goods"+goodsId+"'>";
 						goodsDetail+="商品名称："+json[i]['goods']['goodsName'] +"<br/> ";
