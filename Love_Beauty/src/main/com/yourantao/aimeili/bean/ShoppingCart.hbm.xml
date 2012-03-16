@@ -25,10 +25,14 @@
                 <comment>å•†å"�çš"æ•°é‡�</comment>
             </column>
         </property>
-		
         <property name="providerId" type="java.lang.Integer">
             <column name="provider_id" not-null="true">
                 <comment>ä¾›åº"å•†ç¼-å�·</comment>
+            </column>
+        </property>
+        <property name="price" type="java.lang.Float">
+            <column name="price" precision="12" scale="0" not-null="true">
+                <comment>å•†å"�ä»·æ&#160;¼</comment>
             </column>
         </property>
     </class>
