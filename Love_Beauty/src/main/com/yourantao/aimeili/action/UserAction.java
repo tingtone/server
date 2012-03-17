@@ -134,8 +134,8 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}
 		skin = TransTool.transSkin(skin);
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		User user = userLogin.get(0).getUser();
+		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
+		User user = userLoginList.get(0).getUser();
 		user.setSkin(skin);
 
 		printString(SUCCESS);
@@ -150,17 +150,17 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	@Override
 	public String getUserAddress() {
 		// 获取参数
-		String uuid = getReqeust().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printString(NO_UUID);
 			return null;
 		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
+		if (userLoginList.isEmpty()) {
+			printString(NO_USER_LOGIN);
 			return null;
 		}
-		int userId = userLogin.get(0).getUserId();
+		int userId = userLoginList.get(0).getUserId();
 		List<UserAddress> userAddresses = userAddressDAO.findByUserId(userId);
 		printArray(userAddresses);
 		return null;
@@ -173,10 +173,9 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	 */
 	@Override
 	public String userUpdateAddress() {
-		String msg = "";
 		int aid = getIntegerParameter(ADDRESS_ID); // 送货信息id
 		if (aid == 0) {
-			msg = "{'msg':'没有送货地址'}";
+			printString("{'msg':'没有送货地址'}");
 			return null;
 		}
 		String location = getReqeust().getParameter("loc"); // 省，市，区
@@ -194,7 +193,8 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		userAddress.setReceiver(userName);
 		userAddress.setMobile(telphone);
 		userAddress.setZipCode(zipCode);
-		printString(msg);
+
+		printString(SUCCESS);
 		return null;
 	}
 
@@ -205,10 +205,9 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	 */
 	@Override
 	public String userInsertAddress() {
-		String msg = "";
-		String uuid = getReqeust().getParameter("uuid");
+		String uuid = getStringParameter(UUID);
 		if (uuid == null) {
-			msg = "{'msg':'没有设备号'}";
+			printString(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
@@ -230,9 +229,9 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		userAddress.setMobile(telphone);
 		userAddress.setZipCode(zipCode);
 		userAddress.setDefault_((short) 1);
-
 		userAddressDAO.save(userAddress);
-		printString(msg);
+
+		printString(SUCCESS);
 		return null;
 	}
 
@@ -244,9 +243,9 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public String deleteUserAddress() {
 		String msg = "";
 		// 获取参数
-		String uuid = getReqeust().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			msg = "{'msg':'没有设备号'}";
+			printString(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
@@ -271,8 +270,8 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	@Override
 	public String userInsertRelativeSkin() {
 		String msg = "";
-		String uuid = getReqeust().getParameter("uuid");
-		String skin = getReqeust().getParameter("skin");
+		String uuid = getReqeust().getParameter(UUID);
+		String skin = getReqeust().getParameter(SKIN);
 		String relative = getReqeust().getParameter("rel");
 		if (uuid == null) {
 			msg = "{'msg':'没有设备号'}";
@@ -337,10 +336,9 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	@Override
 	public String getUserAndRelativeSkin() {
 		String msg = "";
-		String uuid = getReqeust().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			msg = "{'msg':'没有设备号'}";
-			printString(msg);
+			printString(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
@@ -376,11 +374,10 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	@Override
 	public String userDeleteRelativeSkin() {
 		String msg = "";
-		String uuid = getReqeust().getParameter("uuid");
-		String relative = getReqeust().getParameter("rel");
+		String uuid = getStringParameter("uuid");
+		String relative = getStringParameter("rel");
 		if (uuid == null) {
-			msg = "{'msg':'没有设备号'}";
-			printString(msg);
+			printString(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
