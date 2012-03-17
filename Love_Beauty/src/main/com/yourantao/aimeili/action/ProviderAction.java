@@ -265,13 +265,13 @@ public class ProviderAction extends BaseAction implements Constant,
 	public String handleProviderLocations()
 	{
 		int providerId = getIntegerParameter(PROVIDER_ID);
-		String updateType = getReqeust().getParameter("submit");
-		String province = getReqeust().getParameter("location1");
-		String city = getReqeust().getParameter("location2");
-		String districAndId = getReqeust().getParameter("location3");
-		String newProvince = getReqeust().getParameter("newlocation1");
-		String newCity = getReqeust().getParameter("newlocation2");
-		String newDistric = getReqeust().getParameter("newlocation3");
+		String updateType = getRequest().getParameter("submit");
+		String province = getRequest().getParameter("location1");
+		String city = getRequest().getParameter("location2");
+		String districAndId = getRequest().getParameter("location3");
+		String newProvince = getRequest().getParameter("newlocation1");
+		String newCity = getRequest().getParameter("newlocation2");
+		String newDistric = getRequest().getParameter("newlocation3");
 		
 		if(updateType.equals("add"))
 		{

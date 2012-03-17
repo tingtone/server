@@ -82,7 +82,7 @@ public abstract class BaseAction extends ActionSupport {
 	protected Integer getIntegerParameter(String paraName) {
 		int ret = 0;
 		try {
-			ret = Integer.valueOf(getReqeust().getParameter(paraName));
+			ret = Integer.valueOf(getRequest().getParameter(paraName));
 		} catch (Exception e) {
 			return null;
 		}
@@ -99,7 +99,7 @@ public abstract class BaseAction extends ActionSupport {
 	protected String getStringParameter(String paraName) {
 		String ret = null;
 		try {
-			ret = String.valueOf(getReqeust().getParameter(paraName));
+			ret = String.valueOf(getRequest().getParameter(paraName));
 		} catch (Exception e) {
 			return null;
 		}
@@ -157,7 +157,7 @@ public abstract class BaseAction extends ActionSupport {
 		}
 	}
 
-	protected HttpServletRequest getReqeust() {
+	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		try {
 			request.setCharacterEncoding(ENCODE);

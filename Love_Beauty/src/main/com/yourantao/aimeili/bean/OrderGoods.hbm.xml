@@ -25,5 +25,10 @@
                 <comment>å•†å"�æ•°é‡�</comment>
             </column>
         </property>
+        <property name="price" type="java.lang.Float">
+            <column name="price" precision="12" scale="0" not-null="true">
+                <comment>å•†å"�ä»·æ&#160;¼</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

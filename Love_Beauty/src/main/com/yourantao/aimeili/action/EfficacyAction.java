@@ -132,10 +132,10 @@ public class EfficacyAction extends BaseAction implements EfficacyInterface,
 	@Override
 	public String updateORinsertEfficacy() {
 		Integer efficacy_id = getIntegerParameter(EFFICACY_ID);
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if (updateType.equals("添加")) { // 添加新分类
 			Efficacy efficacy = new Efficacy();
-			efficacy.setEfficacyName(getReqeust().getParameter(
+			efficacy.setEfficacyName(getRequest().getParameter(
 					"newEfficacy_name"));
 			efficacy.setEfficacyRank((long) 0); // 分类的排序待定！！
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
@@ -162,7 +162,7 @@ public class EfficacyAction extends BaseAction implements EfficacyInterface,
 				efficacy.setEfficacyImageId(imageid);
 				copy(efficacy_image, imageFile);
 			}
-			efficacy.setEfficacyName(getReqeust().getParameter("efficacy_name"));
+			efficacy.setEfficacyName(getRequest().getParameter("efficacy_name"));
 			return SUCCESS;
 		}
 		return ERROR;

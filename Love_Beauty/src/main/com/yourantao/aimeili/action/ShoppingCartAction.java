@@ -49,7 +49,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		public String getShoppingCart()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -82,12 +82,16 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 				GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart.getGoodsRealId());
 				
 				ShoppingCartView shoppingCartView = new ShoppingCartView();
-				shoppingCartView.setProviderId(goodsReal.getProviderId());
+				
+				shoppingCartView.setGoodsRealId(shoppingCart.getGoodsRealId());
+				shoppingCartView.setGoodsPrice(shoppingCart.getPrice());
+				shoppingCartView.setProviderId(shoppingCart.getProviderId());
+				
 				shoppingCartView.setCount(shoppingCart.getCount());
 				shoppingCartView.setGoodsName(goodsReal.getGoodsName());
 				shoppingCartView.setGoodsThumb(goodsReal.getGoodsThumb());
 				shoppingCartView.setGoodsContent(goodsReal.getGoodsContent());
-				shoppingCartView.setGoodsPrice(goodsReal.getGoodsPrice());
+				
 				//加入数组中
 				shoppingCartViewList.add(shoppingCartView);
 			}
@@ -102,7 +106,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg = "";
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -115,13 +119,15 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			int userId=userLogin.get(0).getUserId();
 			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 			Integer count = getIntegerParameter(GOODS_COUNT);
+			Float price = Float.valueOf(getRequest().getParameter("price"));
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			//验证参数
-			if( goodsRealId == null || count == null)
+			if( goodsRealId == null || count == null || price == null || providerId == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
 				return null;
 			}
-			else if(count == 0)
+			else if(count < 0 || price < 0)
 			{
 				outputString("{'msg':'参数值出错'}");
 				return null;
@@ -130,6 +136,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			ShoppingCart shoppingCart = new ShoppingCart();
 			shoppingCart.setUserId(userId);
 			shoppingCart.setGoodsRealId(goodsRealId);
+			shoppingCart.setProviderId(providerId);
 			//先查找是否已经存在对应的购物车记录
 			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByExample(shoppingCart);
 			if(shoppingCartList.size() != 0)
@@ -139,7 +146,10 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			else
 			{
 				//保存
+				shoppingCart.setPrice(price);
+				shoppingCart.setCount(count);
 				shoppingCartDAO.save(shoppingCart);
+				msg = "'cart_id':'" + shoppingCart.getCartId()+ "'";
 			}
 			outputString(msg);
 			return null;
@@ -152,10 +162,9 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		public String modifyQuantity()
 		{
 			String msg = "";
+			
 			//获取参数
-			Integer count = getIntegerParameter(GOODS_COUNT);
-			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -167,13 +176,15 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			}
 			int userId=userLogin.get(0).getUserId();
 			Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+			Integer providerId = getIntegerParameter(PROVIDER_ID);
+			Integer count = getIntegerParameter(GOODS_COUNT);
 			//验证参数
-			if(goodsRealId == null || count == null)
+			if(goodsRealId == null || count == null || providerId == null)
 			{
 				outputString("{'msg':'参数个数不足'}");
 				return null;
 			}
-			else if(count == 0)
+			else if(count < 0)
 			{
 				outputString("{'msg':'参数值出错'}");
 				return null;
@@ -181,6 +192,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			ShoppingCart shoppingCartExample = new ShoppingCart();
 			shoppingCartExample.setGoodsRealId(goodsRealId);
 			shoppingCartExample.setUserId(userId);
+			shoppingCartExample.setProviderId(providerId);
 			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByExample(shoppingCartExample);
 			if(shoppingCartList.size()== 0)
 			{
@@ -194,7 +206,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			}
 			else
 			{
-				msg = "{'msg':'存在多个相同商品'}";
+				msg = "{'msg':'存在多个相同商品'}";//这种情况是不应该出现的，这里先写出来，防止出现问题
 			}
 			outputString(msg);
 			return null;
@@ -206,7 +218,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg ="";
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -240,7 +252,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			}
 			else
 			{
-				msg = "{'msg':'购物车中存在多件商品'}";
+				msg = "{'msg':'购物车中存在多件商品'}";//这样的情况不应该出现的
 			}
 			outputString(msg);
 			return null;
@@ -252,7 +264,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 		{
 			String msg = "";
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -272,7 +284,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			ShoppingCart shoppingCartExample = new ShoppingCart();
 			shoppingCartExample.setUserId(userId);
 			shoppingCartExample.setProviderId(providerId);
-			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByUserId(userId);
+			List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByExample(shoppingCartExample);
 			for(ShoppingCart shoppingCart: shoppingCartList)
 			{
 				shoppingCartDAO.delete(shoppingCart);

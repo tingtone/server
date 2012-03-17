@@ -97,7 +97,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getOrderCount()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -124,7 +124,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnconfirmedOrders()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -174,7 +174,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnconfirmedOrder()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -267,7 +267,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String confirmOrders()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -346,7 +346,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnfinishedOrders()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -393,7 +393,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getUnfinishedOrder()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -465,7 +465,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getHistoryOrders()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -509,7 +509,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String getHistoryOrder()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -566,7 +566,8 @@ public class OrderAction extends BaseAction implements Constant{
 			return null;
 		}
 		/**
-		 * 提交订单,不一定是下单,需要计算出当前所有的商品的总金额?
+		 * 提交订单,需要计算出当前所有的商品的总金额,并与实际的商品总金额比较
+		 * 从而决定是否提醒用户价格变动信息
 		 * 
 		 * @return
 		 */
@@ -574,7 +575,7 @@ public class OrderAction extends BaseAction implements Constant{
 		{
 			String msg="";
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -588,109 +589,101 @@ public class OrderAction extends BaseAction implements Constant{
 			Integer providerId = getIntegerParameter(PROVIDER_ID);
 			Integer addressId = getIntegerParameter(ADDRESS_ID);
 			//复杂参数
-			String cartIdString = getStringParameter("cartidlist");//可能不需要使用
-			String goodsRealIdString = getStringParameter("idlist");
-			String countString = getStringParameter("countlist");
-			String priceString  = getStringParameter("pricelist");
+			String cartIdString = getStringParameter("cartidlist");
+			String paymentType = getStringParameter("");//
+			String deliverType = getStringParameter("");//
+			String deliverTime = getStringParameter("");//
+			Integer invoice = getIntegerParameter("");//
+			//验证参数
+			
 			if( providerId == null)
 			{
 				outputString("{'msg':'没有供应商'}");
 				return null;
 			}
+			else if(addressId == null)
+			{
+				outputString("{'msg':'没有提供收货地址'}");
+				return null;
+			}
+			if(paymentType == null || invoice == null
+					|| deliverType == null || deliverTime == null)
+			{
+				outputString("{'msg':'参数个数不足'}");
+				return null;
+			}
 			String[] cartIdList = cartIdString.split(",");
-			String[] goodsRealIdList= goodsRealIdString.split(",");
-			String[] countList = countString.split(",");
-			String[] priceList = priceString.split(",");
-			if(goodsRealIdList.length != countList.length)
-			{
-				outputString("{'msg':'goods与count不匹配'}");
-				return null;
-			}
-			else if(goodsRealIdList.length != priceList.length)
-			{
-				outputString("{'':'goods与price不匹配'}");
-				return null;
-			}
-			//下面操作有变化
 			//下单
 			Order order = new Order();
 			order.setUserId(userId);
 			order.setFinish((short)0);//设置未收货
 			order.setProviderId(providerId);
-			//若存在addressId说明这是在下单
-			//如果addressId为null说明只是保存订单
-			if(addressId == null)
+			//说明这是一个完整的订单
+			order.setHandled((short)0);
+			order.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));//添加编辑时间
+			order.setHandledTime(Timestamp.valueOf(dateFormat.format(new Date())));
+			//
+			order.setAddressId(addressId);
+			order.setPaymentType("货到付款");
+			order.setDeliverType("送货上门");
+			order.setDeliverTime(deliverTime);
+			order.setInvoice((short)(int) invoice);
+			if (invoice != 0)
 			{
-				//说明这是一个未完成订单
-				order.setHandled((short)0);
-				order.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));//添加编辑时间
-				order.setHandledTime(Timestamp.valueOf(dateFormat.format(new Date())));
+				//保存发票内容
+				//获取参数
 			}
-			else
-			{
-				//说明这是一个完整的订单
-				order.setHandled((short)1);
-				order.setHandledTime(Timestamp.valueOf(dateFormat.format(new Date())));
-				//
-				String paymentType = getStringParameter("");//
-				String deliverType = getStringParameter("");//
-				String deliverTime = getStringParameter("");//
-				Integer invoice = getIntegerParameter("");//
-				//验证参数
-				if(paymentType == null || invoice == null
-						|| deliverType == null || deliverTime == null)
-				{
-					outputString("{'msg':'参数个数不足'}");
-					return null;
-				}
-				order.setAddressId(addressId);
-				order.setPaymentType("货到付款");
-				order.setDeliverType("送货上门");
-				order.setDeliverTime(deliverTime);
-				order.setInvoice((short)(int) invoice);
-				//产生订单号
-				//计算总价格
-			}
+			
 			//通过某种方式保存记录,并获得orderId
 			orderDAO.merge(order);
+			float cartSummary = 0;
+			float summary = 0;
 			//从购物车转到订单中
-			float sumary = (float)0;
 			for(int index = 0; index < cartIdList.length; index++)
 			{
-				
-				//从购物车中删除商品
-				//这里直接使用SQL语句删除对应的购物车中商品
-				/*
-				boolean status = shoppingCartDAO.deleteCart(userId, goodsRealIdList[index], providerId);
-				if(status)
+				ShoppingCart shoppingCart = shoppingCartDAO.findById(Integer.valueOf(cartIdList[index]));
+				if(shoppingCart != null)
 				{
-					ShoppingCart shoppingCart = shoppingCartDAO.findById(Integer.valueOf(cartIdList[index]));
-					OrderGoods orderGoods = new OrderGoods();
-					orderGoods.setCount(shoppingCart.getCount());
-					orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
-					orderGoods.setOrderId(order.getOrderId());//这里需要已经知道orderId
-					orderGoodsDAO.save(orderGoods);
+					if(shoppingCart.getUserId() == userId)
+					{
+						OrderGoods orderGoods = new OrderGoods();
+						orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
+						orderGoods.setCount(shoppingCart.getCount());
+						//orderGoods.setPrice(shoppingCart.getPrice());
+						orderGoods.setOrderId(order.getOrderId());//这里需要已经知道orderId
+						orderGoodsDAO.save(orderGoods);
+						
+						cartSummary += (shoppingCart.getPrice()* shoppingCart.getCount());
+						//
+						GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart.getGoodsRealId());
+						summary += (goodsReal.getGoodsPrice() * shoppingCart.getCount());
+						
+						shoppingCartDAO.delete(shoppingCart);
+					}
 				}
-				*/
 			}
-			if(addressId != null)
+			//判断从购物车获取的商品的金额总和与从goods_real中获取的总额是否相等,如果是返回提醒
+			if(summary != cartSummary)
 			{
-				order.setOrderSum(sumary);//可能要删除
-				orderDAO.merge(order);
+				msg = "{'msg':'商品价格发生变动'}";//这个实际上还是操作成功的结果
 			}
-			//计算
+			order.setOrderSum(cartSummary);
+			orderDAO.merge(order);
+			//计算订单号
+			
 			outputString(msg);
 			return null;
 		}
 		/**
 		 * 删除订单中的某一件商品,可能导致订单整体删除
+		 * 摒弃不用了
 		 * @return
 		 */
 		public String deleteGoods()
 		{
 			String msg = "";
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -747,7 +740,7 @@ public class OrderAction extends BaseAction implements Constant{
 		public String updateOrderSum()
 		{
 			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
+			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
 				outputString("{'msg':'没有设备号'}");
 				return null;
@@ -762,41 +755,7 @@ public class OrderAction extends BaseAction implements Constant{
 			
 			return null;
 		}
-		/**
-		 * 提交订单的地址信息/送货方式,另外一种下单提交方式,同样要计算
-		 * @return
-		 */
-		public String addOrderDetail()
-		{
-			//获取参数
-			String uuid=getReqeust().getParameter("uuid");
-			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
-				return null;
-			}
-			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
-			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
-				return null;
-			}
-			int userId=userLogin.get(0).getUserId();
-			int orderId = getIntegerParameter(ORDER_ID);
-			int addressId = getIntegerParameter(ADDRESS_ID);//
-			//订单的其他信息
-			//见addOrder方法中的提交完整订单时获取的数据
-			Order order = orderDAO.findById(orderId);
-			if(order.getUserId() != userId || order.getHandled() != 0)
-			{
-				outputString("{'msg':'订单不匹配'}");
-				return null;
-			}
-			//
-			order.setAddressId(addressId);
-			order.setHandled((short)1);
-			//order.setHandledTime();
-			orderDAO.merge(order);
-			return null;
-		}
+		
 
 		//以下是小编的接口
 		public String getOrdersForEditor()
