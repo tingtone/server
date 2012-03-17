@@ -84,7 +84,7 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 				+ propertyName + ", value: " + value);
 		try {
 			String queryString = "from UserFavorite as model where model."
-					+ propertyName + "= ? order by model.addTime desc";   //按收藏时间排序
+					+ propertyName + "= ? order by model.addTime desc"; // 按收藏时间排序
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -154,21 +154,21 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 			ApplicationContext ctx) {
 		return (UserFavoriteDAO) ctx.getBean("UserFavoriteDAO");
 	}
-	
-	
+
 	/**
-	 * 自定义查找数据库，uid和gid
+	 * 判断收藏是否存在
 	 * 
 	 * @param brandName
 	 */
-	public List<UserFavorite> findByUidAndGid(Integer uid, Integer gid) {
-		log.info("自定义查找数据库，brandName uid= '{}',gid='{}'",uid,gid);
+	public boolean exist(Integer userId, Integer relatedId, Short favoriteType) {
+		log.debug("confirm given favoite existing");
 		try {
-			String queryString = "from UserFavorite as model where model."
-					+ USER_ID + "=? and "+RELATED_ID+"=?";
-			return getHibernateTemplate().find(queryString,new Integer[]{uid, gid});
+			String query = "from UserFavorite as model where model." + USER_ID
+					+ "=? and " + RELATED_ID + "=? and " + FAVORITE_TYPE + "=?";
+			return !getHibernateTemplate().find(query, userId, relatedId,
+					favoriteType).isEmpty();
 		} catch (RuntimeException re) {
-			log.error("find by property name failed", re);
+			log.error("exist failed", re);
 			throw re;
 		}
 	}

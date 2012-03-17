@@ -312,6 +312,64 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
+	<bean id="SeriesDAO" class="main.com.yourantao.aimeili.bean.SeriesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GoodsImagesDAO" class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RankingDAO" class="main.com.yourantao.aimeili.bean.RankingDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RankingGoodsDAO" class="main.com.yourantao.aimeili.bean.RankingGoodsDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserRelativeDAO" class="main.com.yourantao.aimeili.bean.UserRelativeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>*Action</value>
+				<value>*Server</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="RankGenerator" class="main.com.yourantao.aimeili.util.RankGenerator">
 	</bean>
@@ -434,7 +492,7 @@
 			<ref bean="GoodsRealDAO" />
 		</property>
 	</bean>
-	
+
 	<bean id="OrderAction" class="main.com.yourantao.aimeili.action.OrderAction"
 		parent="BaseAction">
 		<property name="orderDAO">
@@ -453,7 +511,7 @@
 			<ref bean="ShoppingCartDAO" />
 		</property>
 	</bean>
-	
+
 	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction"
 		parent="BaseAction">
 		<property name="userDAO">
@@ -470,63 +528,4 @@
 		</property>
 	</bean>
 	<!-- end -->
-
-	<bean id="SeriesDAO" class="main.com.yourantao.aimeili.bean.SeriesDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="GoodsImagesDAO" class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="RankingDAO" class="main.com.yourantao.aimeili.bean.RankingDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="RankingGoodsDAO" class="main.com.yourantao.aimeili.bean.RankingGoodsDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="UserRelativeDAO" class="main.com.yourantao.aimeili.bean.UserRelativeDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="transactionInterceptor"
-		class="org.springframework.transaction.interceptor.TransactionInterceptor">
-		<property name="transactionManager" ref="transactionManager"></property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
-				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
-				<prop key="insert*">PROPAGATION_REQUIRED</prop>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
-			</props>
-		</property>
-	</bean>
-	<bean
-		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<property name="beanNames">
-			<list>
-				<value>*Action</value>
-				<value>*Server</value>
-			</list>
-		</property>
-		<property name="interceptorNames">
-			<list>
-				<value>transactionInterceptor</value>
-			</list>
-		</property>
-	</bean>
 </beans>

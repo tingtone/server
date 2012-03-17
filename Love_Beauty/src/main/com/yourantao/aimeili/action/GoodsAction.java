@@ -217,20 +217,20 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		String uuid=getReqeust().getParameter("uuid");
 		if(uuid==null){
 			msg="{'msg':'没有设备号'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 		Integer uid=userLogin.get(0).getUserId();
 		if(uid==null || uid==0){
 			msg="{'msg':'设备号未登记'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		List<UserFavorite> userfavlist=userFavoriteDAO.findByUserId(uid);
 		if(userfavlist.size()==0){   //没有收藏
 			msg="{'msg':'没有收藏商品'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}else{                //有收藏，取得相应商品
 			List<GoodsView> result=new ArrayList<GoodsView>();
@@ -620,13 +620,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		String skin=getReqeust().getParameter("skin");
 		if(skin==null){
 			msg="{'msg':'没有肤质结果'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
 		if (categoryId == null){
 			msg="{'msg':'没有分类号'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		String skinName=TransTool.transSkin(skin);
@@ -636,7 +636,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		List<Goods> goodslist=goodsDAO.findBySkinAndCat(skinName,categoryId); //获取适合肤质，不适合，需要注意的
 		if(goodslist.size()==0){
 			msg="{'msg':'无商品'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		

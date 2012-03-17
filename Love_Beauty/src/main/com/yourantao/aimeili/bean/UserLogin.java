@@ -21,11 +21,14 @@ public class UserLogin implements java.io.Serializable {
 
 	/** default constructor */
 	public UserLogin() {
+	}
+	
+	public UserLogin(String uuid) {
 		userName = "";
 		password = "";
 		passwordQuestion = "";
 		passwordAnswer = "";
-		uuid = "";
+		this.uuid = uuid;
 	}
 
 	/** full constructor */

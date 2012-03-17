@@ -10,6 +10,8 @@ package main.com.yourantao.aimeili.conf;
  */
 public interface Constant {
 	
+	public static final String UTF8 = "UTF-8";
+	
 	public static final String CATEGORY_ID = "cid";  //分类ID
 	public static final String TOPIC_ID = "tid";  //专题ID
 	public static final String TOPICEXCHANGE_ID = "tid_exchange";
@@ -33,14 +35,6 @@ public interface Constant {
 	public static final String SHOPPINGCART_ID = "scid";	//购物车的ID
 	public static final String ADDRESS_ID = "aid";		//地址ID
 	public static final String RANKING_ID="rid";   //排行榜ID
-	//public static final String ORDER_RELATED_NUM = "";	//订单号
-//	public static final String BASE_SERVER = "http://192.168.14.24:8080/Love_Beauty/";  //服务链接地址
-//	public static final String BASE_IMAGEURL = "http://192.168.14.24:8080/img/";  //图片服务器链接地址
-//	public static final String BASE_IMAGESTORAGE = "D:\\eclipseworkspace\\.metadata\\.me_tcat\\webapps\\img\\";  //本地存储文件位置
-//	public static final String JINGDONG_UNIONID = "16798";  //京东销售联盟ID（需要重新申请）
-//	public static final String TAOBAOKE_PID = "29213647";  //淘宝客PID (kittypad)
-//	public static final String DANGDANG_PID = "P-301556";  //当当推广联盟ID (kittypad)
-//	public static final String JINGDONG_UNION_BASEURL = "http://click.union.360buy.com/JdClick/?unionId="+JINGDONG_UNIONID+"&to=";  //京东销售联盟URL转换方式  JINGDONG_UNION_BASEURL+url
-//	public static final String DANGDANG_BASEURL = "http://union.dangdang.com/transfer.php?from="+DANGDANG_PID+"&ad_type=10&sys_id=1&backurl=";  //当当推广联盟URL转换方式 DANGDANG_BASEURL+URL
-
+	public static final String UUID = "uuid";
+	public static final String SKIN = "skin";
 }

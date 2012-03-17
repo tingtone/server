@@ -25,6 +25,7 @@ import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.bean.UserLoginDAO;
 import main.com.yourantao.aimeili.conf.Config;
+import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.RankGenerator;
 import net.sf.json.JSONArray;
@@ -56,7 +57,7 @@ public abstract class BaseAction extends ActionSupport {
 	private static final String CONTENT_TYPE = "text;charset=UTF-8";
 	private static final String HEADER = "Cache-Control";
 	private static final String CACHE = "no-cache";
-	private static final String ENCODE = "UTF-8";
+	private static final String ENCODE = Constant.UTF8;
 	private static final String C1 = "(";
 	private static final String C2 = ")";
 
@@ -126,9 +127,9 @@ public abstract class BaseAction extends ActionSupport {
 	protected void printObject(Object jsonObject) {
 		JSONObject json = JSONObject.fromObject(jsonObject);
 		if (jsonpcallback != null) {
-			outputString(jsonpcallback + C1 + json.toString() + C2);
+			printString(jsonpcallback + C1 + json.toString() + C2);
 		} else {
-			outputString(json.toString());
+			printString(json.toString());
 		}
 	}
 
@@ -141,13 +142,13 @@ public abstract class BaseAction extends ActionSupport {
 	protected void printArray(Object jsonArray) {
 		JSONArray json = JSONArray.fromObject(jsonArray);
 		if (jsonpcallback != null) {
-			outputString(jsonpcallback + C1 + json.toString() + C2);
+			printString(jsonpcallback + C1 + json.toString() + C2);
 		} else {
-			outputString(json.toString());
+			printString(json.toString());
 		}
 	}
 
-	protected void outputString(String str) {
+	protected void printString(String str) {
 		PrintWriter out = null;
 		try {
 			out = getResponse().getWriter();
