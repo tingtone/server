@@ -29,7 +29,7 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 			.getLogger(CategoryAction.class);
 	private BrandDAO brandDAO;
 	private SeriesDAO seriesDAO;
-	private ImageDAO imageDAO;
+
 	private File brand_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1

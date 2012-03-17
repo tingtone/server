@@ -21,7 +21,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 	
 	private static final Logger log = LoggerFactory.getLogger(CategoryAction.class);
 	private CategoryDAO categoryDAO;
-	private ImageDAO imageDAO;
+
 	private File category_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1

@@ -28,9 +28,9 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 	private static final Logger log = LoggerFactory
 			.getLogger(RankingAction.class);
 	private RankingDAO rankingDAO;
-	private ImageDAO imageDAO;
 	private RankingGoodsDAO rankingGoodsDAO;
 	private GoodsDAO goodsDAO;
+	
 	private File ranking_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1

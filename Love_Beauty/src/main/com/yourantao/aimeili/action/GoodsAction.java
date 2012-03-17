@@ -58,8 +58,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	private GoodsDAO goodsDAO;
 	private CategoryDAO categoryDAO;
-	private ImageDAO imageDAO;
-	private RankGenerator rankGenerator;
 	private BrandDAO brandDAO;
 	private SeriesDAO seriesDAO;
 	private GoodsImagesDAO goodsImagesDAO;
@@ -67,7 +65,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private GoodsRealDAO goodsRealDAO;
 	private UserDAO userDAO;
 	private UserFavoriteDAO userFavoriteDAO;
-	private UserLoginDAO userLoginDAO;
 	private GoodsCommentDAO goodsCommentDAO;
 	
 	
