@@ -775,7 +775,12 @@ public class OrderAction extends BaseAction implements Constant {
 
 	// 以下是小编的接口
 	public String getOrdersForEditor() {
-
+		//获取参数
+		Integer orderType= getIntegerParameter("ocid");
+		if(orderType == null)
+			return null;
+		//获取未处理订单
+		
 		return null;
 	}
 }

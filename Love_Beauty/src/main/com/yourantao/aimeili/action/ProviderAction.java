@@ -56,7 +56,7 @@ public class ProviderAction extends BaseAction implements Constant,
 	public void setNewprovider_thumbContentType(String thumbContentType)
 	{
 		System.out.println("thumbContentType : " + thumbContentType);
-		this.thumbContentType = thumbContentType;
+		this.setThumbContentType(thumbContentType);
 	}
 	/* (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.ProviderInterface#setNewprovider_thumbFileName(java.lang.String)
@@ -326,6 +326,12 @@ public class ProviderAction extends BaseAction implements Constant,
 			}
 		}
 		return ERROR;
+	}
+	public void setThumbContentType(String thumbContentType) {
+		this.thumbContentType = thumbContentType;
+	}
+	public String getThumbContentType() {
+		return thumbContentType;
 	}
 
 }

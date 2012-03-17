@@ -45,6 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					if(json == null){
 						alert("json null");
 					}else{
+						providerLocations += "<option value=' '> </option>";
 						switch(level)
 						{
 							case 2:
@@ -78,12 +79,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			});
 	}
  	function validate()
-       {
+       {//判断条件进行修改
        	if( locationForm.newlocation1.value != ""
        		|| locationForm.newlocation2.value != ""
        		|| locationForm.newlocation3.value != "")
        		{
-       		locationForm.submit();
+       			locationForm.submit();
        		}
        		else
        		{
@@ -126,7 +127,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </head>
 <body>
 	<%@include file="/top.jsp"%>
-	<form name="locationForm" action="provider_updateOrAddProviderLocations" enctype="application/x-www-form-urlencoded" method="post">
+	<form name="locationForm" action="provider_handleProviderLocations" enctype="application/x-www-form-urlencoded" method="post">
 	<select id="providerId" name="pid">
    		<option value="1">NO5时尚广场</option>
 		<option value="2">乐蜂网</option>
