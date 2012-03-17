@@ -23,7 +23,7 @@ public class EfficacyAction extends BaseAction implements EfficacyInterface,
 	private static final Logger log = LoggerFactory
 			.getLogger(EfficacyAction.class);
 	private EfficacyDAO efficacyDAO;
-	private ImageDAO imageDAO;
+
 	private File efficacy_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1

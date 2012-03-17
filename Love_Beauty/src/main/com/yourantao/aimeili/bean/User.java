@@ -34,6 +34,9 @@ public class User implements java.io.Serializable {
 
 	/** default constructor */
 	public User() {
+	}
+
+	public User(Timestamp regTime, Timestamp lastlogin, UserLogin login) {
 		email = "";
 		verified = 0;
 		birthday = new Date(0);
@@ -42,15 +45,16 @@ public class User implements java.io.Serializable {
 		point = 0;
 		coin = 0;
 		vip = 0;
-		regTime = new Timestamp(System.currentTimeMillis());
-		lastlogin = new Timestamp(System.currentTimeMillis());
+		setRegTime(regTime);
+		setLastlogin(lastlogin);
+		setLogin(login);
 	}
 
 	/** full constructor */
 	public User(String nickName, String email, Short verified, String sex,
 			Date birthday, String mobile, Integer imageId, String description,
 			String skin, String hair, Integer point, Integer coin, Short vip,
-			Timestamp regTime,Timestamp lastlogin) {
+			Timestamp regTime, Timestamp lastlogin) {
 		this.nickName = nickName;
 		this.email = email;
 		this.verified = verified;

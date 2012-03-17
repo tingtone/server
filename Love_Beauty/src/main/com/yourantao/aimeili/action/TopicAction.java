@@ -141,11 +141,11 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 		Topic topic = new Topic();
 		Integer topicId = getIntegerParameter(TOPIC_ID);
 		topic.setTopicId(topicId);
-		topic.setTopicName(getReqeust().getParameter(TOPIC_NAME));
-		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
+		topic.setTopicName(getRequest().getParameter(TOPIC_NAME));
+		topic.setTopicKeywords(getRequest().getParameter(TOPIC_KEYWORDS));
 
-		String updateType = getReqeust().getParameter("submit");
-		getReqeust().getAttribute("newtopic_thumb");
+		String updateType = getRequest().getParameter("submit");
+		getRequest().getAttribute("newtopic_thumb");
 		if (updateType.equals("置顶")) {
 			top(getIntegerParameter(TOPIC_ID));
 			return "back";
@@ -193,8 +193,8 @@ public class TopicAction extends BaseAction implements Constant, TopicInterface 
 	public String insertTopic() {
 
 		Topic topic = new Topic();
-		topic.setTopicName(getReqeust().getParameter(TOPIC_NAME));
-		topic.setTopicKeywords(getReqeust().getParameter(TOPIC_KEYWORDS));
+		topic.setTopicName(getRequest().getParameter(TOPIC_NAME));
+		topic.setTopicKeywords(getRequest().getParameter(TOPIC_KEYWORDS));
 		topic.setCategoryId(getIntegerParameter(CATEGORY_ID));
 		topic.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));
 		topic.setTopicRank(rankGenerator.generateRank());

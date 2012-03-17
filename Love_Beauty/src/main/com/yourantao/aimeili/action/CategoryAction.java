@@ -21,7 +21,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 	
 	private static final Logger log = LoggerFactory.getLogger(CategoryAction.class);
 	private CategoryDAO categoryDAO;
-	private ImageDAO imageDAO;
+
 	private File category_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1
@@ -66,11 +66,11 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 	@Override
 	public String updateORinsertCategory() {
 		Integer category_id = getIntegerParameter(CATEGORY_ID);
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if (updateType.equals("添加")) {   //添加新分类
 			Category category = new Category();
 			for(int j=3;j>0;j--){
-				if(getReqeust().getParameter("category"+j)!=null && !getReqeust().getParameter("category"+j).equals("0")){//第三层的分类值不为空，则将该分类加入到第四层中,以此类推
+				if(getRequest().getParameter("category"+j)!=null && !getRequest().getParameter("category"+j).equals("0")){//第三层的分类值不为空，则将该分类加入到第四层中,以此类推
 					category.setCatLayer((short)j);
 					category.setParentCatid(getIntegerParameter("category"+j));
 					break;
@@ -80,8 +80,8 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 				}
 			}
 			
-			category.setCategoryDescription(getReqeust().getParameter("newcategory_description"));
-			category.setCategoryName(getReqeust().getParameter("newcategory_name"));
+			category.setCategoryDescription(getRequest().getParameter("newcategory_description"));
+			category.setCategoryName(getRequest().getParameter("newcategory_name"));
 			category.setCategoryRank((long)0);         //分类的排序待定！！
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
 				String FileName = MD5.md5(newImageFileName)+ getExtention(newImageFileName);
@@ -104,8 +104,8 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 				category.setCategoryImageId(imageid);
 				copy(category_image, imageFile);
 			}
-			category.setCategoryDescription(getReqeust().getParameter("category_description"));
-			category.setCategoryName(getReqeust().getParameter("category_name"));
+			category.setCategoryDescription(getRequest().getParameter("category_description"));
+			category.setCategoryName(getRequest().getParameter("category_name"));
 			return SUCCESS;
 		} 
 		return ERROR;

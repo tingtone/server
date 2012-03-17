@@ -29,7 +29,7 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 			.getLogger(CategoryAction.class);
 	private BrandDAO brandDAO;
 	private SeriesDAO seriesDAO;
-	private ImageDAO imageDAO;
+
 	private File brand_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1
@@ -136,12 +136,12 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 	@Override
 	public String updateORinsertBrand() {
 		Integer brand_id = getIntegerParameter(BRAND_ID);
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if (updateType.equals("添加")) { // 添加新分类
 			Brand brand = new Brand();
-			brand.setBrandName(getReqeust().getParameter("newBrand_name"));
-			brand.setBrandAlias(getReqeust().getParameter("newBrand_alias"));
-			brand.setBrandDescription(getReqeust().getParameter("newBrand_description"));
+			brand.setBrandName(getRequest().getParameter("newBrand_name"));
+			brand.setBrandAlias(getRequest().getParameter("newBrand_alias"));
+			brand.setBrandDescription(getRequest().getParameter("newBrand_description"));
 			brand.setBrandRank((long) 0); // 分类的排序待定！！
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
 				String FileName = MD5.md5(newImageFileName)
@@ -167,9 +167,9 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 				brand.setBrandImageId(imageid);
 				copy(brand_image, imageFile);
 			}
-			brand.setBrandDescription(getReqeust().getParameter("brand_description"));
-			brand.setBrandName(getReqeust().getParameter("brand_name"));
-			brand.setBrandAlias(getReqeust().getParameter("brand_alias"));
+			brand.setBrandDescription(getRequest().getParameter("brand_description"));
+			brand.setBrandName(getRequest().getParameter("brand_name"));
+			brand.setBrandAlias(getRequest().getParameter("brand_alias"));
 			return SUCCESS;
 		}
 		return ERROR;

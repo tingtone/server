@@ -147,7 +147,8 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/UserRelative.hbm.xml
-				</value></list>
+				</value>
+			</list>
 		</property>
 	</bean>
 
@@ -311,6 +312,64 @@
 			<ref bean="sessionFactory" />
 		</property>
 	</bean>
+	<bean id="SeriesDAO" class="main.com.yourantao.aimeili.bean.SeriesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GoodsImagesDAO" class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RankingDAO" class="main.com.yourantao.aimeili.bean.RankingDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="RankingGoodsDAO" class="main.com.yourantao.aimeili.bean.RankingGoodsDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserRelativeDAO" class="main.com.yourantao.aimeili.bean.UserRelativeDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="transactionInterceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager"></property>
+		<property name="transactionAttributes">
+			<props>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="insert*">PROPAGATION_REQUIRED</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<list>
+				<value>*Action</value>
+				<value>*Server</value>
+			</list>
+		</property>
+		<property name="interceptorNames">
+			<list>
+				<value>transactionInterceptor</value>
+			</list>
+		</property>
+	</bean>
 
 	<bean id="RankGenerator" class="main.com.yourantao.aimeili.util.RankGenerator">
 	</bean>
@@ -346,12 +405,6 @@
 		<property name="categoryDAO">
 			<ref bean="CategoryDAO" />
 		</property>
-		<property name="imageDAO">
-			<ref bean="ImageDAO" />
-		</property>
-		<property name="rankGenerator">
-			<ref bean="RankGenerator" />
-		</property>
 		<property name="seriesDAO">
 			<ref bean="SeriesDAO" />
 		</property>
@@ -370,9 +423,6 @@
 		<property name="userDAO">
 			<ref bean="UserDAO" />
 		</property>
-		<property name="userLoginDAO">
-			<ref bean="UserLoginDAO" />
-		</property>
 		<property name="userFavoriteDAO">
 			<ref bean="UserFavoriteDAO" />
 		</property>
@@ -387,9 +437,6 @@
 		<property name="categoryDAO">
 			<ref bean="CategoryDAO" />
 		</property>
-		<property name="imageDAO">
-			<ref bean="ImageDAO" />
-		</property>
 	</bean>
 
 	<bean id="BrandAction" class="main.com.yourantao.aimeili.action.BrandAction"
@@ -400,28 +447,19 @@
 		<property name="seriesDAO">
 			<ref bean="SeriesDAO" />
 		</property>
-		<property name="imageDAO">
-			<ref bean="ImageDAO" />
-		</property>
 	</bean>
-	
+
 	<bean id="EfficacyAction" class="main.com.yourantao.aimeili.action.EfficacyAction"
 		parent="BaseAction">
 		<property name="efficacyDAO">
 			<ref bean="EfficacyDAO" />
 		</property>
-		<property name="imageDAO">
-			<ref bean="ImageDAO" />
-		</property>
 	</bean>
-	
+
 	<bean id="RankingAction" class="main.com.yourantao.aimeili.action.RankingAction"
 		parent="BaseAction">
 		<property name="rankingDAO">
 			<ref bean="RankingDAO" />
-		</property>
-		<property name="imageDAO">
-			<ref bean="ImageDAO" />
 		</property>
 		<property name="rankingGoodsDAO">
 			<ref bean="RankingGoodsDAO" />
@@ -444,7 +482,7 @@
 			<ref bean="ImageDAO" />
 		</property>
 	</bean>
-	
+
 	<bean id="ShoppingCartAction" class="main.com.yourantao.aimeili.action.ShoppingCartAction"
 		parent="BaseAction">
 		<property name="shoppingCartDAO">
@@ -454,6 +492,7 @@
 			<ref bean="GoodsRealDAO" />
 		</property>
 	</bean>
+
 	<bean id="OrderAction" class="main.com.yourantao.aimeili.action.OrderAction"
 		parent="BaseAction">
 		<property name="orderDAO">
@@ -472,6 +511,7 @@
 			<ref bean="ShoppingCartDAO" />
 		</property>
 	</bean>
+
 	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction"
 		parent="BaseAction">
 		<property name="userDAO">
@@ -488,62 +528,4 @@
 		</property>
 	</bean>
 	<!-- end -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="transactionInterceptor"
-		class="org.springframework.transaction.interceptor.TransactionInterceptor">
-		<property name="transactionManager" ref="transactionManager"></property>
-		<property name="transactionAttributes">
-			<props>
-				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
-				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
-				<prop key="insert*">PROPAGATION_REQUIRED</prop>
-				<prop key="*">PROPAGATION_REQUIRED</prop>
-			</props>
-		</property>
-	</bean>
-	<bean
-		class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<property name="beanNames">
-			<list>
-				<value>*Action</value>
-				<value>*Server</value>
-			</list>
-		</property>
-		<property name="interceptorNames">
-			<list>
-				<value>transactionInterceptor</value>
-			</list>
-		</property>
-	</bean>
-	<bean id="SeriesDAO" class="main.com.yourantao.aimeili.bean.SeriesDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="GoodsImagesDAO" class="main.com.yourantao.aimeili.bean.GoodsImagesDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="RankingDAO"
-		class="main.com.yourantao.aimeili.bean.RankingDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="RankingGoodsDAO"
-		class="main.com.yourantao.aimeili.bean.RankingGoodsDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean>
-	<bean id="UserRelativeDAO"
-		class="main.com.yourantao.aimeili.bean.UserRelativeDAO">
-		<property name="sessionFactory">
-			<ref bean="sessionFactory" />
-		</property>
-	</bean></beans>
+</beans>

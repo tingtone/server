@@ -28,9 +28,9 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 	private static final Logger log = LoggerFactory
 			.getLogger(RankingAction.class);
 	private RankingDAO rankingDAO;
-	private ImageDAO imageDAO;
 	private RankingGoodsDAO rankingGoodsDAO;
 	private GoodsDAO goodsDAO;
+	
 	private File ranking_image; // 上传文件1
 	private String imageContentType;// 上传文件类型1
 	private String imageFileName; // 上传文件名1
@@ -199,10 +199,10 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 	@Override
 	public String updateRanking() {
 		Integer ranking_id = getIntegerParameter(RANKING_ID);
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if (updateType.equals("添加")) { // 添加新分类
 			Ranking ranking = new Ranking();
-			ranking.setRankingName(getReqeust().getParameter("newRanking_name"));
+			ranking.setRankingName(getRequest().getParameter("newRanking_name"));
 			ranking.setRankingRank((long) 0); // 分类的排序待定！！
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
 				String FileName = MD5.md5(newImageFileName)
@@ -228,7 +228,7 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 				ranking.setRankingImageId(imageid);
 				copy(ranking_image, imageFile);
 			}
-			ranking.setRankingName(getReqeust().getParameter("ranking_name"));
+			ranking.setRankingName(getRequest().getParameter("ranking_name"));
 			return SUCCESS;
 		}else if(updateType.equals("对应商品"))
 		{
@@ -324,13 +324,13 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 		Integer rankingId = getIntegerParameter(RANKING_ID);
 		if (rankingId == null){
 			msg="{'msg':'没有排行榜ID'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		List goods = rankingGoodsDAO.findByRankingId(rankingId);
 		if(goods.size()==0){
 			msg="{'msg':'暂无排行商品'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		printArray(goods);
@@ -345,7 +345,7 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 	@Override
 	public String updateRankingGoods() {
 		Integer id = getIntegerParameter("id");
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if(updateType.equals("后移")){
 			exchangeRankingGoods(getIntegerParameter("id"), getIntegerParameter("id_exchange"));
 			return "ranking_goods";
@@ -368,16 +368,16 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 	public String insertRanking() {
 		String msg="";
 		Ranking ranking = new Ranking();
-		String ranking_name=getReqeust().getParameter("ranking_name");
+		String ranking_name=getRequest().getParameter("ranking_name");
 		if(ranking_name==null || ranking_name.equals("null") ||ranking_name.equals("")){
 			msg="{'msg':'没有排行榜名'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		List<Ranking> rankings=rankingDAO.findByRankingName(ranking_name);
 		if(rankings.size()!=0){
 			msg="{'msg':'重复的排行榜名'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		ranking.setRankingName(ranking_name);
@@ -409,19 +409,19 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 		Integer rankingId=getIntegerParameter(RANKING_ID);
 		if (rankingId == null){
 			msg="{'msg':'没有排行榜ID'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		Integer gid=getIntegerParameter(GOODS_ID);
 		if (gid == null){
 			msg="{'msg':'没有商品ID'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		Goods goods=goodsDAO.findById(gid);
 		if(goods==null){
 			msg="{'msg':'该商品ID没有录入'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		RankingGoods rankingGoods=new RankingGoods();

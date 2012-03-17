@@ -58,8 +58,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	private GoodsDAO goodsDAO;
 	private CategoryDAO categoryDAO;
-	private ImageDAO imageDAO;
-	private RankGenerator rankGenerator;
 	private BrandDAO brandDAO;
 	private SeriesDAO seriesDAO;
 	private GoodsImagesDAO goodsImagesDAO;
@@ -67,7 +65,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private GoodsRealDAO goodsRealDAO;
 	private UserDAO userDAO;
 	private UserFavoriteDAO userFavoriteDAO;
-	private UserLoginDAO userLoginDAO;
 	private GoodsCommentDAO goodsCommentDAO;
 	
 	
@@ -217,23 +214,23 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String getGoodsListByFav() {
 		String msg="";
-		String uuid=getReqeust().getParameter("uuid");
+		String uuid=getRequest().getParameter("uuid");
 		if(uuid==null){
 			msg="{'msg':'没有设备号'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 		Integer uid=userLogin.get(0).getUserId();
 		if(uid==null || uid==0){
 			msg="{'msg':'设备号未登记'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		List<UserFavorite> userfavlist=userFavoriteDAO.findByUserId(uid);
 		if(userfavlist.size()==0){   //没有收藏
 			msg="{'msg':'没有收藏商品'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}else{                //有收藏，取得相应商品
 			List<GoodsView> result=new ArrayList<GoodsView>();
@@ -337,16 +334,16 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 //		TopicDAO topicDAO = TopicDAO.getFromApplicationContext(ac);
 		Integer goodsId = getIntegerParameter(GOODS_ID);
 		Goods goods=goodsDAO.findById(goodsId);
-		String goodsName = getReqeust().getParameter("goodsName");
-		String goodsScore = getReqeust().getParameter("goodsScore");
-		String goodsForskin = getReqeust().getParameter("goodsForskin");
-		String goodsNotforskin = getReqeust().getParameter("goodsNotforskin");
-		String goodsNoticeforskin = getReqeust().getParameter("goodsNoticeforskin");
-		String goodsAge = getReqeust().getParameter("goodsAge");
-		String goodsDescription = getReqeust().getParameter("goodsDescription");
-		String goodsSpecification = getReqeust().getParameter("goodsSpecification");
+		String goodsName = getRequest().getParameter("goodsName");
+		String goodsScore = getRequest().getParameter("goodsScore");
+		String goodsForskin = getRequest().getParameter("goodsForskin");
+		String goodsNotforskin = getRequest().getParameter("goodsNotforskin");
+		String goodsNoticeforskin = getRequest().getParameter("goodsNoticeforskin");
+		String goodsAge = getRequest().getParameter("goodsAge");
+		String goodsDescription = getRequest().getParameter("goodsDescription");
+		String goodsSpecification = getRequest().getParameter("goodsSpecification");
 		goods.setGoodsId(goodsId);
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if (updateType.equals("更新")) { // 需要对每个进行更新
 			if (thumbFileName != null && !thumbFileName.equals("")) { // 上传缩略图，并存储
 				String FileName = MD5.md5(thumbFileName)
@@ -388,7 +385,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		Goods goods=new Goods();
 		Integer categoryId=0;
 		for(int j=4;j>0;j--){
-			if(getReqeust().getParameter("category"+j)!=null && !getReqeust().getParameter("category"+j).equals("0")){
+			if(getRequest().getParameter("category"+j)!=null && !getRequest().getParameter("category"+j).equals("0")){
 				categoryId=getIntegerParameter("category"+j);
 				break;
 			}
@@ -397,23 +394,23 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		goods.setSeriesId(getIntegerParameter(SERIES_ID));
 		goods.setCategoryId(categoryId);
 		goods.setGoodsAddTime(Timestamp.valueOf(dateFormat.format(new Date())));
-		goods.setGoodsAge(getReqeust().getParameter("goodsAge"));
+		goods.setGoodsAge(getRequest().getParameter("goodsAge"));
 		goods.setGoodsBuyCount(0);
 		goods.setGoodsViewCount(0);
-		goods.setGoodsDescription(getReqeust().getParameter("goodsDescription"));
-		goods.setGoodsForskin(getReqeust().getParameter("goodsForskin"));
+		goods.setGoodsDescription(getRequest().getParameter("goodsDescription"));
+		goods.setGoodsForskin(getRequest().getParameter("goodsForskin"));
 		goods.setGoodsLastUpdate(Timestamp.valueOf(dateFormat.format(new Date())));
-		goods.setGoodsName(getReqeust().getParameter("goodsName"));
-		goods.setGoodsNotforskin(getReqeust().getParameter("goodsNotforskin"));
-		goods.setGoodsNoticeforskin(getReqeust().getParameter("goodsNoticeforskin"));
+		goods.setGoodsName(getRequest().getParameter("goodsName"));
+		goods.setGoodsNotforskin(getRequest().getParameter("goodsNotforskin"));
+		goods.setGoodsNoticeforskin(getRequest().getParameter("goodsNoticeforskin"));
 		goods.setGoodsRank(0);   //暂时初始化为0，商品的排序规则较复杂，以后再做
-		if(getReqeust().getParameter("goodsScore")==null || getReqeust().getParameter("goodsScore").equals("")){
+		if(getRequest().getParameter("goodsScore")==null || getRequest().getParameter("goodsScore").equals("")){
 			goods.setGoodsScore((float)0);
 		}else{
-			goods.setGoodsScore(Float.valueOf(getReqeust().getParameter("goodsScore")));
+			goods.setGoodsScore(Float.valueOf(getRequest().getParameter("goodsScore")));
 		}
 		
-		goods.setGoodsSpecification(getReqeust().getParameter("goodsSpecification"));
+		goods.setGoodsSpecification(getRequest().getParameter("goodsSpecification"));
 		goods.setGoodsStatus((short)3);
 		
 		
@@ -465,7 +462,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	 */
 	@Override
 	public String updateGoodsImages() {
-		String updateType = getReqeust().getParameter("submit");
+		String updateType = getRequest().getParameter("submit");
 		if (updateType.equals("更新")) { // 更新图片
 			GoodsImages goodsImages=goodsImagesDAO.findById(getIntegerParameter("id"));
 			if (imageFileName != null && !imageFileName.equals("")) { // 上传缩略图，并存储
@@ -521,7 +518,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String GetRealGoodsListBySeries() {
 		List<GoodsReal> result=null;
-		if(getReqeust().getParameter("sid")!=null &&!getReqeust().getParameter("sid").equals("null") &&!getReqeust().getParameter("sid").equals("0")){  //如果有系列号，按系列号取商品数据
+		if(getRequest().getParameter("sid")!=null &&!getRequest().getParameter("sid").equals("null") &&!getRequest().getParameter("sid").equals("0")){  //如果有系列号，按系列号取商品数据
 			int sid=getIntegerParameter("sid");
 			Series series=seriesDAO.findById(sid);
 			result=goodsRealDAO.findBySeriesName(series.getSeriesName());
@@ -541,7 +538,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String getGoodsListBySkin() {
 		String msg="";
-		String skin=getReqeust().getParameter("skin");
+		String skin=getRequest().getParameter("skin");
 		if(skin==null){
 			msg="{'msg':'没有肤质结果'}";
 			return null;
@@ -620,16 +617,16 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String getGoodsListBySkinAndCat() {
 		String msg="";
-		String skin=getReqeust().getParameter("skin");
+		String skin=getRequest().getParameter("skin");
 		if(skin==null){
 			msg="{'msg':'没有肤质结果'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
 		if (categoryId == null){
 			msg="{'msg':'没有分类号'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		String skinName=TransTool.transSkin(skin);
@@ -639,7 +636,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		List<Goods> goodslist=goodsDAO.findBySkinAndCat(skinName,categoryId); //获取适合肤质，不适合，需要注意的
 		if(goodslist.size()==0){
 			msg="{'msg':'无商品'}";
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		

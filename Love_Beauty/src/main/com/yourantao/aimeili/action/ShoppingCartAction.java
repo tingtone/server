@@ -51,12 +51,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//获取参数
 			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
+				printString("{'msg':'没有设备号'}");
 				return null;
 			}
 			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
+				printString("{'msg':'没有该用户'}");
 				return null;
 			}
 			int userId=userLogin.get(0).getUserId();
@@ -108,12 +108,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//获取参数
 			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
+				printString("{'msg':'没有设备号'}");
 				return null;
 			}
 			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
+				printString("{'msg':'没有该用户'}");
 				return null;
 			}
 			int userId=userLogin.get(0).getUserId();
@@ -124,12 +124,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//验证参数
 			if( goodsRealId == null || count == null || price == null || providerId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				printString("{'msg':'参数个数不足'}");
 				return null;
 			}
 			else if(count < 0 || price < 0)
 			{
-				outputString("{'msg':'参数值出错'}");
+				printString("{'msg':'参数值出错'}");
 				return null;
 			}
 			//设置对象状态
@@ -151,7 +151,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 				shoppingCartDAO.save(shoppingCart);
 				msg = "'cart_id':'" + shoppingCart.getCartId()+ "'";
 			}
-			outputString(msg);
+			printString(msg);
 			return null;
 			
 		}
@@ -166,12 +166,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//获取参数
 			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
+				printString("{'msg':'没有设备号'}");
 				return null;
 			}
 			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
+				printString("{'msg':'没有该用户'}");
 				return null;
 			}
 			int userId=userLogin.get(0).getUserId();
@@ -181,12 +181,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//验证参数
 			if(goodsRealId == null || count == null || providerId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				printString("{'msg':'参数个数不足'}");
 				return null;
 			}
 			else if(count < 0)
 			{
-				outputString("{'msg':'参数值出错'}");
+				printString("{'msg':'参数值出错'}");
 				return null;
 			}
 			ShoppingCart shoppingCartExample = new ShoppingCart();
@@ -208,7 +208,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			{
 				msg = "{'msg':'存在多个相同商品'}";//这种情况是不应该出现的，这里先写出来，防止出现问题
 			}
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		/* (non-Javadoc)
@@ -220,12 +220,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//获取参数
 			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
+				printString("{'msg':'没有设备号'}");
 				return null;
 			}
 			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
+				printString("{'msg':'没有该用户'}");
 				return null;
 			}
 			int userId=userLogin.get(0).getUserId();
@@ -234,7 +234,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//验证参数
 			if(goodsRealId == null || providerId == null)
 			{
-				outputString("{'msg':'参数个数不足'}");
+				printString("{'msg':'参数个数不足'}");
 				return null;
 			}
 			ShoppingCart shoppingCartExample = new ShoppingCart();
@@ -254,7 +254,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			{
 				msg = "{'msg':'购物车中存在多件商品'}";//这样的情况不应该出现的
 			}
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 		/* (non-Javadoc)
@@ -266,12 +266,12 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//获取参数
 			String uuid=getRequest().getParameter("uuid");
 			if(uuid==null){
-				outputString("{'msg':'没有设备号'}");
+				printString("{'msg':'没有设备号'}");
 				return null;
 			}
 			List<UserLogin> userLogin=userLoginDAO.findByUuid(uuid);
 			if(userLogin.size()==0){
-				outputString("{'msg':'没有该用户'}");
+				printString("{'msg':'没有该用户'}");
 				return null;
 			}
 			int userId=userLogin.get(0).getUserId();
@@ -279,7 +279,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			//验证参数
 			if(providerId == null)
 			{
-				outputString("{'msg':'没有供应商'}");
+				printString("{'msg':'没有供应商'}");
 			}
 			ShoppingCart shoppingCartExample = new ShoppingCart();
 			shoppingCartExample.setUserId(userId);
@@ -289,7 +289,7 @@ public class ShoppingCartAction extends BaseAction implements Constant, Shopping
 			{
 				shoppingCartDAO.delete(shoppingCart);
 			}
-			outputString(msg);
+			printString(msg);
 			return null;
 		}
 }
