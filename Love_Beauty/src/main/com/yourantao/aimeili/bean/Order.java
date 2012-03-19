@@ -26,6 +26,9 @@ public class Order implements java.io.Serializable {
 	private String relatedNum;
 	private Short handled;
 	private Timestamp handledTime;
+	private Short invoiceType;
+	private String invoiceContent;
+	private String invoiceName;
 
 	// Constructors
 
@@ -60,7 +63,8 @@ public class Order implements java.io.Serializable {
 			Integer addressId, Float postage, String paymentType,
 			String deliverType, String deliverTime, Short invoice,
 			Timestamp addTime, Short finish, Integer providerId,
-			String relatedNum, Short handled, Timestamp handledTime) {
+			String relatedNum, Short handled, Timestamp handledTime,
+			Short invoiceType, String invoiceContent, String invoiceName) {
 		this.userId = userId;
 		this.orderNum = orderNum;
 		this.orderSum = orderSum;
@@ -76,6 +80,9 @@ public class Order implements java.io.Serializable {
 		this.relatedNum = relatedNum;
 		this.handled = handled;
 		this.handledTime = handledTime;
+		this.invoiceType = invoiceType;
+		this.invoiceContent = invoiceContent;
+		this.invoiceName = invoiceName;
 	}
 
 	// Property accessors
@@ -206,6 +213,30 @@ public class Order implements java.io.Serializable {
 
 	public void setHandledTime(Timestamp handledTime) {
 		this.handledTime = handledTime;
+	}
+
+	public Short getInvoiceType() {
+		return this.invoiceType;
+	}
+
+	public void setInvoiceType(Short invoiceType) {
+		this.invoiceType = invoiceType;
+	}
+
+	public String getInvoiceContent() {
+		return this.invoiceContent;
+	}
+
+	public void setInvoiceContent(String invoiceContent) {
+		this.invoiceContent = invoiceContent;
+	}
+
+	public String getInvoiceName() {
+		return this.invoiceName;
+	}
+
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
 	}
 
 }

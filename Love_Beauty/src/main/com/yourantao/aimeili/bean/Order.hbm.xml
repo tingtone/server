@@ -12,78 +12,87 @@
         </id>
         <property name="userId" type="java.lang.Integer">
             <column name="user_id" not-null="true">
-                <comment>用户ID</comment>
+                <comment>ç"¨æˆ·ID</comment>
             </column>
         </property>
         <property name="orderNum" type="java.lang.String">
             <column name="order_num" length="64" not-null="true">
-                <comment>订单号</comment>
+                <comment>è®¢å�•å�·</comment>
             </column>
         </property>
         <property name="orderSum" type="java.lang.Float">
             <column name="order_sum" precision="12" scale="0">
-                <comment>本次订单的金额，不含邮费</comment>
+                <comment>æœ¬æ¬¡è®¢å�•çš"é‡'é¢�ï¼Œä¸�å�«é'®è´¹</comment>
             </column>
         </property>
         <property name="addressId" type="java.lang.Integer">
             <column name="address_id" not-null="true">
-                <comment>地址ID</comment>
+                <comment>åœ°å�€ID</comment>
             </column>
         </property>
         <property name="postage" type="java.lang.Float">
             <column name="postage" precision="12" scale="0" not-null="true">
-                <comment>邮费</comment>
+                <comment>é'®è´¹</comment>
             </column>
         </property>
         <property name="paymentType" type="java.lang.String">
             <column name="payment_type" length="5" not-null="true">
-                <comment>付款方式</comment>
+                <comment>ä»˜æ¬¾æ-¹å¼�</comment>
             </column>
         </property>
         <property name="deliverType" type="java.lang.String">
             <column name="deliver_type" length="5" not-null="true">
-                <comment>送货方式</comment>
+                <comment>é€�è´§æ-¹å¼�</comment>
             </column>
         </property>
         <property name="deliverTime" type="java.lang.String">
             <column name="deliver_time" length="8" not-null="true">
-                <comment>送货时间</comment>
+                <comment>é€�è´§æ-¶é-´</comment>
             </column>
         </property>
         <property name="invoice" type="java.lang.Short">
             <column name="invoice" not-null="true">
-                <comment>是否需要发票</comment>
+                <comment>æ˜¯å�¦éœ€è¦�å�'ç¥¨</comment>
             </column>
         </property>
         <property name="addTime" type="java.sql.Timestamp">
             <column name="add_time" length="0" not-null="true">
-                <comment>添加时间</comment>
+                <comment>æ·»åŠ&#160;æ-¶é-´</comment>
             </column>
         </property>
         <property name="finish" type="java.lang.Short">
             <column name="finish" not-null="true">
-                <comment>0:未收货 3:收货</comment>
+                <comment>0:æœªæ"¶è´§ 3:æ"¶è´§</comment>
             </column>
         </property>
         <property name="providerId" type="java.lang.Integer">
             <column name="provider_id" not-null="true">
-                <comment>供应商ID</comment>
+                <comment>ä¾›åº"å•†ID</comment>
             </column>
         </property>
         <property name="relatedNum" type="java.lang.String">
             <column name="related_num" length="64" not-null="true">
-                <comment>供应商的订单号</comment>
+                <comment>ä¾›åº"å•†çš"è®¢å�•å�·</comment>
             </column>
         </property>
         <property name="handled" type="java.lang.Short">
             <column name="handled" not-null="true">
-                <comment>0:未完成1:等待管理员处理2:管理员电话确认3:管理员下单</comment>
+                <comment>0:ç­‰å¾…ç®¡ç�†å'˜å¤"ç�†3:ç®¡ç�†å'˜ä¸‹å�•</comment>
             </column>
         </property>
         <property name="handledTime" type="java.sql.Timestamp">
             <column name="handled_time" length="0" not-null="true">
-                <comment>管理员处理时间</comment>
+                <comment>ç®¡ç�†å'˜å¤"ç�†æ-¶é-´</comment>
             </column>
+        </property>
+        <property name="invoiceType" type="java.lang.Short">
+            <column name="invoice_type" />
+        </property>
+        <property name="invoiceContent" type="java.lang.String">
+            <column name="invoice_content" />
+        </property>
+        <property name="invoiceName" type="java.lang.String">
+            <column name="invoice_name" length="64" />
         </property>
     </class>
 </hibernate-mapping>
