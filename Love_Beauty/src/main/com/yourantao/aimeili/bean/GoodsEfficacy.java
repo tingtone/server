@@ -10,7 +10,7 @@ public class GoodsEfficacy implements java.io.Serializable {
 
 	private Integer id;
 	private Integer efficacyId;
-	private Integer goodsId;
+	private Goods goods;
 
 	// Constructors
 
@@ -19,9 +19,9 @@ public class GoodsEfficacy implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public GoodsEfficacy(Integer efficacyId, Integer goodsId) {
+	public GoodsEfficacy(Integer efficacyId, Goods goods) {
 		this.efficacyId = efficacyId;
-		this.goodsId = goodsId;
+		this.setGoods(goods);
 	}
 
 	// Property accessors
@@ -42,12 +42,12 @@ public class GoodsEfficacy implements java.io.Serializable {
 		this.efficacyId = efficacyId;
 	}
 
-	public Integer getGoodsId() {
-		return this.goodsId;
+	public void setGoods(Goods goods) {
+		this.goods = goods;
 	}
 
-	public void setGoodsId(Integer goodsId) {
-		this.goodsId = goodsId;
+	public Goods getGoods() {
+		return goods;
 	}
 
 }

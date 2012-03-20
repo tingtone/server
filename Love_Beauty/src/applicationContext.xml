@@ -148,7 +148,12 @@
 				<value>
 					main/com/yourantao/aimeili/bean/UserRelative.hbm.xml
 				</value>
-			</list>
+				<value>
+					main/com/yourantao/aimeili/bean/Search.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/City.hbm.xml
+				</value></list>
 		</property>
 	</bean>
 
@@ -429,6 +434,12 @@
 		<property name="goodsCommentDAO">
 			<ref bean="GoodsCommentDAO" />
 		</property>
+		<property name="efficacyDAO">
+			<ref bean="EfficacyDAO" />
+		</property>
+		<property name="goodsEfficacyDAO">
+			<ref bean="GoodsEfficacyDAO" />
+		</property>
 
 	</bean>
 
@@ -453,6 +464,18 @@
 		parent="BaseAction">
 		<property name="efficacyDAO">
 			<ref bean="EfficacyDAO" />
+		</property>
+	</bean>
+	<bean id="SearchAction" class="main.com.yourantao.aimeili.action.SearchAction"
+		parent="BaseAction">
+		<property name="searchDAO">
+			<ref bean="SearchDAO" />
+		</property>
+	</bean>
+	<bean id="CityAction" class="main.com.yourantao.aimeili.action.CityAction"
+		parent="BaseAction">
+		<property name="cityDAO">
+			<ref bean="CityDAO" />
 		</property>
 	</bean>
 
@@ -528,4 +551,15 @@
 		</property>
 	</bean>
 	<!-- end -->
-</beans>
+	<bean id="SearchDAO"
+		class="main.com.yourantao.aimeili.bean.SearchDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="CityDAO"
+		class="main.com.yourantao.aimeili.bean.CityDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean></beans>

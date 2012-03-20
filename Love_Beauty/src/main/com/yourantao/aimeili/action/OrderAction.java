@@ -2,11 +2,7 @@ package main.com.yourantao.aimeili.action;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import main.com.yourantao.aimeili.bean.GoodsReal;
 import main.com.yourantao.aimeili.bean.GoodsRealDAO;
@@ -21,14 +17,25 @@ import main.com.yourantao.aimeili.bean.UserAddressDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.vo.GoodsRealSimpleView;
-import main.com.yourantao.aimeili.vo.OrderSimpleView;
 import main.com.yourantao.aimeili.vo.OrderTraceView;
 import main.com.yourantao.aimeili.vo.OrderView;
 
-public class OrderAction extends BaseAction implements Constant {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@SuppressWarnings("serial")
+public class OrderAction extends BaseAction implements Constant, OrderInterface {
 
 	private static final Logger LOG = LoggerFactory
 			.getLogger(OrderAction.class);
+
+	private static final String PROVIDER_SPLITER = ";";
+	private static final String CART_SPLITER = ",";
+
+	private static final int NOT_YOURS_GOODS = 4;
+	private static final int PRICE_CHANGE = 3;
+	private static final int GOODS_NOT_FIT = 2;
+	private static final int GOODS_NOT_EXIST = 1;
 
 	private OrderDAO orderDAO;
 	private OrderGoodsDAO orderGoodsDAO;
@@ -117,22 +124,36 @@ public class OrderAction extends BaseAction implements Constant {
 		this.userAddressDAO = userAddressDAO;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#getShoppingCartDAO()
+	 */
 	public ShoppingCartDAO getShoppingCartDAO() {
 		return shoppingCartDAO;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#setShoppingCartDAO(main
+	 * .com.yourantao.aimeili.bean.ShoppingCartDAO)
+	 */
 	public void setShoppingCartDAO(ShoppingCartDAO shoppingCartDAO) {
 		this.shoppingCartDAO = shoppingCartDAO;
 	}
 
-	/**
-	 * 获取各种类型订单的数量
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderCount()
 	 */
 	public String getOrderCount() {
+
 		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printString("{'msg':'没有设备号'}");
 			return null;
@@ -142,229 +163,146 @@ public class OrderAction extends BaseAction implements Constant {
 			printString("{'msg':'没有该用户'}");
 			return null;
 		}
-		int uid = userLogin.get(0).getUserId();
-		// 应该自己手动写一个HQL语句进行统计
-		/*
-		 * List<Integer> countList = orderDAO.getOrderCount(userId); String
-		 * countString = "{'unconfirmed':'" + countList.get(0) +
-		 * "','unfinished':'" + countList.get(1) + "','history':'" +
-		 * countList.get(2) + "'}"; outputString(countString);
-		 */
-		return null;
-	}
-
-	/**
-	 * 获取未确认的订单
-	 */
-	public String getUnconfirmedOrders() {
-		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
-		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
-			return null;
-		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
-			return null;
-		}
-		int userId = userLogin.get(0).getUserId();
-		// 需要定义什么样的状态是待确认的订单
-		List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
-		List<OrderSimpleView> orderSimpleViewList = new ArrayList<OrderSimpleView>();
-		for (Order order : orderList) {
-			OrderSimpleView orderSimpleView = new OrderSimpleView();
-			int handled = order.getHandled();
-			orderSimpleView.setOrderHandled(handled);
-			if (handled == 3) {
-				// 管理员已经下单,应该可以获得对应预计到达时间
-				// 从某个地方获取
-				orderSimpleView.setArrivalTime("");
-			}
-			orderSimpleView.setTime(order.getHandledTime().toString());// 设置对应时间,这个时间可以代表多个含义
-			orderSimpleView.setOrderNum(order.getOrderNum());
-			// 下面计算订单中所有商品的金额
-			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-					.getOrderId());
-			// float sumary = (float) 0.0;
-			for (OrderGoods orderGoods : orderGoodsList) {
-				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods
-						.getGoodsRealId());
-				// sumary += (orderGoods.getCount()*goodsReal.getGoodsPrice());
-			}
-			orderSimpleView.setOrderSumary((Float) order.getOrderSum());
-			// 添加某一个araayList中
-			orderSimpleViewList.add(orderSimpleView);
-		}
-		printArray(orderSimpleViewList);
-		//
-		return null;
-	}
-
-	/**
-	 * 获取指定的未确认的订单
-	 * 
-	 * @return
-	 */
-	public String getUnconfirmedOrder() {
-		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
-		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
-			return null;
-		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
-			return null;
-		}
-		int userId = userLogin.get(0).getUserId();
-		Integer orderId = getIntegerParameter(ORDER_ID);
-		// 验证参数
-		if (orderId == null) {
-			printString("{'msg':'没有订单号'}");
-			return null;
-		}
-		Order order = orderDAO.findById(orderId);
-		// 进行验证
-		if (order.getUserId() != userId) {
-			printString("{'msg':'订单号与用户不匹配'}");
-			return null;
-		}
-		//
-		OrderView orderView = new OrderView();
-		orderView.setOrderId(order.getOrderId());
-		orderView.setProviderId(order.getProviderId());
-		orderView.setOrderNum(order.getOrderNum());
-		int handled = order.getHandled();
-		orderView.setOrderHandled(handled);
-		orderView.setHandledTime(order.getHandledTime().toString());
-
-		List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-				.getOrderId());
-		List<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
-		// float sumary = (float)0;
-		for (OrderGoods orderGoods : orderGoodsList) {
-			GoodsReal goodsReal = goodsRealDAO.findById(orderGoods
-					.getGoodsRealId());
-			// sumary += (goodsReal.getGoodsPrice()* orderGoods.getCount());
-			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
-			goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
-			goodsRealSimpleView.setGoodsContent(goodsReal.getGoodsContent());
-			goodsRealSimpleView.setGoodsPrice(goodsReal.getGoodsPrice());
-			goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
-			goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
-			// 添加到
-			goodsRealSimpleViewList.add(goodsRealSimpleView);
-		}
-		orderView.setGoods(goodsRealSimpleViewList);
-
-		// orderView.setOrderSumary(sumary);
-		orderView.setOrderSumary(order.getOrderSum());
-
-		switch (handled) {
-		case 1:// 管理员未处理
-			// 无relateNum
-			// 无预计到达时间
-			// 无最新订单时间
-			// 无最新订单状态
-			// break;
-		case 2:// 管理员电话确认
-			// 同上
-			break;
-		case 3:// 管理员已经处理
-			// 订单最新状态从何处获取
-			// orderView.setTraceTime("");
-			// orderView.setTraceDesc("");
-			// 预计到达时间
-			// orderView.setOrderArrivalTime("");
-			break;
-		default:
-			printString("{'msg':'handled出错'}");
-			return null;
-		}
-		UserAddress userAddress = userAddressDAO.findById(order.getAddressId());
-		orderView.setName(userAddress.getReceiver());
-		orderView.setAddress(userAddress.getProvince() + userAddress.getCity()
-				+ userAddress.getDistrict() + userAddress.getDetail());
-		orderView.setMobile(userAddress.getMobile());
-		printObject(orderView);
-		return null;
-	}
-
-	/**
-	 * 用户进行收货确认
-	 * 
-	 * @return
-	 */
-	public String confirmOrders() {
-		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
-		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
-			return null;
-		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
-			return null;
-		}
-		int userId = userLogin.get(0).getUserId();
-		Integer orderId = getIntegerParameter(ORDER_ID);
-		// 验证参数
-		if (orderId == null) {
-			printString("{'msg':'参数个数不足'}");
-			return null;
-		}
-		Order order = orderDAO.findById(orderId);
-		// 验证是否合法
-		if (order.getUserId() != userId) {
-			printString("{'msg':'订单与用户不匹配'}");
-			return null;
-		}
-		if (order.getHandled() == 3) {
-			// 用户确认之后需要进行更新操作
-			order.setFinish((short) 3);
-			orderDAO.merge(order);
-			printString("");
-		} else {
-			printString("{'msg':'订单不存在或订单未完成或请等待管理员处理'}");
-		}
+//		List<Order> orderList = orderDAO.findById(8);
+		Order order=orderDAO.findById(8);
+//		for (Order order : orderList) {
+				order.setFinish((short)3);
+				order.setInvoice((short)1);
+				
+				//orderDAO.merge(orderTmp);
+				//order.setFinish((short) 3);
+				//orderDAO.merge(order);
+//		}
+//		List<Integer> countList = orderDAO.getOrderCount(userId);
+//		String countString = "{'unconfirmed':'" + countList.get(0)
+//				+ "','history':'" + countList.get(1) + "'}";
+//
+//		printString(countString);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderTracking()
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#getUnconfirmedOrders()
 	 */
-	public String getOrderTracking() {
+	public String getUnconfirmedOrders() {
+
 		// 获取参数
-		Integer userId = getIntegerParameter(USER_ID);
-		Integer orderId = getIntegerParameter(ORDER_ID);
+		String uuid = getStringParameter("uuid");
+		if (uuid == null) {
+			printString("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
+		if (userLogin.isEmpty()) {
+			printString("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId = userLogin.get(0).getUserId();
+		autoConfirmOrder();
+		List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
+		List<OrderView> orderViewList = new ArrayList<OrderView>();
+
+		for (Order order : orderList) {
+			OrderView orderView;
+			boolean existFlag = false;
+			// 利用短路求值
+			if (!orderViewList.isEmpty()
+					&& order.getOrderNum().equals(
+							orderList.get(orderViewList.size() - 1)
+									.getOrderNum())) {
+				existFlag = true;
+				// 最新添加的orderView =
+				orderView = orderViewList.get(orderViewList.size() - 1);
+			} else {
+				existFlag = false;
+				orderView = new OrderView();
+			}
+
+			List<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
+			//
+			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
+					.getOrderId());
+			// 可以验证一些参数
+			// orderView.setOrderId(order.getOrderId());
+			orderView.setOrderNum(order.getOrderNum());
+			for (OrderGoods orderGoods : orderGoodsList) {
+				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
+				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
+				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
+
+				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
+				goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
+				goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
+
+				goodsRealSimpleViewList.add(goodsRealSimpleView);
+			}
+			OrderTraceView orderTraceView = new OrderTraceView();
+			// 物流信息需要从某处获得
+			// related_num相关获取
+
+			// 设置收货人相关信息
+			UserAddress userAddress = userAddressDAO.findById(order
+					.getAddressId());
+			orderView.setAddress(userAddress.getDetail());
+			orderView.setName(userAddress.getReceiver());
+			orderView.setMobile(userAddress.getMobile());
+			if (!existFlag) {
+				orderViewList.add(orderView);
+			}
+		}
+		printArray(orderViewList);
+		//
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#confirmOrders()
+	 */
+	public String confirmOrders() {
+		String msg = "";
+		// 获取参数
+		String uuid = getStringParameter("uuid");
+		if (uuid == null) {
+			printString("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
+		if (userLogin.isEmpty()) {
+			printString("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId = userLogin.get(0).getUserId();
+		//
+		String orderNum = getStringParameter(ORDER_NUM);
+
 		// 验证参数
-		if (userId == null || orderId == null) {
+		if (orderNum == null) {
 			printString("{'msg':'参数个数不足'}");
 			return null;
 		}
-		Order order = orderDAO.findById(orderId);
-		// 验证是否合法
-		if (order.getUserId() != userId) {
-			printString("{'msg':'订单与用户不匹配'}");
-			return null;
+		List<Order> orderList = orderDAO.findByOrderNum(orderNum);
+		for (Order order : orderList) {
+			if (order.getUserId() != userId) {
+				msg = "{'msg':'订单与用户不匹配'}";
+				printString(msg);
+				return null;
+			} else if (order.getHandled() == 3) {
+				// 用户确认之后需要进行更新操作
+				order.setFinish((short) 3);
+				orderDAO.merge(order);
+			} else {
+				msg = "{'msg':'订单不存在或请等待管理员处理'}";
+				printString(msg);
+				return null;
+			}
 		}
-		// 下面是从某处获取所有的订单追踪信息
-		OrderTraceView orderTraceView = new OrderTraceView();
-		List<String> timeList = new ArrayList<String>();
-		List<String> desList = new ArrayList<String>();
-
-		// 根据这个进行查找
-		order.getRelatedNum();
-		// 这里开始从某个地方获取特定的订单追踪信息
-		//
-		orderTraceView.setTime(timeList);
-		orderTraceView.setDescription(desList);
-		printObject(orderTraceView);
+		printString(msg);
 		return null;
 	}
 
@@ -376,7 +314,7 @@ public class OrderAction extends BaseAction implements Constant {
 	 */
 	public String getUnfinishedOrders() {
 		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printString("{'msg':'没有设备号'}");
 			return null;
@@ -387,114 +325,67 @@ public class OrderAction extends BaseAction implements Constant {
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
-		List<Order> orderList = orderDAO.findUnconfirmedOrdersByUserId(userId);
-		List<OrderSimpleView> orderSimpleViewList = new ArrayList<OrderSimpleView>();
-		for (Order order : orderList) {
-			OrderSimpleView orderSimpleView = new OrderSimpleView();
-			int handled = order.getHandled();// 指定index
-			orderSimpleView.setOrderHandled(handled);
-			// 管理员未下单,无预计到达时间?
-			// orderSimpleView.setArrivalTime("");//这里从某处获取对应的预计到达时间
-			orderSimpleView.setTime(order.getHandledTime().toString());// 设置对应时间,这个时间可以代表多个含义
-			// 下面计算订单中所有商品的金额
-			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-					.getOrderId());
-			// float sumary = (float) 0.0;
-			for (OrderGoods orderGoods : orderGoodsList) {
-				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods
-						.getGoodsRealId());
-				// sumary += (orderGoods.getCount()*goodsReal.getGoodsPrice());
-			}
-			// orderSimpleView.setOrderSumary(sumary);
-			orderSimpleView.setOrderSumary(order.getOrderSum());// 指定index
-
-			// 添加某一个araayList中
-			orderSimpleViewList.add(orderSimpleView);
-		}
-
-		printArray(orderSimpleViewList);
-		//
-		return null;
-	}
-
-	/**
-	 * 获取指定的未完成的订单
-	 * 
-	 * @return
-	 */
-	public String getUnfinishedOrder() {
-		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
-		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
-			return null;
-		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
-			return null;
-		}
-		int userId = userLogin.get(0).getUserId();
-		Integer orderId = getIntegerParameter(ORDER_ID);
-		// 验证参数
-		if (orderId == null) {
-			printString("{'msg':'没有订单号'}");
-			return null;
-		}
-		Order order = orderDAO.findById(orderId);
-		// 进行验证?
-		if (order.getUserId() != userId) {
-			printString("{'msg':'订单与用户不匹配'}");
-			return null;
-		}
-		//
+		// 未完成订单就是购物车
 		OrderView orderView = new OrderView();
-		orderView.setOrderId(order.getOrderId());//
-		orderView.setProviderId(order.getProviderId());//
-		orderView.setOrderNum(order.getOrderNum());
-		int handled = order.getHandled();
-		if (handled != 0) {
-			printString("{'msg':'订单状态不匹配'}");
-			return null;
-		}
-		orderView.setOrderHandled(handled);
-		orderView.setHandledTime(order.getHandledTime().toString());
-
-		List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-				.getOrderId());
-		List<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
-		// float sumary = (float)0;
-		for (OrderGoods orderGoods : orderGoodsList) {
-			GoodsReal goodsReal = goodsRealDAO.findById(orderGoods
-					.getGoodsRealId());
-
-			// sumary += (goodsReal.getGoodsPrice()* orderGoods.getCount());
-
+		List<ShoppingCart> shoppingCartList = shoppingCartDAO
+				.findByUserId(userId);
+		List<GoodsRealSimpleView> goodsRealViewList1 = new ArrayList<GoodsRealSimpleView>();
+		List<GoodsRealSimpleView> goodsRealViewList2 = new ArrayList<GoodsRealSimpleView>();
+		List<GoodsRealSimpleView> goodsRealViewList3 = new ArrayList<GoodsRealSimpleView>();
+		List<GoodsRealSimpleView> goodsRealViewList4 = new ArrayList<GoodsRealSimpleView>();
+		List<GoodsRealSimpleView> goodsRealViewList5 = new ArrayList<GoodsRealSimpleView>();
+		List<GoodsRealSimpleView> goodsRealViewList6 = new ArrayList<GoodsRealSimpleView>();
+		for (ShoppingCart shoppingCart : shoppingCartList) {
 			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
+			goodsRealSimpleView.setGoodsPrice(shoppingCart.getPrice());
+			goodsRealSimpleView.setGoodsCount(shoppingCart.getCount());
+			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
+					.getGoodsRealId());
+			// 判断是否存在这样的goods了
 			goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
-			goodsRealSimpleView.setGoodsContent(goodsReal.getGoodsContent());
-			goodsRealSimpleView.setGoodsPrice(goodsReal.getGoodsPrice());
-			goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
 			goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
-			// 添加到
-			goodsRealSimpleViewList.add(goodsRealSimpleView);
+
+			switch (shoppingCart.getProviderId()) {
+			case 1:
+				goodsRealViewList1.add(goodsRealSimpleView);
+				break;
+			case 2:
+				goodsRealViewList2.add(goodsRealSimpleView);
+				break;
+			case 3:
+				goodsRealViewList3.add(goodsRealSimpleView);
+				break;
+			case 4:
+				goodsRealViewList4.add(goodsRealSimpleView);
+				break;
+			case 5:
+				goodsRealViewList5.add(goodsRealSimpleView);
+				break;
+			case 6:
+				goodsRealViewList6.add(goodsRealSimpleView);
+				break;
+			}
 		}
-		// orderView.setOrderSumary(sumary);
-		orderView.setOrderSumary(order.getOrderSum());
-		orderView.setGoods(goodsRealSimpleViewList);
+//
+//		orderView.setOrderGoodsList1(goodsRealViewList1);
+//		orderView.setOrderGoodsList2(goodsRealViewList2);
+//		orderView.setOrderGoodsList3(goodsRealViewList3);
+//		orderView.setOrderGoodsList4(goodsRealViewList3);
+//		orderView.setOrderGoodsList5(goodsRealViewList5);
+//		orderView.setOrderGoodsList6(goodsRealViewList6);
 
 		printObject(orderView);
 		return null;
 	}
 
-	/**
-	 * 获取成功订单
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#getHistoryOrders()
 	 */
 	public String getHistoryOrders() {
 		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printString("{'msg':'没有设备号'}");
 			return null;
@@ -505,103 +396,70 @@ public class OrderAction extends BaseAction implements Constant {
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
-		// 需要定义什么样的状态是待确认的订单
-		Order orderExample = new Order();
-		orderExample.setUserId(userId);
-		orderExample.setHandled((short) 3);
-		orderExample.setFinish((short) 3);// 收货
-		List<Order> orderList = orderDAO.findByExample(orderExample);
-		List<OrderSimpleView> orderSimpleViewList = new ArrayList<OrderSimpleView>();
+		autoConfirmOrder();
+		List<Order> orderList = orderDAO.findHistoryOrdersByUserId(userId);
+		List<OrderView> orderViewList = new ArrayList<OrderView>();
 		for (Order order : orderList) {
-			OrderSimpleView orderSimpleView = new OrderSimpleView();
+			OrderView orderView;
+			boolean existFlag = false;
+			// 利用短路求值
+			if (!orderViewList.isEmpty()
+					&& order.getOrderNum().equals(
+							orderList.get(orderViewList.size() - 1)
+									.getOrderNum())) {
+				existFlag = true;
+				// 最新添加的orderView =
+				orderView = orderViewList.get(orderViewList.size() - 1);
+			} else {
+				existFlag = false;
+				orderView = new OrderView();
+			}
 
-			int handled = order.getHandled();// 指定index
-			orderSimpleView.setOrderHandled(handled);
-
-			orderSimpleView.setTime(order.getHandledTime().toString());// 设置对应时间,这个时间可以代表多个含义
-			/*
-			 * 下面计算订单中所有商品 的金额 List<OrderGoods> orderGoodsList =
-			 * orderGoodsDAO.findByOrderId(order.getOrderId()); for(int index2 =
-			 * 0; index2 < orderGoodsList.size(); index2++) { OrderGoods
-			 * orderGoods = orderGoodsList.get(index2); GoodsReal goodsReal =
-			 * goodsRealDAO.findById(orderGoods.getGoodsRealId()); }
-			 */
-			orderSimpleView.setOrderSumary(order.getOrderSum());
-
-			// 添加某一个araayList中
-			orderSimpleViewList.add(orderSimpleView);
-		}
-		printArray(orderSimpleViewList);
-		return null;
-	}
-
-	public String getHistoryOrder() {
-		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
-		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
-			return null;
-		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
-			return null;
-		}
-		int userId = userLogin.get(0).getUserId();
-		Integer orderId = getIntegerParameter(ORDER_ID);
-		// 验证参数
-		if (orderId == null) {
-			printString("{'msg':'没有订单号'}");
-			return null;
-		}
-		Order order = orderDAO.findById(orderId);
-		// 进行验证
-		if (order.getUserId() != userId) {
-			printString("{'msg':'订单与用户不匹配'}");
-			return null;
-		}
-
-		OrderView orderView = new OrderView();
-		orderView.setOrderId(order.getOrderId());//
-		orderView.setProviderId(order.getProviderId());//
-		// orderView.setOrderNum(order.getOrderNum());
-		// int handled = order.getHandled();
-		// orderView.setOrderHandled(handled);
-		orderView.setHandledTime(order.getHandledTime().toString());
-
-		List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-				.getOrderId());
-		List<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
-		float sumary = (float) 0;
-		for (int index = 0; index < orderGoodsList.size(); index++) {
-			OrderGoods orderGoods = orderGoodsList.get(index);
-			GoodsReal goodsReal = goodsRealDAO.findById(orderGoods
-					.getGoodsRealId());
+			List<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
 			//
-			sumary += (goodsReal.getGoodsPrice() * orderGoods.getCount());
-			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
-			goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
-			goodsRealSimpleView.setGoodsContent(goodsReal.getGoodsContent());
-			goodsRealSimpleView.setGoodsPrice(goodsReal.getGoodsPrice());
-			goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
-			goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
-			// 添加到
-			goodsRealSimpleViewList.add(goodsRealSimpleView);
+			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
+					.getOrderId());
+			orderView.setOrderNum(order.getOrderNum());
+			for (OrderGoods orderGoods : orderGoodsList) {
+				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
+				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
+				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
+
+				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
+				goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
+				goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
+
+				goodsRealSimpleViewList.add(goodsRealSimpleView);
+			}
+			OrderTraceView orderTraceView = new OrderTraceView();
+			// 物流信息需要从某处获得
+			// related_num相关获取
+
+			// 设置收货人相关信息
+			UserAddress userAddress = userAddressDAO.findById(order
+					.getAddressId());
+			orderView.setAddress(userAddress.getDetail());
+			orderView.setName(userAddress.getReceiver());
+			orderView.setMobile(userAddress.getMobile());
+
+			if (!existFlag) {
+				orderViewList.add(orderView);
+			}
 		}
-		orderView.setOrderSumary(order.getOrderSum());
-		orderView.setGoods(goodsRealSimpleViewList);
+		printArray(orderViewList);
+		//
 		return null;
 	}
 
-	/**
-	 * 提交订单,需要计算出当前所有的商品的总金额,并与实际的商品总金额比较 从而决定是否提醒用户价格变动信息
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#addOrder()
 	 */
 	public String addOrder() {
 		String msg = "";
 		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printString("{'msg':'没有设备号'}");
 			return null;
@@ -612,99 +470,144 @@ public class OrderAction extends BaseAction implements Constant {
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
+		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		Integer addressId = getIntegerParameter(ADDRESS_ID);
 		// 复杂参数
 		String cartIdString = getStringParameter("cartidlist");
-		String paymentType = getStringParameter("");//
-		String deliverType = getStringParameter("");//
-		String deliverTime = getStringParameter("");//
-		Integer invoice = getIntegerParameter("");//
+		// System.out.println(cartIdString);
+		// msg += "cartIdString is" + cartIdString;
+		String providerIdString = getStringParameter("pidlist");
+		// String paymentType = getStringParameter("paymenttype");
+		// String deliverType = getStringParameter("deliverType");
+		String deliverTime = getStringParameter("deliverTime");
+		// 根据是否使用发票来决定是否接受其他参数
+		Integer invoice = getIntegerParameter("invoice");
 		// 验证参数
-
-		if (providerId == null) {
+		if (providerIdString == null) {
 			printString("{'msg':'没有供应商'}");
 			return null;
-		} else if (addressId == null) {
-			printString("{'msg':'goods与count不匹配'}");
+		}
+		if (addressId == null) {
+			printString("{'msg':'无地址信息'}");
 			return null;
 		}
-		if (paymentType == null || invoice == null || deliverType == null
-				|| deliverTime == null) {
+		if (// paymentType == null || deliverType == null ||
+		deliverTime == null || invoice == null) {
 			printString("{'msg':'参数个数不足'}");
-
-		}
-		String[] cartIdList = cartIdString.split(",");
-		// 下单
-		Order order = new Order();
-		order.setUserId(userId);
-		order.setFinish((short) 0);// 设置未收货
-		order.setProviderId(providerId);
-		// 说明这是一个完整的订单
-		order.setHandled((short) 0);
-		order.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));// 添加编辑时间
-		order.setHandledTime(Timestamp.valueOf(dateFormat.format(new Date())));
-		//
-		order.setAddressId(addressId);
-		order.setPaymentType("货到付款");
-		order.setDeliverType("送货上门");
-		order.setDeliverTime(deliverTime);
-		order.setInvoice((short) (int) invoice);
-		if (invoice != 0) {
-			// 保存发票内容
-			// 获取参数
+			return null;
 		}
 
-		// 通过某种方式保存记录,并获得orderId
-		orderDAO.merge(order);
-		float cartSummary = 0;
-		float summary = 0;
-		// 从购物车转到订单中
-		for (int index = 0; index < cartIdList.length; index++) {
-			ShoppingCart shoppingCart = shoppingCartDAO.findById(Integer
-					.valueOf(cartIdList[index]));
-			if (shoppingCart != null) {
-				if (shoppingCart.getUserId() == userId) {
-					OrderGoods orderGoods = new OrderGoods();
-					orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
-					orderGoods.setCount(shoppingCart.getCount());
-					// orderGoods.setPrice(shoppingCart.getPrice());
-					orderGoods.setOrderId(order.getOrderId());// 这里需要已经知道orderId
-					orderGoodsDAO.save(orderGoods);
+		/*
+		 * 为了测试可以将这个先注释掉 // 获取参数 Integer invoiceType =
+		 * getIntegerParameter("invoicetype"); String invoiceContent =
+		 * getStringParameter("invoicecontent"); String invoiceName =
+		 * getStringParameter("invoicename"); //验证参数 if(invoice != 0 &&
+		 * (invoiceContent == null || invoiceName == null || invoiceType ==
+		 * null)) { printString("{'msg':'发票相关参数个数不足'}"); return null; }
+		 */
 
-					cartSummary += (shoppingCart.getPrice() * shoppingCart
-							.getCount());
-					//
-					GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
-							.getGoodsRealId());
-					summary += (goodsReal.getGoodsPrice() * shoppingCart
-							.getCount());
-
-					shoppingCartDAO.delete(shoppingCart);
-				}
+		// 首先划分出各个商城的cartIdList
+		String[] providerIdList = providerIdString.split(PROVIDER_SPLITER);
+		String[] cartIdListList = cartIdString.split(PROVIDER_SPLITER);
+		String filterResult = examOrderGoods(providerIdList, cartIdListList,
+				userId);
+		if (!filterResult.equals("")) {
+			printString(filterResult);
+			return null;
+		}
+		// 订单要使用的订单号
+		String orderNum = "";
+		for (int outerIndex = 0; outerIndex < cartIdListList.length; outerIndex++) {
+			String[] cartIdList = cartIdListList[outerIndex]
+					.split(CART_SPLITER);
+			if (cartIdList.length == 0) {// 这里的判断不知能否起到作用
+				// printString("continue");
+				continue;
 			}
-		}
-		// 判断从购物车获取的商品的金额总和与从goods_real中获取的总额是否相等,如果是返回提醒
-		if (summary != cartSummary) {
-			msg = "{'msg':'商品价格发生变动'}";// 这个实际上还是操作成功的结果
-		}
-		order.setOrderSum(cartSummary);
-		orderDAO.merge(order);
-		// 计算订单号
+			Order order = new Order();
+			order.setUserId(userId);
+			order.setFinish((short) 0);// 设置未收货
 
+			int providerId = Integer.valueOf(providerIdList[outerIndex]);
+			order.setProviderId(providerId);
+			// 说明这是一个完整的订单
+			order.setHandled((short) 0);
+			order.setAddTime(new Timestamp(System.currentTimeMillis()));// 添加编辑时间
+			order.setHandledTime(new Timestamp(System.currentTimeMillis()));
+			order.setAddressId(addressId);
+			// 这里以后才能设置%%%%%%%%%%%%%%%%%
+			order.setPostage((float) 100);// 先使用固定邮费
+			order.setRelatedNum("wodegequ");
+			// 结束%%%%%%%%%%%%%%%%%
+			order.setPaymentType("货到付款");
+			order.setDeliverType("送货上门");
+			// order.setDeliverTime(deliverTime);测试时注释掉
+			order.setDeliverTime("时间不限");
+			order.setInvoice((short) (int) invoice);
+			/*
+			 * 为了测试线注释掉 if (invoice != 0) { // 保存发票内容
+			 * order.setInvoiceContent(invoiceContent);
+			 * order.setInvoiceName(invoiceName);
+			 * order.setInvoiceType((short)(int)invoiceType); }
+			 */
+			// 通过某种方式保存记录,并获得orderId
+			if (orderNum.equals("")) {
+				// 计算一下orderNum,之后一直使用这个
+				orderNum = "aimeili" + 10 + order.getOrderId();
+			}
+			order.setOrderNum(orderNum);
+			/*
+			 * int cartIdTmp = Integer.valueOf(cartIdList[0]); ShoppingCart
+			 * shoppingCartTmp = shoppingCartDAO.findById(cartIdTmp);
+			 * if(shoppingCartTmp == null){ continue;//这里的作用是放置用户进行重复请求，造成订单重复 }
+			 */
+			orderDAO.save(order);
+
+			float cartSummary = 0;
+			//float summary = 0;
+			// 从购物车转到订单中
+			for (int innerIndex = 0; innerIndex < cartIdList.length; innerIndex++) {
+				
+				int cartId = Integer.valueOf(cartIdList[innerIndex]);
+				ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
+				OrderGoods orderGoods = new OrderGoods();
+				orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
+				orderGoods.setCount(shoppingCart.getCount());
+				orderGoods.setPrice(shoppingCart.getPrice());
+				orderGoods.setOrderId(order.getOrderId());// 这里需要已经知道orderId
+				orderGoodsDAO.save(orderGoods);
+				// 计算价格
+				cartSummary += (shoppingCart.getPrice() * shoppingCart
+						.getCount());
+				//
+				GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
+						.getGoodsRealId());
+				//summary += (goodsReal.getGoodsPrice() * shoppingCart.getCount());
+				// 从购物车中删除该商品
+				shoppingCartDAO.delete(shoppingCart);
+			}
+			/* 判断从购物车获取的商品的金额总和与从goods_real中获取的总额是否相等,如果是返回提醒
+			if (summary != cartSummary) {
+				msg = "{'msg':'商品价格发生变动,请等待管理员联系再改动'}";// 这个实际上还是操作成功的结果
+			}
+			*/
+			order.setOrderSum(cartSummary);
+			order.setOrderNum(orderNum);
+			orderDAO.merge(order);
+		}
 		printString(msg);
 		return null;
 	}
 
-	/**
-	 * 删除订单中的某一件商品,可能导致订单整体删除 摒弃不用了
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#deleteGoods()
 	 */
 	public String deleteGoods() {
 		String msg = "";
 		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
+		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printString("{'msg':'没有设备号'}");
 			return null;
@@ -743,44 +646,111 @@ public class OrderAction extends BaseAction implements Constant {
 			}
 		} else {
 			msg = "{'msg':'订单中商品不是唯一的'}";
-			// outputString("{'msg':'订单中商品不是唯一的'}");
 		}
 		//
 		printString(msg);
 		return null;
 	}
 
+	/*
+	 * 提交订单前的检查操作
+	 */
+	private String examOrderGoods(String[] providerIdList,
+			String[] cartIdListList, int userId) {
+		String msg = "";
+
+		for (int outerIndex = 0; outerIndex < cartIdListList.length; outerIndex++) {
+			int providerId = Integer.valueOf(providerIdList[outerIndex]);
+			String[] goodsIdList = cartIdListList[outerIndex]
+					.split(CART_SPLITER);
+			for (int innerIndex = 0; innerIndex < goodsIdList.length; innerIndex++) {
+				int cartId = Integer.valueOf(goodsIdList[innerIndex]);
+				ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
+				if (shoppingCart != null) {
+					if (shoppingCart.getUserId() != userId) {
+						msg = "{'msg':'" + providerId + PROVIDER_SPLITER
+								+ shoppingCart.getGoodsRealId()
+								+ PROVIDER_SPLITER + NOT_YOURS_GOODS + "'}";
+						;
+					} else {
+						GoodsReal goodsReal = goodsRealDAO
+								.findById(shoppingCart.getGoodsRealId());
+						if (goodsReal != null) {
+							if (goodsReal.getGoodsStatus() == 6) {
+								if (goodsReal.getGoodsPrice() != shoppingCart
+										.getPrice()) {
+									// 商品价格发生变动
+									msg = "{'msg':'" + providerId
+											+ PROVIDER_SPLITER
+											+ shoppingCart.getGoodsRealId()
+											+ PROVIDER_SPLITER + PRICE_CHANGE
+											+ "'}";
+								} else {
+									msg = "";
+								}
+							} else {
+								// 商品下架或者待审核
+								msg = "{'msg':'" + providerId
+										+ PROVIDER_SPLITER
+										+ shoppingCart.getGoodsRealId()
+										+ PROVIDER_SPLITER + GOODS_NOT_FIT
+										+ "'}";
+							}
+						} else {
+							// 商品不存在
+							msg = "{'msg':'" + providerId + PROVIDER_SPLITER
+									+ shoppingCart.getGoodsRealId()
+									+ PROVIDER_SPLITER + GOODS_NOT_EXIST + "'}";
+						}
+					}
+
+				} else {
+					msg = "{'msg':'购物车不存在'}";
+				}
+			}
+		}
+		return msg;
+	}
+
 	/**
-	 * 更新订单中的总金额信息 暂时未使用
+	 * 检测待确认收货的订单,并将其设置成收获订单,超时时间以天为单位
 	 * 
 	 * @return
 	 */
-	public String updateOrderSum() {
-		// 获取参数
-		String uuid = getRequest().getParameter("uuid");
-		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
-			return null;
+	private void autoConfirmOrder() {
+		int intval = 10;
+		//long intvalMillise = intval * 24 * 60 * 60 * 1000;
+		long intvalMillise = 60*1000;
+		List<Order> orderList = orderDAO.findUnconfirmedOrders();
+		
+		System.out.println(orderList.size());
+		for (Order order : orderList) {
+			Timestamp handledTime = order.getHandledTime();
+			if (System.currentTimeMillis() - handledTime.getTime() > intvalMillise) {
+				System.out.println(System.currentTimeMillis());
+				System.out.println(handledTime.getTime());
+				Order orderTmp = orderDAO.findById(order.getOrderId());
+				orderTmp.setFinish((short)3);
+				orderTmp.setInvoice((short)1);
+				orderTmp.setPaymentType("测试");
+				//orderDAO.merge(orderTmp);
+				//order.setFinish((short) 3);
+				//orderDAO.merge(order);
+			}
 		}
-		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
-			return null;
-		}
-		int userId = userLogin.get(0).getUserId();
-		int orderId = getIntegerParameter(ORDER_ID);
-
-		return null;
 	}
 
 	// 以下是小编的接口
+	/*
+	 * 获取未完成的且没有被管理员处理过的订单
+	 */
 	public String getOrdersForEditor() {
-		//获取参数
-		Integer orderType= getIntegerParameter("ocid");
-		if(orderType == null)
+		// 获取参数
+		Integer orderType = getIntegerParameter("ocid");
+		if (orderType == null)
 			return null;
-		//获取未处理订单
-		
+		// 获取未处理订单
+
 		return null;
 	}
 }

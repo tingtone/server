@@ -35,6 +35,8 @@ public interface Constant {
 	public static final String SHOPPINGCART_ID = "scid";	//购物车的ID
 	public static final String ADDRESS_ID = "aid";		//地址ID
 	public static final String RANKING_ID="rid";   //排行榜ID
-	public static final String UUID = "uuid";
-	public static final String SKIN = "skin";
+	public static final String UUID = "uuid";   //uuid设备号
+	public static final String SKIN = "skin";  //肤质
+	public static final String CITY = "city";  //城市
+	public static final String MSG_SUCCESS = "";  //在不需要返回数据的接口中返回的成功值
 }

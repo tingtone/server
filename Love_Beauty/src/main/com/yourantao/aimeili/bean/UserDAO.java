@@ -31,6 +31,7 @@ public class UserDAO extends HibernateDaoSupport {
 	public static final String MOBILE = "mobile";
 	public static final String IMAGE_ID = "imageId";
 	public static final String DESCRIPTION = "description";
+	public static final String CITY = "city";
 	public static final String SKIN = "skin";
 	public static final String HAIR = "hair";
 	public static final String POINT = "point";
@@ -127,6 +128,10 @@ public class UserDAO extends HibernateDaoSupport {
 
 	public List findByDescription(Object description) {
 		return findByProperty(DESCRIPTION, description);
+	}
+
+	public List findByCity(Object city) {
+		return findByProperty(CITY, city);
 	}
 
 	public List findBySkin(Object skin) {

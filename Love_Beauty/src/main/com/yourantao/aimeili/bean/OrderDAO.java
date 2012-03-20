@@ -1,6 +1,7 @@
 package main.com.yourantao.aimeili.bean;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.slf4j.Logger;
@@ -36,6 +37,9 @@ public class OrderDAO extends HibernateDaoSupport {
 	public static final String PROVIDER_ID = "providerId";
 	public static final String RELATED_NUM = "relatedNum";
 	public static final String HANDLED = "handled";
+	public static final String INVOICE_TYPE = "invoiceType";
+	public static final String INVOICE_CONTENT = "invoiceContent";
+	public static final String INVOICE_NAME = "invoiceName";
 
 	protected void initDao() {
 		// do nothing
@@ -153,6 +157,18 @@ public class OrderDAO extends HibernateDaoSupport {
 		return findByProperty(HANDLED, handled);
 	}
 
+	public List findByInvoiceType(Object invoiceType) {
+		return findByProperty(INVOICE_TYPE, invoiceType);
+	}
+
+	public List findByInvoiceContent(Object invoiceContent) {
+		return findByProperty(INVOICE_CONTENT, invoiceContent);
+	}
+
+	public List findByInvoiceName(Object invoiceName) {
+		return findByProperty(INVOICE_NAME, invoiceName);
+	}
+
 	public List findAll() {
 		log.debug("finding all Order instances");
 		try {
@@ -205,11 +221,55 @@ public class OrderDAO extends HibernateDaoSupport {
 	/**
 	 * 自定义查找用户待确认订单
 	 */
-	public List findUnconfirmedOrdersByUserId(int userId)
-	{
-		String hql = "from Order "
-			+ "where userId="+ userId +" and finish=0 and handled != 0 and finish = 0";
-		List<Order> results = (List<Order>)getHibernateTemplate().find(hql);
+	public List findUnconfirmedOrdersByUserId(int userId) {
+		String hql = "from Order where userId=" + userId
+				+ " and finish=0 and handled != 3";
+		List<Order> results = (List<Order>) getHibernateTemplate().find(hql);
 		return results;
+	}
+
+	/**
+	 * 自定义查找历史订单
+	 */
+	public List findHistoryOrdersByUserId(int userId) {
+		String hql = "from Order where userId=" + userId
+				+ " and finish=3 and handled = 3";
+		List<Order> results = (List<Order>) getHibernateTemplate().find(hql);
+		return results;
+	}
+
+	/**
+	 * 自定义统计用户待确认/历史成功订单的数量 不一定能够成功
+	 */
+	public List<Integer> getOrderCount(int userId) {
+		// TODO Auto-generated method stub
+		String hql1 = "select orderNum from Order where userId=" + userId
+				+ " and finish=0 group by orderNum";
+		List result1 = getHibernateTemplate().find(hql1);
+		String hql2 = "select orderNum from Order  where userId=" + userId
+				+ " and finish=3 group by orderNum";
+		List result2 = getHibernateTemplate().find(hql2);
+		List<Integer> intList = new ArrayList<Integer>();
+		intList.add(result1.size());
+		intList.add(result2.size());
+		return intList;
+	}
+
+	public List<Order> findUnconfirmedOrders(){
+		try {
+			String queryString = "from Order  where finish = 0 and handled = 3";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+		/*
+		String hql = "update Order set finish = 3 where handled = 3 and finish = 0 and to_days(now()) - to_days(handledTime) > 10";
+		*/
+//		String hql = "from Order where finish = 0 and handled = 3";
+//		List<Order> result = getHibernateTemplate().find(hql);
+		
+		//getHibernateTemplate().bulkUpdate(hql);
+//		return result;
 	}
 }

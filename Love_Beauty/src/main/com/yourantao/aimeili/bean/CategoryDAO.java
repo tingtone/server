@@ -167,4 +167,20 @@ public class CategoryDAO extends HibernateDaoSupport {
 	public static CategoryDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (CategoryDAO) ctx.getBean("CategoryDAO");
 	}
+
+	/**
+	 * 自定义函数，用于有多个分类名的搜索结果
+	 * @param hqlSearch
+	 * @return
+	 */
+	public List<Category> findByCategoryNames(String hqlSearch) {
+		try {
+			String queryString = "from Category where "
+					+ hqlSearch;
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }

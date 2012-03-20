@@ -12,13 +12,10 @@
         </id>
         <property name="efficacyId" type="java.lang.Integer">
             <column name="efficacy_id" not-null="true">
-                <comment>åŠŸæ•ˆID</comment>
+                <comment>功效ID</comment>
             </column>
         </property>
-        <property name="goodsId" type="java.lang.Integer">
-            <column name="goods_id" not-null="true">
-                <comment>å•†å"�ID</comment>
-            </column>
-        </property>
+        <many-to-one class="main.com.yourantao.aimeili.bean.Goods"
+   column="goods_id" lazy="false" name="goods" unique="true"/>
     </class>
 </hibernate-mapping>

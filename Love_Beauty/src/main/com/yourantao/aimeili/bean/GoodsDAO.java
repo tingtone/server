@@ -264,4 +264,20 @@ public class GoodsDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+
+	/**
+	 * 自定义函数，用于搜索结果
+	 * @param hqlSearch
+	 * @return
+	 */
+	public List<Goods> findBySearchKeyword(String hqlSearch) {
+		try {
+			String queryString = "from Goods where "
+					+ hqlSearch;
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }

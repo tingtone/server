@@ -1,13 +1,12 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.util.Date;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -28,6 +27,7 @@ public class UserRelativeDAO extends HibernateDaoSupport {
 	public static final String USER_ID = "userId";
 	public static final String RELATIVE = "relative";
 	public static final String SKIN = "skin";
+	public static final String CITY = "city";
 
 	protected void initDao() {
 		// do nothing
@@ -105,6 +105,10 @@ public class UserRelativeDAO extends HibernateDaoSupport {
 		return findByProperty(SKIN, skin);
 	}
 
+	public List findByCity(Object city) {
+		return findByProperty(CITY, city);
+	}
+
 	public List findAll() {
 		log.debug("finding all UserRelative instances");
 		try {
@@ -155,7 +159,6 @@ public class UserRelativeDAO extends HibernateDaoSupport {
 			ApplicationContext ctx) {
 		return (UserRelativeDAO) ctx.getBean("UserRelativeDAO");
 	}
-
 	/**
 	 * 自定义函数
 	 * 根据亲戚和uid判断是否有重复

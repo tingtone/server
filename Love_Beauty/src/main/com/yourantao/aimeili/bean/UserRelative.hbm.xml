@@ -25,5 +25,15 @@
                 <comment>用户亲戚的肤质</comment>
             </column>
         </property>
+        <property name="city" type="java.lang.String">
+            <column name="city" length="30" not-null="true">
+                <comment>所在城市</comment>
+            </column>
+        </property>
+        <property name="birthday" type="java.util.Date">
+            <column name="birthday" length="0" not-null="true">
+                <comment>生日</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

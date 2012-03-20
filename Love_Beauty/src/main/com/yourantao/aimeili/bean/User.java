@@ -20,6 +20,7 @@ public class User implements java.io.Serializable {
 	private String mobile;
 	private Integer imageId;
 	private String description;
+	private String city;
 	private String skin;
 	private String hair;
 	private Integer point;
@@ -27,7 +28,6 @@ public class User implements java.io.Serializable {
 	private Short vip;
 	private Timestamp regTime;
 	private Timestamp lastlogin;
-
 	private UserLogin login;
 
 	// Constructors
@@ -35,34 +35,42 @@ public class User implements java.io.Serializable {
 	/** default constructor */
 	public User() {
 	}
-
+	
 	public User(Timestamp regTime, Timestamp lastlogin, UserLogin login) {
-		email = "";
-		verified = 0;
-		birthday = new Date(0);
-		mobile = "";
-		description = "";
-		point = 0;
-		coin = 0;
-		vip = 0;
-		setRegTime(regTime);
-		setLastlogin(lastlogin);
-		setLogin(login);
+				email = "";
+				verified = 0;
+				birthday = new Date(0);
+				mobile = "";
+				description = "";
+				point = 0;
+				coin = 0;
+				vip = 0;
+				setRegTime(regTime);
+				setLastlogin(lastlogin);
+				setLogin(login);
+	}
+
+	/** minimal constructor */
+	public User(String city, Timestamp regTime, Timestamp lastlogin) {
+		this.city = city;
+		this.regTime = regTime;
+		this.lastlogin = lastlogin;
 	}
 
 	/** full constructor */
 	public User(String nickName, String email, Short verified, String sex,
 			Date birthday, String mobile, Integer imageId, String description,
-			String skin, String hair, Integer point, Integer coin, Short vip,
-			Timestamp regTime, Timestamp lastlogin) {
+			String city, String skin, String hair, Integer point, Integer coin,
+			Short vip, Timestamp regTime, Timestamp lastlogin) {
 		this.nickName = nickName;
 		this.email = email;
 		this.verified = verified;
 		this.sex = sex;
 		this.birthday = birthday;
 		this.mobile = mobile;
-		this.setImageId(imageId);
+		this.imageId = imageId;
 		this.description = description;
+		this.city = city;
 		this.skin = skin;
 		this.hair = hair;
 		this.point = point;
@@ -70,18 +78,20 @@ public class User implements java.io.Serializable {
 		this.vip = vip;
 		this.regTime = regTime;
 		this.lastlogin = lastlogin;
+		this.setImageId(imageId);
 	}
 
 	// Property accessors
 
-	public Timestamp getLastlogin() {
-		return lastlogin;
-	}
-
-	public void setLastlogin(Timestamp lastlogin) {
-		this.lastlogin = lastlogin;
-	}
-
+	public void setLogin(UserLogin login) {
+				this.login = login;
+				login.setUser(this);
+			}
+		
+			public UserLogin getLogin() {
+				return login;
+			}
+		
 	public Integer getUserId() {
 		return this.userId;
 	}
@@ -138,12 +148,28 @@ public class User implements java.io.Serializable {
 		this.mobile = mobile;
 	}
 
+	public Integer getImageId() {
+		return this.imageId;
+	}
+
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+
 	public String getDescription() {
 		return this.description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getSkin() {
@@ -194,21 +220,12 @@ public class User implements java.io.Serializable {
 		this.regTime = regTime;
 	}
 
-	public void setLogin(UserLogin login) {
-		this.login = login;
-		login.setUser(this);
+	public Timestamp getLastlogin() {
+		return this.lastlogin;
 	}
 
-	public UserLogin getLogin() {
-		return login;
-	}
-
-	public void setImageId(Integer imageId) {
-		this.imageId = imageId;
-	}
-
-	public Integer getImageId() {
-		return imageId;
+	public void setLastlogin(Timestamp lastlogin) {
+		this.lastlogin = lastlogin;
 	}
 
 }

@@ -8,11 +8,16 @@ import java.util.List;
 
 import main.com.yourantao.aimeili.bean.Brand;
 import main.com.yourantao.aimeili.bean.BrandDAO;
+import main.com.yourantao.aimeili.bean.Category;
 import main.com.yourantao.aimeili.bean.CategoryDAO;
+import main.com.yourantao.aimeili.bean.Efficacy;
+import main.com.yourantao.aimeili.bean.EfficacyDAO;
 import main.com.yourantao.aimeili.bean.Goods;
 import main.com.yourantao.aimeili.bean.GoodsComment;
 import main.com.yourantao.aimeili.bean.GoodsCommentDAO;
 import main.com.yourantao.aimeili.bean.GoodsDAO;
+import main.com.yourantao.aimeili.bean.GoodsEfficacy;
+import main.com.yourantao.aimeili.bean.GoodsEfficacyDAO;
 import main.com.yourantao.aimeili.bean.GoodsImages;
 import main.com.yourantao.aimeili.bean.GoodsImagesDAO;
 import main.com.yourantao.aimeili.bean.GoodsMap;
@@ -23,7 +28,6 @@ import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.bean.Series;
 import main.com.yourantao.aimeili.bean.SeriesDAO;
-import main.com.yourantao.aimeili.bean.User;
 import main.com.yourantao.aimeili.bean.UserDAO;
 import main.com.yourantao.aimeili.bean.UserFavorite;
 import main.com.yourantao.aimeili.bean.UserFavoriteDAO;
@@ -40,9 +44,6 @@ import main.com.yourantao.aimeili.vo.GoodsView;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-
-import sun.security.action.GetIntegerAction;
 
 @SuppressWarnings("serial")
 public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
@@ -66,6 +67,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private UserDAO userDAO;
 	private UserFavoriteDAO userFavoriteDAO;
 	private GoodsCommentDAO goodsCommentDAO;
+	private EfficacyDAO efficacyDAO;
+	private GoodsEfficacyDAO goodsEfficacyDAO;
 	
 	
 	// struts
@@ -105,6 +108,22 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
+	}
+
+	public GoodsEfficacyDAO getGoodsEfficacyDAO() {
+		return goodsEfficacyDAO;
+	}
+
+	public void setGoodsEfficacyDAO(GoodsEfficacyDAO goodsEfficacyDAO) {
+		this.goodsEfficacyDAO = goodsEfficacyDAO;
+	}
+
+	public EfficacyDAO getEfficacyDAO() {
+		return efficacyDAO;
+	}
+
+	public void setEfficacyDAO(EfficacyDAO efficacyDAO) {
+		this.efficacyDAO = efficacyDAO;
 	}
 
 	public GoodsCommentDAO getGoodsCommentDAO() {
@@ -687,4 +706,153 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 		printObject(result);
 		return null;
 	}
+
+	/* for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListBySearch()
+	 */
+	@Override
+	public String getGoodsListBySearch() {
+		String uuid=getStringParameter(UUID);
+		String keyword=getStringParameter("kw");
+		String[] keywords=keyword.split(",|\\.|/|\\\\|=|-(|)|\\*|%|@|\\~|\\+|<|>|$|&|。| |，|！|、");   //按分隔符分割为多个词
+		if(keywords==null || keywords[0].equals("null")){
+			printString("{'msg':'没有搜索关键词'}");
+			return null;
+		}
+		List<GoodsView> goodsViews=new ArrayList<GoodsView>();    //返回的结果
+		List<Integer> goodsId=new ArrayList<Integer>();		//返回结果的GID
+		List<Integer> goodsId1=new ArrayList<Integer>(); 	//品牌结果
+		List<Integer> goodsId2=new ArrayList<Integer>();	//分类结果
+		List<Integer> goodsId3=new ArrayList<Integer>();	//功效结果
+		String hqlSearch="";
+		for(int i=0;i<keywords.length;i++){   //多个关键词
+			hqlSearch +=brandDAO.BRAND_NAME+"= '"+ keywords[i]+"' or "+brandDAO.BRAND_ALIAS+"='"+keywords[i]+"'";
+			if(i!=keywords.length-1){
+				hqlSearch += " or ";
+			}
+		}
+			List<Brand> brands=brandDAO.findByBrandNameOrBrandAlias(hqlSearch);  //根据品牌名或者别名查找先
+			if(!brands.isEmpty()){ //搜索的关键词是品牌
+					Brand brand =brands.get(0);   //其实做多只能匹配一个品牌名
+					int bid=brand.getBrandId();
+					List<Goods> goodsList=goodsDAO.findByBrandId(bid);
+					for (Goods goods : goodsList) {
+						goodsId1.add(goods.getGoodsId());
+					}
+			
+			}
+			hqlSearch="";
+			for(int i=0;i<keywords.length;i++){   //多个关键词
+				hqlSearch +="categoryName='"+ keywords[i]+"'";
+				if(i!=keywords.length-1){
+					hqlSearch += " or ";
+				}
+			}
+			List<Category> categorys= categoryDAO.findByCategoryNames(hqlSearch);
+			if(!categorys.isEmpty()){    //搜索的关键词是分类词
+				Category category =categorys.get(0);   //其实做多只能匹配一个品牌名
+				int cid=category.getCategoryId();
+				List<Goods> goodsList=goodsDAO.findByCategoryId(cid);
+				for (Goods goods : goodsList) {
+						goodsId2.add(goods.getGoodsId());
+				}
+			}
+			
+			
+			hqlSearch="";
+			for(int i=0;i<keywords.length;i++){   //多个关键词
+				hqlSearch +="efficacyName='"+ keywords[i]+"'";
+				if(i!=keywords.length-1){
+					hqlSearch += " or ";
+				}
+			}
+			List<Efficacy> efficacies= efficacyDAO.findByEfficacyNames(hqlSearch);
+			if(!efficacies.isEmpty()){   //搜索的关键词是功效
+				Efficacy category =efficacies.get(0);   //其实做多只能匹配一个品牌名
+				int eid=category.getEfficacyId();
+				List<GoodsEfficacy> goodsList=goodsEfficacyDAO.findByEfficacyId(eid);
+				for (GoodsEfficacy goodsEfficacy : goodsList) {
+						goodsId3.add(goodsEfficacy.getGoods().getGoodsId());
+				}
+			}
+		
+		/*因为是且的关系，所以在goodsId2里面包含的才继续加到goodsId3中,如果在品牌和分类相关的搜索中都包含，则加入到goodsId3中*/
+			 
+			if(!goodsId1.isEmpty()){   //优先品牌查询
+				for (Integer Id1 : goodsId1) {
+				if((goodsId2.contains(Id1) || goodsId2.isEmpty())  
+						&& (goodsId3.contains(Id1) || goodsId3.isEmpty())){  //分类和功效都包含（没有数据也算包含）
+					goodsId.add(Id1);
+					}
+				
+				}
+			}
+			else if(!goodsId2.isEmpty()){  //其次是分类查询
+				for (Integer Id2 : goodsId2) {
+					if( (goodsId3.contains(Id2) || goodsId3.isEmpty())){  //功效包含（没有数据也算包含）
+						goodsId.add(Id2);
+						}
+					}
+				
+			}else if(!goodsId3.isEmpty())  //再次是功效查询
+			{
+				goodsId=goodsId3;
+			}else{           //全无数据，则进行关键词查找
+				hqlSearch="";
+				for(int i=0;i<keywords.length;i++){   //多个关键词
+					hqlSearch +="goodsName like '%"+ keywords[i]+"%'";
+					if(i!=keywords.length-1){
+						hqlSearch += " or ";
+					}
+				}
+				List<Goods> goodsList=goodsDAO.findBySearchKeyword(hqlSearch);
+				for (Goods goods : goodsList) {
+					goodsId.add(goods.getGoodsId());
+				}
+			}
+			
+			if(goodsId.isEmpty()){   //无商品
+				printString("{'msg':'没有搜索到商品'}");
+				return null;
+			}
+			
+			for (int id : goodsId) {   //将GID转换为goodsView输出
+				Goods goods=goodsDAO.findById(id);
+				GoodsView goodsView=new GoodsView();
+				goodsView.setGoodsId(goods.getGoodsId());
+				goodsView.setGoodsAge(goods.getGoodsAge());
+				goodsView.setGoodsDescription(goods.getGoodsDescription());
+				goodsView.setGoodsForskin(goods.getGoodsForskin());
+				goodsView.setGoodsName(goods.getGoodsName());
+				goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+				goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+				goodsView.setGoodsScore(goods.getGoodsScore());
+				goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+				goodsView.setGoodsStatus(goods.getGoodsStatus());
+				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+				if (thumb != null) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+				} else {
+					goodsView.setGoodsThumb("");
+				}
+				if (goods.getBrandId() != null) {
+					Brand brand=brandDAO.findById(goods.getBrandId());
+					goodsView.setGoodsBrandName(brand.getBrandName());
+				} 
+				if (goods.getSeriesId() != null) {  
+					if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+						goodsView.setGoodsSeriesName("无");
+					}else{
+						Series series=seriesDAO.findById(goods.getSeriesId());
+						goodsView.setGoodsSeriesName(series.getSeriesName());
+					}
+				}
+					goodsViews.add(goodsView);
+			} 
+			
+		printArray(goodsViews); 
+		return null;
+	}
+
 }

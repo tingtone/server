@@ -77,13 +77,22 @@
         </property>
         <property name="handled" type="java.lang.Short">
             <column name="handled" not-null="true">
-                <comment>0:未完成1:等待管理员处理2:管理员电话确认3:管理员下单</comment>
+                <comment>0:等待管理员处理1:管理员电话确认3:管理员下单</comment>
             </column>
         </property>
         <property name="handledTime" type="java.sql.Timestamp">
             <column name="handled_time" length="0" not-null="true">
                 <comment>管理员处理时间</comment>
             </column>
+        </property>
+        <property name="invoiceType" type="java.lang.Short">
+            <column name="invoice_type" />
+        </property>
+        <property name="invoiceContent" type="java.lang.String">
+            <column name="invoice_content" />
+        </property>
+        <property name="invoiceName" type="java.lang.String">
+            <column name="invoice_name" length="64" />
         </property>
     </class>
 </hibernate-mapping>

@@ -152,4 +152,20 @@ public class EfficacyDAO extends HibernateDaoSupport {
 	public static EfficacyDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (EfficacyDAO) ctx.getBean("EfficacyDAO");
 	}
+	
+	/**
+	 * 自定义函数，用于有多个分类名的搜索结果
+	 * @param hqlSearch
+	 * @return
+	 */
+	public List<Efficacy> findByEfficacyNames(String hqlSearch) {
+		try {
+			String queryString = "from Efficacy where "
+					+ hqlSearch;
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }

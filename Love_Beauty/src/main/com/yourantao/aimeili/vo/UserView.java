@@ -1,6 +1,7 @@
 package main.com.yourantao.aimeili.vo;
 
-import java.util.Map;
+import java.util.Date;
+
 
 /**
  * 用户信息展示类(肤质和其亲戚的肤质)
@@ -13,7 +14,10 @@ import java.util.Map;
 public class UserView {
 	private int userId;
 	private String skin;
-	private Map relativeSkin;
+	private String birthday;
+	private String city;
+	private String userName;
+	
 	public int getUserId() {
 		return userId;
 	}
@@ -26,11 +30,23 @@ public class UserView {
 	public void setSkin(String skin) {
 		this.skin = skin;
 	}
-	public Map getRelativeSkin() {
-		return relativeSkin;
+	public String getBirthday() {
+		return birthday;
 	}
-	public void setRelativeSkin(Map relativeSkin) {
-		this.relativeSkin = relativeSkin;
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	
 }
