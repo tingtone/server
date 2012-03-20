@@ -36,6 +36,11 @@
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>
+		<!-- 购物车-->
+		<action name="shoppingCart_*" class="ShoppingCartAction" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
 		<!-- 用户 -->
 		<action name="user_*" class="UserAction" method="{1}">
 			<result name="success">/success.jsp</result>
@@ -49,7 +54,7 @@
 		</action>
 		
 		<!-- 订单 -->
-		<action name="order_*" class="" method="{1}">
+		<action name="order_*" class="OrderAction" method="{1}">
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>

@@ -56,6 +56,14 @@
         <resourceEdge source="error" routing="0" target="error.jsp" />
       </result>
     </action>
+    <action name="shoppingCart_*" location="0,0" size="0,0">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+    </action>
     <action name="user_*" location="0,0" size="0,0">
       <result name="success">
         <resourceEdge source="success" routing="0" target="success.jsp" />
@@ -72,6 +80,28 @@
         <resourceEdge source="error" routing="0" target="error.jsp" />
       </result>
     </action>
+    <action name="order_*" location="0,0" size="0,0">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+    </action>
+    <action name="ranking_*" location="0,0" size="0,0">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="success.jsp" />
+      </result>
+      <result name="error">
+        <resourceEdge source="error" routing="0" target="error.jsp" />
+      </result>
+      <result name="ranking">
+        <resourceEdge source="ranking" routing="0" target="ranking.jsp" />
+      </result>
+      <result name="ranking_goods">
+        <resourceEdge source="ranking_goods" routing="0" target="ranking_goods.jsp" />
+      </result>
+    </action>
   </package>
   <webResource name="topic_goods.jsp" path="/forEditor/topic_goods.jsp" location="1616,275" size="150,55" />
   <webResource name="topic.jsp" path="/forEditor/topic.jsp" location="1112,590" size="150,55" />
@@ -80,5 +110,7 @@
   <webResource name="goods2realgoods.jsp" path="/forEditor/goods2realgoods.jsp" location="234,65" size="150,55" />
   <webResource name="goods.jsp" path="/forEditor/goods.jsp" location="548,65" size="150,55" />
   <webResource name="goodsImages.jsp" path="/forEditor/goodsImages.jsp" location="771,65" size="150,55" />
+  <webResource name="ranking.jsp" path="/forEditor/ranking.jsp" location="0,0" size="0,0" />
+  <webResource name="ranking_goods.jsp" path="/forEditor/ranking_goods.jsp" location="0,0" size="0,0" />
 </Struts2Diagram>
 

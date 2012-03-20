@@ -28,7 +28,11 @@ public interface ShoppingCartInterface {
 	 * @return
 	 */
 	public abstract String modifyQuantity();
-
+	/**
+	 * 接受商品的新的价格
+	 * @return
+	 */
+	public abstract String acceptGoods();
 	/**
 	 * 删除购物车中的某一个商品
 	 * @return

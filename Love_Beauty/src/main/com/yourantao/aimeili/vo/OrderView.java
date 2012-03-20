@@ -29,6 +29,34 @@ public class OrderView {
 	private String Address;
 	//收件人手机
 	private String mobile;
+	public void setGoodsAndTrace(List<GoodsRealSimpleView> orderGoodsList, OrderTraceView orderTraceView, int providerId){
+		switch (providerId) {//以后这里可以添加新的接口setxxxx(goodsRealSimpleViewList, orderTraceView, providerId);
+		case 1:
+			this.orderGoodsList1 = orderGoodsList;
+			this.traceView1 = orderTraceView;
+			break;
+		case 2:
+			this.orderGoodsList2 = orderGoodsList;
+			this.traceView2 = orderTraceView;
+			break;
+		case 3:
+			this.orderGoodsList3 = orderGoodsList;
+			this.traceView3 = orderTraceView;
+			break;
+		case 4:
+			this.orderGoodsList4 = orderGoodsList;
+			this.traceView3 = orderTraceView;
+			break;
+		case 5:
+			this.orderGoodsList5 = orderGoodsList;
+			this.traceView5 = orderTraceView;
+			break;
+		case 6:
+			this.orderGoodsList6 = orderGoodsList;
+			this.traceView6 = orderTraceView;
+			break;
+		}
+	}
 	public Integer getOrderId() {
 		return orderId;
 	}

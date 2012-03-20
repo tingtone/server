@@ -218,43 +218,47 @@ public class OrderDAO extends HibernateDaoSupport {
 	public static OrderDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (OrderDAO) ctx.getBean("OrderDAO");
 	}
+
 	/**
 	 * 自定义查找用户待确认订单
 	 */
-	public List findUnconfirmedOrdersByUserId(int userId)
-	{
-		String hql = "from Order "
-			+ "where userId="+ userId +" and finish=0 and handled != 3 group by orderNum order by providerId";
-		List<Order> results = (List<Order>)getHibernateTemplate().find(hql);
+	public List findUnconfirmedOrdersByUserId(int userId) {
+		String hql = "from Order where userId=" + userId
+				+ " and finish=0 and handled != 3";
+		List<Order> results = (List<Order>) getHibernateTemplate().find(hql);
 		return results;
 	}
+
 	/**
-	 * 自定义查找用户待确认订单
+	 * 自定义查找历史订单
 	 */
-	public List findHistoryOrdersByUserId(int userId)
-	{
-		String hql = "from Order "
-			+ "where userId="+ userId +" and finish=3 and handled = 3 group by orderNum order by providerId";
-		List<Order> results = (List<Order>)getHibernateTemplate().find(hql);
+	public List findHistoryOrdersByUserId(int userId) {
+		String hql = "from Order where userId=" + userId
+				+ " and finish=3 and handled = 3";
+		List<Order> results = (List<Order>) getHibernateTemplate().find(hql);
 		return results;
 	}
+
 	/**
-	 * 自定义统计用户待确认/历史成功订单的数量
-	 * 不一定能够成功
+	 * 自定义统计用户待确认/历史成功订单的数量 不一定能够成功
 	 */
 	public List<Integer> getOrderCount(int userId) {
 		// TODO Auto-generated method stub
-		String hql1="select count(orderNum) from Order"
-			+ "where userId="+ userId +" and finish=0 and handled != 3 group by orderNum order by providerId";
+		String hql1 = "select orderNum from Order where userId=" + userId
+				+ " and finish=0 and handled != 3 group by orderNum";
 		List result1 = getHibernateTemplate().find(hql1);
-		String hql2="select count(orderNum) from Order"
-			+ "where userId="+ userId +" and finish=3 group by orderNum order by providerId";
+		String hql2 = "select orderNum from Order  where userId=" + userId
+				+ " and finish=3 group by orderNum";
 		List result2 = getHibernateTemplate().find(hql2);
 		List<Integer> intList = new ArrayList<Integer>();
-		intList.add((Integer)result1.get(0));
-		intList.add((Integer)result2.get(0));
+		intList.add(result1.size());
+		intList.add(result2.size());
 		return intList;
 	}
 
-	
+	public List<Order> findUnconfirmedOrders(){
+		String hql = "from Order where finished = 0 and handled = 3";
+		List<Order> result = getHibernateTemplate().find(hql);
+		return result;
+	}
 }
