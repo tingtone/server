@@ -5,6 +5,7 @@ import main.com.yourantao.aimeili.bean.OrderDAO;
 import main.com.yourantao.aimeili.bean.OrderGoodsDAO;
 import main.com.yourantao.aimeili.bean.ShoppingCartDAO;
 import main.com.yourantao.aimeili.bean.UserAddressDAO;
+import main.com.yourantao.aimeili.bean.UserFavoriteDAO;
 
 public interface OrderInterface {
 
@@ -76,18 +77,22 @@ public interface OrderInterface {
 	public abstract ShoppingCartDAO getShoppingCartDAO();
 
 	public abstract void setShoppingCartDAO(ShoppingCartDAO shoppingCartDAO);
+	
+	public abstract UserFavoriteDAO getUserFavoriteDAO();
 
+	public abstract void setUserFavoriteDAO(UserFavoriteDAO userFavoriteDAO);
+	
 	/**
 	 * 获取各种类型订单的数量
 	 * 这里只有待确认订单/历史订单的数量
 	 * @return
 	 */
-	public abstract String getOrderCount();
+	public abstract String fetchCountOverview();
 
 	/**
 	 * 获取未确认的订单
 	 */
-	public abstract String getUnconfirmedOrders();
+	public abstract String fetchUnconfirmedOrders();
 
 	/**
 	 * 用户进行收货确认,一个订单对应多个商城的订单,收货确认如何确定？？？？？？？
@@ -102,14 +107,14 @@ public interface OrderInterface {
 	 * @see
 	 * main.com.yourantao.aimeili.action.OrderInterface#getUnfinishedOrders()
 	 */
-	public abstract String getUnfinishedOrders();
+	public abstract String fetchUnfinishedOrders();
 
 	/**
 	 * 获取成功订单
 	 * 
 	 * @return
 	 */
-	public abstract String getHistoryOrders();
+	public abstract String fetchHistoryOrders();
 
 	/**
 	 * 提交订单,需要计算出当前所有的商品的总金额,并与实际的商品总金额比较

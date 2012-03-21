@@ -25,6 +25,7 @@
   <a href="forEditor/ranking.jsp">排行榜页</a>
   <a href="forEditor/user.jsp">用户系统</a>
   <a href="forEditor/provider.jsp">货商</a>
+  <a href="forEditor/order.jsp">订单</a>
   </div>
 
 

@@ -245,7 +245,7 @@ public class OrderDAO extends HibernateDaoSupport {
 	public List<Integer> getOrderCount(int userId) {
 		// TODO Auto-generated method stub
 		String hql1 = "select orderNum from Order where userId=" + userId
-				+ " and finish=0 and handled != 3 group by orderNum";
+				+ " and finish=0 group by orderNum";
 		List result1 = getHibernateTemplate().find(hql1);
 		String hql2 = "select orderNum from Order  where userId=" + userId
 				+ " and finish=3 group by orderNum";
@@ -256,8 +256,8 @@ public class OrderDAO extends HibernateDaoSupport {
 		return intList;
 	}
 
-	public List<Order> findUnconfirmedOrders(){
-		String hql = "from Order where finished = 0 and handled = 3";
+	public List<Order> getUnhandledOrders(){
+		String hql = "from Order where handled = 0 and finish = 0 order by userId, orderNum, providerId";
 		List<Order> result = getHibernateTemplate().find(hql);
 		return result;
 	}

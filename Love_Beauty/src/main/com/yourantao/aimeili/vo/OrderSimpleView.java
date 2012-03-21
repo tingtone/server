@@ -1,9 +1,9 @@
-package main.com.yourantao.aimeili.vo;
-/**
+/*package main.com.yourantao.aimeili.vo;
+*//**
  * 暂时废弃不用
  * @author rmss
  *
- */
+ *//*
 public class OrderSimpleView {
 	private int orderId;
 	private String orderNum;
@@ -49,3 +49,4 @@ public class OrderSimpleView {
 	}
 	
 }
+*/
