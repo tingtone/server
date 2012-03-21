@@ -8,13 +8,81 @@ import main.com.yourantao.aimeili.bean.UserAddressDAO;
 
 public interface OrderInterface {
 
+	// spring 机制要使用的getter/setter
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderDAO()
+	 */
+	public abstract OrderDAO getOrderDAO();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#setOrderDAO(main.com
+	 * .yourantao.aimeili.bean.OrderDAO)
+	 */
+	public abstract void setOrderDAO(OrderDAO orderDAO);
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderGoodsDAO()
+	 */
+	public abstract OrderGoodsDAO getOrderGoodsDAO();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#setOrderGoodsDAO(main
+	 * .com.yourantao.aimeili.bean.OrderGoodsDAO)
+	 */
+	public abstract void setOrderGoodsDAO(OrderGoodsDAO orderGoodsDAO);
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#getGoodsRealDAO()
+	 */
+	public abstract GoodsRealDAO getGoodsRealDAO();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#setGoodsRealDAO(main
+	 * .com.yourantao.aimeili.bean.GoodsRealDAO)
+	 */
+	public abstract void setGoodsRealDAO(GoodsRealDAO goodsRealDAO);
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see main.com.yourantao.aimeili.action.OrderInterface#getUserAddressDAO()
+	 */
+	public abstract UserAddressDAO getUserAddressDAO();
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.OrderInterface#setUserAddressDAO(main
+	 * .com.yourantao.aimeili.bean.UserAddressDAO)
+	 */
+	public abstract void setUserAddressDAO(UserAddressDAO userAddressDAO);
+
+	public abstract ShoppingCartDAO getShoppingCartDAO();
+
+	public abstract void setShoppingCartDAO(ShoppingCartDAO shoppingCartDAO);
 
 	/**
 	 * 获取各种类型订单的数量
 	 * 这里只有待确认订单/历史订单的数量
 	 * @return
 	 */
-	public String getOrderCount();
+	public abstract String getOrderCount();
 
 	/**
 	 * 获取未确认的订单

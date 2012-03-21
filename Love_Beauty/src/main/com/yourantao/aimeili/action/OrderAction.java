@@ -2,7 +2,11 @@ package main.com.yourantao.aimeili.action;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import main.com.yourantao.aimeili.bean.GoodsReal;
 import main.com.yourantao.aimeili.bean.GoodsRealDAO;
@@ -17,13 +21,10 @@ import main.com.yourantao.aimeili.bean.UserAddressDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.vo.GoodsRealSimpleView;
+import main.com.yourantao.aimeili.vo.OrderSimpleView;
 import main.com.yourantao.aimeili.vo.OrderTraceView;
 import main.com.yourantao.aimeili.vo.OrderView;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-@SuppressWarnings("serial")
 public class OrderAction extends BaseAction implements Constant, OrderInterface {
 
 	private static final Logger LOG = LoggerFactory
@@ -163,22 +164,14 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			printString("{'msg':'没有该用户'}");
 			return null;
 		}
-//		List<Order> orderList = orderDAO.findById(8);
-		Order order=orderDAO.findById(8);
-//		for (Order order : orderList) {
-				order.setFinish((short)3);
-				order.setInvoice((short)1);
-				
-				//orderDAO.merge(orderTmp);
-				//order.setFinish((short) 3);
-				//orderDAO.merge(order);
-//		}
-//		List<Integer> countList = orderDAO.getOrderCount(userId);
-//		String countString = "{'unconfirmed':'" + countList.get(0)
-//				+ "','history':'" + countList.get(1) + "'}";
-//
-//		printString(countString);
-		printString(MSG_SUCCESS);
+		int userId = userLogin.get(0).getUserId();
+		autoConfirmOrder();
+		List<Integer> countList = orderDAO.getOrderCount(userId);
+		String countString = "{'unconfirmed':'" + countList.get(0)
+				+ "','history':'" + countList.get(1) + "'}";
+
+		printString(countString);
+
 		return null;
 	}
 
@@ -232,6 +225,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			for (OrderGoods orderGoods : orderGoodsList) {
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
 				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
+				goodsRealSimpleView.setGoodsId(orderGoods.getGoodsRealId());
 				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
 
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
@@ -244,6 +238,8 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			// 物流信息需要从某处获得
 			// related_num相关获取
 
+			orderView.setGoodsAndTrace(goodsRealSimpleViewList, orderTraceView,
+					order.getProviderId());
 			// 设置收货人相关信息
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
@@ -297,7 +293,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				order.setFinish((short) 3);
 				orderDAO.merge(order);
 			} else {
-				msg = "{'msg':'订单不存在或请等待管理员处理'}";
+				msg = "{'msg':'订单不存在或订单未完成或请等待管理员处理'}";
 				printString(msg);
 				return null;
 			}
@@ -337,6 +333,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		List<GoodsRealSimpleView> goodsRealViewList6 = new ArrayList<GoodsRealSimpleView>();
 		for (ShoppingCart shoppingCart : shoppingCartList) {
 			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
+			goodsRealSimpleView.setGoodsId(shoppingCart.getGoodsRealId());
 			goodsRealSimpleView.setGoodsPrice(shoppingCart.getPrice());
 			goodsRealSimpleView.setGoodsCount(shoppingCart.getCount());
 			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
@@ -366,13 +363,13 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				break;
 			}
 		}
-//
-//		orderView.setOrderGoodsList1(goodsRealViewList1);
-//		orderView.setOrderGoodsList2(goodsRealViewList2);
-//		orderView.setOrderGoodsList3(goodsRealViewList3);
-//		orderView.setOrderGoodsList4(goodsRealViewList3);
-//		orderView.setOrderGoodsList5(goodsRealViewList5);
-//		orderView.setOrderGoodsList6(goodsRealViewList6);
+
+		orderView.setOrderGoodsList1(goodsRealViewList1);
+		orderView.setOrderGoodsList2(goodsRealViewList2);
+		orderView.setOrderGoodsList3(goodsRealViewList3);
+		orderView.setOrderGoodsList4(goodsRealViewList3);
+		orderView.setOrderGoodsList5(goodsRealViewList5);
+		orderView.setOrderGoodsList6(goodsRealViewList6);
 
 		printObject(orderView);
 		return null;
@@ -423,6 +420,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			for (OrderGoods orderGoods : orderGoodsList) {
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
 				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
+				goodsRealSimpleView.setGoodsId(orderGoods.getGoodsRealId());
 				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
 
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
@@ -435,6 +433,8 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			// 物流信息需要从某处获得
 			// related_num相关获取
 
+			orderView.setGoodsAndTrace(goodsRealSimpleViewList, orderTraceView,
+					order.getProviderId());
 			// 设置收货人相关信息
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
@@ -719,25 +719,16 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 */
 	private void autoConfirmOrder() {
 		int intval = 10;
-		//long intvalMillise = intval * 24 * 60 * 60 * 1000;
-		long intvalMillise = 60*1000;
+		long intvalMillise = intval * 24 * 60 * 60 * 1000;
 		List<Order> orderList = orderDAO.findUnconfirmedOrders();
-		
-		System.out.println(orderList.size());
 		for (Order order : orderList) {
 			Timestamp handledTime = order.getHandledTime();
 			if (System.currentTimeMillis() - handledTime.getTime() > intvalMillise) {
-				System.out.println(System.currentTimeMillis());
-				System.out.println(handledTime.getTime());
-				Order orderTmp = orderDAO.findById(order.getOrderId());
-				orderTmp.setFinish((short)3);
-				orderTmp.setInvoice((short)1);
-				orderTmp.setPaymentType("测试");
-				//orderDAO.merge(orderTmp);
-				//order.setFinish((short) 3);
-				//orderDAO.merge(order);
+				order.setFinish((short) 3);
+				orderDAO.merge(order);
 			}
 		}
+		return;
 	}
 
 	// 以下是小编的接口

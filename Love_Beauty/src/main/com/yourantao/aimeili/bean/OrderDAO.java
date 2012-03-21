@@ -218,6 +218,7 @@ public class OrderDAO extends HibernateDaoSupport {
 	public static OrderDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (OrderDAO) ctx.getBean("OrderDAO");
 	}
+
 	/**
 	 * 自定义查找用户待确认订单
 	 */
@@ -244,7 +245,7 @@ public class OrderDAO extends HibernateDaoSupport {
 	public List<Integer> getOrderCount(int userId) {
 		// TODO Auto-generated method stub
 		String hql1 = "select orderNum from Order where userId=" + userId
-				+ " and finish=0 group by orderNum";
+				+ " and finish=0 and handled != 3 group by orderNum";
 		List result1 = getHibernateTemplate().find(hql1);
 		String hql2 = "select orderNum from Order  where userId=" + userId
 				+ " and finish=3 group by orderNum";
@@ -256,20 +257,8 @@ public class OrderDAO extends HibernateDaoSupport {
 	}
 
 	public List<Order> findUnconfirmedOrders(){
-		try {
-			String queryString = "from Order  where finish = 0 and handled = 3";
-			return getHibernateTemplate().find(queryString);
-		} catch (RuntimeException re) {
-			log.error("find by property name failed", re);
-			throw re;
-		}
-		/*
-		String hql = "update Order set finish = 3 where handled = 3 and finish = 0 and to_days(now()) - to_days(handledTime) > 10";
-		*/
-//		String hql = "from Order where finish = 0 and handled = 3";
-//		List<Order> result = getHibernateTemplate().find(hql);
-		
-		//getHibernateTemplate().bulkUpdate(hql);
-//		return result;
+		String hql = "from Order where finished = 0 and handled = 3";
+		List<Order> result = getHibernateTemplate().find(hql);
+		return result;
 	}
 }
