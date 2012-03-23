@@ -100,6 +100,7 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 			brandView.setBrandName(brand.getBrandName());
 			brandView.setBrandAlias(brand.getBrandAlias());
 			brandView.setBrandId(brand.getBrandId());
+			brandView.setBrandOtherName(brand.getBrandOtherNames());
 			
 			
 			if (brand.getBrandImageId()!= 0) // 图片非空

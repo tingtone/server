@@ -9,29 +9,32 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * GoodsEfficacy entities. Transaction control of the save(), update() and
+ * GoodsExperience entities. Transaction control of the save(), update() and
  * delete() operations can directly support Spring container-managed
  * transactions or they can be augmented to handle user-managed Spring
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see main.com.yourantao.aimeili.bean.GoodsEfficacy
+ * @see main.com.yourantao.aimeili.bean.GoodsExperience
  * @author MyEclipse Persistence Tools
  */
 
-public class GoodsEfficacyDAO extends HibernateDaoSupport {
+public class GoodsExperienceDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
-			.getLogger(GoodsEfficacyDAO.class);
+			.getLogger(GoodsExperienceDAO.class);
 	// property constants
-	public static final String EFFICACY_ID = "efficacyId";
-	public static final String GOODS = "goods";
+	public static final String GOODS_NAME = "goodsName";
+	public static final String EXPERIENCE_NAME = "experienceName";
+	public static final String EXPERIENCE_FROM = "experienceFrom";
+	public static final String EXPERIENCE_INTRODUCTION = "experienceIntroduction";
+	public static final String EXPERIENCE_DETAIL = "experienceDetail";
 
 	protected void initDao() {
 		// do nothing
 	}
 
-	public void save(GoodsEfficacy transientInstance) {
-		log.debug("saving GoodsEfficacy instance");
+	public void save(GoodsExperience transientInstance) {
+		log.debug("saving GoodsExperience instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
 			log.debug("save successful");
@@ -41,8 +44,8 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void delete(GoodsEfficacy persistentInstance) {
-		log.debug("deleting GoodsEfficacy instance");
+	public void delete(GoodsExperience persistentInstance) {
+		log.debug("deleting GoodsExperience instance");
 		try {
 			getHibernateTemplate().delete(persistentInstance);
 			log.debug("delete successful");
@@ -52,11 +55,11 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public GoodsEfficacy findById(java.lang.Integer id) {
-		log.debug("getting GoodsEfficacy instance with id: " + id);
+	public GoodsExperience findById(java.lang.Integer id) {
+		log.debug("getting GoodsExperience instance with id: " + id);
 		try {
-			GoodsEfficacy instance = (GoodsEfficacy) getHibernateTemplate()
-					.get("main.com.yourantao.aimeili.bean.GoodsEfficacy", id);
+			GoodsExperience instance = (GoodsExperience) getHibernateTemplate()
+					.get("main.com.yourantao.aimeili.bean.GoodsExperience", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -64,8 +67,8 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByExample(GoodsEfficacy instance) {
-		log.debug("finding GoodsEfficacy instance by example");
+	public List findByExample(GoodsExperience instance) {
+		log.debug("finding GoodsExperience instance by example");
 		try {
 			List results = getHibernateTemplate().findByExample(instance);
 			log.debug("find by example successful, result size: "
@@ -78,10 +81,10 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding GoodsEfficacy instance with property: "
+		log.debug("finding GoodsExperience instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from GoodsEfficacy as model where model."
+			String queryString = "from GoodsExperience as model where model."
 					+ propertyName + "= ?";
 			return getHibernateTemplate().find(queryString, value);
 		} catch (RuntimeException re) {
@@ -90,18 +93,30 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByEfficacyId(Object efficacyId) {
-		return findByProperty(EFFICACY_ID, efficacyId);
+	public List findByGoodsName(Object goodsName) {
+		return findByProperty(GOODS_NAME, goodsName);
 	}
 
-	public List findByGoods(Object goods) {
-		return findByProperty(GOODS, goods);
+	public List findByExperienceName(Object experienceName) {
+		return findByProperty(EXPERIENCE_NAME, experienceName);
+	}
+
+	public List findByExperienceFrom(Object experienceFrom) {
+		return findByProperty(EXPERIENCE_FROM, experienceFrom);
+	}
+
+	public List findByExperienceIntroduction(Object experienceIntroduction) {
+		return findByProperty(EXPERIENCE_INTRODUCTION, experienceIntroduction);
+	}
+
+	public List findByExperienceDetail(Object experienceDetail) {
+		return findByProperty(EXPERIENCE_DETAIL, experienceDetail);
 	}
 
 	public List findAll() {
-		log.debug("finding all GoodsEfficacy instances");
+		log.debug("finding all GoodsExperience instances");
 		try {
-			String queryString = "from GoodsEfficacy";
+			String queryString = "from GoodsExperience";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
@@ -109,10 +124,10 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public GoodsEfficacy merge(GoodsEfficacy detachedInstance) {
-		log.debug("merging GoodsEfficacy instance");
+	public GoodsExperience merge(GoodsExperience detachedInstance) {
+		log.debug("merging GoodsExperience instance");
 		try {
-			GoodsEfficacy result = (GoodsEfficacy) getHibernateTemplate()
+			GoodsExperience result = (GoodsExperience) getHibernateTemplate()
 					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -122,8 +137,8 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachDirty(GoodsEfficacy instance) {
-		log.debug("attaching dirty GoodsEfficacy instance");
+	public void attachDirty(GoodsExperience instance) {
+		log.debug("attaching dirty GoodsExperience instance");
 		try {
 			getHibernateTemplate().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -133,8 +148,8 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public void attachClean(GoodsEfficacy instance) {
-		log.debug("attaching clean GoodsEfficacy instance");
+	public void attachClean(GoodsExperience instance) {
+		log.debug("attaching clean GoodsExperience instance");
 		try {
 			getHibernateTemplate().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -144,8 +159,8 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public static GoodsEfficacyDAO getFromApplicationContext(
+	public static GoodsExperienceDAO getFromApplicationContext(
 			ApplicationContext ctx) {
-		return (GoodsEfficacyDAO) ctx.getBean("GoodsEfficacyDAO");
+		return (GoodsExperienceDAO) ctx.getBean("GoodsExperienceDAO");
 	}
 }

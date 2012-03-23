@@ -153,6 +153,9 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/City.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/GoodsExperience.hbm.xml
 				</value></list>
 		</property>
 	</bean>
@@ -440,6 +443,9 @@
 		<property name="goodsEfficacyDAO">
 			<ref bean="GoodsEfficacyDAO" />
 		</property>
+		<property name="goodsExperienceDAO">
+			<ref bean="GoodsExperienceDAO" />
+		</property>
 
 	</bean>
 
@@ -562,6 +568,12 @@
 	</bean>
 	<bean id="CityDAO"
 		class="main.com.yourantao.aimeili.bean.CityDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="GoodsExperienceDAO"
+		class="main.com.yourantao.aimeili.bean.GoodsExperienceDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>

@@ -18,6 +18,8 @@ import main.com.yourantao.aimeili.bean.GoodsCommentDAO;
 import main.com.yourantao.aimeili.bean.GoodsDAO;
 import main.com.yourantao.aimeili.bean.GoodsEfficacy;
 import main.com.yourantao.aimeili.bean.GoodsEfficacyDAO;
+import main.com.yourantao.aimeili.bean.GoodsExperience;
+import main.com.yourantao.aimeili.bean.GoodsExperienceDAO;
 import main.com.yourantao.aimeili.bean.GoodsImages;
 import main.com.yourantao.aimeili.bean.GoodsImagesDAO;
 import main.com.yourantao.aimeili.bean.GoodsMap;
@@ -69,7 +71,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	private GoodsCommentDAO goodsCommentDAO;
 	private EfficacyDAO efficacyDAO;
 	private GoodsEfficacyDAO goodsEfficacyDAO;
-	
+	private GoodsExperienceDAO goodsExperienceDAO;
 	
 	// struts
 
@@ -108,6 +110,14 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	public void setRankGenerator(RankGenerator rankGenerator) {
 		this.rankGenerator = rankGenerator;
+	}
+
+	public GoodsExperienceDAO getGoodsExperienceDAO() {
+		return goodsExperienceDAO;
+	}
+
+	public void setGoodsExperienceDAO(GoodsExperienceDAO goodsExperienceDAO) {
+		this.goodsExperienceDAO = goodsExperienceDAO;
 	}
 
 	public GoodsEfficacyDAO getGoodsEfficacyDAO() {
@@ -285,7 +295,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 						goodsView.setGoodsSeriesName(series.getSeriesName());
 					}
 				}
-				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 				String efficacyName="";
 				if (goodsEfficacyList.isEmpty()){
 				}else{
@@ -304,7 +314,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	
 	
 	
-	/*
+	/*for Editor
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsList()
 	 */
@@ -347,7 +357,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 					goodsView.setGoodsSeriesName(series.getSeriesName());
 				}
 			}
-			List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+			List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 			String efficacyName="";
 			if (goodsEfficacyList.isEmpty()){
 			}else{
@@ -627,7 +637,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 							goodsView.setGoodsSeriesName(series.getSeriesName());
 						}
 					}
-					List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+					List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 					String efficacyName="";
 					if (goodsEfficacyList.isEmpty()){
 					}else{
@@ -684,7 +694,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 							goodsView.setGoodsSeriesName(series.getSeriesName());
 						}
 					}
-					List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+					List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 					String efficacyName="";
 					if (goodsEfficacyList.isEmpty()){
 					}else{
@@ -793,7 +803,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 						goodsView.setGoodsSeriesName(series.getSeriesName());
 					}
 				}
-				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 				String efficacyName="";
 				if (goodsEfficacyList.isEmpty()){
 				}else{
@@ -850,7 +860,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 						goodsView.setGoodsSeriesName(series.getSeriesName());
 					}
 				}
-				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 				String efficacyName="";
 				if (goodsEfficacyList.isEmpty()){
 				}else{
@@ -1021,7 +1031,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 						goodsView.setGoodsSeriesName(series.getSeriesName());
 					}
 				}
-				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
 				String efficacyName="";
 				if (goodsEfficacyList.isEmpty()){
 				}else{
@@ -1099,6 +1109,97 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			goodsViews.add(goodsView);
 		}
 		printArray(goodsViews);
+		return null;
+	}
+
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListByBrand()
+	 */
+	@Override
+	public String getGoodsListByBrand() {
+		Integer bid=getIntegerParameter("bid");
+		if(bid==null||bid==0){
+			printString("{'msg':'没有输入品牌号'}");
+			return null;
+		}
+		Brand brand=brandDAO.findById(bid);
+		if(brand==null){
+			printString("{'msg':'没有找到品牌'}");
+			return null;
+		}
+		List<GoodsView> goodsViews=new ArrayList<GoodsView>();    //返回的结果
+		List<Goods> goodsList=goodsDAO.findByBrandId(bid);
+		if(goodsList.isEmpty()){
+			printString("{'msg':'没有商品'}");
+			return null;
+		}
+		for (Goods goods : goodsList) {
+			GoodsView goodsView=new GoodsView();
+			goodsView.setGoodsId(goods.getGoodsId());
+			goodsView.setGoodsAge(goods.getGoodsAge());
+			goodsView.setGoodsDescription(goods.getGoodsDescription());
+			goodsView.setGoodsForskin(goods.getGoodsForskin());
+			goodsView.setGoodsName(goods.getGoodsName());
+			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+			goodsView.setGoodsScore(goods.getGoodsScore());
+			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+			goodsView.setGoodsStatus(goods.getGoodsStatus());
+			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+			if (thumb != null) {
+				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+			} else {
+				goodsView.setGoodsThumb("");
+			}
+			goodsView.setGoodsBrandName(brand.getBrandName());
+			if (goods.getSeriesId() != null) {  
+				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+					goodsView.setGoodsSeriesName("无");
+				}else{
+					Series series=seriesDAO.findById(goods.getSeriesId());
+					goodsView.setGoodsSeriesName(series.getSeriesName());
+				}
+			}
+			List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoods(goods);  //功效标签
+			String efficacyName="";
+			if (goodsEfficacyList.isEmpty()){
+			}else{
+				for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+					Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+					efficacyName+=efficacy.getEfficacyName()+"  ";
+				}
+			goodsView.setGoodsEfficacy(efficacyName);
+			}
+			goodsViews.add(goodsView);
+		}
+		
+		printArray(goodsViews);
+		return null;
+	}
+
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsExperience()
+	 */
+	@Override
+	public String getGoodsExperience() {
+		Integer gid=getIntegerParameter(GOODS_ID);
+		if(gid==null||gid==0){
+			printString("{'msg':'没有输入商品号'}");
+			return null;
+		}
+		
+		Goods goods=goodsDAO.findById(gid);
+		if(goods==null){
+			printString("{'msg':'没有该商品'}");
+			return null;
+		}
+		String goodsName=goods.getGoodsName();
+		List<GoodsExperience> goodsExperiences = goodsExperienceDAO.findByGoodsName(goodsName);
+		printArray(goodsExperiences);
 		return null;
 	}
 
