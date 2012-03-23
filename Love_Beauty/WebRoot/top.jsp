@@ -26,6 +26,7 @@
   <a href="forEditor/user.jsp">用户系统</a>
   <a href="forEditor/provider.jsp">货商</a>
   <a href="forEditor/search.jsp">搜索</a>
+  <a href="forEditor/order.jsp">订单</a>
   </div>
 
 

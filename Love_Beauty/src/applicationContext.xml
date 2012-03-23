@@ -533,6 +533,9 @@
 		<property name="shoppingCartDAO">
 			<ref bean="ShoppingCartDAO" />
 		</property>
+		<property name="userFavoriteDAO">
+			<ref bean="UserFavoriteDAO" />
+		</property>
 	</bean>
 
 	<bean id="UserAction" class="main.com.yourantao.aimeili.action.UserAction"

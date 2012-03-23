@@ -1,15 +1,18 @@
 package main.com.yourantao.aimeili.vo;
 
-public class GoodsRealSimpleView {
+public class GoodsRealSimpleEditorView {
 	//商品名称
 	private String goodsName;
 	//商品ID
 	private int goodsId;
 	//商品缩略图
 	private String goodsThumb;
-	//private String goodsContent;
+	//商品URL
+	private String goodsUrl;
 	//商品价格
 	private float goodsPrice;
+	//新商品的价格
+	private float newGoodsPrice;
 	//商品数量
 	private int goodsCount;
 	//商城ID
@@ -50,5 +53,17 @@ public class GoodsRealSimpleView {
 	}
 	public int getGoodsId() {
 		return goodsId;
+	}
+	public void setGoodsUrl(String goodsUrl) {
+		this.goodsUrl = goodsUrl;
+	}
+	public String getGoodsUrl() {
+		return goodsUrl;
+	}
+	public void setNewGoodsPrice(float newGoodsPrice) {
+		this.newGoodsPrice = newGoodsPrice;
+	}
+	public float getNewGoodsPrice() {
+		return newGoodsPrice;
 	}
 }
