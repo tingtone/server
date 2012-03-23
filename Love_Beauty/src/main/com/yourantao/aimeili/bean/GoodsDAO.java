@@ -280,4 +280,46 @@ public class GoodsDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+
+	/**
+	 * 自定义函数，通过肤质获取适合，不适合，需要注意的商品,是敏感性肌肤的人群
+	 * @param skinName
+	 * @return
+	 */
+	public List<Goods> findBySkinSensitive(String skinName) {
+		try {
+			skinName="%"+skinName+"%";
+			String queryString = "from Goods where "
+					+"("+ GOODS_FORSKIN + " like ? and "+GOODS_FORSKIN+" like '%敏感性%')"
+					+" or ("+GOODS_NOTFORSKIN+" like ? and "+GOODS_NOTFORSKIN+" like '%敏感性%')"
+					+" or ("+GOODS_NOTICEFORSKIN+" like ? and "+GOODS_NOTICEFORSKIN+" like '%敏感性%')";
+			return getHibernateTemplate().find(queryString,new String[]{skinName,skinName,skinName});
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	/**
+	 * 自定义函数
+	 * 根据肤质和分类号获得商品list  （敏感性肤质的）
+	 * @param skinName
+	 * @param categoryId
+	 * @return
+	 */
+	public List<Goods> findBySkinAndCatSensitive(String skinName,
+			Integer categoryId) {
+		try {
+			skinName="%"+skinName+"%";
+			String queryString = "from Goods as model where model."
+					+ CATEGORY_ID + "= ? and ("
+					+"("+ GOODS_FORSKIN + " like ? and "+GOODS_FORSKIN+" like '%敏感性%')"
+					+" or ("+GOODS_NOTFORSKIN+" like ? and "+GOODS_NOTFORSKIN+" like '%敏感性%')"
+					+" or ("+GOODS_NOTICEFORSKIN+" like ? and "+GOODS_NOTICEFORSKIN+" like '%敏感性%'))";
+			return getHibernateTemplate().find(queryString,new Object[]{categoryId,skinName,skinName,skinName});
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }

@@ -31,6 +31,13 @@ public interface GoodsInterface {
 	public String getGoodsListByCat();
 	
 	/**
+	 * 通过功效获得商品列表
+	 * 
+	 * @return
+	 */
+	public String getGoodsListByEfficacy();
+	
+	/**
 	 * 获得收藏商品列表
 	 * @return
 	 */

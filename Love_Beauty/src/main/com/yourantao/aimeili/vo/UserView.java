@@ -12,12 +12,26 @@ import java.util.Date;
  * 具体描述： TODO
  */
 public class UserView {
+	private int relativeId;
 	private int userId;
 	private String skin;
 	private String birthday;
 	private String city;
 	private String userName;
+	private String userTags;
 	
+	public int getRelativeId() {
+		return relativeId;
+	}
+	public void setRelativeId(int relativeId) {
+		this.relativeId = relativeId;
+	}
+	public String getUserTags() {
+		return userTags;
+	}
+	public void setUserTags(String userTags) {
+		this.userTags = userTags;
+	}
 	public int getUserId() {
 		return userId;
 	}

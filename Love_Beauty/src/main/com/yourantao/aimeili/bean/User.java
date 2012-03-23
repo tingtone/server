@@ -22,46 +22,48 @@ public class User implements java.io.Serializable {
 	private String description;
 	private String city;
 	private String skin;
+	private Short isSensitivie;
 	private String hair;
 	private Integer point;
 	private Integer coin;
 	private Short vip;
 	private Timestamp regTime;
 	private Timestamp lastlogin;
-	private UserLogin login;
+	private String userTags;
 
+	private UserLogin login;
 	// Constructors
 
 	/** default constructor */
 	public User() {
 	}
-	
-	public User(Timestamp regTime, Timestamp lastlogin, UserLogin login) {
-				email = "";
-				verified = 0;
-				birthday = new Date(0);
-				mobile = "";
-				description = "";
-				point = 0;
-				coin = 0;
-				vip = 0;
-				setRegTime(regTime);
-				setLastlogin(lastlogin);
-				setLogin(login);
-	}
 
 	/** minimal constructor */
-	public User(String city, Timestamp regTime, Timestamp lastlogin) {
-		this.city = city;
-		this.regTime = regTime;
-		this.lastlogin = lastlogin;
+	public User(Timestamp regTime,
+			Timestamp lastlogin, UserLogin login) {
+		this.isSensitivie = 0;
+		email = "";
+		verified = 0;
+		birthday = new Date(0);
+		mobile = "";
+		description = "";
+		point = 0;
+		coin = 0;
+		vip = 0;
+		city="";
+		setUserTags("");
+		setNickName("我");  //默认为我
+		setRegTime(regTime);
+		setLastlogin(lastlogin);
+		setLogin(login);
 	}
 
 	/** full constructor */
 	public User(String nickName, String email, Short verified, String sex,
 			Date birthday, String mobile, Integer imageId, String description,
-			String city, String skin, String hair, Integer point, Integer coin,
-			Short vip, Timestamp regTime, Timestamp lastlogin) {
+			String city, String skin, Short isSensitivie, String hair,
+			Integer point, Integer coin, Short vip, Timestamp regTime,
+			Timestamp lastlogin,String userTags) {
 		this.nickName = nickName;
 		this.email = email;
 		this.verified = verified;
@@ -72,26 +74,18 @@ public class User implements java.io.Serializable {
 		this.description = description;
 		this.city = city;
 		this.skin = skin;
+		this.isSensitivie = isSensitivie;
 		this.hair = hair;
 		this.point = point;
 		this.coin = coin;
 		this.vip = vip;
 		this.regTime = regTime;
 		this.lastlogin = lastlogin;
-		this.setImageId(imageId);
+		this.userTags = userTags;
 	}
 
 	// Property accessors
 
-	public void setLogin(UserLogin login) {
-				this.login = login;
-				login.setUser(this);
-			}
-		
-			public UserLogin getLogin() {
-				return login;
-			}
-		
 	public Integer getUserId() {
 		return this.userId;
 	}
@@ -180,6 +174,14 @@ public class User implements java.io.Serializable {
 		this.skin = skin;
 	}
 
+	public Short getIsSensitivie() {
+		return this.isSensitivie;
+	}
+
+	public void setIsSensitivie(Short isSensitivie) {
+		this.isSensitivie = isSensitivie;
+	}
+
 	public String getHair() {
 		return this.hair;
 	}
@@ -220,12 +222,29 @@ public class User implements java.io.Serializable {
 		this.regTime = regTime;
 	}
 
+	public void setLogin(UserLogin login) {
+		this.login = login;
+		login.setUser(this);
+	}
+
+	public UserLogin getLogin() {
+		return login;
+	}
+	
 	public Timestamp getLastlogin() {
 		return this.lastlogin;
 	}
 
 	public void setLastlogin(Timestamp lastlogin) {
 		this.lastlogin = lastlogin;
+	}
+	
+	public String getUserTags() {
+		return this.userTags;
+	}
+
+	public void setUserTags(String userTags) {
+		this.userTags = userTags;
 	}
 
 }

@@ -33,10 +33,12 @@ public class UserDAO extends HibernateDaoSupport {
 	public static final String DESCRIPTION = "description";
 	public static final String CITY = "city";
 	public static final String SKIN = "skin";
+	public static final String IS_SENSITIVIE = "isSensitivie";
 	public static final String HAIR = "hair";
 	public static final String POINT = "point";
 	public static final String COIN = "coin";
 	public static final String VIP = "vip";
+	public static final String USER_TAGS = "userTags";
 
 	protected void initDao() {
 		// do nothing
@@ -138,6 +140,10 @@ public class UserDAO extends HibernateDaoSupport {
 		return findByProperty(SKIN, skin);
 	}
 
+	public List findByIsSensitivie(Object isSensitivie) {
+		return findByProperty(IS_SENSITIVIE, isSensitivie);
+	}
+
 	public List findByHair(Object hair) {
 		return findByProperty(HAIR, hair);
 	}
@@ -152,6 +158,10 @@ public class UserDAO extends HibernateDaoSupport {
 
 	public List findByVip(Object vip) {
 		return findByProperty(VIP, vip);
+	}
+	
+	public List findByUserTags(Object userTags) {
+		return findByProperty(USER_TAGS, userTags);
 	}
 
 	public List findAll() {

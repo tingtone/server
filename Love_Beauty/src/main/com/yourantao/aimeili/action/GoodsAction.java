@@ -285,6 +285,16 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 						goodsView.setGoodsSeriesName(series.getSeriesName());
 					}
 				}
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				String efficacyName="";
+				if (goodsEfficacyList.isEmpty()){
+				}else{
+					for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+						Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+						efficacyName+=efficacy.getEfficacyName()+"  ";
+					}
+				goodsView.setGoodsEfficacy(efficacyName);
+				}
 				result.add(goodsView);
 			}
 			printArray(result);
@@ -301,8 +311,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String getGoodsListByCat() {
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
-		if (categoryId == null)
+		if (categoryId == null){
+			printString("{'msg':'没有分类号'}");
 			return null;
+		}
 		List<Goods> goodsList = goodsDAO.findByCategoryId(categoryId);
 		List<GoodsView> result=new ArrayList<GoodsView>();
 		for (Goods goods : goodsList) {
@@ -334,6 +346,16 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 					Series series=seriesDAO.findById(goods.getSeriesId());
 					goodsView.setGoodsSeriesName(series.getSeriesName());
 				}
+			}
+			List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+			String efficacyName="";
+			if (goodsEfficacyList.isEmpty()){
+			}else{
+				for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+					Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+					efficacyName+=efficacy.getEfficacyName()+"  ";
+				}
+			goodsView.setGoodsEfficacy(efficacyName);
 			}
 			result.add(goodsView);
 		}
@@ -557,55 +579,136 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String getGoodsListBySkin() {
 		String msg="";
-		String skin=getRequest().getParameter("skin");
-		if(skin==null){
+		String skin=getRequest().getParameter("skin").substring(0,1);
+		String isSensitive =getRequest().getParameter("skin").substring(1,2);
+		if(skin==null || skin.equals("n")){
 			msg="{'msg':'没有肤质结果'}";
 			return null;
 		}
-		String skinName=TransTool.transSkin(skin);
+		String skinName=TransTool.transSkinIdToName(skin);
 		List<GoodsView> skinResult=new ArrayList<GoodsView>();
 		List<GoodsView> notSkinResult=new ArrayList<GoodsView>();
 		List<GoodsView> noticeSkinResult=new ArrayList<GoodsView>();
-		List<Goods> goodslist=goodsDAO.findBySkin(skinName); //获取适合肤质，不适合，需要注意的
-		for (Goods goods : goodslist) {
-			GoodsView goodsView=new GoodsView();
-			goodsView.setGoodsId(goods.getGoodsId());
-			goodsView.setGoodsAge(goods.getGoodsAge());
-			goodsView.setGoodsDescription(goods.getGoodsDescription());
-			goodsView.setGoodsForskin(goods.getGoodsForskin());
-			goodsView.setGoodsName(goods.getGoodsName());
-			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
-			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
-			goodsView.setGoodsScore(goods.getGoodsScore());
-			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
-			goodsView.setGoodsStatus(goods.getGoodsStatus());
-			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
-			if (thumb != null) {
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
-			} else {
-				goodsView.setGoodsThumb("");
-			}
-			if (goods.getBrandId() != null) {
-				Brand brand=brandDAO.findById(goods.getBrandId());
-				goodsView.setGoodsBrandName(brand.getBrandName());
-			} 
-			if (goods.getSeriesId() != null) {  
-				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
-					goodsView.setGoodsSeriesName("无");
-				}else{
-					Series series=seriesDAO.findById(goods.getSeriesId());
-					goodsView.setGoodsSeriesName(series.getSeriesName());
+		List<Goods> goodslist=null;
+		if(isSensitive.equals("0")){    //如果是不敏感的
+			 goodslist=goodsDAO.findBySkin(skinName); //获取适合肤质，不适合，需要注意的
+			 if(goodslist.isEmpty()){
+					msg="{'msg':'无商品'}";
+					printString(msg);
+					return null;
 				}
-			}
-			if(goods.getGoodsForskin().contains(skinName)){ //适合肤质
-				skinResult.add(goodsView);
-			}
-			if(goods.getGoodsNotforskin().contains(skinName)){
-				notSkinResult.add(goodsView);
-			}
-			if(goods.getGoodsNoticeforskin().contains(skinName)){
-				noticeSkinResult.add(goodsView);
-			}
+			 for (Goods goods : goodslist) {
+					GoodsView goodsView=new GoodsView();
+					goodsView.setGoodsId(goods.getGoodsId());
+					goodsView.setGoodsAge(goods.getGoodsAge());
+					goodsView.setGoodsDescription(goods.getGoodsDescription());
+					goodsView.setGoodsForskin(goods.getGoodsForskin());
+					goodsView.setGoodsName(goods.getGoodsName());
+					goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+					goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+					goodsView.setGoodsScore(goods.getGoodsScore());
+					goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+					goodsView.setGoodsStatus(goods.getGoodsStatus());
+					Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+					if (thumb != null) {
+						goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+					} else {
+						goodsView.setGoodsThumb("");
+					}
+					if (goods.getBrandId() != null) {
+						Brand brand=brandDAO.findById(goods.getBrandId());
+						goodsView.setGoodsBrandName(brand.getBrandName());
+					} 
+					if (goods.getSeriesId() != null) {  
+						if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+							goodsView.setGoodsSeriesName("无");
+						}else{
+							Series series=seriesDAO.findById(goods.getSeriesId());
+							goodsView.setGoodsSeriesName(series.getSeriesName());
+						}
+					}
+					List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+					String efficacyName="";
+					if (goodsEfficacyList.isEmpty()){
+					}else{
+						for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+							Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+							efficacyName+=efficacy.getEfficacyName()+"  ";
+						}
+					goodsView.setGoodsEfficacy(efficacyName);
+					}
+					if(goods.getGoodsForskin().contains(skinName)){ //适合肤质
+						skinResult.add(goodsView);
+					}
+					if(goods.getGoodsNotforskin().contains(skinName)){
+						notSkinResult.add(goodsView);
+					}
+					if(goods.getGoodsNoticeforskin().contains(skinName)){
+						noticeSkinResult.add(goodsView);
+					}
+				}
+		}else{  //敏感性肌肤，则和前4选一是且的关系
+			 goodslist=goodsDAO.findBySkinSensitive(skinName); //获取适合肤质，不适合，需要注意的
+			 if(goodslist.isEmpty()){
+					msg="{'msg':'无商品'}";
+					printString(msg);
+					return null;
+				}
+			 for (Goods goods : goodslist) {
+					GoodsView goodsView=new GoodsView();
+					goodsView.setGoodsId(goods.getGoodsId());
+					goodsView.setGoodsAge(goods.getGoodsAge());
+					goodsView.setGoodsDescription(goods.getGoodsDescription());
+					goodsView.setGoodsForskin(goods.getGoodsForskin());
+					goodsView.setGoodsName(goods.getGoodsName());
+					goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+					goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+					goodsView.setGoodsScore(goods.getGoodsScore());
+					goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+					goodsView.setGoodsStatus(goods.getGoodsStatus());
+					Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+					if (thumb != null) {
+						goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+					} else {
+						goodsView.setGoodsThumb("");
+					}
+					if (goods.getBrandId() != null) {
+						Brand brand=brandDAO.findById(goods.getBrandId());
+						goodsView.setGoodsBrandName(brand.getBrandName());
+					} 
+					if (goods.getSeriesId() != null) {  
+						if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+							goodsView.setGoodsSeriesName("无");
+						}else{
+							Series series=seriesDAO.findById(goods.getSeriesId());
+							goodsView.setGoodsSeriesName(series.getSeriesName());
+						}
+					}
+					List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+					String efficacyName="";
+					if (goodsEfficacyList.isEmpty()){
+					}else{
+						for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+							Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+							efficacyName+=efficacy.getEfficacyName()+"  ";
+						}
+					goodsView.setGoodsEfficacy(efficacyName);
+					}
+					if(goods.getGoodsForskin().contains(skinName) && goods.getGoodsForskin().contains("敏感性")){ //适合肤质
+						skinResult.add(goodsView);
+					}
+					if(goods.getGoodsNotforskin().contains(skinName)&& goods.getGoodsNotforskin().contains("敏感性")){
+						notSkinResult.add(goodsView);
+					}
+					if(goods.getGoodsNoticeforskin().contains(skinName)&& goods.getGoodsNoticeforskin().contains("敏感性")){
+						noticeSkinResult.add(goodsView);
+					}
+				}
+		}
+		if(goodslist.isEmpty()){
+			msg="{'msg':'无商品'}";
+			printString(msg);
+			return null;
 		}
 		GoodsSkinView result=new GoodsSkinView();
 		result.setSkinResult(skinResult);
@@ -636,10 +739,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 	@Override
 	public String getGoodsListBySkinAndCat() {
 		String msg="";
-		String skin=getRequest().getParameter("skin");
-		if(skin==null){
+		String skin=getRequest().getParameter("skin").substring(0,1);
+		String isSensitive =getRequest().getParameter("skin").substring(1,2);
+		if(skin==null || skin.equals("n")){
 			msg="{'msg':'没有肤质结果'}";
-			printString(msg);
 			return null;
 		}
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
@@ -648,57 +751,127 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 			printString(msg);
 			return null;
 		}
-		String skinName=TransTool.transSkin(skin);
+		String skinName=TransTool.transSkinIdToName(skin);
 		List<GoodsView> skinResult=new ArrayList<GoodsView>();
 		List<GoodsView> notSkinResult=new ArrayList<GoodsView>();
 		List<GoodsView> noticeSkinResult=new ArrayList<GoodsView>();
-		List<Goods> goodslist=goodsDAO.findBySkinAndCat(skinName,categoryId); //获取适合肤质，不适合，需要注意的
-		if(goodslist.size()==0){
-			msg="{'msg':'无商品'}";
-			printString(msg);
-			return null;
-		}
-		
-		for (Goods goods : goodslist) {
-			GoodsView goodsView=new GoodsView();
-			goodsView.setGoodsId(goods.getGoodsId());
-			goodsView.setGoodsAge(goods.getGoodsAge());
-			goodsView.setGoodsDescription(goods.getGoodsDescription());
-			goodsView.setGoodsForskin(goods.getGoodsForskin());
-			goodsView.setGoodsName(goods.getGoodsName());
-			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
-			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
-			goodsView.setGoodsScore(goods.getGoodsScore());
-			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
-			goodsView.setGoodsStatus(goods.getGoodsStatus());
-			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
-			if (thumb != null) {
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
-			} else {
-				goodsView.setGoodsThumb("");
+		List<Goods> goodslist=null;
+		if(isSensitive.equals("0")){    //如果是不敏感的
+			goodslist=goodsDAO.findBySkinAndCat(skinName,categoryId); //获取适合肤质，不适合，需要注意的
+			if(goodslist.isEmpty()){
+				msg="{'msg':'无商品'}";
+				printString(msg);
+				return null;
 			}
-			if (goods.getBrandId() != null) {
-				Brand brand=brandDAO.findById(goods.getBrandId());
-				goodsView.setGoodsBrandName(brand.getBrandName());
-			} 
-			if (goods.getSeriesId() != null) {  
-				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
-					goodsView.setGoodsSeriesName("无");
+			for (Goods goods : goodslist) {
+				GoodsView goodsView=new GoodsView();
+				goodsView.setGoodsId(goods.getGoodsId());
+				goodsView.setGoodsAge(goods.getGoodsAge());
+				goodsView.setGoodsDescription(goods.getGoodsDescription());
+				goodsView.setGoodsForskin(goods.getGoodsForskin());
+				goodsView.setGoodsName(goods.getGoodsName());
+				goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+				goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+				goodsView.setGoodsScore(goods.getGoodsScore());
+				goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+				goodsView.setGoodsStatus(goods.getGoodsStatus());
+				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+				if (thumb != null) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+				} else {
+					goodsView.setGoodsThumb("");
+				}
+				if (goods.getBrandId() != null) {
+					Brand brand=brandDAO.findById(goods.getBrandId());
+					goodsView.setGoodsBrandName(brand.getBrandName());
+				} 
+				if (goods.getSeriesId() != null) {  
+					if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+						goodsView.setGoodsSeriesName("无");
+					}else{
+						Series series=seriesDAO.findById(goods.getSeriesId());
+						goodsView.setGoodsSeriesName(series.getSeriesName());
+					}
+				}
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				String efficacyName="";
+				if (goodsEfficacyList.isEmpty()){
 				}else{
-					Series series=seriesDAO.findById(goods.getSeriesId());
-					goodsView.setGoodsSeriesName(series.getSeriesName());
+					for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+						Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+						efficacyName+=efficacy.getEfficacyName()+"  ";
+					}
+				goodsView.setGoodsEfficacy(efficacyName);
+				}
+				if(goods.getGoodsForskin().contains(skinName)){ //适合肤质
+					skinResult.add(goodsView);
+				}
+				if(goods.getGoodsNotforskin().contains(skinName)){
+					notSkinResult.add(goodsView);
+				}
+				if(goods.getGoodsNoticeforskin().contains(skinName)){
+					noticeSkinResult.add(goodsView);
 				}
 			}
-			if(goods.getGoodsForskin().contains(skinName)){ //适合肤质
-				skinResult.add(goodsView);
+		}else{   //是敏感的
+			goodslist=goodsDAO.findBySkinAndCatSensitive(skinName,categoryId); //获取适合肤质，不适合，需要注意的(敏感性肌肤的)
+			if(goodslist.isEmpty()){
+				msg="{'msg':'无商品'}";
+				printString(msg);
+				return null;
 			}
-			if(goods.getGoodsNotforskin().contains(skinName)){
-				notSkinResult.add(goodsView);
-			}
-			if(goods.getGoodsNoticeforskin().contains(skinName)){
-				noticeSkinResult.add(goodsView);
+			for (Goods goods : goodslist) {
+				GoodsView goodsView=new GoodsView();
+				goodsView.setGoodsId(goods.getGoodsId());
+				goodsView.setGoodsAge(goods.getGoodsAge());
+				goodsView.setGoodsDescription(goods.getGoodsDescription());
+				goodsView.setGoodsForskin(goods.getGoodsForskin());
+				goodsView.setGoodsName(goods.getGoodsName());
+				goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+				goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+				goodsView.setGoodsScore(goods.getGoodsScore());
+				goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+				goodsView.setGoodsStatus(goods.getGoodsStatus());
+				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+				if (thumb != null) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+				} else {
+					goodsView.setGoodsThumb("");
+				}
+				if (goods.getBrandId() != null) {
+					Brand brand=brandDAO.findById(goods.getBrandId());
+					goodsView.setGoodsBrandName(brand.getBrandName());
+				} 
+				if (goods.getSeriesId() != null) {  
+					if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+						goodsView.setGoodsSeriesName("无");
+					}else{
+						Series series=seriesDAO.findById(goods.getSeriesId());
+						goodsView.setGoodsSeriesName(series.getSeriesName());
+					}
+				}
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				String efficacyName="";
+				if (goodsEfficacyList.isEmpty()){
+				}else{
+					for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+						Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+						efficacyName+=efficacy.getEfficacyName()+"  ";
+					}
+				goodsView.setGoodsEfficacy(efficacyName);
+				}
+				if(goods.getGoodsForskin().contains(skinName) && goods.getGoodsForskin().contains("敏感性")){ //适合肤质
+					skinResult.add(goodsView);
+				}
+				if(goods.getGoodsNotforskin().contains(skinName)&& goods.getGoodsNotforskin().contains("敏感性")){
+					notSkinResult.add(goodsView);
+				}
+				if(goods.getGoodsNoticeforskin().contains(skinName)&& goods.getGoodsNoticeforskin().contains("敏感性")){
+					noticeSkinResult.add(goodsView);
+				}
 			}
 		}
+			
 		GoodsSkinView result=new GoodsSkinView();
 		result.setSkinResult(skinResult);
 		result.setNotSkinResult(notSkinResult);
@@ -848,10 +1021,84 @@ public class GoodsAction extends BaseAction implements GoodsInterface,Constant{
 						goodsView.setGoodsSeriesName(series.getSeriesName());
 					}
 				}
+				List<GoodsEfficacy> goodsEfficacyList=goodsEfficacyDAO.findByGoodsId(goods.getGoodsId());  //功效标签
+				String efficacyName="";
+				if (goodsEfficacyList.isEmpty()){
+				}else{
+					for (GoodsEfficacy goodsEfficacy : goodsEfficacyList) {
+						Efficacy efficacy = efficacyDAO.findById(goodsEfficacy.getEfficacyId());
+						efficacyName+=efficacy.getEfficacyName()+"  ";
+					}
+				goodsView.setGoodsEfficacy(efficacyName);
+				}
 					goodsViews.add(goodsView);
 			} 
 			
 		printArray(goodsViews); 
+		return null;
+	}
+
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListByEfficacy()
+	 */
+	@Override
+	public String getGoodsListByEfficacy() {
+		
+		Integer eid=getIntegerParameter("eid");
+		if(eid==null||eid==0){
+			printString("{'msg':'没有输入功效号'}");
+			return null;
+		}
+		Efficacy efficacy= efficacyDAO.findById(eid);
+		if(efficacy==null){
+			printString("{'msg':'没有找到功效'}");
+			return null;
+		}
+		List<GoodsView> goodsViews=new ArrayList<GoodsView>();    //返回的结果
+		List<GoodsEfficacy> goodsList=goodsEfficacyDAO.findByEfficacyId(eid);
+		if(goodsList.isEmpty()){
+			printString("{'msg':'没有商品'}");
+			return null;
+		}
+		for (GoodsEfficacy goodsEfficacy : goodsList) {
+			Goods goods=goodsEfficacy.getGoods();
+			GoodsView goodsView=new GoodsView();
+			goodsView.setGoodsId(goods.getGoodsId());
+			goodsView.setGoodsAge(goods.getGoodsAge());
+			goodsView.setGoodsDescription(goods.getGoodsDescription());
+			goodsView.setGoodsForskin(goods.getGoodsForskin());
+			goodsView.setGoodsName(goods.getGoodsName());
+			goodsView.setGoodsNotforskin(goods.getGoodsNotforskin());
+			goodsView.setGoodsNoticeforskin(goods.getGoodsNoticeforskin());
+			goodsView.setGoodsScore(goods.getGoodsScore());
+			goodsView.setGoodsSpecification(goods.getGoodsSpecification());
+			goodsView.setGoodsStatus(goods.getGoodsStatus());
+			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
+			if (thumb != null) {
+				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL) + thumb.getImgUrl());
+			} else {
+				goodsView.setGoodsThumb("");
+			}
+			if (goods.getBrandId() != null) {
+				Brand brand=brandDAO.findById(goods.getBrandId());
+				goodsView.setGoodsBrandName(brand.getBrandName());
+			} 
+			if (goods.getSeriesId() != null) {  
+				if(goods.getSeriesId()==0){    //对应系列号为0 代表没有对应系列
+					goodsView.setGoodsSeriesName("无");
+				}else{
+					Series series=seriesDAO.findById(goods.getSeriesId());
+					goodsView.setGoodsSeriesName(series.getSeriesName());
+				}
+			}
+			String efficacyName="";
+			efficacyName+=efficacy.getEfficacyName()+"  ";
+			goodsView.setGoodsEfficacy(efficacyName);
+			goodsViews.add(goodsView);
+		}
+		printArray(goodsViews);
 		return null;
 	}
 

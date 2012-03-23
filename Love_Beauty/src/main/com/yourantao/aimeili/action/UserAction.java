@@ -120,15 +120,47 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			printString(NO_UUID);
 			return null;
 		}
-		String skin = getStringParameter(SKIN);
-		if (skin == null) {
+		String nickName=getStringParameter("nick");   //昵称
+		String city=getStringParameter("city");
+		String skin = getStringParameter(SKIN).substring(0,1);
+		String isSensitive = getStringParameter(SKIN).substring(1,2);
+		String birthday = getStringParameter("birth");
+		if (skin == null || skin.equals("n")) {
 			printString(NO_SKIN);
 			return null;
 		}
-		skin = TransTool.transSkin(skin);
+		if(birthday==null && birthday.equals("null")){
+			printString("{'msg':'没有生日信息'}");
+			return null;
+		}
+		String userTags=getStringParameter("tag");
+		if (userTags == null || userTags.equals("null")) {
+			printString(NO_SKIN);
+			return null;
+		}
+		userTags=TransTool.transUserTagsIdToName(userTags);
+		if (city == null|| city.equals("null")) {
+			printString("{'msg':'没有城市'}");
+			return null;
+		}
+		if (userTags == null|| userTags.equals("null")||userTags.equals("000000")) {
+			printString("{'msg':'没有用户标签'}");
+			return null;
+		}
+		skin = TransTool.transSkinIdToName(skin);
 		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
 		User user = userLoginList.get(0).getUser();
 		user.setSkin(skin);
+		user.setCity(city);
+		user.setNickName(nickName);
+		user.setUserTags(userTags);
+		try {
+			user.setBirthday(dateFormat.parse(birthday));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		user.setIsSensitivie(Short.parseShort(isSensitive));
 
 		printString(MSG_SUCCESS);
 		return null;
@@ -262,11 +294,14 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	@Override
 	public String userInsertOrUpdateRelativeSkin() {
 		String msg = "";
+		Integer id=getIntegerParameter("id");   //relative的id号
 		String uuid = getStringParameter(UUID);
-		String skin = getStringParameter(SKIN);
+		String skin = getStringParameter(SKIN).substring(0,1);
+		String isSensitive = getStringParameter(SKIN).substring(1,2);
 		String birthday = getStringParameter("birth");
 		String city = getStringParameter(CITY);
 		String relative = getStringParameter("rel");
+		String userTags = getStringParameter("tag");
 		if (uuid == null || uuid.equals("null")) {
 			printString(NO_UUID);
 			return null;
@@ -277,8 +312,8 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}
 		int uid = userLogin.get(0).getUserId();
-		if (skin == null|| skin.equals("null")) {
-			msg = "{'msg':'没有皮肤id'}";
+		if (skin == null|| skin.equals("n")) {
+			msg = "{'msg':'没有肤质结果'}";
 			printString(msg);
 			return null;
 		}
@@ -290,6 +325,15 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		if (city == null|| city.equals("null")) {
 			msg = "{'msg':'没有城市'}";
 			printString(msg);
+			return null;
+		}
+		if (userTags == null|| userTags.equals("null")||userTags.equals("000000")) {
+			msg = "{'msg':'没有用户标签'}";
+			printString(msg);
+			return null;
+		}
+		if(birthday==null && birthday.equals("null")){
+			printString("{'msg':'没有生日信息'}");
 			return null;
 		}
 		// try {
@@ -306,36 +350,44 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		skin = TransTool.transSkin(skin);
-		List<UserRelative> userRelativeList = userRelativeDAO.findByUidAndRelative(relative,
-				uid);
-		if (userRelativeList.size() != 0) {    //重复的代表需要更新
-//			UserRelative userRelative=userRelativeDAO.findById(userRelativeList.get(0).getUserRelativeId());
-			UserRelative userRelative=userRelativeList.get(0);
+		userTags=TransTool.transUserTagsIdToName(userTags);
+		skin = TransTool.transSkinIdToName(skin);   //数字转换为文字存储
+//		List<UserRelative> userRelativeList = userRelativeDAO.findByUidAndRelative(relative,uid);
+		if(id==null||id==0){   //id为空，则代表是插入处理
+			UserRelative userRelative = new UserRelative();
+			userRelative.setUserId(uid);
+			userRelative.setSkin(skin);
+			userRelative.setIsSensitive(Short.parseShort(isSensitive)); //是否敏感
+			userRelative.setUserTags(userTags);//用户标签
+			userRelative.setRelative(relative);
+			userRelative.setCity(city);
 			try {
 				userRelative.setBirthday(dateFormat.parse(birthday));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			userRelative.setCity(city);
-			userRelative.setSkin(skin);
+			userRelativeDAO.save(userRelative);
+		}else{
+			UserRelative userRelative=userRelativeDAO.findById(id);
+			if(userRelative==null){
+				printString("{'msg':'没有该id'}");
+				return null;
+			}
+			try {
+				userRelative.setBirthday(dateFormat.parse(birthday));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			userRelative.setRelative(relative);
+			userRelative.setCity(city);   //城市
+			userRelative.setSkin(skin);  //4选1肤质
+			userRelative.setUserTags(userTags);//用户标签
+			userRelative.setIsSensitive(Short.parseShort(isSensitive)); //是否敏感
 			printString(MSG_SUCCESS);
 			return null;
 		}
-		UserRelative userRelative = new UserRelative();
-		userRelative.setUserId(uid);
-		userRelative.setSkin(skin);
-		userRelative.setRelative(relative);
-		userRelative.setCity(city);
-		try {
-			userRelative.setBirthday(dateFormat.parse(birthday));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		userRelativeDAO.save(userRelative);
-
 		printString(MSG_SUCCESS);
 		return null;
 	}
@@ -360,26 +412,37 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}
 		int uid = userLogin.get(0).getUserId();
-		User user = userDAO.findById(userLogin.get(0).getUserId());
+		User user = userDAO.findById(uid);
 		List<UserView> userViews=new ArrayList<UserView>();
+		String userTags=user.getUserTags();
+		userTags=TransTool.transUserTagsNameToId(userTags);
+		
 		//“我”的那部分信息
 		UserView userView = new UserView();
-		userView.setBirthday(TransTool.transBirthday(user.getBirthday()));
+		userView.setRelativeId(0);
+		userView.setBirthday(TransTool.transBirthday(user.getBirthday()));  //只取birthday字段中的前10位，即 2012-01-01
 		userView.setCity(user.getCity());
-		userView.setSkin(user.getSkin());
+		if(user.getSkin()==null || user.getSkin().equals("null")){
+			userView.setSkin("0"+user.getIsSensitivie());   //skin包含4选1肤质+是否敏感
+		}else{
+			userView.setSkin(TransTool.transSkinNameToId(user.getSkin())+user.getIsSensitivie());   //skin包含4选1肤质+是否敏感
+		}
 		userView.setUserId(uid);
-		userView.setUserName("我");
+		userView.setUserName(user.getNickName());
+		userView.setUserTags(userTags);
 		userViews.add(userView);
 		
 		//其他亲戚的信息
 		List<UserRelative> userRelatives=userRelativeDAO.findByUserId(uid);
 		for (UserRelative userRelative : userRelatives) {
 			userView = new UserView();
+			userView.setRelativeId(userRelative.getUserRelativeId());
 			userView.setBirthday(TransTool.transBirthday(userRelative.getBirthday()));
 			userView.setCity(userRelative.getCity());
-			userView.setSkin(userRelative.getSkin());
+			userView.setSkin(TransTool.transSkinNameToId(userRelative.getSkin())+userRelative.getIsSensitive());   //skin包含4选1肤质+是否敏感
 			userView.setUserId(uid);
 			userView.setUserName(userRelative.getRelative());
+			userView.setUserTags(userTags);
 			userViews.add(userView);
 		}
 		
@@ -396,7 +459,8 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	@Override
 	public String userDeleteRelativeSkin() {
 		String uuid = getStringParameter(UUID);
-		String relative = getStringParameter("rel");
+		Integer relativeId=getIntegerParameter("id");
+		
 		if (uuid == null || uuid.equals("null")) {
 			printString(NO_UUID);
 			return null;
@@ -407,17 +471,17 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}
 		int uid = userLogin.get(0).getUserId();
-		if (relative == null|| relative.equals("null")) {
-			printString("{'msg':'没有亲戚关键词'}");
+		if (relativeId == null|| relativeId==0) {
+			printString("{'msg':'没有亲戚ID'}");
 			return null;
 		}
-		List<UserRelative> userRelative = userRelativeDAO.findByUidAndRelative(
-				relative, uid);
-		if(userRelative.isEmpty()){
+		UserRelative userRelative = userRelativeDAO.findById(relativeId);
+				
+		if(userRelative==null){
 			printString("{'msg':'没有该亲戚'}");
 			return null;
 		}else{
-			userRelativeDAO.delete(userRelative.get(0));
+			userRelativeDAO.delete(userRelative);
 			printString(MSG_SUCCESS);
 			return null;
 		}

@@ -15,7 +15,9 @@ public class UserRelative implements java.io.Serializable {
 	private String relative;
 	private String skin;
 	private String city;
+	private Short isSensitive;
 	private Date birthday;
+	private String userTags;
 
 	// Constructors
 
@@ -25,21 +27,25 @@ public class UserRelative implements java.io.Serializable {
 
 	/** minimal constructor */
 	public UserRelative(Integer userId, String relative, String city,
-			Date birthday) {
+			Short isSensitive, Date birthday, String userTags) {
 		this.userId = userId;
 		this.relative = relative;
 		this.city = city;
+		this.isSensitive = isSensitive;
 		this.birthday = birthday;
+		this.userTags = userTags;
 	}
 
 	/** full constructor */
 	public UserRelative(Integer userId, String relative, String skin,
-			String city, Date birthday) {
+			String city, Short isSensitive, Date birthday, String userTags) {
 		this.userId = userId;
 		this.relative = relative;
 		this.skin = skin;
 		this.city = city;
+		this.isSensitive = isSensitive;
 		this.birthday = birthday;
+		this.userTags = userTags;
 	}
 
 	// Property accessors
@@ -84,12 +90,28 @@ public class UserRelative implements java.io.Serializable {
 		this.city = city;
 	}
 
+	public Short getIsSensitive() {
+		return this.isSensitive;
+	}
+
+	public void setIsSensitive(Short isSensitive) {
+		this.isSensitive = isSensitive;
+	}
+
 	public Date getBirthday() {
 		return this.birthday;
 	}
 
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
+	}
+
+	public String getUserTags() {
+		return this.userTags;
+	}
+
+	public void setUserTags(String userTags) {
+		this.userTags = userTags;
 	}
 
 }

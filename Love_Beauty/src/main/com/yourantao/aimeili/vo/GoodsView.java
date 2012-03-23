@@ -24,7 +24,15 @@ public class GoodsView {
 	private String goodsDescription;
 	private String goodsSpecification;
 	private Short goodsStatus;
+	private String goodsEfficacy;
 	
+	
+	public String getGoodsEfficacy() {
+		return goodsEfficacy;
+	}
+	public void setGoodsEfficacy(String goodsEfficacy) {
+		this.goodsEfficacy = goodsEfficacy;
+	}
 	public Integer getGoodsId() {
 		return goodsId;
 	}

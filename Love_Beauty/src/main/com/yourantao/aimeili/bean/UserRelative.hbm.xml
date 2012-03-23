@@ -30,9 +30,19 @@
                 <comment>所在城市</comment>
             </column>
         </property>
+        <property name="isSensitive" type="java.lang.Short">
+            <column name="isSensitive" not-null="true">
+                <comment>是否为敏感肤质（0-不敏感 1-敏感）</comment>
+            </column>
+        </property>
         <property name="birthday" type="java.util.Date">
             <column name="birthday" length="0" not-null="true">
                 <comment>生日</comment>
+            </column>
+        </property>
+        <property name="userTags" type="java.lang.String">
+            <column name="user_tags" length="56">
+                <comment>用户标签</comment>
             </column>
         </property>
     </class>

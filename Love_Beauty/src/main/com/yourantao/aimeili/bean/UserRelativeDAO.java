@@ -28,6 +28,8 @@ public class UserRelativeDAO extends HibernateDaoSupport {
 	public static final String RELATIVE = "relative";
 	public static final String SKIN = "skin";
 	public static final String CITY = "city";
+	public static final String IS_SENSITIVE = "isSensitive";
+	public static final String USER_TAGS = "userTags";
 
 	protected void initDao() {
 		// do nothing
@@ -107,6 +109,14 @@ public class UserRelativeDAO extends HibernateDaoSupport {
 
 	public List findByCity(Object city) {
 		return findByProperty(CITY, city);
+	}
+
+	public List findByIsSensitive(Object isSensitive) {
+		return findByProperty(IS_SENSITIVE, isSensitive);
+	}
+
+	public List findByUserTags(Object userTags) {
+		return findByProperty(USER_TAGS, userTags);
 	}
 
 	public List findAll() {
