@@ -132,10 +132,9 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 		Integer count = getIntegerParameter(GOODS_COUNT);
 		Float price = Float.valueOf(getRequest().getParameter("price"));
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
+		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
-		if (goodsRealId == null || count == null || price == null
-				|| providerId == null) {
+		if (goodsRealId == null || count == null || price == null) {
 			printString("{'msg':'参数个数不足'}");
 			return null;
 		} else if (count < 0 || price < 0) {
@@ -146,7 +145,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setUserId(userId);
 		shoppingCart.setGoodsRealId(goodsRealId);
-		shoppingCart.setProviderId(providerId);
+		// shoppingCart.setProviderId(providerId);
 		// 先查找是否已经存在对应的购物车记录
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCart);
@@ -160,6 +159,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			} else {
 				shoppingCart.setPrice(price);
 				shoppingCart.setCount(count);
+				shoppingCart.setProviderId(goodsReal.getProviderId());
 				shoppingCartDAO.save(shoppingCart);
 				// msg = "{'cart_id':'" + shoppingCart.getCartId()+ "'}";
 			}
@@ -239,16 +239,16 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
+		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
-		if (goodsRealId == null || providerId == null) {
-			printString("{'msg':'参数个数不足'}");
+		if (goodsRealId == null) {
+			printString("{'msg':'没有提供商品'}");
 			return null;
 		}
 		ShoppingCart shoppingCartExample = new ShoppingCart();
 		shoppingCartExample.setUserId(userId);
 		shoppingCartExample.setGoodsRealId(goodsRealId);
-		shoppingCartExample.setProviderId(providerId);
+		// shoppingCartExample.setProviderId(providerId);
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
 		if (shoppingCartList.size() == 0) {
@@ -294,16 +294,16 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
+		//Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
-		if (goodsRealId == null || providerId == null) {
-			printString("{'msg':'参数个数不足'}");
+		if (goodsRealId == null) {
+			printString("{'msg':'没有提供商品'}");
 			return null;
 		}
 		ShoppingCart shoppingCartExample = new ShoppingCart();
 		shoppingCartExample.setUserId(userId);
 		shoppingCartExample.setGoodsRealId(goodsRealId);
-		shoppingCartExample.setProviderId(providerId);
+		//shoppingCartExample.setProviderId(providerId);
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
 		if (shoppingCartList.size() == 0) {

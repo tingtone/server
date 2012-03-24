@@ -147,7 +147,7 @@ public abstract class BaseAction extends ActionSupport {
 			printString(json.toString());
 		}
 	}
-
+	
 	protected void printString(String str) {
 		PrintWriter out = null;
 		try {
@@ -157,7 +157,6 @@ public abstract class BaseAction extends ActionSupport {
 			LOG.error(e.getMessage(), e);
 		}
 	}
-
 	protected HttpServletRequest getRequest() {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		try {

@@ -129,11 +129,18 @@ public interface OrderInterface {
 	 * @return
 	 */
 	public abstract String deleteGoods();
-
+	
 	// 以下是小编的接口
 	/*
 	 * 获取未完成的且没有被管理员处理过的订单
 	 */
+	public abstract String setConfirmPhoneForEditor();
+	public abstract String deleteGoodsForEditor();
+	public abstract String acceptPriceForEditor();
+	public abstract String modifyQuantityForEditor();
+	public abstract String addRelatedNumForEditor();
 	public abstract String getOrdersForEditor();
-
+	public abstract String getUserInOrder();
+	public abstract String getUserOrder();
+	public abstract String getSpecificOrderForEditor();
 }

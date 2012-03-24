@@ -37,13 +37,11 @@ public class Order implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Order(Integer userId, String orderNum, Integer addressId,
-			Float postage, String paymentType, String deliverType,
-			String deliverTime, Short invoice, Timestamp addTime, Short finish,
-			Integer providerId, String relatedNum, Short handled,
-			Timestamp handledTime) {
+	public Order(Integer userId, Integer addressId, Float postage,
+			String paymentType, String deliverType, String deliverTime,
+			Short invoice, Timestamp addTime, Short finish, Integer providerId,
+			String relatedNum, Short handled, Timestamp handledTime) {
 		this.userId = userId;
-		this.orderNum = orderNum;
 		this.addressId = addressId;
 		this.postage = postage;
 		this.paymentType = paymentType;

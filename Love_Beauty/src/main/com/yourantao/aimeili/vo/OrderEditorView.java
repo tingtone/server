@@ -8,59 +8,35 @@ public class OrderEditorView {
 	private String orderNum;
 	// 用户ID
 	private int userId;
-	// 处理状态
-	private int handled;
-	// 订单处理时间
-	private String handleTime;
-	// 订单提交时间
-	private String addTime;
 	// 订单ID
-	private List<Integer> orderIdList = new ArrayList<Integer>();
-	// 商品和物流信息一一对应
-	private List<GoodsRealSimpleEditorView> orderGoodsList1;
-	private List<GoodsRealSimpleEditorView> orderGoodsList2;
-	private List<GoodsRealSimpleEditorView> orderGoodsList3;
-	private List<GoodsRealSimpleEditorView> orderGoodsList4;
-	private List<GoodsRealSimpleEditorView> orderGoodsList5;
-	private List<GoodsRealSimpleEditorView> orderGoodsList6;
-
+	private List<Integer> orderIdList = new ArrayList<Integer>(6);
+	//
+	private List<ArrayList<GoodsRealSimpleEditorView>> goodsList = new ArrayList<ArrayList<GoodsRealSimpleEditorView>>(
+			6);
 	// 收件人姓名
-	private String Name;
+	private String name;
 	// 收件人地址
-	private String Address;
+	private String address;
 	// 收件人手机
 	private String mobile;
+	//
+	private int invoice;
+	private int invoiceType;
+	private String invoiceContent;
+	private String invoiceName;
+	private String paymentType;
+	private String deliverType;
+	private String deliverTime;
 
 	// 自定的setter
+	public void addGoodsList(ArrayList<GoodsRealSimpleEditorView> goodsList) {
+		this.goodsList.add(goodsList);
+	}
+
 	public void addOrderId(int orderId) {
 		this.orderIdList.add(orderId);
 	}
 
-	public void setGoodsList(List<GoodsRealSimpleEditorView> orderGoodsList,
-			int providerId) {
-		switch (providerId) {
-		case 1:
-			this.orderGoodsList1 = orderGoodsList;
-			break;
-		case 2:
-			this.orderGoodsList2 = orderGoodsList;
-			break;
-		case 3:
-			this.orderGoodsList3 = orderGoodsList;
-			break;
-		case 4:
-			this.orderGoodsList4 = orderGoodsList;
-			break;
-		case 5:
-			this.orderGoodsList5 = orderGoodsList;
-			break;
-		case 6:
-			this.orderGoodsList6 = orderGoodsList;
-			break;
-		}
-	}
-
-	// 自定义setter
 	public String getOrderNum() {
 		return orderNum;
 	}
@@ -70,19 +46,19 @@ public class OrderEditorView {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getAddress() {
-		return Address;
+		return address;
 	}
 
 	public void setAddress(String address) {
-		Address = address;
+		this.address = address;
 	}
 
 	public String getMobile() {
@@ -91,78 +67,6 @@ public class OrderEditorView {
 
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-
-	public List<GoodsRealSimpleEditorView> getOrderGoodsList1() {
-		return orderGoodsList1;
-	}
-
-	public void setOrderGoodsList1(List<GoodsRealSimpleEditorView> orderGoodsList1) {
-		this.orderGoodsList1 = orderGoodsList1;
-	}
-
-	public List<GoodsRealSimpleEditorView> getOrderGoodsList2() {
-		return orderGoodsList2;
-	}
-
-	public void setOrderGoodsList2(List<GoodsRealSimpleEditorView> orderGoodsList2) {
-		this.orderGoodsList2 = orderGoodsList2;
-	}
-
-	public List<GoodsRealSimpleEditorView> getOrderGoodsList3() {
-		return orderGoodsList3;
-	}
-
-	public void setOrderGoodsList3(List<GoodsRealSimpleEditorView> orderGoodsList3) {
-		this.orderGoodsList3 = orderGoodsList3;
-	}
-
-	public List<GoodsRealSimpleEditorView> getOrderGoodsList4() {
-		return orderGoodsList4;
-	}
-
-	public void setOrderGoodsList4(List<GoodsRealSimpleEditorView> orderGoodsList4) {
-		this.orderGoodsList4 = orderGoodsList4;
-	}
-
-	public List<GoodsRealSimpleEditorView> getOrderGoodsList5() {
-		return orderGoodsList5;
-	}
-
-	public void setOrderGoodsList5(List<GoodsRealSimpleEditorView> orderGoodsList5) {
-		this.orderGoodsList5 = orderGoodsList5;
-	}
-
-	public List<GoodsRealSimpleEditorView> getOrderGoodsList6() {
-		return orderGoodsList6;
-	}
-
-	public void setOrderGoodsList6(List<GoodsRealSimpleEditorView> orderGoodsList6) {
-		this.orderGoodsList6 = orderGoodsList6;
-	}
-
-	public void setHandled(int handled) {
-		this.handled = handled;
-	}
-
-	public int getHandled() {
-		return handled;
-	}
-
-	public void setHandleTime(String handleTime) {
-		this.handleTime = handleTime;
-	}
-
-	public String getHandleTime() {
-		return handleTime;
-	}
-
-	public void setAddTime(String addTime) {
-		this.addTime = addTime;
-	}
-
-	public String getAddTime() {
-		return addTime;
 	}
 
 	public void setOrderIdList(List<Integer> orderIdList) {
@@ -180,4 +84,70 @@ public class OrderEditorView {
 	public int getUserId() {
 		return userId;
 	}
+
+	public void setGoodsList(
+			List<ArrayList<GoodsRealSimpleEditorView>> goodsList) {
+		this.goodsList = goodsList;
+	}
+
+	public List<ArrayList<GoodsRealSimpleEditorView>> getGoodsList() {
+		return goodsList;
+	}
+
+	public int getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(int invoice) {
+		this.invoice = invoice;
+	}
+
+	public int getInvoiceType() {
+		return invoiceType;
+	}
+
+	public void setInvoiceType(int invoiceType) {
+		this.invoiceType = invoiceType;
+	}
+
+	public String getInvoiceContent() {
+		return invoiceContent;
+	}
+
+	public void setInvoiceContent(String invoiceContent) {
+		this.invoiceContent = invoiceContent;
+	}
+
+	public String getInvoiceName() {
+		return invoiceName;
+	}
+
+	public void setInvoiceName(String invoiceName) {
+		this.invoiceName = invoiceName;
+	}
+
+	public String getPaymentType() {
+		return paymentType;
+	}
+
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
+	}
+
+	public String getDeliverType() {
+		return deliverType;
+	}
+
+	public void setDeliverType(String deliverType) {
+		this.deliverType = deliverType;
+	}
+
+	public String getDeliverTime() {
+		return deliverTime;
+	}
+
+	public void setDeliverTime(String deliverTime) {
+		this.deliverTime = deliverTime;
+	}
+
 }

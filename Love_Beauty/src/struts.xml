@@ -55,6 +55,8 @@
 		
 		<!-- 订单 -->
 		<action name="order_*" class="OrderAction" method="{1}">
+			<result name="userorder">/forEditor/userorder.jsp</result>
+			<!--<result name="">/forEditor/goods.jsp</result>-->
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>

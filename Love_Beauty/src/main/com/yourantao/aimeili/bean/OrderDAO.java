@@ -224,7 +224,7 @@ public class OrderDAO extends HibernateDaoSupport {
 	 */
 	public List findUnconfirmedOrdersByUserId(int userId) {
 		String hql = "from Order where userId=" + userId
-				+ " and finish=0 and handled != 3";
+				+ " and finish=0 and handled != 3 order by orderNum, providerId";
 		List<Order> results = (List<Order>) getHibernateTemplate().find(hql);
 		return results;
 	}
@@ -234,13 +234,13 @@ public class OrderDAO extends HibernateDaoSupport {
 	 */
 	public List findHistoryOrdersByUserId(int userId) {
 		String hql = "from Order where userId=" + userId
-				+ " and finish=3 and handled = 3";
+				+ " and finish=3 and handled = 3 by orderNum, providerId";
 		List<Order> results = (List<Order>) getHibernateTemplate().find(hql);
 		return results;
 	}
 
 	/**
-	 * 自定义统计用户待确认/历史成功订单的数量 不一定能够成功
+	 * 自定义统计用户待确认/历史成功订单的数量
 	 */
 	public List<Integer> getOrderCount(int userId) {
 		// TODO Auto-generated method stub
@@ -255,9 +255,14 @@ public class OrderDAO extends HibernateDaoSupport {
 		intList.add(result2.size());
 		return intList;
 	}
-
+	
 	public List<Order> getUnhandledOrders(){
 		String hql = "from Order where handled = 0 and finish = 0 order by userId, orderNum, providerId";
+		List<Order> result = getHibernateTemplate().find(hql);
+		return result;
+	}
+	public List<Order> getUsersAndUnhandledOrders(){
+		String hql ="from Order where handled = 0 and finish = 0 group by orderNum order by userId, orderNum";
 		List<Order> result = getHibernateTemplate().find(hql);
 		return result;
 	}

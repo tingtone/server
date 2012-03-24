@@ -16,7 +16,7 @@
             </column>
         </property>
         <property name="orderNum" type="java.lang.String">
-            <column name="order_num" length="64" not-null="true">
+            <column name="order_num" length="64">
                 <comment>è®¢å�•å�·</comment>
             </column>
         </property>
@@ -77,7 +77,7 @@
         </property>
         <property name="handled" type="java.lang.Short">
             <column name="handled" not-null="true">
-                <comment>0:ç­‰å¾…ç®¡ç�†å'˜å¤"ç�†3:ç®¡ç�†å'˜ä¸‹å�•</comment>
+                <comment>0:ç­‰å¾…ç®¡ç�†å'˜å¤"ç�†1:ç®¡ç�†å'˜ç"µè¯�ç¡®è®¤3:ç®¡ç�†å'˜ä¸‹å�•</comment>
             </column>
         </property>
         <property name="handledTime" type="java.sql.Timestamp">
