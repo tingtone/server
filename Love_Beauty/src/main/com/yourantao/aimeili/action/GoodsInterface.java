@@ -38,6 +38,13 @@ public interface GoodsInterface {
 	public String getGoodsListByEfficacy();
 	
 	/**
+	 * 通过品牌获得商品列表
+	 * 
+	 * @return
+	 */
+	public String getGoodsListByBrand();
+	
+	/**
 	 * 获得收藏商品列表
 	 * @return
 	 */
@@ -83,6 +90,15 @@ public interface GoodsInterface {
 	 * @return
 	 */
 	public String GetRealGoodsListBySeries();
+	
+	/**
+	 * 获得商品的新的评测
+	 */
+	public String getGoodsExperience();
+	
+	
+	
+	
 	
 	public void setNewGoods_thumbContentType(String thumbContentType);
 

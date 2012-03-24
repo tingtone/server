@@ -14,8 +14,15 @@ public class BrandView {
 	private String brandAlias;
 	private String brandDescription;
 	private String brandImageUrl;
+	private String brandOtherName;
 	
 	
+	public String getBrandOtherName() {
+		return brandOtherName;
+	}
+	public void setBrandOtherName(String brandOtherName) {
+		this.brandOtherName = brandOtherName;
+	}
 	public String getBrandDescription() {
 		return brandDescription;
 	}
