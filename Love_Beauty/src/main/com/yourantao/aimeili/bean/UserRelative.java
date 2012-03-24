@@ -1,5 +1,7 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.util.Date;
+
 /**
  * UserRelative entity. @author MyEclipse Persistence Tools
  */
@@ -12,6 +14,10 @@ public class UserRelative implements java.io.Serializable {
 	private Integer userId;
 	private String relative;
 	private String skin;
+	private String city;
+	private Short isSensitive;
+	private Date birthday;
+	private String userTags;
 
 	// Constructors
 
@@ -20,16 +26,26 @@ public class UserRelative implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public UserRelative(Integer userId, String relative) {
+	public UserRelative(Integer userId, String relative, String city,
+			Short isSensitive, Date birthday, String userTags) {
 		this.userId = userId;
 		this.relative = relative;
+		this.city = city;
+		this.isSensitive = isSensitive;
+		this.birthday = birthday;
+		this.userTags = userTags;
 	}
 
 	/** full constructor */
-	public UserRelative(Integer userId, String relative, String skin) {
+	public UserRelative(Integer userId, String relative, String skin,
+			String city, Short isSensitive, Date birthday, String userTags) {
 		this.userId = userId;
 		this.relative = relative;
 		this.skin = skin;
+		this.city = city;
+		this.isSensitive = isSensitive;
+		this.birthday = birthday;
+		this.userTags = userTags;
 	}
 
 	// Property accessors
@@ -64,6 +80,38 @@ public class UserRelative implements java.io.Serializable {
 
 	public void setSkin(String skin) {
 		this.skin = skin;
+	}
+
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public Short getIsSensitive() {
+		return this.isSensitive;
+	}
+
+	public void setIsSensitive(Short isSensitive) {
+		this.isSensitive = isSensitive;
+	}
+
+	public Date getBirthday() {
+		return this.birthday;
+	}
+
+	public void setBirthday(Date birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getUserTags() {
+		return this.userTags;
+	}
+
+	public void setUserTags(String userTags) {
+		this.userTags = userTags;
 	}
 
 }

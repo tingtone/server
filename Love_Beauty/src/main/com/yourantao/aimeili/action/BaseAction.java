@@ -68,8 +68,10 @@ public abstract class BaseAction extends ActionSupport {
 	protected UserLoginDAO userLoginDAO;
 
 	protected static final int BUFFER_SIZE = 16 * 1024;
-	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+	protected static final SimpleDateFormat dateTimeFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss");
+	protected static final SimpleDateFormat dateFormat = new SimpleDateFormat(
+	"yyyy-MM-dd");
 
 	private String jsonpcallback = null;
 

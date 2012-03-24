@@ -24,7 +24,7 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 			.getLogger(GoodsEfficacyDAO.class);
 	// property constants
 	public static final String EFFICACY_ID = "efficacyId";
-	public static final String GOODS_ID = "goodsId";
+	public static final String GOODS = "goods";
 
 	protected void initDao() {
 		// do nothing
@@ -94,8 +94,8 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		return findByProperty(EFFICACY_ID, efficacyId);
 	}
 
-	public List findByGoodsId(Object goodsId) {
-		return findByProperty(GOODS_ID, goodsId);
+	public List findByGoods(Object goods) {
+		return findByProperty(GOODS, goods);
 	}
 
 	public List findAll() {

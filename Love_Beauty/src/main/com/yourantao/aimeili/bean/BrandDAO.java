@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 /**
  * A data access object (DAO) providing persistence and search support for Brand
  * entities. Transaction control of the save(), update() and delete() operations
@@ -185,6 +187,24 @@ public class BrandDAO extends HibernateDaoSupport {
 			      return getHibernateTemplate().find(hql);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);
+			throw re;
+		}
+	}
+	
+	
+	
+	/**
+	 * 自定义查找函数，根据品牌名称或者别名查找
+	 * @param hqlSearch
+	 * @return
+	 */
+	public List findByBrandNameOrBrandAlias(String hqlSearch) {
+		try {
+			String queryString = "from Brand where "
+					+ hqlSearch;
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
 			throw re;
 		}
 	}

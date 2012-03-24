@@ -53,10 +53,22 @@
 			<result name="error">/error.jsp</result>
 		</action>
 		
+		<!-- 搜索词 -->
+		<action name="search_*" class="SearchAction" method="{1}">
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		
 		<!-- 订单 -->
 		<action name="order_*" class="OrderAction" method="{1}">
 			<result name="userorder">/forEditor/userorder.jsp</result>
 			<!--<result name="">/forEditor/goods.jsp</result>-->
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		
+		<!-- 城市 -->
+		<action name="city_*" class="CityAction" method="{1}">
 			<result name="success">/success.jsp</result>
 			<result name="error">/error.jsp</result>
 		</action>

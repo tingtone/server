@@ -51,9 +51,24 @@
                 <comment>用户个人描述</comment>
             </column>
         </property>
+        <property name="city" type="java.lang.String">
+            <column name="city" length="30" not-null="true">
+                <comment>所在城市</comment>
+            </column>
+        </property>
         <property name="skin" type="java.lang.String">
             <column name="skin" length="3">
                 <comment>用户肤质</comment>
+            </column>
+        </property>
+        <property name="isSensitivie" type="java.lang.Short">
+            <column name="isSensitivie" not-null="true">
+                <comment>是否为敏感性肤质(0-不敏感 1-敏感)</comment>
+            </column>
+        </property>
+        <property name="userTags" type="java.lang.String">
+            <column name="user_tags" length="50">
+                <comment>用户标签</comment>
             </column>
         </property>
         <property name="hair" type="java.lang.String">

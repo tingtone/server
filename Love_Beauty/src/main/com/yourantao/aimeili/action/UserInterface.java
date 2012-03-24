@@ -14,7 +14,7 @@ public interface UserInterface {
 	 * 用户亲戚的肤质登记
 	 * uuid rel skin
 	 */
-	public String userInsertRelativeSkin();
+	public String userInsertOrUpdateRelativeSkin();
 	
 	/**
 	 *  for client
