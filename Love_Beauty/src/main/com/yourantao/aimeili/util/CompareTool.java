@@ -5,12 +5,12 @@ import java.util.List;
 
 public class CompareTool {
 	public static double stringSimilarity(CharSequence str1, CharSequence str2) {
-		double length = Math.max(str1.length(), str2.length());
-		double similarity1 = (length - levenshteinDistance(str1, str2))
-				/ length;
-		// double similarity2 = diceCoefficient(str1, str2);
+//		double length = Math.max(str1.length(), str2.length());
+//		double similarity1 = (length - levenshteinDistance(str1, str2))
+//				/ length;
+		double similarity2 = diceCoefficient(str1, str2);
 		double similarity3 = jaroWinklerDistance(str1, str2);
-		return similarity1 * 0.4 + similarity3 * 0.6;
+		return similarity2 * 0.4 + similarity3 * 0.6;
 	}
 
 	public static int levenshteinDistance(CharSequence str1, CharSequence str2) {
@@ -112,9 +112,10 @@ public class CompareTool {
 	}
 
 	public static void main(String[] args) {
-		String[] strs = new String[] { "雅诗兰黛代购ANR即时修护特润精华液",
-				"雅诗兰黛ANR即时修护特润精华液", "雅诗兰黛 ANR即时修护特润精华露", "雅诗兰黛即时修护ANR特润精华液",
+		String[] strs = new String[] { "ANR即时修护特润洗发水",
+				"ANR即时修护特润精华液", " ANR即时修护特润精华露", "即时修护ANR特润精华液",
 				"美国雅诗兰黛ANR即时修护精华美白精华液", "雅诗兰黛DNA即时特润修护露", "正雅诗兰黛代购即时修护特润精华露" };
+		long t1 = System.currentTimeMillis();
 		for (String str1 : strs) {
 			str1 = str1.replace(" ", "");
 			for (String str2 : strs) {
@@ -123,5 +124,7 @@ public class CompareTool {
 						+ stringSimilarity(str1, str2));
 			}
 		}
+		System.out.println(strs.length * strs.length + " : "
+				+ (System.currentTimeMillis() - t1));
 	}
 }
