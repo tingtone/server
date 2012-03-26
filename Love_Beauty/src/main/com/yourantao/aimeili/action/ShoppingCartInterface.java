@@ -33,6 +33,7 @@ public interface ShoppingCartInterface {
 	 * @return
 	 */
 	public abstract String acceptGoods();
+	public String acceptAllGoods();
 	/**
 	 * 删除购物车中的某一个商品
 	 * @return

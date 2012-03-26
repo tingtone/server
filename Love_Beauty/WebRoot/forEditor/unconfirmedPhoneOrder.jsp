@@ -24,6 +24,26 @@
 		<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+		<style type="text/css">
+table {
+	text-align: center;
+	font-size: 15px;
+	color: red;
+	border: 1px solid purple;
+}
+
+table td {
+	border: 1px solid blue;
+}
+
+table b {
+	border: 1px solid blue;
+}
+
+table b input {
+	width: 10px;
+}
+</style>
 		<script src="jquery1.4.2.js" type="text/javascript">
 </script>
 		<script type="text/javascript">
@@ -51,37 +71,12 @@ function TransShopName(index) {
 	}
 	return shopName;
 }
-function addRelatedNum(oIdx){
-	var url = BASE_SERVER + "/order_addRelatedNumForEditor";
-	var oid = $('#oid'+oIdx).val();
-	var relatednum = $('#relatedNum'+oIdx).val();
-	//alert(oid);
-	//alert(relatednum);
-	var params = {
-		"oid" : oid,
-		"relatednum" : relatednum
-	};
-	var result = "";
-	$.ajax({
-				type : "POST",
-				data : params,
-				dataType : "json",
-				url : url,
-				success : function(json) {
-					if(json == null){
-						alert("json null");
-					}
-					else{
-						alert(json.msg);
-					}
-				}
-				});
-}
-function modifyQuantity(index){
+
+function modifyQuantity(index) {
 	var url = BASE_SERVER + "/order_modifyQuantityForEditor";
-	var grid = $('#grid'+index).val();
-	var oid = $('#oid'+index).val();
-	var gcount = $('#count'+index).val();
+	var grid = $('#grid' + index).val();
+	var oid = $('#oid' + index).val();
+	var gcount = $('#count' + index).val();
 	var params = {
 		"grid" : grid,
 		"oid" : oid,
@@ -89,31 +84,32 @@ function modifyQuantity(index){
 	};
 	//alert(oid+";"+grid+";"+gcount);
 	var result = "";
-	$.ajax({
-				type : "POST",
-				data : params,
-				dataType : "json",
-				url : url,
-				success : function(json) {
-					//alert("in modifyQuantity");
-					if (json == null) {
-						alert("json null");
-					} else {
-						alert(json.msg);
-					}
-				}
-				});
+	$.ajax( {
+		type : "POST",
+		data : params,
+		dataType : "json",
+		url : url,
+		success : function(json) {
+			//alert("in modifyQuantity");
+		if (json == null) {
+			alert("json null");
+		} else {
+			alert(json.msg);
+		}
+	}
+	});
 }
 
-function acceptPrice(index){
+function acceptPrice(index) {
 	var flag = confirm("确认接受该商品的新价格");
-	if(flag == false){
+	if (flag == false) {
 		return;
-	}	
+	}
 	var url = BASE_SERVER + "/order_acceptPriceForEditor";
-	var grid = $('#grid'+index).val();
-	var oid = $('#oid'+index).val();
-	var params = {
+	var grid = $('#grid' + index).val();
+	var oid = $('#oid' + index).val();
+	var params
+= {
 		"grid" : grid,
 		"oid" : oid,
 	};
@@ -170,7 +166,8 @@ function getSpecificOrder(uid, ono) {
 	var url = BASE_SERVER + "/order_getSpecificOrderForEditor";
 	var params = {
 		"uid" : uid,
-		"ono" : ono
+		"ono" : ono,
+		"otype" : 2
 	};
 	var result = "";
 	$
@@ -185,26 +182,19 @@ function getSpecificOrder(uid, ono) {
 					} else {
 					//alert("in get specific order");
 						var index = 0;
-						result += "收件人姓名"+json.name+";手机"+json.mobile+";地址"+json.address+"<br/>";
-						result += "付款方式:"+json.paymentType+";送货方式:"+json.deliverType+";送货时间:"+json.deliverTime+"<br/>";
+						result += "<table>"
+						result += "<tr><td>收件人姓名"+json.name+"</td><td>手机"+json.mobile+"</td><td>地址"+json.address+"<td></tr>";
+						result += "<tr><td>付款方式:"+json.paymentType+"</td><td>送货方式:"+json.deliverType+"</td><td>送货时间:"+json.deliverTime+"<td></tr>";
+						result += "</table>";
 						if(json.invoice == 3){
 							result += "发票类型"+json.invoiceType+";个人/单位名称"+json.invoiceName+";发票内容:"+json.invoiceContent;
 						}
 						//
 						for ( var oIdx = 0; oIdx < json.goodsList.length; oIdx++) {
 							var goodsList = json.goodsList[oIdx];
-							result += "---<br/>";
-							result += "<form action='order_' method='post'>";
-							result += "<input type='hidden' name='ooid"+oIdx+"' value='"
-									+ json.orderIdList[oIdx] + "'/>";
-							//result += "商城:" + TransShopName();
-							result += "商城:" + oIdx;
-							result += "商城订单编号:<input type='text' id='relatedNum"+oIdx+"'/>"
-							result += "<input type='button' onclick='addRelatedNum("+oIdx+")' value='下单'/>";
-							result += "</form>";
-							
+							result += "<hr size='5'>";
 							for ( var mIdx = 0; mIdx < goodsList.length; mIdx++) {
-								result += "+++++"+mIdx + "+++++";
+								result += "+++++++++++++++"+(mIdx+1) + "+++++++++++++++";
 								result += "<div id=div"+index+">";
 								result += "<form>";
 								result += "<input id='oid"+index+"' type='hidden' name='oid"+index+"' value='"
@@ -222,7 +212,7 @@ function getSpecificOrder(uid, ono) {
 										+ goodsList[mIdx].goodsUrl
 										+ "' target='_blank'>点击导向购买</a></td></tr>";
 								
-								result += "<tr><td>数量<label></label>修改为<input id='count"+index+"' type='text' name='count"+index+"' value='"
+								result += "<tr><td>数量修改为<input id='count"+index+"' type='text' name='count"+index+"' value='"
 										+ goodsList[mIdx].goodsCount
 										+ "'/></td></tr>";
 								result += "<tr><td>原价格:<label id='price"+index+"'>"

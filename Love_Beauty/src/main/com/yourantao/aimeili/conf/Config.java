@@ -22,8 +22,8 @@ public class Config {
 	public static Properties properties;
 
 	private static final String springPath = "applicationContext.xml";
-	private static final String configPath = "C:/Users/kfirst/Workspaces/MyEclipse 8.6/.metadata/.me_tcat/webapps/Love_Beauty/WEB-INF/classes/config.properties";   
-//	private static final String configPath = System.getProperty("configPath")+"/config.properties";   
+	//private static final String configPath = "C:/Users/kfirst/Workspaces/MyEclipse 8.6/.metadata/.me_tcat/webapps/Love_Beauty/WEB-INF/classes/config.properties";   
+	private static final String configPath = System.getProperty("configPath")+"/config.properties";   
 
 	// 配置文件中的key值
 	public static final String BASE_SERVER = "BASE_SERVER"; // 服务链接地址

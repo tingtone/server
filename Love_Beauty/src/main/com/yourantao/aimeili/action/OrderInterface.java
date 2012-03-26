@@ -139,7 +139,7 @@ public interface OrderInterface {
 	public abstract String acceptPriceForEditor();
 	public abstract String modifyQuantityForEditor();
 	public abstract String addRelatedNumForEditor();
-	public abstract String getOrdersForEditor();
+	/*public abstract String getOrdersForEditor();*/
 	public abstract String getUserInOrder();
 	public abstract String getUserOrder();
 	public abstract String getSpecificOrderForEditor();

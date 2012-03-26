@@ -770,11 +770,26 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	public String getUserInOrder() {
 		String msg = "";
 		// 获取参数
-		/*
-		 * Integer orderType = getIntegerParameter("orderType"); if(orderType ==
-		 * null){ msg = "msg'':'参数不足'"; printString(msg); return null; }
-		 */
-		List<Order> orderList = orderDAO.getUsersAndUnhandledOrders();
+		Integer orderType = getIntegerParameter("otype");
+		if(orderType == null){
+			msg = "{'msg':'参数不足'}";
+			printObject(msg);
+			return null;
+			
+		}
+		List<Order> orderList;
+		switch(orderType){
+		case 1:
+			orderList = orderDAO.getUsersAndUnconfirmedPhoneOrders();
+			break;
+		case 2:
+			orderList = orderDAO.getUsersAndUnhandledOrders();
+			break;
+		default:
+			orderList = orderDAO.getUsersAndUnconfirmedPhoneOrders();
+			break;
+		}
+
 		List<UserOrderView> userOrderViewList = new ArrayList<UserOrderView>();
 		for (Order order : orderList) {
 			// intList.add(order.getUserId());
@@ -788,15 +803,16 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	}
 
 	/*
-	 * 获取未完成的且没有被管理员处理过的订单 貌似不使用了
-	 */
+	 * 获取未完成的且没有被管理员处理过的订单
+	 * 貌似不使用了
+	 
 	public String getOrdersForEditor() {
 		// 获取参数
 		Integer orderType = getIntegerParameter("ocid");
 		if (orderType == null) {
-			/*
+			
 			 * printString("{'msg':'没有订单种类'}"); return null;
-			 */
+			 
 		}
 		autoConfirmOrder();
 		// 获取未处理订单
@@ -821,11 +837,11 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			}
 			// 开始设置orderEditorView的各个字段
 			orderEditorView.setUserId(order.getUserId());
-			/*
+			
 			 * orderEditorView.setHandled(order.getHandled());
 			 * orderEditorView.setHandleTime(order.getHandledTime().toString());
 			 * orderEditorView.setAddTime(order.getAddTime().toString());
-			 */
+			 
 			orderEditorView.addOrderId(order.getOrderId());
 			orderEditorView.setOrderNum(order.getOrderNum());
 
@@ -852,10 +868,10 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				goodsRealSimpleEditorViewList.add(goodsRealSimpleEditorView);
 
 			}
-			/*
+			
 			 * orderEditorView.setGoodsList(goodsRealSimpleEditorViewList, order
 			 * .getProviderId());
-			 */
+			 
 
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
@@ -869,7 +885,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 
 		printArray(orderEditorViewList);
 		return null;
-	}
+	}*/
 
 	/**
 	 * 管理员已经电话确认
@@ -887,15 +903,21 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		for (Order order : orderList) {
 			if (order.getHandled() == 3)
 				continue;
-			order.setHandled((short) 1);
 			// 这里计算每一个订单的新的总价格,以后都不改变了
 			int orderId = order.getOrderId();
 			List<OrderGoods> orderGoodsList = orderGoodsDAO
 					.findByOrderId(orderId);
 			float summary = 0;
 			for (OrderGoods orderGoods : orderGoodsList) {
+				//这里检查数据库中的价格和实际的价格是否发生变动,主要是防止管理员无意间忽略了部分商品价格的变动
+				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getGoodsRealId());
+				if(Math.abs(goodsReal.getGoodsPrice()-orderGoods.getPrice()) > 0.00001){
+					printObject("{'msg':'订单中还存在价格变动的商品'}");
+					return null;
+				}
 				summary += orderGoods.getCount() * orderGoods.getPrice();
 			}
+			order.setHandled((short) 1);
 			order.setOrderSum(summary);
 			orderDAO.merge(order);
 		}

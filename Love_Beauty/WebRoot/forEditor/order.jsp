@@ -21,6 +21,26 @@
 		<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+		<style type="text/css">
+table {
+	text-align: center;
+	font-size: 15px;
+	color: red;
+	border: 1px solid purple;
+}
+
+table td {
+	border: 1px solid blue;
+}
+
+table b {
+	border: 1px solid blue;
+}
+
+table b input {
+	width: 10px;
+}
+</style>
 		<script src="jquery1.4.2.js" type="text/javascript">
 </script>
 		<script type="text/javascript">
@@ -28,7 +48,7 @@
 function getUserInOrder(orderType) {
 	var url = BASE_SERVER + "/order_getUserInOrder";
 	var params = {
-		"orderType" : orderType
+		"otype" : orderType
 	};
 	var result = "";
 	$
@@ -43,10 +63,6 @@ function getUserInOrder(orderType) {
 					} else {
 						for ( var oIdx = 0; oIdx < json.length; oIdx++) {
 							result += "<form>";
-							/*result += "<input type='hidden' id='uid' name='uid' value='"
-									+ json[oIdx].userId + "'/>";
-							result += "<input type='hidden' id='ono' name='ono' value='"
-									+ json[oIdx].orderNum + "'/>";*/
 							result += "<input type='hidden' id='uid" + oIdx
 									+ "' name='uid' value='"
 									+ json[oIdx].userId + "'/>";
@@ -62,11 +78,15 @@ function getUserInOrder(orderType) {
 									+ json[oIdx].orderNum
 									+ "</label></td></tr>";
 							result += "</table>";
-							/*result += "<input type='submit' value='查看详情'/>";*/
-							result += "<input type='button' onclick='getDetail("
-									+ oIdx + ")' value='查看详情'/>";
-							result += "<input type='button' onclick='setHandled("
-									+ oIdx + ")' value='电话确认'/>";
+							if (orderType == 1) {
+								result += "<input type='button' onclick='getDetail("
+										+ oIdx + ")' value='查看详情'/>";
+								result += "<input type='button' onclick='setHandled("
+										+ oIdx + ")' value='电话确认'/>";
+							} else {
+								result += "<input type='button' onclick='getDetail2("
+										+ oIdx + ")' value='查看详情'/>";
+							}
 							result += "</form>";
 						}
 					}
@@ -75,17 +95,23 @@ function getUserInOrder(orderType) {
 			});
 }
 function getDetail(oIdx) {
-	var url = BASE_SERVER + "/forEditor/userorder.jsp" + "?uid="
+	var url = BASE_SERVER + "/forEditor/unconfirmedPhoneOrder.jsp" + "?uid="
+			+ $('#uid' + oIdx).val() + "&ono=" + $('#ono' + oIdx).val();
+	//alert(url);
+	window.open(url, "", "");
+}
+function getDetail2(oIdx) {
+	var url = BASE_SERVER + "/forEditor/unhandledOrder.jsp" + "?uid="
 			+ $('#uid' + oIdx).val() + "&ono=" + $('#ono' + oIdx).val();
 	//alert(url);
 	window.open(url, "", "");
 }
 function setHandled(oIdx) {
 	var url = BASE_SERVER + "/order_setConfirmPhoneForEditor";
-	var ono = $('#ono'+oIdx).val();
+	var ono = $('#ono' + oIdx).val();
 	//alert(ono);
 	var params = {
-		"ono" : ono 
+		"ono" : ono
 	};
 	var result = "";
 	$.ajax( {
