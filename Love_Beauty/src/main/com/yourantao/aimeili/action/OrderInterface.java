@@ -136,6 +136,7 @@ public interface OrderInterface {
 	 */
 	public abstract String setConfirmPhoneForEditor();
 	public abstract String deleteGoodsForEditor();
+	public abstract String deleteOrderForEditor();
 	public abstract String acceptPriceForEditor();
 	public abstract String modifyQuantityForEditor();
 	public abstract String addRelatedNumForEditor();

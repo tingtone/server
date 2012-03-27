@@ -51,11 +51,14 @@ function addRelatedNum(oIdx) {
 	var url = BASE_SERVER + "/order_addRelatedNumForEditor";
 	var oid = $('#oid' + oIdx).val();
 	var relatednum = $('#relatedNum' + oIdx).val();
+	var postage = $('#postage'+ oIdx).val();
+	alert(postage);
 	//alert(oid);
 	//alert(relatednum);
 	var params = {
 		"oid" : oid,
-		"relatednum" : relatednum
+		"relatednum" : relatednum,
+		"postage" : postage
 	};
 	var result = "";
 	$.ajax( {
@@ -132,7 +135,8 @@ function getSpecificOrder(uid, ono) {
 					+ json.orderIdList[oIdx] + "'/>";
 			//result += "商城:" + TransShopName();
 			result += "商城:" + oIdx;
-			result += "商城订单编号:<input type='text' id='relatedNum" + oIdx + "'/>"
+			result += "商城订单编号:<input type='text' id='relatedNum" + oIdx + "'/>";
+			result += "邮费:<input type='text' id='postage" + oIdx + "' value='0'/>";
 			result += "<input type='button' onclick='addRelatedNum(" + oIdx
 					+ ")' value='设置订单号'/>";
 			result += "</form>";

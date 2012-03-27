@@ -268,7 +268,7 @@ public class OrderDAO extends HibernateDaoSupport {
 		return result;
 	}
 	public List<Order> getUsersAndUnhandledOrders(){
-		String hql ="from Order where handled = 0 and finish = 1 group by orderNum order by userId, orderNum";
+		String hql ="from Order where handled = 1 and finish = 0 group by orderNum order by userId, orderNum";
 		List<Order> result = getHibernateTemplate().find(hql);
 		return result;
 	}

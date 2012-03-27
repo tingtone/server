@@ -30,5 +30,10 @@
                 <comment>å•†å"�ä»·æ&#160;¼</comment>
             </column>
         </property>
+        <property name="priceType" type="java.lang.Short">
+            <column name="price_type" not-null="true">
+                <comment>0:ä½¿ç"¨æ•°æ�®åº"ä¸­çš"ä»·æ&#160;¼ï¼›3:ä½¿ç"¨ç½'ç«™çš"ä»·æ&#160;¼</comment>
+            </column>
+        </property>
     </class>
 </hibernate-mapping>

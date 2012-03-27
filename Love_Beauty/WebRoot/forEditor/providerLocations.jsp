@@ -17,22 +17,22 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
 		<style type="text/css">
-.table {
+table {
 	text-align: center;
 	font-size: 15px;
 	color: red;
 	border: 1px solid purple;
 }
 
-.table td {
+table td {
 	border: 1px solid blue;
 }
 
-.table b {
+table b {
 	border: 1px solid blue;
 }
 
-.table b input {
+table b input {
 	width: 10px;
 }
 </style>
@@ -175,42 +175,30 @@ $(document).ready(function() {
 				<tr>
 					<td>
 						省
-					</td>
-					<td>
 						<select id="location1" name="location1"></select>
 					</td>
 					<td>
 						自定义
-					</td>
-					<td>
 						<input type="text" name="newlocation1">
 					</td>
 				</tr>
 				<tr>
 					<td>
 						市
-					</td>
-					<td>
 						<select id="location2" name="location2"></select>
 					</td>
 					<td>
 						自定义
-					</td>
-					<td>
 						<input type="text" name="newlocation2">
 					</td>
 				</tr>
 				<tr>
 					<td>
 						区/县
-					</td>
-					<td>
 						<select id="location3" name="location3"></select>
 					</td>
 					<td>
 						自定义
-					</td>
-					<td>
 						<input type="text" name="newlocation3">
 					</td>
 				</tr>

@@ -131,14 +131,12 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 		Integer count = getIntegerParameter(GOODS_COUNT);
-		Float price = Float.valueOf(getRequest().getParameter("price"));
-		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
-		if (goodsRealId == null || count == null || price == null) {
+		if (goodsRealId == null || count == null) {
 			printString("{'msg':'参数个数不足'}");
 			return null;
-		} else if (count < 0 || price < 0) {
-			printString("{'msg':'参数值出错'}");
+		} else if (count <= 0 ) {
+			printString("{'msg':'数量不能小于1'}");
 			return null;
 		}
 		// 设置对象状态
@@ -157,7 +155,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			if (goodsReal.getGoodsStatus() != 6) {
 				msg = "{'msg':'商品已经下架或待审核'}";
 			} else {
-				shoppingCart.setPrice(price);
+				shoppingCart.setPrice(goodsReal.getGoodsPrice());
 				shoppingCart.setCount(count);
 				shoppingCart.setProviderId(goodsReal.getProviderId());
 				shoppingCartDAO.save(shoppingCart);
@@ -191,20 +189,18 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
 		Integer count = getIntegerParameter(GOODS_COUNT);
 		// 验证参数
-		if (goodsRealId == null || count == null || providerId == null) {
+		if (goodsRealId == null || count == null) {
 			printString("{'msg':'参数个数不足'}");
 			return null;
-		} else if (count < 0) {
+		} else if (count <= 0) {
 			printString("{'msg':'参数值出错'}");
 			return null;
 		}
 		ShoppingCart shoppingCartExample = new ShoppingCart();
 		shoppingCartExample.setGoodsRealId(goodsRealId);
 		shoppingCartExample.setUserId(userId);
-		shoppingCartExample.setProviderId(providerId);
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
 		if (shoppingCartList.size() == 0) {

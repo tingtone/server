@@ -47,7 +47,7 @@ table b input {
 		<script src="jquery1.4.2.js" type="text/javascript">
 </script>
 		<script type="text/javascript">
-function TransShopName(index) {
+/*function TransShopName(index) {
 	var shopName;
 	switch (index) {
 	case 0:
@@ -70,7 +70,7 @@ function TransShopName(index) {
 		break;
 	}
 	return shopName;
-}
+}*/
 
 function modifyQuantity(index) {
 	var url = BASE_SERVER + "/order_modifyQuantityForEditor";
@@ -100,8 +100,8 @@ function modifyQuantity(index) {
 	});
 }
 
-function acceptPrice(index) {
-	var flag = confirm("确认接受该商品的新价格");
+function acceptDatabasePrice(index) {
+	var flag = confirm("确认接受该商品的数据库价格");
 	if (flag == false) {
 		return;
 	}
@@ -112,6 +112,7 @@ function acceptPrice(index) {
 = {
 		"grid" : grid,
 		"oid" : oid,
+		"type" : 1
 	};
 	var result = "";
 	$.ajax({
@@ -130,6 +131,39 @@ function acceptPrice(index) {
 				}
 				});
 }
+function acceptWebPrice(index) {
+	var flag = confirm("确认接受该商品的网站价格");
+	if (flag == false) {
+		return;
+	}
+	var url = BASE_SERVER + "/order_acceptPriceForEditor";
+	var grid = $('#grid' + index).val();
+	var oid = $('#oid' + index).val();
+	var newprice = $('#nprice' + index).val();
+	//alert(newprice);
+	var params = {
+		"grid" : grid,
+		"oid" : oid,
+		"type" : 2,
+		"nprice" : newprice
+	};
+	var result = "";
+	$.ajax({
+				type : "POST",
+				data : params,
+				dataType : "json",
+				url : url,
+				success : function(json) {
+					if (json == null) {
+						alert("操作失败");
+					} else {
+						$('#price'+index).empty();
+						var newprice = $('#nprice'+index).val();
+						$('#price'+index).append(newprice);
+					}
+				}
+				});
+}
 function deleteGoods(index){
 	var flag = confirm("确认删除该商品");
 	if(flag == false){
@@ -138,8 +172,8 @@ function deleteGoods(index){
 	var url = BASE_SERVER + "/order_deleteGoodsForEditor";
 	var grid = $('#grid'+index).val();
 	var oid = $('#oid'+index).val();
-	alert(grid);
-	alert(oid);
+	/*alert(grid);
+	alert(oid);*/
 	var params = {
 		"grid" : grid,
 		"oid" : oid,
@@ -157,6 +191,34 @@ function deleteGoods(index){
 						alert(json.msg);
 						if(json.msg == 'done'){
 							$('#div'+index).remove();
+						}
+					}
+				}
+				});
+}
+function deleteOrder(index){
+	var flag = confirm("确认删除该订单");
+	if(flag == false){
+		return;
+	}
+	var url = BASE_SERVER + "/order_deleteOrderForEditor";
+	var oid = $('#oid'+index).val();
+	var params = {
+		"oid" : oid,
+	};
+	var result = "";
+	$.ajax({
+				type : "POST",
+				data : params,
+				dataType : "json",
+				url : url,
+				success : function(json) {
+					if (json == null) {
+						alert("json null");
+					} else {
+						//alert(json.msg);
+						if(json.msg == 'done'){
+							$('#div'+index+'o').remove();
 						}
 					}
 				}
@@ -192,7 +254,14 @@ function getSpecificOrder(uid, ono) {
 						//
 						for ( var oIdx = 0; oIdx < json.goodsList.length; oIdx++) {
 							var goodsList = json.goodsList[oIdx];
+							result += "<div id='div"+oIdx+"'o>";
 							result += "<hr size='5'>";
+							result += "<form>";
+							result += "<input type='hidden' name='ooid" + oIdx + "' value='"
+									+ json.orderIdList[oIdx] + "'/>";
+							result += "<input type='button' onclick='deleteOrder(" + oIdx
+									+ ")' value='删除此订单'/>";
+							result += "</form>";
 							for ( var mIdx = 0; mIdx < goodsList.length; mIdx++) {
 								result += "+++++++++++++++"+(mIdx+1) + "+++++++++++++++";
 								result += "<div id=div"+index+">";
@@ -216,12 +285,14 @@ function getSpecificOrder(uid, ono) {
 										+ goodsList[mIdx].goodsCount
 										+ "'/></td></tr>";
 								result += "<tr><td>原价格:<label id='price"+index+"'>"
-										+ goodsList[mIdx].goodsPrice + "</label>新价格<label id='newprice"+index+"'>"
-										+ goodsList[mIdx].newGoodsPrice+"</label>"
+										+ goodsList[mIdx].goodsPrice + "</label> 数据库中价格<label id='newprice"+index+"'>"
+										+ goodsList[mIdx].newGoodsPrice+"</label> ";
+								result += "商城价格<input type='text' value='0' id='nprice"+index+"'/>"
 										+ "</td></tr>";
 								result += "<tr><td>";
 								result += "<input type='button' onclick='modifyQuantity("+index+")' value='修改数量'/>";
-								result += "<input type='button' onclick='acceptPrice("+index+")' value='接受新价格'/>";
+								result += "<input type='button' onclick='acceptDatabasePrice("+index+")' value='接受数据库价格'/>";
+								result += "<input type='button' onclick='acceptWebPrice("+index+")' value='接受网站价格'/>";
 								result += "<input type='button' onclick='deleteGoods("+index+")' value='删除该商品'/>";
 								result += "</td></tr>";
 								result += "</table>";
@@ -229,6 +300,7 @@ function getSpecificOrder(uid, ono) {
 								result += "</div>";
 								index++;
 							}
+							result += "</div>";
 						}
 					}
 					$('#result').html(result.toString());
