@@ -12,6 +12,7 @@ import main.com.yourantao.aimeili.bean.ShoppingCart;
 import main.com.yourantao.aimeili.bean.ShoppingCartDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.vo.GoodsRealSimpleView;
 import main.com.yourantao.aimeili.vo.ShoppingCartView;
 
 public class ShoppingCartAction extends BaseAction implements Constant,
@@ -72,38 +73,43 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		}
 		int userId = userLogin.get(0).getUserId();
 
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
-		List<ShoppingCart> shoppingCartList;
-		if (providerId != null) {
-			// 获取购物车中指定商城的商品
-			ShoppingCart shoppingCartExample = new ShoppingCart();
-			shoppingCartExample.setUserId(userId);
-			shoppingCartExample.setProviderId(providerId);
-			shoppingCartList = shoppingCartDAO
-					.findByExample(shoppingCartExample);
-		} else {
-			shoppingCartList = shoppingCartDAO.findByUserId(userId);
-		}
+//		List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByUserId(userId);
+		List<ShoppingCart> shoppingCartList = shoppingCartDAO.getUserShoppingCart(userId);
 		// 对结果进行进一步处理
 		List<ShoppingCartView> shoppingCartViewList = new ArrayList<ShoppingCartView>();
+		
 		for (ShoppingCart shoppingCart : shoppingCartList) {
+			ShoppingCartView shoppingCartView;
+			boolean existFlag = false;
+			if(!shoppingCartViewList.isEmpty()
+					&& shoppingCartViewList.get(shoppingCartViewList.size()-1).getProviderId() == shoppingCart.getProviderId()){
+				shoppingCartView = shoppingCartViewList.get(shoppingCartViewList.size()-1);
+				existFlag = true;
+			}
+			else{
+				shoppingCartView = new ShoppingCartView();
+				existFlag = false;
+			}
+			shoppingCartView.setProviderId(shoppingCart.getProviderId());
+			
 			// 去goods表中查询
 			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
 					.getGoodsRealId());
-
-			ShoppingCartView shoppingCartView = new ShoppingCartView();
-
-			shoppingCartView.setGoodsRealId(shoppingCart.getGoodsRealId());
-			shoppingCartView.setGoodsPrice(shoppingCart.getPrice());
-			shoppingCartView.setProviderId(shoppingCart.getProviderId());
-
-			shoppingCartView.setCount(shoppingCart.getCount());
-			shoppingCartView.setGoodsName(goodsReal.getGoodsName());
-			shoppingCartView.setGoodsThumb(goodsReal.getGoodsThumb());
-			shoppingCartView.setGoodsContent(goodsReal.getGoodsContent());
-
-			// 加入数组中
-			shoppingCartViewList.add(shoppingCartView);
+			
+			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
+			goodsRealSimpleView.setGoodsRealId(shoppingCart.getGoodsRealId());
+			goodsRealSimpleView.setGoodsPrice(shoppingCart.getPrice());
+			goodsRealSimpleView.setGoodsCount(shoppingCart.getCount());
+			
+			goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
+			goodsRealSimpleView.setGoodsContent(goodsReal.getGoodsContent());
+			goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
+			
+			shoppingCartView.addGoods(goodsRealSimpleView);
+			//
+			if(!existFlag){
+				shoppingCartViewList.add(shoppingCartView);
+			}
 		}
 		//
 		printArray(shoppingCartViewList);
