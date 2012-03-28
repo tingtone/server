@@ -19,6 +19,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
+	<style type="text/css">
+table {
+	text-align: center;
+	font-size: 15px;
+	color: red;
+	border: 1px solid purple;
+}
+
+table td {
+	border: 1px solid blue;
+}
+
+table b {
+	border: 1px solid blue;
+}
+
+table b input {
+	width: 10px;
+}
+</style>
 	<script src="jquery1.4.2.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	function GetProvider_Detail(pid){
@@ -39,7 +59,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}else{
 					provider +="<form action='provider_updateProvider' enctype='multipart/form-data' method='post'>";
 					provider += "<input type=hidden name='pid' value='" +json['providerId'] +"'>";
-					provider += "<table border='1'>";
+					provider += "<table>";
 					provider += "<tr><td>商铺名称</td><td>" +json['providerName'] +"</td></tr>";
 					provider += "<tr><td>缩略图像</td><td><img src='" +json['providerThumb'] +"'></td></tr>";
 					provider += "<tr><td>更改缩略图</td><td><input type='file' name='newprovider_thumb'></td></tr>";
@@ -54,19 +74,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				}
 			});
 	}
-	function update2Provider()
+/*	function update2Provider()
 	{
 		var pid = $('#providerId').val();
 		var pdes = $('#providerDescription').val();
 		var pservice =$('#providerService').val();
 		var pdeliver = $('#providerDeliver').val();
-		/*
-		alert(pid);
-		alert(pdes);
-		alert(pservice);
-		alert(pdeliver);
-		*/
-		var url="http://localhost:8080/Love_Beauty/provider_updateProvider";
+		var url= BASE_SERVER+"/provider_updateProvider";
 		var params = {"pid":pid, "pdes":pdes, "pservice":pservice, "pdeliver":pdeliver};
 		$.ajax({
 				type:"POST",
@@ -77,7 +91,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					alert("return from server");
 				}
 		});
-	}
+	}*/
 	$(document).ready(function(){
 			GetProvider_Detail($('#providerId').val());
 			$('#providerId').change(function(){

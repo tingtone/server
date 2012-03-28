@@ -26,6 +26,8 @@ public class OrderGoodsDAO extends HibernateDaoSupport {
 	public static final String ORDER_ID = "orderId";
 	public static final String GOODS_REAL_ID = "goodsRealId";
 	public static final String COUNT = "count";
+	public static final String PRICE = "price";
+	public static final String PRICE_TYPE = "priceType";
 
 	protected void initDao() {
 		// do nothing
@@ -101,6 +103,14 @@ public class OrderGoodsDAO extends HibernateDaoSupport {
 
 	public List findByCount(Object count) {
 		return findByProperty(COUNT, count);
+	}
+
+	public List findByPrice(Object price) {
+		return findByProperty(PRICE, price);
+	}
+
+	public List findByPriceType(Object priceType) {
+		return findByProperty(PRICE_TYPE, priceType);
 	}
 
 	public List findAll() {

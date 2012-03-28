@@ -131,14 +131,12 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 		Integer count = getIntegerParameter(GOODS_COUNT);
-		Float price = Float.valueOf(getRequest().getParameter("price"));
-		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
-		if (goodsRealId == null || count == null || price == null) {
+		if (goodsRealId == null || count == null) {
 			printString("{'msg':'参数个数不足'}");
 			return null;
-		} else if (count < 0 || price < 0) {
-			printString("{'msg':'参数值出错'}");
+		} else if (count <= 0 ) {
+			printString("{'msg':'数量不能小于1'}");
 			return null;
 		}
 		// 设置对象状态
@@ -157,7 +155,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			if (goodsReal.getGoodsStatus() != 6) {
 				msg = "{'msg':'商品已经下架或待审核'}";
 			} else {
-				shoppingCart.setPrice(price);
+				shoppingCart.setPrice(goodsReal.getGoodsPrice());
 				shoppingCart.setCount(count);
 				shoppingCart.setProviderId(goodsReal.getProviderId());
 				shoppingCartDAO.save(shoppingCart);
@@ -191,20 +189,18 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		Integer providerId = getIntegerParameter(PROVIDER_ID);
 		Integer count = getIntegerParameter(GOODS_COUNT);
 		// 验证参数
-		if (goodsRealId == null || count == null || providerId == null) {
+		if (goodsRealId == null || count == null) {
 			printString("{'msg':'参数个数不足'}");
 			return null;
-		} else if (count < 0) {
+		} else if (count <= 0) {
 			printString("{'msg':'参数值出错'}");
 			return null;
 		}
 		ShoppingCart shoppingCartExample = new ShoppingCart();
 		shoppingCartExample.setGoodsRealId(goodsRealId);
 		shoppingCartExample.setUserId(userId);
-		shoppingCartExample.setProviderId(providerId);
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
 		if (shoppingCartList.size() == 0) {
@@ -272,7 +268,44 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		printString(msg);
 		return null;
 	}
-
+	/**
+	 * 接受购物车中商品的所有变动
+	 * 价格变动就接受新的价格
+	 * 商品不存在或者下架/待审核就从购物车中删除此商品
+	 * 此操作不可撤销
+	 */
+	public String acceptAllGoods(){
+		String msg = "";
+		String uuid = getStringParameter("uuid");
+		if (uuid == null) {
+			printString("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
+		if (userLogin.size() == 0) {
+			printString("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId = userLogin.get(0).getUserId();
+		List<ShoppingCart> shoppingCartList = shoppingCartDAO.findByUserId(userId);
+		for(ShoppingCart shoppingCart: shoppingCartList){
+			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart.getGoodsRealId());
+			if(goodsReal != null && goodsReal.getGoodsStatus() == 6){
+				if(Math.abs(goodsReal.getGoodsPrice()-shoppingCart.getPrice()) > 0.00001){
+					//接受新价格
+					shoppingCart.setPrice(goodsReal.getGoodsPrice());
+					shoppingCartDAO.merge(shoppingCart);
+				}
+				//什么也不做
+			}
+			else{
+				//商品不存在或者下架/待审核,删除此商品
+				shoppingCartDAO.delete(shoppingCart);
+			}
+		}
+		printString(msg);
+		return null;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
