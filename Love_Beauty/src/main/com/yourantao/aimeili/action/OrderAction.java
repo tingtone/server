@@ -179,7 +179,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
-		autoConfirmOrder();
+		autoConfirmOrder();//这里自动设置订单的状态为已经收货状态是否合理
 		List<Integer> countList = orderDAO.getOrderCount(userId);
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByUserId(userId);
@@ -188,7 +188,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		int favCount = userFavlist.size();
 		String countString = "{'favourite':'" + favCount + "','shopping':'"
 				+ shoppingCount + "','unconfirm':'" + countList.get(0)
-				+ "','unfinish':'" + countList.get(1) + "'}";
+				+ "','history':'" + countList.get(1) + "'}";
 		printString(countString);
 
 		return null;
