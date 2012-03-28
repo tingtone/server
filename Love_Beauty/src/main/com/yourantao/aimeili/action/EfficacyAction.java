@@ -143,7 +143,7 @@ public class EfficacyAction extends BaseAction implements EfficacyInterface,
 						+ getExtention(newImageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(newEfficacy_image, FileName);
+				int imageid = getImgAttribute(newEfficacy_image, FileName,1);
 				efficacy.setEfficacyImageId(imageid);
 				copy(newEfficacy_image, imageFile);
 			}
@@ -158,7 +158,7 @@ public class EfficacyAction extends BaseAction implements EfficacyInterface,
 						+ getExtention(imageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(efficacy_image, FileName);
+				int imageid = getImgAttribute(efficacy_image, FileName,1);
 				efficacy.setEfficacyImageId(imageid);
 				copy(efficacy_image, imageFile);
 			}

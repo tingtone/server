@@ -22,7 +22,7 @@ public interface GoodsInterface {
 	/**
 	 * 获得真实商品的评论
 	 */
-	public String getRealGoodsComment();
+	public String getGoodsRealComment();
 	/**
 	 * 通过分类获得商品列表
 	 * 
@@ -89,16 +89,36 @@ public interface GoodsInterface {
 	 * 通过品牌或者系列获得真实商品
 	 * @return
 	 */
-	public String GetRealGoodsListBySeries();
+	public String GetGoodsRealListBySeries();
 	
 	/**
-	 * 获得商品的新的评测
+	 * 获得商品对应关系的真实商品
+	 * @return
+	 */
+	public String GetGoodsRealListByMap();
+	
+	/**
+	 * 获得商品的 心得评测
 	 */
 	public String getGoodsExperience();
 	
+	/**
+	 * 根据排行榜获得商品列表
+	 * @return
+	 */
+	public String getGoodsListByRanking();
 	
+	/**
+	 * 根据排行榜获得商品列表,为小编建立的接口
+	 * @return
+	 */
+	public String getGoodsListByRanking0();
 	
-	
+	/**
+	 * 将真实商品中的某一个站的数据导入商品表中
+	 * @return
+	 */
+	public String copyGoodsReal2Goods();
 	
 	public void setNewGoods_thumbContentType(String thumbContentType);
 

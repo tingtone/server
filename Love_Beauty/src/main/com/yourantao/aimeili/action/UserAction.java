@@ -71,7 +71,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}
 		int userId = userLoginList.get(0).getUserId();
-		if (userFavoriteDAO.exist(userId, goodsId, favoriteType)) {
+		if (!userFavoriteDAO.findByUserIdAndGoodId(userId, goodsId, favoriteType).isEmpty()) {
 			printString(FAVORITE_DUPLICATED);
 			return null;
 		}
@@ -487,6 +487,41 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		}
 	}
 
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#userDeleteFav()
+	 */
+	@Override
+	public String userDeleteFav() {
+		Integer goodsId=getIntegerParameter(GOODS_ID);
+		String uuid = getStringParameter(UUID); 
+		Short favoriteType = FavoriteType.GOODS;
+		if (uuid == null || uuid.equals("null")) {
+			printString(NO_UUID);
+			return null;
+		}
+		if (goodsId == null || goodsId == 0) {
+			printString(NO_GOODS_ID);
+			return null;
+		}
+		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
+		if (userLoginList.isEmpty()) {
+			printString(NO_USER_LOGIN);
+			return null;
+		}
+		int userId=userLoginList.get(0).getUserId();
+		List<UserFavorite> userFavorites=userFavoriteDAO.findByUserIdAndGoodId(userId, goodsId, favoriteType);
+		if (userFavorites.isEmpty()) {
+			printString("{'msg':'没有收藏'}");
+			return null;
+		}else{
+			userFavoriteDAO.delete(userFavorites.get(0));
+		}
+		
+		
+		return null;
+	}
 	public UserRelativeDAO getUserRelativeDAO() {
 		return userRelativeDAO;
 	}
@@ -534,4 +569,5 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+
 }

@@ -280,7 +280,7 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 	 * 
 	 * @param brandName
 	 */
-	public List<GoodsReal> findRealGoodsByBrandName(String brandName) {
+	public List<GoodsReal> findGoodsRealByBrandName(String brandName) {
 		log.info("自定义查找数据库，brandName like '%{}%'",brandName);
 		try {
 			String queryString = "from GoodsReal as model where model."

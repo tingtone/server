@@ -32,11 +32,19 @@ public interface UserInterface {
 
 	/**
 	 * for client
-	 * 用户收藏
+	 * 用户添加收藏
 	 * 
 	 * @return
 	 */
 	public String userInsertFav();
+	
+	/**
+	 * for client
+	 * 用户删除收藏
+	 * 
+	 * @return
+	 */
+	public String userDeleteFav();
 
 	/**
 	 *  for client

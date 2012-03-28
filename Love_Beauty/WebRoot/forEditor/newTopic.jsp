@@ -87,10 +87,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  </tr>
  <tr>
  <td>加入的分类：<select id="maincla" name="cid">
- <option value="1">护肤</option>
-  <option value="2">妆扮</option>
-   <option value="3">美体</option>
-    <option value="4">美发</option>
+ <option value="1">每日护肤</option>
+  <option value="2">每周护肤</option>
  </td> <td><input id="add_submit" type="submit" value="确认添加"/></td>
  </tr>
  

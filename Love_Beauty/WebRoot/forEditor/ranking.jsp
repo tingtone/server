@@ -51,13 +51,14 @@
 					for(var i=0;i<json.length;i++){
 					ranking+="<form action='ranking_updateRanking' enctype='multipart/form-data' method='post'>";
 					ranking+="<table class='tabel'><tbody><tr>";
-					if(i==0 &&json.length!=1){
-						ranking+="<td><input type='hidden' name='rid' value='"+json[i]['rankingId']+"'/><input type='hidden' name='rid_exchange' value='"+json[i+1]['rankingId']+"'/>排行榜名: <input name='ranking_name' value='"+json[i]['rankingName']+"'/></td><td>排行榜图：<img src='"+json[i]['rankingImageUrl']+"'/>更改：<input type='file' name='newranking_image'></td><td><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
-					}else if(i==json.length-1){
-					ranking+="<td><input type='hidden' name='rid' value='"+json[i]['rankingId']+"'/>排行榜名: <input name='ranking_name' value='"+json[i]['rankingName']+"'/></td><td>排行榜图：<img src='"+json[i]['rankingImageUrl']+"'/>更改：<input type='file' name='newranking_image'></td><td><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
-					}else{
-					ranking+="<td><input type='hidden' name='rid' value='"+json[i]['rankingId']+"'/><input type='hidden' name='rid_exchange' value='"+json[i+1]['rankingId']+"'/>排行榜名: <input name='ranking_name' value='"+json[i]['rankingName']+"'/></td><td>排行榜图：<img src='"+json[i]['rankingImageUrl']+"'/>更改：<input type='file' name='newranking_image'></td><td><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
-					}
+					ranking+="<td>"+(i+1)+"号位：</td><td><input type='hidden' name='rid' value='"+json[i]['rankingId']+"'/>排行榜名: <input name='ranking_name' value='"+json[i]['rankingName']+"'/></td><td>排行榜图：<img src='"+json[i]['rankingImageUrl']+"'/>更改：<input type='file' name='newranking_image'></td>";
+					if(i==0&&json.length!=1){ranking+="<td><input type='hidden' name='rid_exchange' value='"+json[i+1]['rankingId']+"'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
+						}
+						else if(i==json.length-1){ranking+="<td><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
+						}
+						else{ranking+="<td><input type='hidden' name='rid_exchange' value='"+json[i+1]['rankingId']+"'/><input name='submit' type='submit' value='置顶'/><input name='submit' type='submit' value='后移'/><input name='submit' type='submit' value='删除'/><input name='submit' type='submit' value='更新'/><input name='submit' value='对应商品' type='submit'/></td>" ;
+						}
+					
 					ranking+="</tr></tbody></table></form>";
 					}
 				}

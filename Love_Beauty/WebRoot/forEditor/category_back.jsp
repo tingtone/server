@@ -50,6 +50,7 @@ function GetSubCategory(cid) {
 		url : url,
 		success : function(json) {
 			if (json == null) {
+				alert("json null");
 			} else {
 					category +="<option value='0'></option>";
 				for ( var i = 0; i < json.length; i++) {
@@ -79,6 +80,7 @@ function GetCategoryDetail(cid) {
 		url : url,
 		success : function(json) {
 			if (json == null) {
+				alert("json null");
 			} else {
 					category+="<table class='tabel'><tbody><tr>";
 					category+="<td><input type='hidden' name='cid' value='"+json['categoryId']+"'/>分类名: <input name='category_name' value='"+json['categoryName']+"'/></td><td>分类对应图片：<img src='"+json['categoryImageName']+"'/>更改：<input type='file' name='category_image'></td><td>分类描述：<input name='category_description' value='"+json['categoryDescription']+"'/></td><td><input name='submit' type='submit' value='更新'/></td>" ;
@@ -116,16 +118,32 @@ function GetCategoryDetail(cid) {
 						<option value="0" selected="selected">
 							</option>
 							<option value="1">
-								每日护肤
+								护肤
 							</option>
 							<option value="2">
-								每周护肤
+								妆扮
+							</option>
+							<option value="3">
+								美体
+							</option>
+							<option value="4">
+								美发
 							</option>
 						</select>
 					</td>
 					<td>
 						二级分类：
 						<select class="category" flag="2" id="category2" name="category2">
+						</select>
+					</td>
+					<td>
+						三级分类：
+						<select class="category" flag="3" id="category3" name="category3">
+						</select>
+					</td>
+					<td>
+						四级分类：
+						<select class="category" flag="4" id="category4" name="category4">
 						</select>
 					</td>
  </tr>

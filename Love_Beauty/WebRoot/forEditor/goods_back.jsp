@@ -181,16 +181,32 @@ $(document).ready(function() {
 						<option value="0" selected="selected">
 							</option>
 							<option value="1">
-								每日护肤
+								护肤
 							</option>
 							<option value="2">
-								每周护肤
+								妆扮
+							</option>
+							<option value="3">
+								美体
+							</option>
+							<option value="4">
+								美发
 							</option>
 						</select>
 					</td>
 					<td>
 						二级分类：
 						<select class="category" flag="2" id="category2">
+						</select>
+					</td>
+					<td>
+						三级分类：
+						<select class="category" flag="3" id="category3">
+						</select>
+					</td>
+					<td>
+						四级分类：
+						<select class="category" flag="4" id="category4">
 						</select>
 					</td>
 				</tr>

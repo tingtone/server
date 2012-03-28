@@ -159,13 +159,12 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 	 * 
 	 * @param brandName
 	 */
-	public boolean exist(Integer userId, Integer relatedId, Short favoriteType) {
+	public List findByUserIdAndGoodId(Integer userId, Integer relatedId, Short favoriteType) {
 		log.debug("confirm given favoite existing");
 		try {
 			String query = "from UserFavorite as model where model." + USER_ID
 					+ "=? and " + RELATED_ID + "=? and " + FAVORITE_TYPE + "=?";
-			return !getHibernateTemplate().find(query, userId, relatedId,
-					favoriteType).isEmpty();
+			return getHibernateTemplate().find(query, userId, relatedId,favoriteType);
 		} catch (RuntimeException re) {
 			log.error("exist failed", re);
 			throw re;

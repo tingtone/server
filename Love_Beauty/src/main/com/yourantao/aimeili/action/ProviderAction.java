@@ -163,7 +163,7 @@ public class ProviderAction extends BaseAction implements Constant,
 			String FileName = MD5.md5(thumbFileName)
 					+ getExtention(thumbFileName);
 			File thumbFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
-			int imageid = getImgAttribute(newprovider_thumb, FileName);
+			int imageid = getImgAttribute(newprovider_thumb, FileName,1);
 			provider.setProviderThumbId(imageid);
 			copy(newprovider_thumb, thumbFile);
 		}
