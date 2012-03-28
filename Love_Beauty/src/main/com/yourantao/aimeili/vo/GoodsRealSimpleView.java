@@ -4,10 +4,11 @@ public class GoodsRealSimpleView {
 	//商品名称
 	private String goodsName;
 	//商品ID
-	private int goodsId;
+	private int goodsRealId;
 	//商品缩略图
 	private String goodsThumb;
-	//private String goodsContent;
+	//商品规格
+	private String goodsContent;
 	//商品价格
 	private float goodsPrice;
 	//商品数量
@@ -45,10 +46,16 @@ public class GoodsRealSimpleView {
 	public void setProviderId(int providerId) {
 		this.providerId = providerId;
 	}
-	public void setGoodsId(int goodsId) {
-		this.goodsId = goodsId;
+	public void setGoodsRealId(int goodsId) {
+		this.goodsRealId = goodsId;
 	}
-	public int getGoodsId() {
-		return goodsId;
+	public int getGoodsRealId() {
+		return goodsRealId;
+	}
+	public void setGoodsContent(String goodsContent) {
+		this.goodsContent = goodsContent;
+	}
+	public String getGoodsContent() {
+		return goodsContent;
 	}
 }

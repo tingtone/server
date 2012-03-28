@@ -163,4 +163,12 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 			ApplicationContext ctx) {
 		return (ShoppingCartDAO) ctx.getBean("ShoppingCartDAO");
 	}
+	/**
+	 * 自定义查找用户的购物车函数
+	 */
+	public List<ShoppingCart> getUserShoppingCart(int userId){
+		String hql = "from ShoppingCart where userId = "+ userId + " order by providerId";
+		List<ShoppingCart> result = getHibernateTemplate().find(hql);
+		return result;
+	}
 }

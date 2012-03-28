@@ -246,7 +246,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			for (OrderGoods orderGoods : orderGoodsList) {
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
 				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
-				goodsRealSimpleView.setGoodsId(orderGoods.getGoodsRealId());
+				goodsRealSimpleView.setGoodsRealId(orderGoods.getGoodsRealId());
 				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
 
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
@@ -359,7 +359,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		ArrayList<GoodsRealSimpleView> goodsRealViewList6 = new ArrayList<GoodsRealSimpleView>();
 		for (ShoppingCart shoppingCart : shoppingCartList) {
 			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
-			goodsRealSimpleView.setGoodsId(shoppingCart.getGoodsRealId());
+			goodsRealSimpleView.setGoodsRealId(shoppingCart.getGoodsRealId());
 			goodsRealSimpleView.setGoodsPrice(shoppingCart.getPrice());
 			goodsRealSimpleView.setGoodsCount(shoppingCart.getCount());
 			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
@@ -447,7 +447,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			for (OrderGoods orderGoods : orderGoodsList) {
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
 				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
-				goodsRealSimpleView.setGoodsId(orderGoods.getGoodsRealId());
+				goodsRealSimpleView.setGoodsRealId(orderGoods.getGoodsRealId());
 				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
 
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
