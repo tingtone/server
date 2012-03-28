@@ -16,7 +16,7 @@
 		<property name="driverClassName" value="com.mysql.jdbc.Driver">
 		</property>
 		<property name="url"
-			value="jdbc:mysql://localhost/beauty?characterEncoding=UTF-8"></property>
+			value="jdbc:mysql://localhost:3306/beauty?characterEncoding=UTF-8"></property>
 		<property name="username" value="${username}"></property>
 		<property name="password" value="${password}"></property>
 	</bean>

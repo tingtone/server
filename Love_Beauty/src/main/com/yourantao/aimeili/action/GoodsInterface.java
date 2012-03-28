@@ -10,6 +10,11 @@ public interface GoodsInterface {
 	public String updateGoods();
 	
 	/**
+	 * 更新商品对应真实商品
+	 */
+	public String updateGoods2realGoods();
+	
+	/**
 	 * 我的护肤品中获得适合，不适合和需要注意的商品列表
 	 */
 	public String getGoodsListBySkin();

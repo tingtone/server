@@ -46,6 +46,7 @@ import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.bean.UserLoginDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.util.CompareTool;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.PHPSerializer;
 import main.com.yourantao.aimeili.util.RankGenerator;
@@ -308,10 +309,11 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				goodsView.setGoodsStatus(goods.getGoodsStatus());
 				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 				if (thumb != null) {
-					if(thumb.getImgType()==1){
-					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-							+ thumb.getImgUrl());
-					}else{
+					if (thumb.getImgType() == 1) {
+						goodsView.setGoodsThumb(Config
+								.get(Config.BASE_IMAGEURL)
+								+ thumb.getImgUrl());
+					} else {
 						goodsView.setGoodsThumb(thumb.getImgUrl());
 					}
 				} else {
@@ -376,10 +378,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				if(thumb.getImgType()==1){
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-						+ thumb.getImgUrl());
-				}else{
+				if (thumb.getImgType() == 1) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
+							+ thumb.getImgUrl());
+				} else {
 					goodsView.setGoodsThumb(thumb.getImgUrl());
 				}
 			} else {
@@ -416,8 +418,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	}
 
 	/*
-	 * for Editor
-	 * (non-Javadoc)
+	 * for Editor (non-Javadoc)
+	 * 
 	 * @see main.com.yourantao.aimeili.action.GoodsInterface#updateGoods()
 	 */
 	@Override
@@ -560,10 +562,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			GoodsImageView goodsImageView = new GoodsImageView();
 			goodsImageView.setId(goodsImages.getId());
 			goodsImageView.setImageId(image.getImgId());
-			if(image.getImgType()==1){
-			goodsImageView.setImageURL(Config.get(Config.BASE_IMAGEURL)
-					+ image.getImgUrl());
-			}else{
+			if (image.getImgType() == 1) {
+				goodsImageView.setImageURL(Config.get(Config.BASE_IMAGEURL)
+						+ image.getImgUrl());
+			} else {
 				goodsImageView.setImageURL(image.getImgUrl());
 			}
 			result.add(goodsImageView);
@@ -617,8 +619,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		return null;
 	}
 
-	/* for Editor
-	 * (non-Javadoc)
+	/*
+	 * for Editor (non-Javadoc)
 	 * 
 	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsMapList()
 	 */
@@ -635,16 +637,17 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		printArray(result);
 		return null;
 	}
-	
+
 	/*
-	 * for client
-	 * (non-Javadoc)
-	 * @see main.com.yourantao.aimeili.action.GoodsInterface#GetGoodsRealListByMap()
+	 * for client (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.GoodsInterface#GetGoodsRealListByMap()
 	 */
 	@Override
 	public String GetGoodsRealListByMap() {
 		Integer goodsId = getIntegerParameter(GOODS_ID);
-		if (goodsId == null || goodsId==0) {
+		if (goodsId == null || goodsId == 0) {
 			printString("{'msg':'没有商品id'}");
 			return null;
 		}
@@ -653,18 +656,22 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		for (GoodsMap goodsMap : GoodsMapList) {
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsMap
 					.getGoodsRealId());
-			
-			GoodsRealComparePriceView goodsRealComparePriceView=new GoodsRealComparePriceView();
-			
-			Provider provider=providerDAO.findById(goodsReal.getProviderId());
+
+			GoodsRealComparePriceView goodsRealComparePriceView = new GoodsRealComparePriceView();
+
+			Provider provider = providerDAO.findById(goodsReal.getProviderId());
 			goodsRealComparePriceView.setProviderId(goodsReal.getProviderId());
-			goodsRealComparePriceView.setProviderName(provider.getProviderName());
-			goodsRealComparePriceView.setDescription(provider.getProviderDeliver());
-			
-			goodsRealComparePriceView.setGoodsContent(goodsReal.getGoodsContent());
+			goodsRealComparePriceView.setProviderName(provider
+					.getProviderName());
+			goodsRealComparePriceView.setDescription(provider
+					.getProviderDeliver());
+
+			goodsRealComparePriceView.setGoodsContent(goodsReal
+					.getGoodsContent());
 			goodsRealComparePriceView.setGoodsName(goodsReal.getGoodsName());
 			goodsRealComparePriceView.setGoodsPrice(goodsReal.getGoodsPrice());
-			goodsRealComparePriceView.setGoodsRealId(goodsReal.getGoodsRealId());
+			goodsRealComparePriceView
+					.setGoodsRealId(goodsReal.getGoodsRealId());
 			result.add(goodsRealComparePriceView);
 		}
 		printArray(result);
@@ -738,10 +745,11 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				goodsView.setGoodsStatus(goods.getGoodsStatus());
 				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 				if (thumb != null) {
-					if(thumb.getImgType()==1){
-					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-							+ thumb.getImgUrl());
-					}else{
+					if (thumb.getImgType() == 1) {
+						goodsView.setGoodsThumb(Config
+								.get(Config.BASE_IMAGEURL)
+								+ thumb.getImgUrl());
+					} else {
 						goodsView.setGoodsThumb(thumb.getImgUrl());
 					}
 				} else {
@@ -802,10 +810,11 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				goodsView.setGoodsStatus(goods.getGoodsStatus());
 				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 				if (thumb != null) {
-					if(thumb.getImgType()==1){
-					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-							+ thumb.getImgUrl());
-					}else{
+					if (thumb.getImgType() == 1) {
+						goodsView.setGoodsThumb(Config
+								.get(Config.BASE_IMAGEURL)
+								+ thumb.getImgUrl());
+					} else {
 						goodsView.setGoodsThumb(thumb.getImgUrl());
 					}
 				} else {
@@ -925,10 +934,11 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				goodsView.setGoodsStatus(goods.getGoodsStatus());
 				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 				if (thumb != null) {
-					if(thumb.getImgType()==1){
-					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-							+ thumb.getImgUrl());
-					}else{
+					if (thumb.getImgType() == 1) {
+						goodsView.setGoodsThumb(Config
+								.get(Config.BASE_IMAGEURL)
+								+ thumb.getImgUrl());
+					} else {
 						goodsView.setGoodsThumb(thumb.getImgUrl());
 					}
 				} else {
@@ -990,10 +1000,11 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				goodsView.setGoodsStatus(goods.getGoodsStatus());
 				Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 				if (thumb != null) {
-					if(thumb.getImgType()==1){
-					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-							+ thumb.getImgUrl());
-					}else{
+					if (thumb.getImgType() == 1) {
+						goodsView.setGoodsThumb(Config
+								.get(Config.BASE_IMAGEURL)
+								+ thumb.getImgUrl());
+					} else {
 						goodsView.setGoodsThumb(thumb.getImgUrl());
 					}
 				} else {
@@ -1176,10 +1187,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				if(thumb.getImgType()==1){
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-						+ thumb.getImgUrl());
-				}else{
+				if (thumb.getImgType() == 1) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
+							+ thumb.getImgUrl());
+				} else {
 					goodsView.setGoodsThumb(thumb.getImgUrl());
 				}
 			} else {
@@ -1256,10 +1267,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				if(thumb.getImgType()==1){
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-						+ thumb.getImgUrl());
-				}else{
+				if (thumb.getImgType() == 1) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
+							+ thumb.getImgUrl());
+				} else {
 					goodsView.setGoodsThumb(thumb.getImgUrl());
 				}
 			} else {
@@ -1287,7 +1298,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	}
 
 	/*
-	 * for client (non-Javadoc)
+	 * for client  and Editor
+	 * (non-Javadoc)
 	 * 
 	 * @see
 	 * main.com.yourantao.aimeili.action.GoodsInterface#getGoodsListByBrand()
@@ -1324,10 +1336,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				if(thumb.getImgType()==1){
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-						+ thumb.getImgUrl());
-				}else{
+				if (thumb.getImgType() == 1) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
+							+ thumb.getImgUrl());
+				} else {
 					goodsView.setGoodsThumb(thumb.getImgUrl());
 				}
 			} else {
@@ -1425,10 +1437,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				if(thumb.getImgType()==1){
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-						+ thumb.getImgUrl());
-				}else{
+				if (thumb.getImgType() == 1) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
+							+ thumb.getImgUrl());
+				} else {
 					goodsView.setGoodsThumb(thumb.getImgUrl());
 				}
 			} else {
@@ -1459,7 +1471,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				goodsView.setGoodsEfficacy(efficacyName);
 			}
 			goodsViews.add(goodsView);
-			
+
 		}
 		printArray(goodsViews);
 		return null;
@@ -1480,7 +1492,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			printString(msg);
 			return null;
 		}
-		List<RankingGoods> goodsList = rankingGoodsDAO.findByRankingId(rankingId);
+		List<RankingGoods> goodsList = rankingGoodsDAO
+				.findByRankingId(rankingId);
 		if (goodsList.isEmpty()) {
 			msg = "{'msg':'暂无排行商品'}";
 			printString(msg);
@@ -1502,10 +1515,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsView.setGoodsStatus(goods.getGoodsStatus());
 			Image thumb = imageDAO.findById(goods.getGoodsThumbId()); // 缩略图
 			if (thumb != null) {
-				if(thumb.getImgType()==1){
-				goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
-						+ thumb.getImgUrl());
-				}else{
+				if (thumb.getImgType() == 1) {
+					goodsView.setGoodsThumb(Config.get(Config.BASE_IMAGEURL)
+							+ thumb.getImgUrl());
+				} else {
 					goodsView.setGoodsThumb(thumb.getImgUrl());
 				}
 			} else {
@@ -1616,7 +1629,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 					while ((i = is.read()) != -1) {
 						out.write(i);
 					}
-					imageid = getImgAttribute(file, fileName,0); // 只需要取到image不需要本地存储
+					imageid = getImgAttribute(file, fileName, 0); // 只需要取到image不需要本地存储
 					goodsImages.setImgId(imageid);
 					goodsImagesDAO.save(goodsImages);
 				}
@@ -1628,10 +1641,77 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} 
+			}
 		}
 
 		return null;
+	}
+
+	/*
+	 * for Editor (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.GoodsInterface#updateGoods2realGoods()
+	 */
+	@Override
+	public String updateGoods2realGoods() {
+		Integer goodsId = getIntegerParameter(GOODS_ID);
+		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+		String updateType = getStringParameter("submit");
+
+		if (updateType.equals("确认")) { // 小编确认
+			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+			goodsReal.setGoodsStatus((short) 6); // 小编确认过的设置为6
+			return SUCCESS;
+		} else if (updateType.equals("删除")) { // 删除
+			List<GoodsMap> goodsMaps = goodsMapDAO.findByGoodsIdAndGoodsRealId(
+					goodsId, goodsRealId);
+			goodsMapDAO.delete(goodsMaps.get(0));
+
+			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+			goodsReal.setGoodsStatus((short) 4); // 小编删除过的设置为4
+			return SUCCESS;
+		} else if (updateType.equals("添加")) { // 添加对应真实商品
+			GoodsMap goodsMap = new GoodsMap();
+			goodsMap.setGoodsId(goodsId);
+			goodsMap.setGoodsRealId(goodsRealId);
+			goodsMapDAO.save(goodsMap);
+
+			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+			goodsReal.setGoodsStatus((short) 6); // 小编添加的直接设置为6
+			return SUCCESS;
+		} else if (updateType.equals("程序更新真实商品")) { // 更新真实商品,即更新goodsMap表
+			Goods goods = goodsDAO.findById(goodsId);
+			String goodsName = goods.getGoodsName();
+			List<GoodsReal> goodsReals = goodsRealDAO
+					.findByBrandIdAndCategoryId(goods.getBrandId(), goods
+							.getCategoryId()); // 先通过品牌ID和分类ID筛选过滤
+			for (GoodsReal goodsReal : goodsReals) {
+				// if(goodsReal.getGoodsStatus()!=3 &&
+				// goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
+				// continue;
+				// }
+
+				/* 字符串匹配筛选过滤 */
+				String goodsRealName = goodsReal.getGoodsName();
+				double similarity = CompareTool.stringSimilarity(goodsName,
+						goodsRealName);
+				if (similarity > 0.75) { // 相似度取值
+					List<GoodsMap> goodsMaps = goodsMapDAO
+							.findByGoodsIdAndGoodsRealId(goodsId, goodsReal
+									.getGoodsRealId()); // 通过商品和真实商品 id
+														// 获得goodsMap
+					if (goodsMaps.isEmpty()) { // 如果没有则插入该goodsMap
+						GoodsMap goodsMap = new GoodsMap();
+						goodsMap.setGoodsId(goodsId);
+						goodsMap.setGoodsRealId(goodsReal.getGoodsRealId());
+						goodsMapDAO.save(goodsMap);
+					}
+				}
+			}
+			return SUCCESS;
+		}
+		return ERROR;
 	}
 
 }

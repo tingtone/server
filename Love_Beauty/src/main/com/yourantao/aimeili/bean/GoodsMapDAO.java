@@ -147,4 +147,22 @@ public class GoodsMapDAO extends HibernateDaoSupport {
 	public static GoodsMapDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (GoodsMapDAO) ctx.getBean("GoodsMapDAO");
 	}
+
+	/**
+	 * 自定义函数，根据商品id和真实商品ID获得goodsMap
+	 * @param goodsId
+	 * @param goodsRealId
+	 * @return
+	 */
+	public List<GoodsMap> findByGoodsIdAndGoodsRealId(Integer goodsId,
+			Integer goodsRealId) {
+		try {
+			String queryString = "from GoodsMap where "
+					+ GOODS_ID + "= ? and "+GOODS_REAL_ID+"= ?";
+			return getHibernateTemplate().find(queryString, goodsId,goodsRealId);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }
