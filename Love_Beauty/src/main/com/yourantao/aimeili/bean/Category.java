@@ -15,6 +15,8 @@ public class Category implements java.io.Serializable {
 	private Long categoryRank;
 	private Integer parentCatid;
 	private Short catLayer;
+	private String categoryAlias;
+	private String categorySearchKeyword;
 
 	// Constructors
 
@@ -22,7 +24,7 @@ public class Category implements java.io.Serializable {
 	public Category() {
 	}
 
-	/** full constructor */
+	/** minimal constructor */
 	public Category(String categoryName, Integer categoryImageId,
 			String categoryDescription, Long categoryRank, Integer parentCatid,
 			Short catLayer) {
@@ -32,6 +34,20 @@ public class Category implements java.io.Serializable {
 		this.categoryRank = categoryRank;
 		this.parentCatid = parentCatid;
 		this.catLayer = catLayer;
+	}
+
+	/** full constructor */
+	public Category(String categoryName, Integer categoryImageId,
+			String categoryDescription, Long categoryRank, Integer parentCatid,
+			Short catLayer, String categoryAlias, String categorySearchKeyword) {
+		this.categoryName = categoryName;
+		this.categoryImageId = categoryImageId;
+		this.categoryDescription = categoryDescription;
+		this.categoryRank = categoryRank;
+		this.parentCatid = parentCatid;
+		this.catLayer = catLayer;
+		this.categoryAlias = categoryAlias;
+		this.categorySearchKeyword = categorySearchKeyword;
 	}
 
 	// Property accessors
@@ -90,6 +106,22 @@ public class Category implements java.io.Serializable {
 
 	public void setCatLayer(Short catLayer) {
 		this.catLayer = catLayer;
+	}
+
+	public String getCategoryAlias() {
+		return this.categoryAlias;
+	}
+
+	public void setCategoryAlias(String categoryAlias) {
+		this.categoryAlias = categoryAlias;
+	}
+
+	public String getCategorySearchKeyword() {
+		return this.categorySearchKeyword;
+	}
+
+	public void setCategorySearchKeyword(String categorySearchKeyword) {
+		this.categorySearchKeyword = categorySearchKeyword;
 	}
 
 }

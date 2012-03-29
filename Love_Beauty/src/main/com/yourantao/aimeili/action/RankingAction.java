@@ -209,7 +209,7 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 						+ getExtention(newImageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(newRanking_image, FileName);
+				int imageid = getImgAttribute(newRanking_image, FileName,1);
 				ranking.setRankingImageId(imageid);
 				copy(newRanking_image, imageFile);
 			}
@@ -224,7 +224,7 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 						+ getExtention(imageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(ranking_image, FileName);
+				int imageid = getImgAttribute(ranking_image, FileName,1);
 				ranking.setRankingImageId(imageid);
 				copy(ranking_image, imageFile);
 			}
@@ -388,7 +388,7 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 			String FileName = MD5.md5(newImageFileName)
 					+ getExtention(newImageFileName);
 			File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
-			int imageid = getImgAttribute(newRanking_image, FileName);
+			int imageid = getImgAttribute(newRanking_image, FileName,1);
 			ranking.setRankingImageId(imageid);
 			copy(newRanking_image, imageFile);
 		}else{
@@ -425,7 +425,7 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 			return null;
 		}
 		RankingGoods rankingGoods=new RankingGoods();
-		rankingGoods.setAddTime(Timestamp.valueOf(dateFormat.format(new Date())));
+		rankingGoods.setAddTime(Timestamp.valueOf(dateTimeFormat.format(new Date())));
 		rankingGoods.setGoodsRank(rankGenerator.generateRank());
 		rankingGoods.setRankingId(rankingId);
 		rankingGoods.setGoods(goods);

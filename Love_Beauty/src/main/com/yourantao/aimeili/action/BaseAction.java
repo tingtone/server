@@ -176,11 +176,11 @@ public abstract class BaseAction extends ActionSupport {
 		response.setHeader(HEADER, CACHE);
 		return response;
 	}
-
+	
 	/**
 	 * 获得图片信息，并更新或新增 return imgid
 	 */
-	protected int getImgAttribute(File imgfile, String fileName) {
+	protected int getImgAttribute(File imgfile, String fileName,int imageType) {
 		Image image = new Image();
 		ApplicationContext ac = Config.getInstant();
 		ImageDAO imageDAO = ImageDAO.getFromApplicationContext(ac);
@@ -194,7 +194,7 @@ public abstract class BaseAction extends ActionSupport {
 			image.setImgSize(imgfile.length());
 			image.setImgWidth(buff.getWidth());
 			image.setImgMd5(imgurl_md5);
-			image.setImgType(1); // 1代表是编辑给的图片
+			image.setImgType(imageType); // 0代表是 外展的图片
 			image.setImgUrl(imgurl);
 			image.setCreatTime(new Timestamp(System.currentTimeMillis()));
 
@@ -221,6 +221,8 @@ public abstract class BaseAction extends ActionSupport {
 		}
 		return 0;
 	}
+	
+
 
 	/**
 	 * 从给定的文件中生成Image实体类。

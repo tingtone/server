@@ -190,7 +190,7 @@ public class SearchAction extends BaseAction implements
 						+ getExtention(newImageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(newSearch_image, FileName);
+				int imageid = getImgAttribute(newSearch_image, FileName,1);
 				search.setSearchImageId(imageid);
 				copy(newSearch_image, imageFile);
 			}
@@ -205,7 +205,7 @@ public class SearchAction extends BaseAction implements
 						+ getExtention(imageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(search_image, FileName);
+				int imageid = getImgAttribute(search_image, FileName,1);
 				search.setSearchImageId(imageid);
 				copy(search_image, imageFile);
 			}

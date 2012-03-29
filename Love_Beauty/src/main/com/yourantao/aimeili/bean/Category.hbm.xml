@@ -16,7 +16,9 @@
             </column>
         </property>
         <property name="categoryImageId" type="java.lang.Integer">
-            <column name="category_image_id" not-null="true" />
+            <column name="category_image_id" not-null="true">
+                <comment>分类图片id</comment>
+            </column>
         </property>
         <property name="categoryDescription" type="java.lang.String">
             <column name="category_description" length="65535" not-null="true">
@@ -36,6 +38,16 @@
         <property name="catLayer" type="java.lang.Short">
             <column name="cat_layer" not-null="true">
                 <comment>类别所在层数，如1、2、3等</comment>
+            </column>
+        </property>
+        <property name="categoryAlias" type="java.lang.String">
+            <column name="category_alias" length="30">
+                <comment>分类别名</comment>
+            </column>
+        </property>
+        <property name="categorySearchKeyword" type="java.lang.String">
+            <column name="category_search_keyword" length="30">
+                <comment>分类的搜索别名</comment>
             </column>
         </property>
     </class>

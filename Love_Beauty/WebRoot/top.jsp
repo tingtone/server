@@ -3,11 +3,12 @@
 <style type="text/css">
 			.topbar{
 				margin-bottom:20px;		
-				
 			}
 			.topbar a{
 				padding-left: 5px;
+				border-right: solid 3px tan;
 			}
+			
 	
 	</style>
 <script type="text/javascript">
@@ -17,8 +18,9 @@
 	//var BASE_SERVER="http://127.0.0.1:8080/Love_Beauty";
 </script>
   <div class="topbar">
-  <a href="forEditor/topic.jsp">专题页</a>
-  <a href="forEditor/goods.jsp">商品信息（原，按分类取）</a>
+  <a href="forEditor/topic.jsp">专题页 </a>
+  <a href="forEditor/goods_back.jsp">商品信息（原，按分类取）</a>
+  <a href="forEditor/goods.jsp">商品信息</a>
   <a href="forEditor/brand.jsp">品牌</a>
   <a href="forEditor/category.jsp">分类信息</a>
   <a href="forEditor/efficacy.jsp">功效页</a>
@@ -27,6 +29,7 @@
   <a href="forEditor/provider.jsp">货商</a>
   <a href="forEditor/search.jsp">搜索</a>
   <a href="forEditor/order.jsp">订单</a>
+  <a href="forEditor/copyGoodsReal2Goods.jsp">复制真实商品到商品表（小编勿点）</a>
   </div>
 
 

@@ -1,5 +1,7 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.slf4j.Logger;
@@ -122,7 +124,7 @@ public class BrandDAO extends HibernateDaoSupport {
 	public List findAll() {
 		log.debug("finding all Brand instances");
 		try {
-			String queryString = "from Brand";
+			String queryString = "from Brand order by brand_other_names";
 			return getHibernateTemplate().find(queryString);
 		} catch (RuntimeException re) {
 			log.error("find all failed", re);

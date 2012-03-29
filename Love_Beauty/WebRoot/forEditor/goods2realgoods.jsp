@@ -133,10 +133,11 @@ function GetGoodsMap(gid) {
 				var goodsimage=json[i]['goodsImages'];
 				var goodsimagelist=unserialize(goodsimage);
 				goodsDetail+=(i+1)+"：";
-						goodsDetail+="<form action='goods_updateGoods' enctype='multipart/form-data'>";
-						goodsDetail+="<table class='tabel'><tbody><tr>"
-						goodsDetail+="<tr><td>供应商："+transProvider(json[i]['providerId'])+"</td></tr>"
-						goodsDetail+="<tr><td>商品名称："+json[i]['goodsName']+"  商品ID号："+json[i]['goodsRealId']+"</td></tr>";
+						goodsDetail+="<form action='goods_updateGoods2realGoods' enctype='multipart/form-data'>";
+						goodsDetail+="<table class='tabel'><tbody><tr><input type='hidden' name='gid' value='"+$('#goods_id').val()+"'/><input type='hidden' name='grid' value='"+json[i]['goodsRealId']+"'/>";
+					if(json[i]['goodsStatus']=='3' || json[i]['goodsStatus']=='4'){
+						goodsDetail+="<tr><td>供应商："+transProvider(json[i]['providerId'])+"</td><td><input type='submit' name='submit' value='确认'></td></tr>"
+						goodsDetail+="<tr><td>商品名称："+json[i]['goodsName']+"  商品ID号："+json[i]['goodsRealId']+"</td><td><input type='submit' name='submit' value='删除'></td></tr>";
 						goodsDetail+="<tr><td>品牌名："+json[i]['brandName']+"  系列名："+json[i]['seriesName']+"</td></tr>";
 						goodsDetail+="<tr><td>商品价格："+json[i]['goodsPrice']+"</td></tr>";
 						goodsDetail+="<tr><td>商品分类名："+json[i]['categoryName']+"</td></tr>";
@@ -146,17 +147,21 @@ function GetGoodsMap(gid) {
 							goodsDetail+="<img src='"+goodsimagelist[j] +"'/>";
 						}
 						goodsDetail+="</td></tr>";
-						goodsDetail+="<tr><td>商品评分："+json[i]['goodsScore']+"</td></tr> ";
-						goodsDetail+="<tr><td>商品适用肤质："+json[i]['goodsForskin'] +"</td></tr> ";
-						goodsDetail+="<tr><td>商品不适用肤质："+json[i]['goodsNotforskin'] +"</td></tr> ";
-						goodsDetail+="<tr><td>商品需注意肤质："+json[i]['goodsNoticeforskin'] +"</td></tr> ";
-						goodsDetail+="<tr><td>商品年龄范围："+json[i]['goodsAge']+"</td></tr> ";
-						goodsDetail+="<tr><td>商品特点及成分："+json[i]['goodsDescription'] +"</td></tr> ";
-						goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
-						goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
-						goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
-						goodsDetail+="</tbody></table></form>";
+				//		goodsDetail+="<tr><td>商品评分："+json[i]['goodsScore']+"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品适用肤质："+json[i]['goodsForskin'] +"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品不适用肤质："+json[i]['goodsNotforskin'] +"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品需注意肤质："+json[i]['goodsNoticeforskin'] +"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品年龄范围："+json[i]['goodsAge']+"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品特点及成分："+json[i]['goodsDescription'] +"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
+				//		goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
+					}else if(json[i]['goodsStatus']=='6'){
+						goodsDetail+="<tr><td>商品名称："+json[i]['goodsName']+"  商品ID号："+json[i]['goodsRealId']+"</td><td><b style='color:pink;'>该信息已经被审核</b></td></tr>";
+						goodsDetail+="<tr><td>商品缩略图：<a href='"+ json[i]['goodsUrl']+"' target='_blank'><img src='"+json[i]['goodsThumb']+"'/>点击查看</a></td><td><input type='submit' name='submit' value='删除'></td></tr> ";
 					}
+					goodsDetail+="</tbody></table></form>";
+				}
 			}
 			$('#real_goods_detail').html(goodsDetail.toString());
 		}
@@ -492,8 +497,12 @@ $(document).ready(function() {
 
 	<body>
 		<%@include file="/top.jsp"%>
+		<form action='goods_updateGoods2realGoods' enctype='multipart/form-data' method="post">
 		<input id="goods_id" type="hidden" name="gid" value="<%=gid%>"/>商品名： <%=gname%><br/><br/>
-		添加对应商品id号：<input type="text" name="real_gid">  <a href='forEditor/realgoods.jsp' target='_blank'>查看真实商品</a>
+		添加对应商品id号：<input type="text" name="grid">  <a href='forEditor/realgoods.jsp' target='_blank'>查看真实商品</a><br/>
+		<input type="submit" value="添加" name="submit"/>
+		<input type="submit" value="程序更新真实商品" name="submit"/>
+		</form>
 	<div id="real_goods_detail">
 
  </div>

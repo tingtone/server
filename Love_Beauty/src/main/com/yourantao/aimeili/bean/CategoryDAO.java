@@ -29,6 +29,8 @@ public class CategoryDAO extends HibernateDaoSupport {
 	public static final String CATEGORY_RANK = "categoryRank";
 	public static final String PARENT_CATID = "parentCatid";
 	public static final String CAT_LAYER = "catLayer";
+	public static final String CATEGORY_ALIAS = "categoryAlias";
+	public static final String CATEGORY_SEARCH_KEYWORD = "categorySearchKeyword";
 
 	protected void initDao() {
 		// do nothing
@@ -118,6 +120,14 @@ public class CategoryDAO extends HibernateDaoSupport {
 		return findByProperty(CAT_LAYER, catLayer);
 	}
 
+	public List findByCategoryAlias(Object categoryAlias) {
+		return findByProperty(CATEGORY_ALIAS, categoryAlias);
+	}
+
+	public List findByCategorySearchKeyword(Object categorySearchKeyword) {
+		return findByProperty(CATEGORY_SEARCH_KEYWORD, categorySearchKeyword);
+	}
+
 	public List findAll() {
 		log.debug("finding all Category instances");
 		try {
@@ -167,6 +177,7 @@ public class CategoryDAO extends HibernateDaoSupport {
 	public static CategoryDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (CategoryDAO) ctx.getBean("CategoryDAO");
 	}
+	
 
 	/**
 	 * 自定义函数，用于有多个分类名的搜索结果

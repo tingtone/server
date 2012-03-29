@@ -190,7 +190,6 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				+ shoppingCount + "','unconfirm':'" + countList.get(0)
 				+ "','history':'" + countList.get(1) + "'}";
 		printString(countString);
-
 		return null;
 	}
 

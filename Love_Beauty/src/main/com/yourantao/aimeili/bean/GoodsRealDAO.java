@@ -280,12 +280,30 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 	 * 
 	 * @param brandName
 	 */
-	public List<GoodsReal> findRealGoodsByBrandName(String brandName) {
+	public List<GoodsReal> findGoodsRealByBrandName(String brandName) {
 		log.info("自定义查找数据库，brandName like '%{}%'",brandName);
 		try {
 			String queryString = "from GoodsReal as model where model."
 					+ BRAND_NAME + " like '%"+brandName+"%'";
 			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
+
+	/**
+	 * 自定义函数，通过品牌ID和分类ID获得真实商品list
+	 * @param brandId
+	 * @param categoryId
+	 * @return
+	 */
+	public List<GoodsReal> findByBrandIdAndCategoryId(Integer brandId,
+			Integer categoryId) {
+		try {
+			String queryString = "from GoodsReal where "
+					+ BRAND_ID + " =? and "+CATEGORY_ID+"=? ";
+			return getHibernateTemplate().find(queryString,brandId,categoryId);
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;

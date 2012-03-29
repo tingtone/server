@@ -22,6 +22,7 @@ public class Config {
 	public static Properties properties;
 
 	private static final String springPath = "applicationContext.xml";
+	//请配置自己机器的tomcat 的config路径
 	//private static final String configPath = "C:/Users/kfirst/Workspaces/MyEclipse 8.6/.metadata/.me_tcat/webapps/Love_Beauty/WEB-INF/classes/config.properties";   
 	private static final String configPath = System.getProperty("configPath")+"/config.properties";   
 

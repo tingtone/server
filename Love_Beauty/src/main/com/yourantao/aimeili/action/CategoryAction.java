@@ -86,7 +86,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 			if (newImageFileName != null && !newImageFileName.equals("")) { // 上传图片，并存储
 				String FileName = MD5.md5(newImageFileName)+ getExtention(newImageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
-				int imageid = getImgAttribute(newCategory_image, FileName);
+				int imageid = getImgAttribute(newCategory_image, FileName,1);
 				category.setCategoryImageId(imageid);
 				copy(newCategory_image, imageFile);
 			}
@@ -100,7 +100,7 @@ public class CategoryAction extends BaseAction implements CategoryInterface,Cons
 				// getExtention(imageFileName);
 				String FileName = MD5.md5(imageFileName)+ getExtention(imageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE) + FileName);
-				int imageid = getImgAttribute(category_image, FileName);
+				int imageid = getImgAttribute(category_image, FileName,1);
 				category.setCategoryImageId(imageid);
 				copy(category_image, imageFile);
 			}

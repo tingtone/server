@@ -147,7 +147,7 @@
         </property>
         <property name="goodsStatus" type="java.lang.Short">
             <column name="goods_status" not-null="true">
-                <comment>商品的状态，0表示不可用，3表示新添加待审核，6表示已审核</comment>
+                <comment>商品的状态，0表示不可用，3表示新添加待审核，6表示已审核，4表示审核过又删除的</comment>
             </column>
         </property>
         <property name="goodsRank" type="java.lang.Integer">

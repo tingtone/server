@@ -34,6 +34,7 @@ public class GoodsImagesDAO extends HibernateDaoSupport {
 		log.debug("saving GoodsImages instance");
 		try {
 			getHibernateTemplate().save(transientInstance);
+			getHibernateTemplate().flush();
 			log.debug("save successful");
 		} catch (RuntimeException re) {
 			log.error("save failed", re);

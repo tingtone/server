@@ -149,7 +149,7 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 						+ getExtention(newImageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(newBrand_image, FileName);
+				int imageid = getImgAttribute(newBrand_image, FileName,1);
 				brand.setBrandImageId(imageid);
 				copy(newBrand_image, imageFile);
 			}
@@ -164,7 +164,7 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 						+ getExtention(imageFileName);
 				File imageFile = new File(Config.get(Config.BASE_IMAGESTORAGE)
 						+ FileName);
-				int imageid = getImgAttribute(brand_image, FileName);
+				int imageid = getImgAttribute(brand_image, FileName,1);
 				brand.setBrandImageId(imageid);
 				copy(brand_image, imageFile);
 			}
