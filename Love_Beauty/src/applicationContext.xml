@@ -567,6 +567,9 @@
 		<property name="userRelativeDAO">
 			<ref bean="UserRelativeDAO" />
 		</property>
+		<property name="userAddressDAO">
+			<ref bean="UserAddressDAO" />
+		</property>
 	</bean>
 	<!-- end -->
 	<bean id="SearchDAO"

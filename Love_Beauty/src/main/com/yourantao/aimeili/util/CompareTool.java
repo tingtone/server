@@ -112,6 +112,10 @@ public class CompareTool {
 	}
 
 	public static void main(String[] args) {
+//		Kose 高丝Softymo温和保湿卸妆油(31132)
+//		Kose 高丝Softymo玻尿酸高保湿眼唇卸妆液(31815)
+//		Kose 高丝Softymo牛奶保湿嫩肤卸妆洁面乳(31276)
+//		Kose 高丝Softymo温和保湿卸妆油(31132)
 		String[] goodsNames = new String[] { "代购ANR即时修护特润精华液", "ANR即时修护特润精华液",
 				"ANR即时修护特润精华露", "即时修护ANR特润精华液", "美国ANR即时修护精华美白精华液",
 				"DNA即时特润修护露", "正代购即时修护特润精华露" };

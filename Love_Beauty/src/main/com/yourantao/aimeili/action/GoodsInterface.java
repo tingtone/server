@@ -120,10 +120,20 @@ public interface GoodsInterface {
 	public String getGoodsListByRanking0();
 	
 	/**
+	 *  for Programmer
 	 * 将真实商品中的某一个站的数据导入商品表中
 	 * @return
 	 */
 	public String copyGoodsReal2Goods();
+	
+	/**
+	 *  for Programmer
+	 * 更新全部的商品聚合(goodsMap)
+	 * @return
+	 */
+	public String updateGoodsMap();
+	
+	
 	
 	public void setNewGoods_thumbContentType(String thumbContentType);
 
