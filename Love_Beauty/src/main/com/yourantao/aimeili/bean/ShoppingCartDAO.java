@@ -171,4 +171,14 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 		List<ShoppingCart> result = getHibernateTemplate().find(hql);
 		return result;
 	}
+
+	public ShoppingCart getCartByGoodsAndUser(int goodsRealId, int userId) {
+		// TODO Auto-generated method stub
+		String hql = "from ShoppingCart where userId = " + userId + " and goodsRealId = " + goodsRealId;
+		List<ShoppingCart> result = getHibernateTemplate().find(hql);
+		if(result.isEmpty())
+			return null;
+		else
+			return result.get(0);
+	}
 }

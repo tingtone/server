@@ -136,20 +136,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		Integer count = getIntegerParameter(GOODS_COUNT);
 		// 验证参数
-		if (goodsRealId == null || count == null) {
+		if (goodsRealId == null){
 			printString("{'msg':'参数个数不足'}");
-			return null;
-		} else if (count <= 0 ) {
-			printString("{'msg':'数量不能小于1'}");
 			return null;
 		}
 		// 设置对象状态
 		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setUserId(userId);
 		shoppingCart.setGoodsRealId(goodsRealId);
-		// shoppingCart.setProviderId(providerId);
 		// 先查找是否已经存在对应的购物车记录
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCart);
@@ -158,14 +153,16 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		} else {
 			// 保存
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			if (goodsReal.getGoodsStatus() != 6) {
+			if(goodsReal == null){
+				msg = "{'msg':'商品不存在'}";
+			}
+			else if (goodsReal.getGoodsStatus() != 6) {
 				msg = "{'msg':'商品已经下架或待审核'}";
 			} else {
 				shoppingCart.setPrice(goodsReal.getGoodsPrice());
-				shoppingCart.setCount(count);
+				shoppingCart.setCount(1);
 				shoppingCart.setProviderId(goodsReal.getProviderId());
 				shoppingCartDAO.save(shoppingCart);
-				// msg = "{'cart_id':'" + shoppingCart.getCartId()+ "'}";
 			}
 		}
 		printString(msg);

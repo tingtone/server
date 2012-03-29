@@ -23,6 +23,7 @@ import main.com.yourantao.aimeili.bean.UserFavoriteDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.vo.GoodsRealErrorView;
 import main.com.yourantao.aimeili.vo.GoodsRealSimpleView; //import main.com.yourantao.aimeili.vo.OrderSimpleView;
 import main.com.yourantao.aimeili.vo.GoodsRealSimpleEditorView;
 import main.com.yourantao.aimeili.vo.OrderEditorView;
@@ -36,10 +37,9 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			.getLogger(OrderAction.class);
 
 	private static final String PROVIDER_SPLITER = ";";
-	private static final String CART_SPLITER = ",";
+	private static final String GOODS_SPLITER = ",";
 
-	private static final int NOT_YOURS_GOODS = 4;
-	private static final int PRICE_CHANGE = 3;
+	private static final int GOODS_PRICE_CHANGE = 3;
 	private static final int GOODS_NOT_FIT = 2;
 	private static final int GOODS_NOT_EXIST = 1;
 
@@ -500,18 +500,20 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		Integer addressId = getIntegerParameter(ADDRESS_ID);
 		// 复杂参数
-		String cartIdString = getStringParameter("cartidlist");
+		String goodsRealIdString = getStringParameter("gridlist");
 		String providerIdString = getStringParameter("pidlist");
+		String countString = getStringParameter("countlist");
+		
 		// String paymentType = getStringParameter("paymenttype");
 		// String deliverType = getStringParameter("deliverType");
 		String deliverTime = getStringParameter("deliverTime");
 		// 根据是否使用发票来决定是否接受其他参数
 		Integer invoice = getIntegerParameter("invoice");
 		// 验证参数
-		if (providerIdString == null) {
+		/*if (providerIdString == null) {
 			printString("{'msg':'没有供应商'}");
 			return null;
-		}
+		}*/
 		if (addressId == null) {
 			printString("{'msg':'无地址信息'}");
 			return null;
@@ -530,29 +532,29 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		 * (invoiceContent == null || invoiceName == null || invoiceType ==
 		 * null)) { printString("{'msg':'发票相关参数个数不足'}"); return null; }
 		 */
-
-		// 首先划分出各个商城的cartIdList
-		String[] providerIdList = providerIdString.split(PROVIDER_SPLITER);
-		String[] cartIdListList = cartIdString.split(PROVIDER_SPLITER);
-		String filterResult = examOrderGoods(providerIdList, cartIdListList,
-				userId);
-		if (!filterResult.equals("")) {
-			printString(filterResult);
+		
+		List<GoodsRealErrorView> filterResult = examOrderGoods(goodsRealIdString, userId);
+		if(filterResult != null){
+			printObject(filterResult);
 			return null;
 		}
+		String[] goodsRealIdListList = goodsRealIdString.split(PROVIDER_SPLITER);
+		String[] countListList = countString.split(PROVIDER_SPLITER);
+		String[] providerIdList = providerIdString.split(PROVIDER_SPLITER);
+		//这里省略了复杂的检验goodsRealId与count是否对应等
+		
 		// 订单要使用的订单号
 		String orderNum = "";
-		for (int outerIndex = 0; outerIndex < cartIdListList.length; outerIndex++) {
-			String[] cartIdList = cartIdListList[outerIndex]
-					.split(CART_SPLITER);
-			if (cartIdList.length == 0) {// 这里的判断不知能否起到作用
-				// printString("continue");
+		for(int outerIndex = 0; outerIndex < goodsRealIdListList.length; outerIndex++){
+			String[] goodsRealIdList = goodsRealIdListList[outerIndex].split(GOODS_SPLITER);
+			if(goodsRealIdList.length == 0){
 				continue;
 			}
+			String[] countList = countListList[outerIndex].split(GOODS_SPLITER);
+			//设置订单状态
 			Order order = new Order();
 			order.setUserId(userId);
 			order.setFinish((short) 0);// 设置未收货
-
 			int providerId = Integer.valueOf(providerIdList[outerIndex]);
 			order.setProviderId(providerId);
 			// 说明这是一个完整的订单
@@ -562,7 +564,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			order.setAddressId(addressId);
 			// 这里以后才能设置%%%%%%%%%%%%%%%%%
 			order.setPostage((float) 100);// 先使用固定邮费
-			order.setRelatedNum("wodegequ");
+			//order.setRelatedNum("wodegequ");
 			// 结束%%%%%%%%%%%%%%%%%
 			order.setPaymentType("货到付款");
 			order.setDeliverType("送货上门");
@@ -582,40 +584,35 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				orderNum = "aimeili" + 10 + order.getOrderId();
 			}
 			order.setOrderNum(orderNum);
-			/*
-			 * int cartIdTmp = Integer.valueOf(cartIdList[0]); ShoppingCart
-			 * shoppingCartTmp = shoppingCartDAO.findById(cartIdTmp);
-			 * if(shoppingCartTmp == null){ continue;//这里的作用是放置用户进行重复请求，造成订单重复 }
-			 */
-			// orderDAO.save(order);
+			
+			
+			//存储order_goods
+			for(int innerIndex = 0; innerIndex < countList.length; innerIndex++){
+				ShoppingCart shoppingCart =  shoppingCartDAO.getCartByGoodsAndUser(Integer.valueOf(goodsRealIdList[innerIndex]), userId);
+				if(shoppingCart != null){
+					OrderGoods orderGoods = new OrderGoods();
+					orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
+					orderGoods.setCount(Integer.valueOf(countList[innerIndex]));
+					orderGoods.setPrice(shoppingCart.getPrice());
+					orderGoods.setOrderId(order.getOrderId());// 这里需要已经知道orderId
+					// 价格来源的设置
+					orderGoods.setPriceType((short) 0);
+					orderGoodsDAO.save(orderGoods);
+					// 计算价格
+					/*cartSummary += (shoppingCart.getPrice() * shoppingCart
+							.getCount());*/
+					//
+					GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
+							.getGoodsRealId());
 
-			float cartSummary = 0;
-			// 从购物车转到订单中
-			for (int innerIndex = 0; innerIndex < cartIdList.length; innerIndex++) {
-
-				int cartId = Integer.valueOf(cartIdList[innerIndex]);
-				ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
-				OrderGoods orderGoods = new OrderGoods();
-				orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
-				orderGoods.setCount(shoppingCart.getCount());
-				orderGoods.setPrice(shoppingCart.getPrice());
-				orderGoods.setOrderId(order.getOrderId());// 这里需要已经知道orderId
-				// 价格来源的设置
-				orderGoods.setPriceType((short) 0);
-				orderGoodsDAO.save(orderGoods);
-				// 计算价格
-				cartSummary += (shoppingCart.getPrice() * shoppingCart
-						.getCount());
-				//
-				GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
-						.getGoodsRealId());
-
-				// 从购物车中删除该商品
-				shoppingCartDAO.delete(shoppingCart);
+					// 从购物车中删除该商品
+					shoppingCartDAO.delete(shoppingCart);
+				}
+				//可能造成这样一种情况,订单存在,但是订单中不存在任何商品
 			}
-
-			order.setOrderSum(cartSummary);
-			order.setOrderNum(orderNum);
+			//总金额由客户端计算出来
+			//order.setOrderSum(cartSummary);
+			//order.setOrderNum(orderNum);
 			orderDAO.merge(order);
 		}
 		printString(msg);
@@ -678,62 +675,47 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	/*
 	 * 提交订单前的检查操作
 	 */
-	private String examOrderGoods(String[] providerIdList,
-			String[] cartIdListList, int userId) {
-		String msg = "";
-
-		for (int outerIndex = 0; outerIndex < cartIdListList.length; outerIndex++) {
-			int providerId = Integer.valueOf(providerIdList[outerIndex]);
-			String[] goodsIdList = cartIdListList[outerIndex]
-					.split(CART_SPLITER);
-			for (int innerIndex = 0; innerIndex < goodsIdList.length; innerIndex++) {
-				int cartId = Integer.valueOf(goodsIdList[innerIndex]);
-				ShoppingCart shoppingCart = shoppingCartDAO.findById(cartId);
-				if (shoppingCart != null) {
-					if (shoppingCart.getUserId() != userId) {
-						msg = "{'msg':'" + providerId + PROVIDER_SPLITER
-								+ cartId + PROVIDER_SPLITER + NOT_YOURS_GOODS
-								+ "'}";
-					} else {
-						GoodsReal goodsReal = goodsRealDAO
-								.findById(shoppingCart.getGoodsRealId());
-						if (goodsReal != null) {
-							if (goodsReal.getGoodsStatus() == 6) {
-								if (Math.abs(goodsReal.getGoodsPrice()
-										- shoppingCart.getPrice()) > 0.00001) {
-									// 商品价格发生变动
-									/*
-									 * System.out.println(goodsReal.getGoodsPrice
-									 * ()+" "+shoppingCart .getPrice());
-									 */
-									msg = "{'msg':'" + providerId
-											+ PROVIDER_SPLITER + cartId
-											+ PROVIDER_SPLITER + PRICE_CHANGE
-											+ "'}";
-								} else {
-									msg = "";
-								}
-							} else {
-								// 商品下架或者待审核
-								msg = "{'msg':'" + providerId
-										+ PROVIDER_SPLITER + cartId
-										+ PROVIDER_SPLITER + GOODS_NOT_FIT
-										+ "'}";
-							}
-						} else {
-							// 商品不存在
-							msg = "{'msg':'" + providerId + PROVIDER_SPLITER
-									+ cartId + PROVIDER_SPLITER
-									+ GOODS_NOT_EXIST + "'}";
-						}
-					}
-
-				} else {
-					msg = "{'msg':'购物车不存在'}";
+	private List<GoodsRealErrorView> examOrderGoods(String goodsRealIdString, int userId){
+		String[] goodsRealIdList = goodsRealIdString.split("[,;]");
+		List<GoodsRealErrorView> goodsRealErrorViewList = new ArrayList<GoodsRealErrorView>();
+		for(int outerIndex = 0; outerIndex < goodsRealIdList.length; outerIndex++){
+			int goodsRealId = Integer.valueOf(goodsRealIdList[outerIndex]);
+			ShoppingCart shoppingCart = shoppingCartDAO.getCartByGoodsAndUser(goodsRealId, userId);
+			if(shoppingCart != null){
+				GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+				if(goodsReal == null){
+					//购物车中的商品在goods_real表中找不到对应的记录
+					GoodsRealErrorView goodsNotExist = new GoodsRealErrorView();
+					goodsNotExist.setErrorCode(GOODS_NOT_EXIST);
+					goodsNotExist.setProviderId(shoppingCart.getProviderId());
+					goodsNotExist.setGoodsRealId(goodsRealId);
+					
+					goodsRealErrorViewList.add(goodsNotExist);
+				}
+				else if( goodsReal.getGoodsStatus() != 6){
+					//购物车中商品已经下架
+						GoodsRealErrorView goodsNotFit = new GoodsRealErrorView();
+						goodsNotFit.setErrorCode(GOODS_NOT_FIT);
+						goodsNotFit.setProviderId(shoppingCart.getProviderId());
+						goodsNotFit.setGoodsRealId(goodsRealId);
+						
+						goodsRealErrorViewList.add(goodsNotFit);
+				}
+				else if( Math.abs(goodsReal.getGoodsPrice() - shoppingCart.getPrice()) > 0.00001){
+					//购物车中商品价格发生变动
+						GoodsRealErrorView goodsPriceChange = new GoodsRealErrorView();
+						goodsPriceChange.setErrorCode(GOODS_PRICE_CHANGE);
+						goodsPriceChange.setProviderId(shoppingCart.getProviderId());
+						goodsPriceChange.setGoodsRealId(goodsRealId);
+						
+						goodsRealErrorViewList.add(goodsPriceChange);
 				}
 			}
 		}
-		return msg;
+		if(goodsRealErrorViewList.isEmpty())
+			return null;
+		else
+			return goodsRealErrorViewList;
 	}
 
 	/**
