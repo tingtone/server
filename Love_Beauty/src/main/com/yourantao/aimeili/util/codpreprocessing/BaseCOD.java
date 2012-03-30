@@ -13,11 +13,7 @@ import main.com.yourantao.aimeili.bean.UserAddress;
  * @author kfirst
  * 
  */
-abstract class BaseCOD {
-	public static final int SUPPORT = 2;
-	public static final int PARTIALLY_SUPPORT = 1;
-	public static final int NONSUPPORT = 0;
-
+abstract class BaseCOD implements CODJudgement {
 	private static final String REGEX1 = "\\(.*\\)";
 	private static final String REGEX2 = "市*$|县*$|区*$|旗*$";
 
