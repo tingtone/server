@@ -10,6 +10,11 @@
             <column name="experience_id" />
             <generator class="identity" />
         </id>
+        <property name="goodsId" type="java.lang.Integer">
+            <column name="goods_id">
+                <comment>商品id</comment>
+            </column>
+        </property>
         <property name="goodsName" type="java.lang.String">
             <column name="goods_name" not-null="true">
                 <comment>商品名称</comment>

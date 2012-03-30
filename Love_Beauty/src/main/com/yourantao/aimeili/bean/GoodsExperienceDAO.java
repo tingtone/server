@@ -23,6 +23,7 @@ public class GoodsExperienceDAO extends HibernateDaoSupport {
 	private static final Logger log = LoggerFactory
 			.getLogger(GoodsExperienceDAO.class);
 	// property constants
+	public static final String GOODS_ID = "goodsId";
 	public static final String GOODS_NAME = "goodsName";
 	public static final String EXPERIENCE_NAME = "experienceName";
 	public static final String EXPERIENCE_FROM = "experienceFrom";
@@ -91,6 +92,10 @@ public class GoodsExperienceDAO extends HibernateDaoSupport {
 			log.error("find by property name failed", re);
 			throw re;
 		}
+	}
+
+	public List findByGoodsId(Object goodsId) {
+		return findByProperty(GOODS_ID, goodsId);
 	}
 
 	public List findByGoodsName(Object goodsName) {

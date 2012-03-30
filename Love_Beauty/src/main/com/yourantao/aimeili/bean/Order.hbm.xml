@@ -71,7 +71,7 @@
             </column>
         </property>
         <property name="relatedNum" type="java.lang.String">
-            <column name="related_num" length="64" not-null="true">
+            <column name="related_num" length="64">
                 <comment>ä¾›åº"å•†çš"è®¢å�•å�·</comment>
             </column>
         </property>

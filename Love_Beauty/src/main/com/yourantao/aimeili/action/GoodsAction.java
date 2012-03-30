@@ -67,6 +67,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	private static final Logger log = LoggerFactory
 			.getLogger(GoodsAction.class);
 
+	private short GOODS_EDITORCONFIRM_CORRECT=6;
+	private short GOODS_NOCONFIRM=3;
+	private short GOODS_EDITORCONFIRM_DELETE=4;
+	
 	private File newGoods_thumb; // 上传文件1
 	private File newGoods_image; // 上传文件1
 	private String imageContentType;// 上传文件类型2
@@ -1394,9 +1398,10 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			printString("{'msg':'没有该商品'}");
 			return null;
 		}
-		String goodsName = goods.getGoodsName();
-		List<GoodsExperience> goodsExperiences = goodsExperienceDAO
-				.findByGoodsName(goodsName);
+		List<GoodsExperience> goodsExperiences = goodsExperienceDAO.findByGoodsId(gid);
+		System.out.println(goodsExperiences.get(0).getExperienceDetail());
+		for (GoodsExperience goodsExperience : goodsExperiences) {
+		}
 		printArray(goodsExperiences);
 		return null;
 	}
@@ -1663,7 +1668,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 
 		if (updateType.equals("确认")) { // 小编确认
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			goodsReal.setGoodsStatus((short) 6); // 小编确认过的设置为6
+			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_CORRECT); // 小编确认过的设置为6
 			return SUCCESS;
 		} else if (updateType.equals("删除")) { // 删除
 			List<GoodsMap> goodsMaps = goodsMapDAO.findByGoodsIdAndGoodsRealId(
@@ -1671,7 +1676,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsMapDAO.delete(goodsMaps.get(0));
 
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			goodsReal.setGoodsStatus((short) 4); // 小编删除过的设置为4
+			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_DELETE); // 小编删除过的设置为4
 			return SUCCESS;
 		} else if (updateType.equals("添加")) { // 添加对应真实商品
 			GoodsMap goodsMap = new GoodsMap();
@@ -1680,7 +1685,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsMapDAO.save(goodsMap);
 
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			goodsReal.setGoodsStatus((short) 6); // 小编添加的直接设置为6
+			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_CORRECT); // 小编添加的直接设置为6
 			return SUCCESS;
 		} else if (updateType.equals("程序更新真实商品")) { // 更新真实商品,即更新goodsMap表
 			Goods goods = goodsDAO.findById(goodsId);
@@ -1698,7 +1703,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				String goodsRealName = goodsReal.getGoodsName();
 				/* 字符串匹配筛选过滤 */
 
-				String goodsName_compare=goodsName.replaceAll("(?i)"+brand.getBrandName(), "");
+				String goodsName_compare=goodsName.replaceAll("(?i)"+brand.getBrandName(), "");  //(?i)代表忽略大小写
 				goodsName_compare=goodsName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");    //除去商品名称中的商品名称和别名
 				String goodsRealName_compare=goodsRealName.replaceAll("(?i)"+brand.getBrandName(), "");
 				goodsRealName_compare=goodsRealName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");//除去商品名称中的商品名称和别名
@@ -1739,8 +1744,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 					.findByBrandIdAndCategoryId(goods.getBrandId(), goods
 							.getCategoryId()); // 先通过品牌ID和分类ID筛选过滤
 			for (GoodsReal goodsReal : goodsReals) {
-				 if(goodsReal.getGoodsStatus()!=3 &&
-				 goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
+				 if(goodsReal.getGoodsStatus()!=GOODS_NOCONFIRM &&
+				 goodsReal.getGoodsStatus()!=GOODS_EDITORCONFIRM_CORRECT){ //商品状态不是3或6则不给显示
 				 continue;
 				 }
 				String goodsRealName = goodsReal.getGoodsName();
@@ -1768,4 +1773,63 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		return null;
 	}
 
+	/*
+	 * for Programmer
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#updateGoodsMap()
+	 */
+	@Override
+	public String updateGoodsExperience() {
+		List<GoodsExperience> goodsExperiences=goodsExperienceDAO.findAll();
+		List<Goods> goodsList=goodsDAO.findAll();
+		String lastGoodsName="";
+		int lastGoodsId=0;
+		for (GoodsExperience goodsExperience : goodsExperiences) {
+			String goodsExperienceName=goodsExperience.getGoodsName();
+			if(lastGoodsName.equals(goodsExperienceName)){
+				goodsExperience.setGoodsId(lastGoodsId);
+				continue;
+			}
+			int i=0;
+			double maxSimilarity=0;
+			int index=0;
+			for (Goods goods : goodsList) {
+				String goodsName=goods.getGoodsName();
+				double similarity = CompareTool.stringSimilarity(goodsExperienceName,goodsName);
+				if(similarity>maxSimilarity){
+					maxSimilarity=similarity;
+					index=i;
+					if(similarity==1){
+						break;
+					}
+				}
+				i++;
+			}
+//			倩碧润肤露——带押嘴
+//			Clinique 倩碧特效润肤露(带押嘴68LE)
+			
+			lastGoodsName=goodsExperienceName;  //因为心得评测中的重复值很多，所以要记录上一次的，减少操作
+			if(maxSimilarity<0.5){
+				lastGoodsId=0;
+				goodsExperience.setGoodsId(0);
+			}else{
+				lastGoodsId=goodsList.get(index).getGoodsId();
+				goodsExperience.setGoodsId(goodsList.get(index).getGoodsId());
+			}
+			
+			System.out.println("index:"+index+"  maxSimilarity:"+maxSimilarity+"  goodsId:"+lastGoodsId);
+		}
+		return null;
+	}
+	
+	
+	/*
+	 * for Programmer
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#updateGoodsMap()
+	 */
+	@Override
+	public String insertNoMapGoodsReal() {
+		return null;
+	}
 }

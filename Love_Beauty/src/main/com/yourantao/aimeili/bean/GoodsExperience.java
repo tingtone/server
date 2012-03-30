@@ -9,6 +9,7 @@ public class GoodsExperience implements java.io.Serializable {
 	// Fields
 
 	private Integer experienceId;
+	private Integer goodsId;
 	private String goodsName;
 	private String experienceName;
 	private Short experienceFrom;
@@ -30,9 +31,10 @@ public class GoodsExperience implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public GoodsExperience(String goodsName, String experienceName,
-			Short experienceFrom, String experienceIntroduction,
-			String experienceDetail) {
+	public GoodsExperience(Integer goodsId, String goodsName,
+			String experienceName, Short experienceFrom,
+			String experienceIntroduction, String experienceDetail) {
+		this.goodsId = goodsId;
 		this.goodsName = goodsName;
 		this.experienceName = experienceName;
 		this.experienceFrom = experienceFrom;
@@ -48,6 +50,14 @@ public class GoodsExperience implements java.io.Serializable {
 
 	public void setExperienceId(Integer experienceId) {
 		this.experienceId = experienceId;
+	}
+
+	public Integer getGoodsId() {
+		return this.goodsId;
+	}
+
+	public void setGoodsId(Integer goodsId) {
+		this.goodsId = goodsId;
 	}
 
 	public String getGoodsName() {

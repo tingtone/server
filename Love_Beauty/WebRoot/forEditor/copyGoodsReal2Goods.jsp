@@ -54,5 +54,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <form action="goods_updateGoodsMap" enctype="multipart/form-data" method="post">
  <input type="submit" value="全部更新"/>
  </form>
+ 
+ 3.心得评测与商品的对应（goodsExperience）：
+ <form action="goods_updateGoodsExperience" enctype="multipart/form-data" method="post">
+ <input type="submit" value="全部更新"/>
+ </form>
   </body>
 </html>
