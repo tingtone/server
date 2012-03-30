@@ -19,7 +19,7 @@ public class UserAddress implements java.io.Serializable {
 	private String telephone;
 	private String receiver;
 	private String zipCode;
-	private Short default_;
+	private Short isDefault;
 
 	// Constructors
 
@@ -30,7 +30,7 @@ public class UserAddress implements java.io.Serializable {
 	/** minimal constructor */
 	public UserAddress(Integer userId, String province, String city,
 			String district, String detail, String userAddress, String mobile,
-			String telephone, String receiver, Short default_) {
+			String telephone, String receiver, Short isDefault) {
 		this.userId = userId;
 		this.province = province;
 		this.city = city;
@@ -40,13 +40,13 @@ public class UserAddress implements java.io.Serializable {
 		this.mobile = mobile;
 		this.telephone = telephone;
 		this.receiver = receiver;
-		this.default_ = default_;
+		this.isDefault = isDefault;
 	}
 
 	/** full constructor */
 	public UserAddress(Integer userId, String province, String city,
 			String district, String detail, String userAddress, String mobile,
-			String telephone, String receiver, String zipCode, Short default_) {
+			String telephone, String receiver, String zipCode, Short isDefault) {
 		this.userId = userId;
 		this.province = province;
 		this.city = city;
@@ -57,7 +57,7 @@ public class UserAddress implements java.io.Serializable {
 		this.telephone = telephone;
 		this.receiver = receiver;
 		this.zipCode = zipCode;
-		this.default_ = default_;
+		this.isDefault = isDefault;
 	}
 
 	// Property accessors
@@ -150,12 +150,12 @@ public class UserAddress implements java.io.Serializable {
 		this.zipCode = zipCode;
 	}
 
-	public Short getDefault_() {
-		return this.default_;
+	public Short getIsDefault() {
+		return this.isDefault;
 	}
 
-	public void setDefault_(Short default_) {
-		this.default_ = default_;
+	public void setIsDefault(Short isDefault) {
+		this.isDefault = isDefault;
 	}
 
 }

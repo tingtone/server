@@ -208,19 +208,21 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}
 
-		String location = getStringParameter("loc"); // 省，市，区
-		String[] locations = location.split("/"); // 0-》省，1-》市，2=》区
+		String location = getStringParameter("loc"); // 省，市，区，方位
+		String[] locations = location.split("/"); // 0-》省，1-》市，2=》区 ，3=》方位
 		String address = getStringParameter("add");
 		String userName = getStringParameter("user");
 		String telphone = getStringParameter("tel");
+		String mobile = getStringParameter("mobile");
 		String zipCode = getStringParameter("code");
 
 		userAddress.setCity(locations[1]);
 		userAddress.setProvince(locations[0]);
 		userAddress.setDistrict(locations[2]);
-		userAddress.setDetail(address);
+		userAddress.setDetail(locations[3]);
+		userAddress.setUserAddress(address);
 		userAddress.setReceiver(userName);
-		userAddress.setMobile(telphone);
+		userAddress.setMobile(mobile);
 		userAddress.setZipCode(zipCode);
 
 		printString(MSG_SUCCESS);
@@ -241,22 +243,32 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		int uid = userLogin.get(0).getUserId();
+		
+		List<UserAddress> userAddresses=userAddressDAO.findByUserId(uid);
+		for (UserAddress userAddress2 : userAddresses) {   //将其余的设置为非默认地址
+			userAddress2.setIsDefault((short) 0);
+		}
+		
+		
 		UserAddress userAddress = new UserAddress();
-		String location = getStringParameter("loc"); // 省，市，区
-		String[] locations = location.split("/"); // 0-》省，1-》市，2=》区
-		String address = getStringParameter("add");
+		String location = getStringParameter("loc"); // 省，市，区，方位
+		String[] locations = location.split("/"); // 0-》省，1-》市，2=》区 ，3=》方位
+		String address = getStringParameter("add");   //用户填的具体地址
 		String userName = getStringParameter("user");
-		String telphone = getStringParameter("tel");
+		String mobile = getStringParameter("mobile");
 		String zipCode = getStringParameter("code");
+//		String telphone = getStringParameter("tel");
 		userAddress.setUserId(uid);
 		userAddress.setCity(locations[1]);
 		userAddress.setProvince(locations[0]);
 		userAddress.setDistrict(locations[2]);
-		userAddress.setDetail(address);
+		userAddress.setDetail(locations[3]);
+		userAddress.setUserAddress(address);
 		userAddress.setReceiver(userName);
-		userAddress.setMobile(telphone);
+		userAddress.setMobile(mobile);
+		userAddress.setTelephone("0");  // 现在没有用户输入的电话，都默认为0
 		userAddress.setZipCode(zipCode);
-		userAddress.setDefault_((short) 1);
+		userAddress.setIsDefault((short) 1);
 		userAddressDAO.save(userAddress);
 
 		printString(MSG_SUCCESS);
@@ -423,7 +435,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		
 		//“我”的那部分信息
 		UserView userView = new UserView();
-		userView.setRelativeId(0);
+		userView.setRelativeId(0);   //我是0
 		userView.setBirthday(TransTool.transBirthday(user.getBirthday()));  //只取birthday字段中的前10位，即 2012-01-01
 		userView.setCity(user.getCity());
 		if(user.getSkin()==null || user.getSkin().equals("null")){
@@ -446,7 +458,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			userView.setSkin(TransTool.transSkinNameToId(userRelative.getSkin())+userRelative.getIsSensitive());   //skin包含4选1肤质+是否敏感
 			userView.setUserId(uid);
 			userView.setUserName(userRelative.getRelative());
-			userView.setUserTags(userTags);
+			userView.setUserTags(TransTool.transUserTagsNameToId(userRelative.getUserTags()));
 			userViews.add(userView);
 		}
 		

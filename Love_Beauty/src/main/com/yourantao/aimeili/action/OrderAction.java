@@ -692,7 +692,8 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 					
 					goodsRealErrorViewList.add(goodsNotExist);
 				}
-				else if( goodsReal.getGoodsStatus() != 6){
+				else if( goodsReal.getGoodsStatus() == 0){
+					//TODO 正常的工作时采用 != 6
 					//购物车中商品已经下架
 						GoodsRealErrorView goodsNotFit = new GoodsRealErrorView();
 						goodsNotFit.setErrorCode(GOODS_NOT_FIT);

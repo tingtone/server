@@ -33,7 +33,7 @@ public class UserAddressDAO extends HibernateDaoSupport {
 	public static final String TELEPHONE = "telephone";
 	public static final String RECEIVER = "receiver";
 	public static final String ZIP_CODE = "zipCode";
-	public static final String DEFAULT_ = "default_";
+	public static final String IS_DEFAULT = "isDefault";
 
 	protected void initDao() {
 		// do nothing
@@ -139,8 +139,8 @@ public class UserAddressDAO extends HibernateDaoSupport {
 		return findByProperty(ZIP_CODE, zipCode);
 	}
 
-	public List findByDefault_(Object default_) {
-		return findByProperty(DEFAULT_, default_);
+	public List findByIsDefault(Object isDefault) {
+		return findByProperty(IS_DEFAULT, isDefault);
 	}
 
 	public List findAll() {

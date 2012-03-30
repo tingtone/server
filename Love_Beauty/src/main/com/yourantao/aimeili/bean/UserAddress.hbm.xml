@@ -60,8 +60,8 @@
                 <comment>邮编</comment>
             </column>
         </property>
-        <property name="default_" type="java.lang.Short">
-            <column name="default" not-null="true">
+        <property name="isDefault" type="java.lang.Short">
+            <column name="isDefault" not-null="true">
                 <comment>是否为默认地址 0不是 1是</comment>
             </column>
         </property>

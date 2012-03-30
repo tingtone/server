@@ -28,6 +28,7 @@ public interface GoodsInterface {
 	 * 获得真实商品的评论
 	 */
 	public String getGoodsRealComment();
+	
 	/**
 	 * 通过分类获得商品列表
 	 * 
@@ -132,6 +133,20 @@ public interface GoodsInterface {
 	 * @return
 	 */
 	public String updateGoodsMap();
+	
+	/**
+	 *  for Programmer
+	 * 心得评测与商品的对应（goodsExperience）
+	 * @return
+	 */
+	public String updateGoodsExperience();
+	
+	/**
+	 * for Programmer
+	 * 将不在对应关系的goodsreal 添加到goods表中
+	 * @return
+	 */
+	public String insertNoMapGoodsReal();
 	
 	
 	

@@ -156,7 +156,8 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			if(goodsReal == null){
 				msg = "{'msg':'商品不存在'}";
 			}
-			else if (goodsReal.getGoodsStatus() != 6) {
+			else if (goodsReal.getGoodsStatus() == 0) {
+				//TODO 
 				msg = "{'msg':'商品已经下架或待审核'}";
 			} else {
 				shoppingCart.setPrice(goodsReal.getGoodsPrice());
