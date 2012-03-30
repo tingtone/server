@@ -1,10 +1,13 @@
 package main.com.yourantao.aimeili.servlet;
 
+import java.sql.Timestamp;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import main.com.yourantao.aimeili.conf.Config;
+import main.com.yourantao.aimeili.log.UserLoginLog;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,7 +40,8 @@ public class SystemInit implements ServletContextListener {
 			log.info("path={}", path);
 			Config.init();
 			Log log1 = LogFactory.getLog("myTest1");
-			log1.debug(" 测试");
+			log1.info("程序启动");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

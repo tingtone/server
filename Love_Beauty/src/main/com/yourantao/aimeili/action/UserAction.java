@@ -23,9 +23,12 @@ import main.com.yourantao.aimeili.bean.UserRelative;
 import main.com.yourantao.aimeili.bean.UserRelativeDAO;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.conf.FavoriteType;
+import main.com.yourantao.aimeili.log.UserLoginLog;
 import main.com.yourantao.aimeili.util.TransTool;
 import main.com.yourantao.aimeili.vo.UserView;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,9 +104,19 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			userDAO.save(new User(current, current, userLogin));
 		} else { // 用户存在，修改登录时间
 			userLoginList.get(0).getUser().setLastlogin(current);
+			
+			/*用户登录日志记录*/
+			Log log2 = LogFactory.getLog("UserLogin");
+			UserLoginLog userLoginLog=new UserLoginLog();
+			userLoginLog.setUuid(uuid);
+			userLoginLog.setUid(userLoginList.get(0).getUser().getUserId());
+			userLoginLog.setUname(userLoginList.get(0).getUser().getNickName());
+			userLoginLog.setLoginTime(current);
+			log2.debug(userLoginLog.toString());
 		}
 
 		printString(MSG_SUCCESS); // 返回成功或者失败
+		
 		return null;
 	}
 
