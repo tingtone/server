@@ -59,7 +59,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		this.goodsRealDAO = goodsRealDAO;
 	}
 
-	public String getShoppingCart() {
+	public String fetchShoppingCart() {
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -95,20 +95,38 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			// 去goods表中查询
 			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
 					.getGoodsRealId());
-			
-			GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
-			goodsRealSimpleView.setGoodsRealId(shoppingCart.getGoodsRealId());
-			goodsRealSimpleView.setGoodsPrice(shoppingCart.getPrice());
-			goodsRealSimpleView.setGoodsCount(shoppingCart.getCount());
-			
-			goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
-			goodsRealSimpleView.setGoodsContent(goodsReal.getGoodsContent());
-			goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
-			
-			shoppingCartView.addGoods(goodsRealSimpleView);
-			//
-			if(!existFlag){
-				shoppingCartViewList.add(shoppingCartView);
+			//判断商品是否存在,是否已经下架
+			if(goodsReal == null || goodsReal.getGoodsStatus() == 0){
+				//TODO 修改status的判断条件
+				//删除购物车记录
+				shoppingCartDAO.delete(shoppingCart);
+				System.out.println("in delete");
+			}
+			else{
+				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
+				goodsRealSimpleView.setGoodsRealId(shoppingCart.getGoodsRealId());
+				goodsRealSimpleView.setGoodsCount(shoppingCart.getCount());
+				
+				goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
+				goodsRealSimpleView.setGoodsContent(goodsReal.getGoodsContent());
+				goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
+				
+				if(Math.abs(goodsReal.getGoodsPrice()-shoppingCart.getPrice()) > 0.00001){
+					//更新新价格并封装
+					shoppingCart.setPrice(goodsReal.getGoodsPrice());
+					shoppingCartDAO.merge(shoppingCart);
+					
+					goodsRealSimpleView.setGoodsPrice(goodsReal.getGoodsPrice());
+				}
+				else{
+					//正常封装
+					goodsRealSimpleView.setGoodsPrice(shoppingCart.getPrice());
+				}
+				shoppingCartView.addGoods(goodsRealSimpleView);
+				//
+				if(!existFlag){
+					shoppingCartViewList.add(shoppingCartView);
+				}
 			}
 		}
 		//
@@ -157,7 +175,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				msg = "{'msg':'商品不存在'}";
 			}
 			else if (goodsReal.getGoodsStatus() == 0) {
-				//TODO 
+				//TODO
 				msg = "{'msg':'商品已经下架或待审核'}";
 			} else {
 				shoppingCart.setPrice(goodsReal.getGoodsPrice());

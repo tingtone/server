@@ -15,7 +15,7 @@ public interface ShoppingCartInterface {
 	 * 获取购物车内容
 	 * @return
 	 */
-	public abstract String getShoppingCart();
+	public abstract String fetchShoppingCart();
 
 	/**
 	 * 添加商品到购物车中
