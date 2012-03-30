@@ -29,7 +29,7 @@
   <a href="forEditor/provider.jsp">货商</a>
   <a href="forEditor/search.jsp">搜索</a>
   <a href="forEditor/order.jsp">订单</a>
-  <a href="forEditor/copyGoodsReal2Goods.jsp">复制真实商品到商品表（小编勿点）</a>
+  <a href="forEditor/copyGoodsReal2Goods.jsp">商品聚类处理（小编勿点）</a>
   </div>
 
 

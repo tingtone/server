@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>专题插入</title>
+    <title>商品聚类处理</title>
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
 	<meta http-equiv="expires" content="0">    
@@ -36,7 +36,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
   <%@include file="/top.jsp"%>
-  	
+1.复制goodsReal中的一个货商的商品到goods中：  	
 <form action="goods_copyGoodsReal2Goods" enctype="multipart/form-data" method="post">
 <select name="pid">
 	<option value="1">no5</option>
@@ -47,6 +47,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<option value="6">amazon</option>
 </select>
  <input type="submit" value="确认"/>
+ </form>
+ 
+ 
+ 2.更新全部的商品对应（goods，goodsreal--》goodsMap）：
+ <form action="goods_updateGoodsMap" enctype="multipart/form-data" method="post">
+ <input type="submit" value="全部更新"/>
  </form>
   </body>
 </html>

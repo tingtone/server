@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.net.*;
 
 import main.com.yourantao.aimeili.bean.Brand;
@@ -1683,20 +1685,28 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		} else if (updateType.equals("程序更新真实商品")) { // 更新真实商品,即更新goodsMap表
 			Goods goods = goodsDAO.findById(goodsId);
 			String goodsName = goods.getGoodsName();
+			Brand brand = brandDAO.findById(goods.getBrandId());   //品牌
 			List<GoodsReal> goodsReals = goodsRealDAO
 					.findByBrandIdAndCategoryId(goods.getBrandId(), goods
 							.getCategoryId()); // 先通过品牌ID和分类ID筛选过滤
 			for (GoodsReal goodsReal : goodsReals) {
-				// if(goodsReal.getGoodsStatus()!=3 &&
-				// goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
-				// continue;
-				// }
-
-				/* 字符串匹配筛选过滤 */
+				/*小编处理的，是都可见的*/
+//				 if(goodsReal.getGoodsStatus()!=3 &&
+//				 goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
+//				 continue;
+//				 }
 				String goodsRealName = goodsReal.getGoodsName();
-				double similarity = CompareTool.stringSimilarity(goodsName,
-						goodsRealName);
-				if (similarity > 0.75) { // 相似度取值
+				/* 字符串匹配筛选过滤 */
+
+				String goodsName_compare=goodsName.replaceAll("(?i)"+brand.getBrandName(), "");
+				goodsName_compare=goodsName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");    //除去商品名称中的商品名称和别名
+				String goodsRealName_compare=goodsRealName.replaceAll("(?i)"+brand.getBrandName(), "");
+				goodsRealName_compare=goodsRealName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");//除去商品名称中的商品名称和别名
+				double similarity = CompareTool.stringSimilarity(goodsName_compare,    //字符串匹配结果
+						goodsRealName_compare);
+						double similarity1 = CompareTool.stringSimilarity(goodsName,   //原，不去掉品牌名的字符串匹配结果
+								goodsRealName);
+				if (similarity > 0.76) { // 相似度取值
 					List<GoodsMap> goodsMaps = goodsMapDAO
 							.findByGoodsIdAndGoodsRealId(goodsId, goodsReal
 									.getGoodsRealId()); // 通过商品和真实商品 id
@@ -1712,6 +1722,50 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			return SUCCESS;
 		}
 		return ERROR;
+	}
+
+	/*
+	 * for Programmer
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#updateGoodsMap()
+	 */
+	@Override
+	public String updateGoodsMap() {
+		List<Goods> goodsList = goodsDAO.findAll();
+		for (Goods goods : goodsList) {
+			String goodsName = goods.getGoodsName();
+			Brand brand = brandDAO.findById(goods.getBrandId());   //品牌
+			List<GoodsReal> goodsReals = goodsRealDAO
+					.findByBrandIdAndCategoryId(goods.getBrandId(), goods
+							.getCategoryId()); // 先通过品牌ID和分类ID筛选过滤
+			for (GoodsReal goodsReal : goodsReals) {
+				 if(goodsReal.getGoodsStatus()!=3 &&
+				 goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
+				 continue;
+				 }
+				String goodsRealName = goodsReal.getGoodsName();
+				/* 字符串匹配筛选过滤 */
+				String goodsName_compare=goodsName.replaceAll("(?i)"+brand.getBrandName(), "");
+				goodsName_compare=goodsName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");    //除去商品名称中的商品名称和别名
+				String goodsRealName_compare=goodsRealName.replaceAll("(?i)"+brand.getBrandName(), "");
+				goodsRealName_compare=goodsRealName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");//除去商品名称中的商品名称和别名
+				double similarity = CompareTool.stringSimilarity(goodsName_compare,goodsRealName_compare);
+				if (similarity > 0.76) { // 相似度取值
+					List<GoodsMap> goodsMaps = goodsMapDAO
+							.findByGoodsIdAndGoodsRealId(goods.getGoodsId(), goodsReal
+									.getGoodsRealId()); // 通过商品和真实商品 id
+														// 获得goodsMap
+					if (goodsMaps.isEmpty()) { // 如果没有则插入该goodsMap
+						GoodsMap goodsMap = new GoodsMap();
+						goodsMap.setGoodsId(goods.getGoodsId());
+						goodsMap.setGoodsRealId(goodsReal.getGoodsRealId());
+						goodsMapDAO.save(goodsMap);
+					}
+				}
+			}
+		}
+		
+		return null;
 	}
 
 }

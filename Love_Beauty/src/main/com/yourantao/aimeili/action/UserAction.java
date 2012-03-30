@@ -197,9 +197,14 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	 */
 	@Override
 	public String userUpdateAddress() {
-		int aid = getIntegerParameter(ADDRESS_ID); // 送货信息id
-		if (aid == 0) {
-			printString(NO_USER);
+		Integer aid = getIntegerParameter(ADDRESS_ID); // 送货信息id
+		if (aid==null || aid == 0) {
+			printString("{'msg':'没有送货ID'}");
+			return null;
+		}
+		UserAddress userAddress = userAddressDAO.findById(aid);
+		if(userAddress==null){
+			printString("{'msg':'没有该送货地址'}");
 			return null;
 		}
 
@@ -210,7 +215,6 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		String telphone = getStringParameter("tel");
 		String zipCode = getStringParameter("code");
 
-		UserAddress userAddress = userAddressDAO.findById(aid);
 		userAddress.setCity(locations[1]);
 		userAddress.setProvince(locations[0]);
 		userAddress.setDistrict(locations[2]);

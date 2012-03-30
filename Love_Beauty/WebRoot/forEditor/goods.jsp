@@ -91,6 +91,8 @@ function GetGoods(cid) {
 			} else {
 				for(var i=0;i<json.length;i++){
 					goodsDetail+=(i+1)+"：";
+					gid=json[i]['goodsId'];
+					gname=json[i]['goodsName'];
 						goodsDetail+="<form action='goods_updateGoods' enctype='multipart/form-data' method='post'>";
 						goodsDetail+="<table class='tabel'><tbody><tr>"
 						goodsDetail+="<input type='hidden' name='cid' value='"+cid+"'/><input type='hidden' name='gid' value='"+json[i]['goodsId']+"'/><input type='hidden' name='bid' value='"+json[i]['brandId']+"'/>";
@@ -105,7 +107,7 @@ function GetGoods(cid) {
 						goodsDetail+="<tr><td>商品特点及成分：<input name='goodsDescription'  type='text' value='"+json[i]['goodsDescription'] +"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品用法：<input name='goodsSpecification' type='text' value='"+json[i]['goodsSpecification']+"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品状态：<input name='goodsStatus' type='text' value='"+json[i]['goodsStatus']+"'/></td></tr> ";
-						goodsDetail+="<tr><td><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><input type='submit' name='submit' value='对应真实商品'/><input type='submit' name='submit' value='商品细节图'/></td></tr> ";
+						goodsDetail+="<tr><td><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><input class='goodsreal' type='button' onclick='toGoodsReal("+gid+",\""+gname+"\")' value='对应真实商品'/><input class='goodsImages' type='button' onclick='goodsImages("+gid+",\""+gname+"\")' value='商品细节图'/></td></tr> ";
 						goodsDetail+="</tbody></table></form>";
 					}
 			}
@@ -147,6 +149,8 @@ function GetGoodsListByBrand(bid) {
 		"bid" : bid
 	};
 	var goodsDetail = "";
+	var gid=0;
+	var gname="";
 	$.ajax({
 		type : "POST",
 		data : params,
@@ -158,6 +162,8 @@ function GetGoodsListByBrand(bid) {
 			} else {
 				for(var i=0;i<json.length;i++){
 					goodsDetail+=(i+1)+"：";
+					gid=json[i]['goodsId'];
+					gname=json[i]['goodsName'];
 						goodsDetail+="<form action='goods_updateGoods' enctype='multipart/form-data' method='post'>";
 						goodsDetail+="<table class='tabel'><tbody><tr>"
 						goodsDetail+="<input type='hidden' name='bid' value='"+bid+"'/><input type='hidden' name='gid' value='"+json[i]['goodsId']+"'/>";
@@ -172,7 +178,7 @@ function GetGoodsListByBrand(bid) {
 						goodsDetail+="<tr><td>商品特点及成分：<input name='goodsDescription'  type='text' value='"+json[i]['goodsDescription'] +"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品用法：<input name='goodsSpecification' type='text' value='"+json[i]['goodsSpecification']+"'/></td></tr> ";
 						goodsDetail+="<tr><td>商品状态：<input name='goodsStatus' type='text' value='"+json[i]['goodsStatus']+"'/></td></tr> ";
-						goodsDetail+="<tr><td><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><input type='submit' name='submit' value='对应真实商品'/><input type='submit' name='submit' value='商品细节图'/></td></tr> ";
+						goodsDetail+="<tr><td><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><input class='goodsreal' type='button' onclick='toGoodsReal("+gid+",\""+gname+"\")' value='对应真实商品'/><input class='goodsImages' type='button' onclick='goodsImages("+gid+",\""+gname+"\")' value='商品细节图'/></td></tr> ";
 						goodsDetail+="</tbody></table></form>";
 					}
 			}
@@ -180,8 +186,18 @@ function GetGoodsListByBrand(bid) {
 		}
 	});
 }
-
-
+function toGoodsReal(gid,gname) {
+	var url = BASE_SERVER + "/forEditor/goods2realgoods.jsp?gid="
+			+gid+ "&goodsName=" +gname;
+	//alert(url);
+	window.open(url, "", "");
+}
+function goodsImages(gid,gname) {
+	var url = BASE_SERVER + "/forEditor/goodsImages.jsp?gid="
+			+gid+ "&goodsName=" +gname;
+	//alert(url);
+	window.open(url, "", "");
+}
 $(document).ready(function() {
 
 GetBrands();
@@ -233,9 +249,8 @@ GetBrands();
 		}
 	});
 	
-	$('#realgoods').click(function() {
+	$('#brand').change(function() {
 		var bid = $('#brand').val();
-		var sid = $('#series').val();
 		GetGoodsListByBrand(bid);
 	});
 	
@@ -274,8 +289,7 @@ GetBrands();
 		</table>
 		<table class="tabel" >
 		 <tbody>
-		 <tr><td>商品品牌：<select class="brand" id="brand" name="bid"></select></td>
- 		<td><input id="realgoods" type="button" value="查看商品"/></td></tr>
+		 <tr><td>商品品牌：<select class="brand" id="brand" name="bid"></select></td></tr>
  		</tbody></table>
 		
 <div id="goods_detail">
