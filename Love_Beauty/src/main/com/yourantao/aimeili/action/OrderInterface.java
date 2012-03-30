@@ -115,7 +115,12 @@ public interface OrderInterface {
 	 * @return
 	 */
 	public abstract String fetchHistoryOrders();
-
+	/**
+	 * 检查商品状态
+	 * 
+	 * @return
+	 */
+	public abstract String examOrderGoods();
 	/**
 	 * 提交订单,需要计算出当前所有的商品的总金额,并与实际的商品总金额比较
 	 * 
@@ -125,7 +130,6 @@ public interface OrderInterface {
 
 	/**
 	 * 删除订单中的某一件商品,可能导致订单整体删除
-	 * 管理员可能要使用这个功能,但是这种情况下就不能使用uuid来访问而是使用userId直接进行访问
 	 * @return
 	 */
 	public abstract String deleteGoods();
@@ -140,7 +144,6 @@ public interface OrderInterface {
 	public abstract String acceptPriceForEditor();
 	public abstract String modifyQuantityForEditor();
 	public abstract String addRelatedNumForEditor();
-	/*public abstract String getOrdersForEditor();*/
 	public abstract String getUserInOrder();
 	public abstract String getUserOrder();
 	public abstract String getSpecificOrderForEditor();

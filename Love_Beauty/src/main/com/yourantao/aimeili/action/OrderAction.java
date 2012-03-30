@@ -478,6 +478,68 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		return null;
 	}
 
+	public String examOrderGoods() {
+		String msg = "";
+		// 获取参数
+		String uuid = getStringParameter("uuid");
+		if (uuid == null) {
+			printString("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
+		if (userLogin.isEmpty()) {
+			printString("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId = userLogin.get(0).getUserId();
+		
+		// 复杂参数
+		String goodsRealIdString = getStringParameter("gridlist");
+		
+		String[] goodsRealIdList = goodsRealIdString.split("[,;]");
+		List<GoodsRealErrorView> goodsRealErrorViewList = new ArrayList<GoodsRealErrorView>();
+		for(int outerIndex = 0; outerIndex < goodsRealIdList.length; outerIndex++){
+			int goodsRealId = Integer.valueOf(goodsRealIdList[outerIndex]);
+			ShoppingCart shoppingCart = shoppingCartDAO.getCartByGoodsAndUser(goodsRealId, userId);
+			if(shoppingCart != null){
+				GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+				if(goodsReal == null){
+					//购物车中的商品在goods_real表中找不到对应的记录
+					GoodsRealErrorView goodsNotExist = new GoodsRealErrorView();
+					goodsNotExist.setErrorCode(GOODS_NOT_EXIST);
+					goodsNotExist.setProviderId(shoppingCart.getProviderId());
+					goodsNotExist.setGoodsRealId(goodsRealId);
+					
+					goodsRealErrorViewList.add(goodsNotExist);
+				}
+				else if( goodsReal.getGoodsStatus() == 0){
+					//TODO
+					//购物车中商品已经下架
+						GoodsRealErrorView goodsNotFit = new GoodsRealErrorView();
+						goodsNotFit.setErrorCode(GOODS_NOT_FIT);
+						goodsNotFit.setProviderId(shoppingCart.getProviderId());
+						goodsNotFit.setGoodsRealId(goodsRealId);
+						
+						goodsRealErrorViewList.add(goodsNotFit);
+				}
+				else if( Math.abs(goodsReal.getGoodsPrice() - shoppingCart.getPrice()) > 0.00001){
+					//购物车中商品价格发生变动
+						GoodsRealErrorView goodsPriceChange = new GoodsRealErrorView();
+						goodsPriceChange.setErrorCode(GOODS_PRICE_CHANGE);
+						goodsPriceChange.setProviderId(shoppingCart.getProviderId());
+						goodsPriceChange.setGoodsRealId(goodsRealId);
+						
+						goodsRealErrorViewList.add(goodsPriceChange);
+				}
+			}
+			//TODO 还有可能是购物车中不存在这样的记录
+		}
+		if(goodsRealErrorViewList.isEmpty())
+			printString(msg);
+		else
+			printObject(goodsRealErrorViewList);
+		return null;
+	}
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -497,7 +559,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
-		// Integer providerId = getIntegerParameter(PROVIDER_ID);
+		
 		Integer addressId = getIntegerParameter(ADDRESS_ID);
 		// 复杂参数
 		String goodsRealIdString = getStringParameter("gridlist");
@@ -533,9 +595,9 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		 * null)) { printString("{'msg':'发票相关参数个数不足'}"); return null; }
 		 */
 		
-		List<GoodsRealErrorView> filterResult = examOrderGoods(goodsRealIdString, userId);
-		if(filterResult != null){
-			printObject(filterResult);
+		boolean filterResult = quickExamOrderGoods(goodsRealIdString, userId);
+		if(!filterResult){
+			printString("{'msg':'商品出错'}");
 			return null;
 		}
 		String[] goodsRealIdListList = goodsRealIdString.split(PROVIDER_SPLITER);
@@ -687,7 +749,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	/*
 	 * 提交订单前的检查操作
 	 */
-	private List<GoodsRealErrorView> examOrderGoods(String goodsRealIdString, int userId){
+	private boolean quickExamOrderGoods(String goodsRealIdString, int userId){
 		String[] goodsRealIdList = goodsRealIdString.split("[,;]");
 		List<GoodsRealErrorView> goodsRealErrorViewList = new ArrayList<GoodsRealErrorView>();
 		for(int outerIndex = 0; outerIndex < goodsRealIdList.length; outerIndex++){
@@ -697,38 +759,20 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
 				if(goodsReal == null){
 					//购物车中的商品在goods_real表中找不到对应的记录
-					GoodsRealErrorView goodsNotExist = new GoodsRealErrorView();
-					goodsNotExist.setErrorCode(GOODS_NOT_EXIST);
-					goodsNotExist.setProviderId(shoppingCart.getProviderId());
-					goodsNotExist.setGoodsRealId(goodsRealId);
-					
-					goodsRealErrorViewList.add(goodsNotExist);
+					return false;
 				}
 				else if( goodsReal.getGoodsStatus() == 0){
 					//TODO
 					//购物车中商品已经下架
-						GoodsRealErrorView goodsNotFit = new GoodsRealErrorView();
-						goodsNotFit.setErrorCode(GOODS_NOT_FIT);
-						goodsNotFit.setProviderId(shoppingCart.getProviderId());
-						goodsNotFit.setGoodsRealId(goodsRealId);
-						
-						goodsRealErrorViewList.add(goodsNotFit);
+					return false;
 				}
 				else if( Math.abs(goodsReal.getGoodsPrice() - shoppingCart.getPrice()) > 0.00001){
 					//购物车中商品价格发生变动
-						GoodsRealErrorView goodsPriceChange = new GoodsRealErrorView();
-						goodsPriceChange.setErrorCode(GOODS_PRICE_CHANGE);
-						goodsPriceChange.setProviderId(shoppingCart.getProviderId());
-						goodsPriceChange.setGoodsRealId(goodsRealId);
-						
-						goodsRealErrorViewList.add(goodsPriceChange);
+					return false;
 				}
 			}
 		}
-		if(goodsRealErrorViewList.isEmpty())
-			return null;
-		else
-			return goodsRealErrorViewList;
+		return true;
 	}
 
 	/**
@@ -1147,6 +1191,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 						.getGoodsThumb());
 				// System.out.println(goodsReal.getGoodsThumb());
 				// 这里要修改成推广联盟的链接
+				//TODO
 				goodsRealSimpleEditorView.setGoodsUrl(getAssistURL(order
 						.getProviderId())
 						+ goodsReal.getGoodsUrl());
@@ -1176,9 +1221,9 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	/**
 	 * 将providerId换成推广链接
 	 * 
-	 * @return
 	 */
 	private String getAssistURL(int providerId) {
+		//TODO
 		String url = "";
 		switch (providerId) {
 		case 1:
