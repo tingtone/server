@@ -96,10 +96,11 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			GoodsReal goodsReal = goodsRealDAO.findById(shoppingCart
 					.getGoodsRealId());
 			//判断商品是否存在,是否已经下架
-			if(goodsReal == null && goodsReal.getGoodsStatus() == 0){
+			if(goodsReal == null || goodsReal.getGoodsStatus() == 0){
 				//TODO 修改status的判断条件
 				//删除购物车记录
 				shoppingCartDAO.delete(shoppingCart);
+				System.out.println("in delete");
 			}
 			else{
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
