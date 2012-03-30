@@ -17,8 +17,9 @@ abstract class BaseCOD {
 	public static final int SUPPORT = 2;
 	public static final int PARTIALLY_SUPPORT = 1;
 	public static final int NONSUPPORT = 0;
-	
-	private static final String REGEX = "\\(.*\\)|市*$|县*$|区*$|旗*$";
+
+	private static final String REGEX1 = "\\(.*\\)";
+	private static final String REGEX2 = "市*$|县*$|区*$|旗*$";
 
 	private static String replace(final String sourceString,
 			final String regex, final String replacement) {
@@ -44,7 +45,7 @@ abstract class BaseCOD {
 	 * @return 统一格式的城市名或区县名
 	 */
 	protected static String getCityOrDistrictName(String cityOrDistrict) {
-		return replace(cityOrDistrict, REGEX, "");
+		return replace(replace(cityOrDistrict, REGEX1, ""), REGEX2, "");
 	}
 
 	/**
@@ -88,11 +89,11 @@ abstract class BaseCOD {
 			return true;
 		return false;
 	}
-	
+
 	protected static boolean containsBracket(String str) {
 		return str.contains("(");
 	}
-	
+
 	/**
 	 * 是否支持货到付款
 	 * <p />
@@ -104,5 +105,16 @@ abstract class BaseCOD {
 	 */
 	public int supportCOD(UserAddress address) {
 		return NONSUPPORT;
+	}
+
+	/**
+	 * 返回该地址支持货到付款的区域，该函数只有当supportCOD返回NONSUPPORT时有效。
+	 * 
+	 * @param address
+	 *            用户地址持久化类
+	 * @return 返回该地址支持货到付款的区域
+	 */
+	public String supportArea(UserAddress address) {
+		return "";
 	}
 }

@@ -40,7 +40,7 @@ public class No5COD extends BaseCOD {
 			+ "!青海省：(12) 西宁市、大通、互助、湟中、湟源、格尔木、海东、乐都、民和、海西、矿区、乌兰。"
 			+ "!甘肃省：(75) 兰州市、榆中、皋兰、永登、景泰、临洮、靖远、会宁、白银、临夏州、和政、广河、东乡、康乐、永靖、积石山、临夏县、甘南、夏河、碌曲、玛曲、迭部、临潭、卓尼、渭源、漳县、岷县、宕昌、酒泉、嘉峪关、玉门、金塔、武威、古浪、天祝、民勤、金昌、永昌、张掖、山丹、临泽、高台、肃南、民乐、柳园、安西、敦煌、天水、甘谷、武山、清水、张家川、秦安、西和、礼县、徽县、两当、成县、武都、陇西、定西、通渭、静宁、平凉、华亭、崇信、泾川、灵台、镇原、庄浪、西峰、庆阳、宁县、正宁、合水。"
 			+ "!新疆：(16) 乌鲁木齐市、昌吉、石河子、奎屯、博乐、克拉玛依、塔城、伊宁、阿勒泰、吐鲁番、哈密、库尔勒、阿克苏、阿图什、和田、喀什。";
-	
+
 	private Map<String, Set<String>> codMappings;
 
 	public No5COD() {
@@ -66,9 +66,9 @@ public class No5COD extends BaseCOD {
 		if (!codMappings.containsKey(province))
 			return NONSUPPORT;
 		Set<String> cities = codMappings.get(province);
-		if (cities.isEmpty())
-			return SUPPORT;
 		if (isRegions(address.getCity())) {
+			if (cities.isEmpty())
+				return SUPPORT;
 			String district = getCityOrDistrictName(address.getDistrict());
 			if (cities.contains(district))
 				return SUPPORT;
