@@ -585,14 +585,20 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			}
 			order.setOrderNum(orderNum);
 			
-			
+			//检测是否为空订单的标志,即订单中不存在任何商品
+			boolean emptyOrderFlag = true;
 			//存储order_goods
 			for(int innerIndex = 0; innerIndex < countList.length; innerIndex++){
 				ShoppingCart shoppingCart =  shoppingCartDAO.getCartByGoodsAndUser(Integer.valueOf(goodsRealIdList[innerIndex]), userId);
 				if(shoppingCart != null){
 					OrderGoods orderGoods = new OrderGoods();
 					orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
-					orderGoods.setCount(Integer.valueOf(countList[innerIndex]));
+					//对于不合法的数量指甲转换成1
+					int goodsCount = Integer.valueOf(countList[innerIndex]);
+					if(goodsCount <= 0)
+						orderGoods.setCount(1);
+					else
+						orderGoods.setCount(goodsCount);
 					orderGoods.setPrice(shoppingCart.getPrice());
 					orderGoods.setOrderId(order.getOrderId());// 这里需要已经知道orderId
 					// 价格来源的设置
@@ -607,13 +613,19 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 
 					// 从购物车中删除该商品
 					shoppingCartDAO.delete(shoppingCart);
+					emptyOrderFlag = false;
 				}
-				//可能造成这样一种情况,订单存在,但是订单中不存在任何商品
 			}
-			//总金额由客户端计算出来
-			//order.setOrderSum(cartSummary);
-			//order.setOrderNum(orderNum);
-			orderDAO.merge(order);
+			//处理这样的情况,订单存在,但是订单中不存在任何商品
+			if(emptyOrderFlag){
+				orderDAO.delete(order);
+			}
+			else{
+				//总金额由客户端计算出来
+				//order.setOrderSum(cartSummary);
+				//order.setOrderNum(orderNum);
+				orderDAO.merge(order);
+			}
 		}
 		printString(msg);
 		return null;
@@ -692,7 +704,8 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 					
 					goodsRealErrorViewList.add(goodsNotExist);
 				}
-				else if( goodsReal.getGoodsStatus() != 6){
+				else if( goodsReal.getGoodsStatus() == 0){
+					//TODO
 					//购物车中商品已经下架
 						GoodsRealErrorView goodsNotFit = new GoodsRealErrorView();
 						goodsNotFit.setErrorCode(GOODS_NOT_FIT);
