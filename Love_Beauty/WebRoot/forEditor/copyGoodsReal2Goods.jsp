@@ -59,5 +59,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <form action="goods_updateGoodsExperience" enctype="multipart/form-data" method="post">
  <input type="submit" value="全部更新"/>
  </form>
+ 
+  4.心得评测数据库中的详情修改（goodsExperience）：
+ <form action="goods_updateGoodsExperienceDetail" enctype="multipart/form-data" method="post">
+ <input type="submit" value="全部更新"/>
+ </form>
+ 
+  5.商品表根据名字去重（goods）：
+ <form action="goods_deleteRepeatGoods" enctype="multipart/form-data" method="post">
+ <input type="submit" value="去重"/>
+ </form>
   </body>
 </html>

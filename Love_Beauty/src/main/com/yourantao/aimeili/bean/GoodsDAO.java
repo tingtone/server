@@ -322,4 +322,19 @@ public class GoodsDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+
+	/**
+	 * 自定义函数
+	 * 找出名字相同的商品，即重复商品
+	 * @return
+	 */
+	public List<Goods> findByRepeatGoods() {
+		try {
+			String queryString = "from Goods group by goods_name having count(goods_name)>1";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }
