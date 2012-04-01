@@ -89,11 +89,11 @@ public class DangDangCOD extends BaseCOD {
 						// System.out.println(districDes);
 						JSONObject districJO = JSONObject
 								.fromObject(districDes);
-						if (!districJO.getString("errorCode").equals(0))
+						if (!districJO.getString("errorCode").equals("0"))
 							continue;
 						JSONArray detailJA = districJO
 								.getJSONArray("ship_types");
-
+						//System.out.println(detailJA.size());
 						for (int oIndex = 0; oIndex < detailJA.size(); oIndex++) {
 							Integer shipType = Integer.valueOf(detailJA
 									.getJSONObject(oIndex).getString(
@@ -107,11 +107,13 @@ public class DangDangCOD extends BaseCOD {
 								normalResult.append(provinceName + "\t"
 										+ cityName + "\t" + districName + "\t"
 										+ codAreaDesc + "\r\n");
+								//System.out.println("in case 1");
 								break;
 							case 5:
 								emergeResult.append(provinceName + "\t"
 										+ cityName + "\t" + districName + "\t"
 										+ codAreaDesc + "\r\n");
+								//System.out.println("in case 2");
 								break;
 							}
 						}
@@ -121,15 +123,20 @@ public class DangDangCOD extends BaseCOD {
 				// System.out.println(cityName);
 			}
 		}
-
+		System.out.println("爬取数据结束");
 		FileWriter normalFW;
 		FileWriter emergeFW;
 		try {
 			normalFW = new FileWriter("E:/dangdang-normal.txt");
+			System.out.println(normalResult.toString());
 			normalFW.write(normalResult.toString(), 0, normalResult.length());
 			normalFW.flush();
 			normalFW.close();
 			emergeFW = new FileWriter("E:/dangdang-emerge.txt");
+			System.out.println("%%%%%");
+			System.out.println("%%%%%");
+			System.out.println("%%%%%");
+			System.out.println(emergeResult.toString());
 			emergeFW.write(emergeResult.toString(), 0, emergeResult.length());
 			emergeFW.flush();
 			emergeFW.close();
