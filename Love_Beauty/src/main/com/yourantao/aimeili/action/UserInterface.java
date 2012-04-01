@@ -11,6 +11,13 @@ public interface UserInterface {
 	
 	/**
 	 *  for client
+	 * 用户退出应用
+	 * uuid
+	 */
+	public void userLogout();
+	
+	/**
+	 *  for client
 	 * 用户亲戚的肤质登记
 	 * uuid rel skin
 	 */
@@ -77,4 +84,9 @@ public interface UserInterface {
 	 */
 	public String deleteUserAddress();
 	
+	/**
+	 * 客户端页面结束时需调用，用于传送页面停留时间
+	 * 暂时先不做了
+	 */
+	public void leavePage();
 }

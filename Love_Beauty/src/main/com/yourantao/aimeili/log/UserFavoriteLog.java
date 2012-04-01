@@ -7,27 +7,35 @@ import javax.servlet.http.HttpServletRequest;
 
 import main.com.yourantao.aimeili.conf.Constant;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-/**
- * @author whp
- *
- */
-public class UserLoginLog implements Constant
+public class UserFavoriteLog implements Constant
 {
-	public static final String LOGGER_NAME="userLogin"; 
+	public static final int INSERT=1; 
+	public static final int GET=2; 
+	public static final int DELETE=3; 
+	public static final String LOGGER_NAME="userFavorite"; 
+	
+	private int type;
 	private LogHeader header;
-	private Timestamp loginTime;
-
-	public Timestamp getLoginTime() {
-		return loginTime;
+	private int goodsId;
+	
+	
+	public int getGoodsId() {
+		return goodsId;
 	}
 
-	public void setLoginTime(Timestamp loginTime) {
-		this.loginTime = loginTime;
+	public void setGoodsId(int goodsId) {
+		this.goodsId = goodsId;
 	}
 
-	public UserLoginLog(String uuid,HttpServletRequest request){
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public UserFavoriteLog(String uuid,HttpServletRequest request){
 		//配置request中的编码为utf-8
 		try {
 			request.setCharacterEncoding("UTF-8");
@@ -49,13 +57,17 @@ public class UserLoginLog implements Constant
 		StringBuilder sb=new StringBuilder();
 		sb.append(header);
 		
-		sb.append("time");
+		sb.append("type");
 		sb.append(SEPARATOR_COLON);
-		sb.append(loginTime);
+		sb.append(type);
+		sb.append(SEPARATOR_COMMA);
+		
+		sb.append("gid");
+		sb.append(SEPARATOR_COLON);
+		sb.append(goodsId);
 //		sb.append(SEPARATOR_COMMA);
 
 		return sb.toString();
 		
 	} 
-	
 }

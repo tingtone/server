@@ -1,33 +1,38 @@
 package main.com.yourantao.aimeili.log;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 
 import main.com.yourantao.aimeili.conf.Constant;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-/**
- * @author whp
- *
- */
-public class UserLoginLog implements Constant
+public class LeaveCurrentPageLog implements Constant
 {
-	public static final String LOGGER_NAME="userLogin"; 
+	public static final String LOGGER_NAME="leaveCurrentPage"; 
+	
 	private LogHeader header;
-	private Timestamp loginTime;
+	private int time;
+	private String pageName;
+	
+	
 
-	public Timestamp getLoginTime() {
-		return loginTime;
+	public int getTime() {
+		return time;
 	}
 
-	public void setLoginTime(Timestamp loginTime) {
-		this.loginTime = loginTime;
+	public void setTime(int time) {
+		this.time = time;
 	}
 
-	public UserLoginLog(String uuid,HttpServletRequest request){
+	public String getPageName() {
+		return pageName;
+	}
+
+	public void setPageName(String pageName) {
+		this.pageName = pageName;
+	}
+
+	public LeaveCurrentPageLog(String uuid,HttpServletRequest request){
 		//配置request中的编码为utf-8
 		try {
 			request.setCharacterEncoding("UTF-8");
@@ -49,13 +54,17 @@ public class UserLoginLog implements Constant
 		StringBuilder sb=new StringBuilder();
 		sb.append(header);
 		
+		sb.append("page");
+		sb.append(SEPARATOR_COLON);
+		sb.append(pageName);
+		sb.append(SEPARATOR_COMMA);
+		
 		sb.append("time");
 		sb.append(SEPARATOR_COLON);
-		sb.append(loginTime);
+		sb.append(time);
 //		sb.append(SEPARATOR_COMMA);
 
 		return sb.toString();
 		
 	} 
-	
 }

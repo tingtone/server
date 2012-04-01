@@ -7,27 +7,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import main.com.yourantao.aimeili.conf.Constant;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
-/**
- * @author whp
- *
- */
-public class UserLoginLog implements Constant
+public class UserRegisterLog implements Constant
 {
-	public static final String LOGGER_NAME="userLogin"; 
+	public static final String LOGGER_NAME="userRegister"; 
+	private Timestamp registerTime;
 	private LogHeader header;
-	private Timestamp loginTime;
-
-	public Timestamp getLoginTime() {
-		return loginTime;
+	public Timestamp getRegisterTime() {
+		return registerTime;
 	}
-
-	public void setLoginTime(Timestamp loginTime) {
-		this.loginTime = loginTime;
+	public void setRegisterTime(Timestamp registerTime) {
+		this.registerTime = registerTime;
 	}
-
-	public UserLoginLog(String uuid,HttpServletRequest request){
+	public UserRegisterLog(String uuid,HttpServletRequest request){
 		//配置request中的编码为utf-8
 		try {
 			request.setCharacterEncoding("UTF-8");
@@ -38,6 +29,7 @@ public class UserLoginLog implements Constant
 		header.setUuid(uuid);
 		header.getHeader(request);
 	}
+	
 	
 	/*
 	 * (non-Javadoc)
@@ -51,11 +43,10 @@ public class UserLoginLog implements Constant
 		
 		sb.append("time");
 		sb.append(SEPARATOR_COLON);
-		sb.append(loginTime);
+		sb.append(registerTime);
 //		sb.append(SEPARATOR_COMMA);
 
 		return sb.toString();
 		
 	} 
-	
 }

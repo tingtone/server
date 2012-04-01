@@ -82,12 +82,12 @@ public class No5COD extends BaseCOD {
 
 	public static void main(String[] args) {
 		No5COD no5cod = new No5COD();
-		for (Entry<String, Set<String>> entry : no5cod.codMappings.entrySet())
-			System.out.println(entry.getValue().size() + " " + entry);
+//		for (Entry<String, Set<String>> entry : no5cod.codMappings.entrySet())
+//			System.out.println(entry.getValue().size() + " " + entry);
 		UserAddress address = new UserAddress();
 		address.setProvince("北京");
 		address.setCity("北京市");
-		address.setDistrict("东城区");
+		address.setDistrict("瞬移区");
 		System.out.println(no5cod.supportCOD(address));
 	}
 }

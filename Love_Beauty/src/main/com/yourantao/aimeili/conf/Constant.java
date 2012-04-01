@@ -39,4 +39,18 @@ public interface Constant {
 	public static final String SKIN = "skin";  //肤质
 	public static final String CITY = "city";  //城市
 	public static final String MSG_SUCCESS = "";  //在不需要返回数据的接口中返回的成功值
+	
+	
+	
+	/*日志所需*/
+	public static final String X_FORWARDED_FOR = "x-forwarded-for";
+	public static final String X_FORWARDED_FOR1 = "x-forward-for";
+	public static final String UNKNOWN = "unknown";
+	public static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
+	public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+	public static final String USER_AGENT = "User-Agent";
+	public static final String X_UP_CALLING_LINE_ID = "x-up-calling-line-id";
+	public static final String SEPARATOR_COMMA=",";//字段间的分隔
+	public static final String SEPARATOR_SEMICOLON=";";//header和body的分隔
+	public static final String SEPARATOR_COLON=":";//字段的名和值的分隔
 }

@@ -17,6 +17,6 @@
 			</column>
 		</property>
 		<many-to-one class="main.com.yourantao.aimeili.bean.Goods"
-			column="goods_id" lazy="false" name="goods" unique="true" />
+			column="goods_id" lazy="false" name="goods" unique="true" not-found="ignore"/>  <!-- not-found="ignore"的含义是忽略外键引用的数据不存在的情况 -->
 	</class>
 </hibernate-mapping>

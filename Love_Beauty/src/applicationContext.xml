@@ -404,7 +404,7 @@
 			<ref bean="TopicGoodsDAO" />
 		</property>
 	</bean>
-
+	
 	<bean id="GoodsAction" class="main.com.yourantao.aimeili.action.GoodsAction"
 		parent="BaseAction">
 		<property name="goodsDAO">

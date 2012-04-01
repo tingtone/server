@@ -151,9 +151,9 @@ function GetGoodsMap(gid) {
 				//		goodsDetail+="<tr><td>商品适用肤质："+json[i]['goodsForskin'] +"</td></tr> ";
 				//		goodsDetail+="<tr><td>商品不适用肤质："+json[i]['goodsNotforskin'] +"</td></tr> ";
 				//		goodsDetail+="<tr><td>商品需注意肤质："+json[i]['goodsNoticeforskin'] +"</td></tr> ";
-				//		goodsDetail+="<tr><td>商品年龄范围："+json[i]['goodsAge']+"</td></tr> ";
-				//		goodsDetail+="<tr><td>商品特点及成分："+json[i]['goodsDescription'] +"</td></tr> ";
-				//		goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
+						goodsDetail+="<tr><td>商品年龄范围："+json[i]['goodsAge']+"</td></tr> ";
+						goodsDetail+="<tr><td>商品特点及成分："+json[i]['goodsDescription'] +"</td></tr> ";
+						goodsDetail+="<tr><td>商品用法："+json[i]['goodsSpecification']+"</td></tr> ";
 				//		goodsDetail+="<tr><td>商品添加时间："+json[i]['goodsAddTime']+"</td></tr> ";
 				//		goodsDetail+="<tr><td>商品状态："+json[i]['goodsStatus']+"</td></tr> ";
 					}else if(json[i]['goodsStatus']=='6'){

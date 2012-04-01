@@ -5,10 +5,7 @@ import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import main.com.yourantao.aimeili.bean.GoodsDAO;
 import main.com.yourantao.aimeili.bean.User;
@@ -23,7 +20,12 @@ import main.com.yourantao.aimeili.bean.UserRelative;
 import main.com.yourantao.aimeili.bean.UserRelativeDAO;
 import main.com.yourantao.aimeili.conf.Constant;
 import main.com.yourantao.aimeili.conf.FavoriteType;
+import main.com.yourantao.aimeili.log.LeaveCurrentPageLog;
+import main.com.yourantao.aimeili.log.UserFavoriteLog;
+import main.com.yourantao.aimeili.log.UserInfoLog;
 import main.com.yourantao.aimeili.log.UserLoginLog;
+import main.com.yourantao.aimeili.log.UserLogoutLog;
+import main.com.yourantao.aimeili.log.UserRegisterLog;
 import main.com.yourantao.aimeili.util.TransTool;
 import main.com.yourantao.aimeili.vo.UserView;
 
@@ -34,7 +36,15 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("serial")
 public class UserAction extends BaseAction implements UserInterface, Constant {
-	private static final Logger LOG = LoggerFactory.getLogger(UserAction.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserAction.class);
+	private static Log userRegisterLogger = LogFactory.getLog("UserRegister"); /*用户注册日志记录*/
+	private static Log userLoginLogger = LogFactory.getLog("UserLogin");/*用户登录日志记录*/
+	private static Log userLogoutLogger = LogFactory.getLog("UserLogout");/*用户登出日志记录*/
+	private static Log userFavoriteLogger = LogFactory.getLog("UserFavorite");/*用户收藏记录*/
+	private static Log userInfoLogger = LogFactory.getLog("UserInfo");/*用户收藏记录*/
+	private static Log leaveCurrentPageLogger = LogFactory.getLog("LeaveCurrentPage");/*用户离开访问页面记录*/
+	
+	
 	private static final String NO_UUID = "{'msg':'没有设备号'}";
 	private static final String NO_GOODS_ID = "{'msg':'没有商品号'}";
 	private static final String NO_SKIN = "{'msg':'没有肤质结果'}";
@@ -80,6 +90,12 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		}
 		userFavoriteDAO.save(new UserFavorite(userId, favoriteType, goodsId,
 				new Timestamp(System.currentTimeMillis())));
+		
+		/*用户收藏日志*/
+		UserFavoriteLog userFavoriteLog=new UserFavoriteLog(uuid, getRequest());
+		userFavoriteLog.setGoodsId(goodsId);
+		userFavoriteLog.setType(UserFavoriteLog.INSERT);   //删除操作
+		userFavoriteLogger.debug(userFavoriteLog.toString());
 
 		printString(MSG_SUCCESS);
 		return null;
@@ -102,23 +118,46 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		if (userLoginList.isEmpty()) { // 无此用户，改用户注册
 			UserLogin userLogin = new UserLogin(uuid);
 			userDAO.save(new User(current, current, userLogin));
+			
+			/*用户注册日志记录*/
+			UserRegisterLog userRegisterLog=new UserRegisterLog(uuid,getRequest());
+			userRegisterLog.setRegisterTime(current);
+			userRegisterLogger.debug(userRegisterLog.toString());
 		} else { // 用户存在，修改登录时间
 			userLoginList.get(0).getUser().setLastlogin(current);
 			
 			/*用户登录日志记录*/
-			Log log2 = LogFactory.getLog("UserLogin");
-			UserLoginLog userLoginLog=new UserLoginLog();
-			userLoginLog.setUuid(uuid);
-			userLoginLog.setUid(userLoginList.get(0).getUser().getUserId());
-			userLoginLog.setUname(userLoginList.get(0).getUser().getNickName());
+			UserLoginLog userLoginLog=new UserLoginLog(uuid,getRequest());
 			userLoginLog.setLoginTime(current);
-			log2.debug(userLoginLog.toString());
+			userLoginLogger.debug(userLoginLog.toString());
 		}
 
 		printString(MSG_SUCCESS); // 返回成功或者失败
 		
 		return null;
 	}
+	
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#userLoginOut()
+	 */
+	@Override
+	public void userLogout() {
+		String pageName = getStringParameter("page");  //离开时的最后一页
+		String uuid = getStringParameter(UUID);
+		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
+		Timestamp loginTimes=userLoginList.get(0).getUser().getLastlogin();
+		Long loginTime=loginTimes.getTime();   //上次登录时间
+		Long logoutTime=System.currentTimeMillis();  //当前时间，即登出时间
+		
+		/*用户登出日志记录*/
+		UserLogoutLog userLogoutLog=new UserLogoutLog(uuid,getRequest());
+		userLogoutLog.setPageName(pageName);
+		userLogoutLog.setLastTime(logoutTime-loginTime);
+		userLogoutLogger.debug(userLogoutLog.toString());
+	}
+	
 
 	/*
 	 * for client (non-Javadoc)
@@ -175,6 +214,18 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		}
 		user.setIsSensitivie(Short.parseShort(isSensitive));
 
+		/*用户信息修改*/
+		UserInfoLog userInfoLog=new UserInfoLog(uuid,getRequest());
+		userInfoLog.setBirthday(birthday);
+		userInfoLog.setCity(city);
+		userInfoLog.setNickName(nickName);
+		userInfoLog.setRelativeId(0);   //0代表 “我”
+		userInfoLog.setSkin(skin);
+		userInfoLog.setType(UserInfoLog.UPDATE);
+		userInfoLog.setUserTags(userTags);
+		userInfoLogger.debug(userInfoLog.toString());
+		
+		
 		printString(MSG_SUCCESS);
 		return null;
 	}
@@ -331,6 +382,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		String city = getStringParameter(CITY);
 		String relative = getStringParameter("rel");
 		String userTags = getStringParameter("tag");
+		int relativeId=0;
 		if (uuid == null || uuid.equals("null")) {
 			printString(NO_UUID);
 			return null;
@@ -397,6 +449,18 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 				e.printStackTrace();
 			}
 			userRelativeDAO.save(userRelative);
+			
+			/*用户信息修改*/
+			UserInfoLog userInfoLog=new UserInfoLog(uuid,getRequest());
+			userInfoLog.setBirthday(birthday);
+			userInfoLog.setCity(city);
+			userInfoLog.setNickName(relative);
+			userInfoLog.setRelativeId(userRelative.getUserRelativeId());   
+			userInfoLog.setSkin(skin);
+			userInfoLog.setType(UserInfoLog.INSERT);
+			userInfoLog.setUserTags(userTags);
+			userInfoLogger.debug(userInfoLog.toString());
+			
 		}else{
 			UserRelative userRelative=userRelativeDAO.findById(id);
 			if(userRelative==null){
@@ -414,9 +478,24 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			userRelative.setSkin(skin);  //4选1肤质
 			userRelative.setUserTags(userTags);//用户标签
 			userRelative.setIsSensitive(Short.parseShort(isSensitive)); //是否敏感
+			
+			/*用户信息修改*/
+			UserInfoLog userInfoLog=new UserInfoLog(uuid,getRequest());
+			userInfoLog.setBirthday(birthday);
+			userInfoLog.setCity(city);
+			userInfoLog.setNickName(relative);
+			userInfoLog.setRelativeId(userRelative.getUserRelativeId());   
+			userInfoLog.setSkin(skin);
+			userInfoLog.setType(UserInfoLog.UPDATE);
+			userInfoLog.setUserTags(userTags);
+			userInfoLogger.debug(userInfoLog.toString());
+			
 			printString(MSG_SUCCESS);
 			return null;
 		}
+		
+		
+		
 		printString(MSG_SUCCESS);
 		return null;
 	}
@@ -481,8 +560,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 
 	/*
 	 * for Client (non-Javadoc)
-	 * 
-	 * @see
+	 *
 	 * main.com.yourantao.aimeili.action.UserInterface#userDeleteRelativeSkin()
 	 */
 	@Override
@@ -511,6 +589,12 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}else{
 			userRelativeDAO.delete(userRelative);
+			/*用户信息修改*/
+			UserInfoLog userInfoLog=new UserInfoLog(uuid,getRequest());
+			userInfoLog.setRelativeId(userRelative.getUserRelativeId());   
+			userInfoLog.setType(UserInfoLog.DELETE);
+			userInfoLogger.debug(userInfoLog.toString());
+			
 			printString(MSG_SUCCESS);
 			return null;
 		}
@@ -546,11 +630,34 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			return null;
 		}else{
 			userFavoriteDAO.delete(userFavorites.get(0));
+			
+			/*用户收藏日志*/
+			UserFavoriteLog userFavoriteLog=new UserFavoriteLog(uuid, getRequest());
+			userFavoriteLog.setGoodsId(goodsId);
+			userFavoriteLog.setType(UserFavoriteLog.DELETE);   //删除操作
+			userFavoriteLogger.debug(userFavoriteLog.toString());
+			
 		}
-		
-		
 		return null;
 	}
+	
+	/*
+	 * for statistic
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.StatisticInterface#statistic()
+	 */
+	@Override
+	public void leavePage() {
+		String uuid=getStringParameter(UUID);
+		String pageName=getStringParameter("page");
+		Integer time=getIntegerParameter("time");  //毫秒值
+		
+		LeaveCurrentPageLog leaveCurrentPage = new LeaveCurrentPageLog(uuid, getRequest());
+		leaveCurrentPage.setPageName(pageName);
+		leaveCurrentPage.setTime(time);
+		leaveCurrentPageLogger.debug(leaveCurrentPage);
+	}
+	
 	public UserRelativeDAO getUserRelativeDAO() {
 		return userRelativeDAO;
 	}
@@ -598,5 +705,4 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
-
 }

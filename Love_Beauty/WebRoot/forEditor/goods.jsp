@@ -186,6 +186,53 @@ function GetGoodsListByBrand(bid) {
 		}
 	});
 }
+
+//根据搜索词获得商品列表
+function GetGoodsListBySearch(keywords) {
+	var url = BASE_SERVER+"/goods_getGoodsListBySearch";
+	var params = {
+		"kw" : keywords
+	};
+	var goodsDetail = "";
+	var gid=0;
+	var gname="";
+	$.ajax({
+		type : "POST",
+		data : params,
+		dataType : "json",
+		url : url,
+		success : function(json) {
+			if (json == null) {
+				alert("json null");
+			} else {
+				for(var i=0;i<json.length;i++){
+					goodsDetail+=(i+1)+"：";
+					gid=json[i]['goodsId'];
+					gname=json[i]['goodsName'];
+						goodsDetail+="<form action='goods_updateGoods' enctype='multipart/form-data' method='post'>";
+						goodsDetail+="<table class='tabel'><tbody><tr>"
+						goodsDetail+="<input type='hidden' name='gid' value='"+json[i]['goodsId']+"'/>";
+						goodsDetail+="<tr><td>商品名称：<input name='goodsName' type='text' value='"+json[i]['goodsName']+"'/></td></tr>";
+						goodsDetail+="<tr><td>商品品牌：<input name='goodsBrand' type='text' value='"+json[i]['goodsBrandName']+"'/>系列：<input name='goodsSeries' type='text' value='"+json[i]['goodsSeriesName']+"'/></td></tr>";
+						goodsDetail+="<tr><td>商品缩略图：<img src='"+json[i]['goodsThumb']+"'/>更改：<input type='file' name='newGoods_thumb'></td></td></tr> ";
+						goodsDetail+="<tr><td>商品评分：<input name='goodsScore' type='text' value='"+json[i]['goodsScore']+"'/></td></tr> ";
+						goodsDetail+="<tr><td>商品适用肤质：<input id='goodsForskin"+i+"' name='goodsForskin' type='text' value='"+json[i]['goodsForskin'] +"'/><span class='forskin' i='"+i+"'>干性</span><span class='forskin' i='"+i+"'>油性</span><span class='forskin' i='"+i+"'>混合性</span><span class='forskin' i='"+i+"'>中性</span><span class='forskin' i='"+i+"'>敏感性</span></td></tr> ";
+						goodsDetail+="<tr><td>商品不适用肤质：<input id='goodsNotforskin"+i+"' name='goodsNotforskin' type='text' value='"+json[i]['goodsNotforskin'] +"'/><span class='notforskin' i='"+i+"'>干性</span><span class='notforskin' i='"+i+"'>油性</span><span class='notforskin' i='"+i+"'>混合性</span><span class='notforskin' i='"+i+"'>中性</span><span class='notforskin' i='"+i+"'>敏感性</span></td></tr> ";
+						goodsDetail+="<tr><td>商品需注意肤质：<input id='goodsNoticeforskin"+i+"' name='goodsNoticeforskin' type='text' value='"+json[i]['goodsNoticeforskin'] +"'/><span class='noticeskin' i='"+i+"'>干性</span><span class='noticeskin' i='"+i+"'>油性</span><span class='noticeskin' i='"+i+"'>混合性</span><span class='noticeskin' i='"+i+"'>中性</span><span class='noticeskin' i='"+i+"'>敏感性</span></td></tr> ";
+						goodsDetail+="<tr><td>商品年龄范围：<input id='goodsAge"+i+"' name='goodsAge' type='text' value='"+json[i]['goodsAge']+"'/><span class='goodsage' i='"+i+"'>20岁以下</span><span class='goodsage' i='"+i+"'>20-25岁</span><span class='goodsage' i='"+i+"'>26-30岁</span><span class='goodsage' i='"+i+"'>30-35岁</span><span class='goodsage' i='"+i+"'>36-40岁</span><span class='goodsage' i='"+i+"'>40岁以上</span></td></tr> ";
+						goodsDetail+="<tr><td>商品特点及成分：<input name='goodsDescription'  type='text' value='"+json[i]['goodsDescription'] +"'/></td></tr> ";
+						goodsDetail+="<tr><td>商品用法：<input name='goodsSpecification' type='text' value='"+json[i]['goodsSpecification']+"'/></td></tr> ";
+						goodsDetail+="<tr><td>商品状态：<input name='goodsStatus' type='text' value='"+json[i]['goodsStatus']+"'/></td></tr> ";
+						goodsDetail+="<tr><td><input type='submit' name='submit' value='更新'/><input type='submit' name='submit' value='删除'/><input class='goodsreal' type='button' onclick='toGoodsReal("+gid+",\""+gname+"\")' value='对应真实商品'/><input class='goodsImages' type='button' onclick='goodsImages("+gid+",\""+gname+"\")' value='商品细节图'/></td></tr> ";
+						goodsDetail+="</tbody></table></form>";
+					}
+			}
+			$('#goods_detail').html(goodsDetail.toString());
+		}
+	});
+}
+
+
 function toGoodsReal(gid,gname) {
 	var url = BASE_SERVER + "/forEditor/goods2realgoods.jsp?gid="
 			+gid+ "&goodsName=" +gname;
@@ -254,12 +301,23 @@ GetBrands();
 		GetGoodsListByBrand(bid);
 	});
 	
+	$('#brand').change(function() {
+		var bid = $('#brand').val();
+		GetGoodsListByBrand(bid);
+	});
+	
+	$('#search').live("click",function(){
+		var keywords = $('#keywords').val();
+		GetGoodsListBySearch(keywords);
+	});
+	
 });
 </script>
 	</head>
 
 	<body>
 		<%@include file="/top.jsp"%>
+		<b><a href="forEditor/newGoods.jsp" >新增商品</a></b>
 		<table border="1">
 			<tbody>
 				<tr>
@@ -282,14 +340,12 @@ GetBrands();
 						</select>
 					</td>
 				</tr>
-				<tr>
-					<td><a href="forEditor/newGoods.jsp" >新增商品</a></td>
-				</tr>
 			</tbody>
 		</table>
 		<table class="tabel" >
 		 <tbody>
 		 <tr><td>商品品牌：<select class="brand" id="brand" name="bid"></select></td></tr>
+		 <tr><td>商品搜索：<input type='text' id="keywords"/><input type="button" id="search" value="搜索"/></td></tr>
  		</tbody></table>
 		
 <div id="goods_detail">

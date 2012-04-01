@@ -142,12 +142,24 @@ public interface GoodsInterface {
 	public String updateGoodsExperience();
 	
 	/**
+	 *  for Programmer
+	 *心得评测数据库中的详情修改（goodsExperience）
+	 * @return
+	 */
+	public String updateGoodsExperienceDetail();
+	
+	/**
 	 * for Programmer
 	 * 将不在对应关系的goodsreal 添加到goods表中
 	 * @return
 	 */
 	public String insertNoMapGoodsReal();
 	
+	/**
+	 * for Programmer
+	 * @param 
+	 */
+	public String deleteRepeatGoods();
 	
 	
 	public void setNewGoods_thumbContentType(String thumbContentType);

@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.net.*;
 
 import main.com.yourantao.aimeili.bean.Brand;
 import main.com.yourantao.aimeili.bean.BrandDAO;
@@ -36,7 +36,6 @@ import main.com.yourantao.aimeili.bean.Image;
 import main.com.yourantao.aimeili.bean.ImageDAO;
 import main.com.yourantao.aimeili.bean.Provider;
 import main.com.yourantao.aimeili.bean.ProviderDAO;
-import main.com.yourantao.aimeili.bean.RankingDAO;
 import main.com.yourantao.aimeili.bean.RankingGoods;
 import main.com.yourantao.aimeili.bean.RankingGoodsDAO;
 import main.com.yourantao.aimeili.bean.Series;
@@ -48,6 +47,7 @@ import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.bean.UserLoginDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.log.GetGoodsListLog;
 import main.com.yourantao.aimeili.util.CompareTool;
 import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.PHPSerializer;
@@ -59,6 +59,8 @@ import main.com.yourantao.aimeili.vo.GoodsSkinView;
 import main.com.yourantao.aimeili.vo.GoodsView;
 import main.com.yourantao.aimeili.vo.GoodsViewWithRanking;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +68,7 @@ import org.slf4j.LoggerFactory;
 public class GoodsAction extends BaseAction implements GoodsInterface, Constant {
 	private static final Logger log = LoggerFactory
 			.getLogger(GoodsAction.class);
+	private static Log getGoodsListLogger = LogFactory.getLog("GetGoodsList"); /*获得商品列表记录*/
 
 	private short GOODS_EDITORCONFIRM_CORRECT=6;
 	private short GOODS_NOCONFIRM=3;
@@ -352,6 +355,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 				result.add(goodsView);
 			}
 			printArray(result);
+			
+			/*日志记录*/
+			GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
+			getGoodsListLog.setFrom(GetGoodsListLog.FAVORITE);
+			getGoodsListLog.setFromMsg(uid+"");//收藏的fromId实际上是uid
+			getGoodsListLogger.debug(getGoodsListLog);
+			
 			return null;
 		}
 	}
@@ -420,6 +430,8 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			result.add(goodsView);
 		}
 		printArray(result);
+		
+		
 		return null;
 	}
 
@@ -902,6 +914,12 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	@Override
 	public String getGoodsListBySkinAndCat() {
 		String msg = "";
+		String uuid=getStringParameter(UUID);
+		if (uuid == null) {
+			msg = "{'msg':'没有设备号'}";
+			printString(msg);
+			return null;
+		}
 		String skin = getRequest().getParameter("skin").substring(0, 1);
 		String isSensitive = getRequest().getParameter("skin").substring(1, 2);
 		if (skin == null || skin.equals("n")) {
@@ -1060,6 +1078,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		result.setNotSkinResult(notSkinResult);
 		result.setNoticeSkinResult(noticeSkinResult);
 		printObject(result);
+		
+		
+		/*日志记录*/
+		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
+		getGoodsListLog.setFrom(GetGoodsListLog.CATEGORY);
+		getGoodsListLog.setFromMsg(categoryId+"");
+		getGoodsListLogger.debug(getGoodsListLog);
 		return null;
 	}
 
@@ -1230,6 +1255,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		}
 
 		printArray(goodsViews);
+		
+		
+		/*日志记录*/
+		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
+		getGoodsListLog.setFrom(GetGoodsListLog.SEARCH);
+		getGoodsListLog.setFromMsg(keyword);
+		getGoodsListLogger.debug(getGoodsListLog);
 		return null;
 	}
 
@@ -1241,7 +1273,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	 */
 	@Override
 	public String getGoodsListByEfficacy() {
-
+		String uuid = getStringParameter(UUID);
 		Integer eid = getIntegerParameter("eid");
 		if (eid == null || eid == 0) {
 			printString("{'msg':'没有输入功效号'}");
@@ -1300,6 +1332,12 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsViews.add(goodsView);
 		}
 		printArray(goodsViews);
+		
+		/*日志记录*/
+		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
+		getGoodsListLog.setFrom(GetGoodsListLog.EFFICASY);
+		getGoodsListLog.setFromMsg(eid+"");
+		getGoodsListLogger.debug(getGoodsListLog);
 		return null;
 	}
 
@@ -1312,6 +1350,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	 */
 	@Override
 	public String getGoodsListByBrand() {
+		String uuid = getStringParameter(UUID);
 		Integer bid = getIntegerParameter("bid");
 		if (bid == null || bid == 0) {
 			printString("{'msg':'没有输入品牌号'}");
@@ -1376,6 +1415,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		}
 
 		printArray(goodsViews);
+		
+		
+		/*日志记录*/
+		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
+		getGoodsListLog.setFrom(GetGoodsListLog.EFFICASY);
+		getGoodsListLog.setFromMsg(bid+"");
+		getGoodsListLogger.debug(getGoodsListLog);
 		return null;
 	}
 
@@ -1399,8 +1445,9 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			return null;
 		}
 		List<GoodsExperience> goodsExperiences = goodsExperienceDAO.findByGoodsId(gid);
-		System.out.println(goodsExperiences.get(0).getExperienceDetail());
-		for (GoodsExperience goodsExperience : goodsExperiences) {
+		if(goodsExperiences.isEmpty()){
+			printString("{'msg':'此商品暂无心得评测'}");
+			return null;
 		}
 		printArray(goodsExperiences);
 		return null;
@@ -1415,6 +1462,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	@Override
 	public String getGoodsListByRanking() {
 		String msg = "";
+		String uuid = getStringParameter(UUID);
 		Integer rankingId = getIntegerParameter(RANKING_ID);
 		if (rankingId == null) {
 			msg = "{'msg':'没有排行榜ID'}";
@@ -1481,6 +1529,12 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 
 		}
 		printArray(goodsViews);
+		
+		/*日志记录*/
+		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
+		getGoodsListLog.setFrom(GetGoodsListLog.RANKING);
+		getGoodsListLog.setFromMsg(rankingId+"");
+		getGoodsListLogger.debug(getGoodsListLog);
 		return null;
 	}
 
@@ -1563,6 +1617,82 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		printArray(goodsViewWithRankings);
 		return null;
 	}
+	
+	/*
+	 * for Editor (non-Javadoc)
+	 * 
+	 * @see
+	 * main.com.yourantao.aimeili.action.GoodsInterface#updateGoods2realGoods()
+	 */
+	@Override
+	public String updateGoods2realGoods() {
+		Integer goodsId = getIntegerParameter(GOODS_ID);
+		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
+		String updateType = getStringParameter("submit");
+
+		if (updateType.equals("确认")) { // 小编确认
+			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_CORRECT); // 小编确认过的设置为6
+			return SUCCESS;
+		} else if (updateType.equals("删除")) { // 删除
+			List<GoodsMap> goodsMaps = goodsMapDAO.findByGoodsIdAndGoodsRealId(
+					goodsId, goodsRealId);
+			goodsMapDAO.delete(goodsMaps.get(0));
+
+			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_DELETE); // 小编删除过的设置为4
+			return SUCCESS;
+		} else if (updateType.equals("添加")) { // 添加对应真实商品
+			GoodsMap goodsMap = new GoodsMap();
+			goodsMap.setGoodsId(goodsId);
+			goodsMap.setGoodsRealId(goodsRealId);
+			goodsMapDAO.save(goodsMap);
+
+			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
+			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_CORRECT); // 小编添加的直接设置为6
+			return SUCCESS;
+		} else if (updateType.equals("程序更新真实商品")) { // 更新真实商品,即更新goodsMap表
+			Goods goods = goodsDAO.findById(goodsId);
+			String goodsName = goods.getGoodsName();
+			Brand brand = brandDAO.findById(goods.getBrandId());   //品牌
+			List<GoodsReal> goodsReals = goodsRealDAO
+					.findByBrandIdAndCategoryId(goods.getBrandId(), goods
+							.getCategoryId()); // 先通过品牌ID和分类ID筛选过滤
+			for (GoodsReal goodsReal : goodsReals) {
+				/*小编处理的，是都可见的*/
+//				 if(goodsReal.getGoodsStatus()!=3 &&
+//				 goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
+//				 continue;
+//				 }
+				String goodsRealName = goodsReal.getGoodsName();
+				/* 字符串匹配筛选过滤 */
+
+				String goodsName_compare=goodsName.replaceAll("(?i)"+brand.getBrandName(), "");  //(?i)代表忽略大小写
+				goodsName_compare=goodsName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");    //除去商品名称中的商品名称和别名
+				String goodsRealName_compare=goodsRealName.replaceAll("(?i)"+brand.getBrandName(), "");
+				goodsRealName_compare=goodsRealName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");//除去商品名称中的商品名称和别名
+				double similarity = CompareTool.stringSimilarity(goodsName_compare,    //字符串匹配结果
+						goodsRealName_compare);
+						double similarity1 = CompareTool.stringSimilarity(goodsName,   //原，不去掉品牌名的字符串匹配结果
+								goodsRealName);
+				if (similarity > 0.76) { // 相似度取值
+					List<GoodsMap> goodsMaps = goodsMapDAO
+							.findByGoodsIdAndGoodsRealId(goodsId, goodsReal
+									.getGoodsRealId()); // 通过商品和真实商品 id
+														// 获得goodsMap
+					if (goodsMaps.isEmpty()) { // 如果没有则插入该goodsMap
+						GoodsMap goodsMap = new GoodsMap();
+						goodsMap.setGoodsId(goodsId);
+						goodsMap.setGoodsRealId(goodsReal.getGoodsRealId());
+						goodsMapDAO.save(goodsMap);
+					}
+				}
+			}
+			return SUCCESS;
+		}
+		return ERROR;
+	}
+
 
 	/*
 	 * for Programmer (non-Javadoc)
@@ -1654,80 +1784,6 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		return null;
 	}
 
-	/*
-	 * for Editor (non-Javadoc)
-	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.GoodsInterface#updateGoods2realGoods()
-	 */
-	@Override
-	public String updateGoods2realGoods() {
-		Integer goodsId = getIntegerParameter(GOODS_ID);
-		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		String updateType = getStringParameter("submit");
-
-		if (updateType.equals("确认")) { // 小编确认
-			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_CORRECT); // 小编确认过的设置为6
-			return SUCCESS;
-		} else if (updateType.equals("删除")) { // 删除
-			List<GoodsMap> goodsMaps = goodsMapDAO.findByGoodsIdAndGoodsRealId(
-					goodsId, goodsRealId);
-			goodsMapDAO.delete(goodsMaps.get(0));
-
-			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_DELETE); // 小编删除过的设置为4
-			return SUCCESS;
-		} else if (updateType.equals("添加")) { // 添加对应真实商品
-			GoodsMap goodsMap = new GoodsMap();
-			goodsMap.setGoodsId(goodsId);
-			goodsMap.setGoodsRealId(goodsRealId);
-			goodsMapDAO.save(goodsMap);
-
-			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
-			goodsReal.setGoodsStatus(GOODS_EDITORCONFIRM_CORRECT); // 小编添加的直接设置为6
-			return SUCCESS;
-		} else if (updateType.equals("程序更新真实商品")) { // 更新真实商品,即更新goodsMap表
-			Goods goods = goodsDAO.findById(goodsId);
-			String goodsName = goods.getGoodsName();
-			Brand brand = brandDAO.findById(goods.getBrandId());   //品牌
-			List<GoodsReal> goodsReals = goodsRealDAO
-					.findByBrandIdAndCategoryId(goods.getBrandId(), goods
-							.getCategoryId()); // 先通过品牌ID和分类ID筛选过滤
-			for (GoodsReal goodsReal : goodsReals) {
-				/*小编处理的，是都可见的*/
-//				 if(goodsReal.getGoodsStatus()!=3 &&
-//				 goodsReal.getGoodsStatus()!=6){ //商品状态不是3或6则不给显示
-//				 continue;
-//				 }
-				String goodsRealName = goodsReal.getGoodsName();
-				/* 字符串匹配筛选过滤 */
-
-				String goodsName_compare=goodsName.replaceAll("(?i)"+brand.getBrandName(), "");  //(?i)代表忽略大小写
-				goodsName_compare=goodsName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");    //除去商品名称中的商品名称和别名
-				String goodsRealName_compare=goodsRealName.replaceAll("(?i)"+brand.getBrandName(), "");
-				goodsRealName_compare=goodsRealName_compare.replaceAll("(?i)"+brand.getBrandAlias(), "");//除去商品名称中的商品名称和别名
-				double similarity = CompareTool.stringSimilarity(goodsName_compare,    //字符串匹配结果
-						goodsRealName_compare);
-						double similarity1 = CompareTool.stringSimilarity(goodsName,   //原，不去掉品牌名的字符串匹配结果
-								goodsRealName);
-				if (similarity > 0.76) { // 相似度取值
-					List<GoodsMap> goodsMaps = goodsMapDAO
-							.findByGoodsIdAndGoodsRealId(goodsId, goodsReal
-									.getGoodsRealId()); // 通过商品和真实商品 id
-														// 获得goodsMap
-					if (goodsMaps.isEmpty()) { // 如果没有则插入该goodsMap
-						GoodsMap goodsMap = new GoodsMap();
-						goodsMap.setGoodsId(goodsId);
-						goodsMap.setGoodsRealId(goodsReal.getGoodsRealId());
-						goodsMapDAO.save(goodsMap);
-					}
-				}
-			}
-			return SUCCESS;
-		}
-		return ERROR;
-	}
 
 	/*
 	 * for Programmer
@@ -1819,9 +1875,48 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			
 			System.out.println("index:"+index+"  maxSimilarity:"+maxSimilarity+"  goodsId:"+lastGoodsId);
 		}
-		return null;
+		return SUCCESS;
 	}
 	
+	/*
+	 * for Programmer
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#updateGoodsExperienceDetail()
+	 */
+	@Override
+	public String updateGoodsExperienceDetail() {
+		List<GoodsExperience> goodsExperiences = goodsExperienceDAO.findAll();
+		
+//		/*清除所有的<br/>标签*/
+//		for (GoodsExperience goodsExperience : goodsExperiences) {
+//			String goodsExperienceDetail = goodsExperience
+//			.getExperienceDetail();
+//			
+//			goodsExperienceDetail=goodsExperienceDetail.replace("<br/>", "");
+//			goodsExperience.setExperienceDetail(goodsExperienceDetail);
+//		}
+		
+		for (GoodsExperience goodsExperience : goodsExperiences) {
+			String goodsExperienceDetail = goodsExperience
+					.getExperienceDetail();
+			java.util.regex.Pattern p_html;
+			java.util.regex.Matcher m_html;
+			p_html = java.util.regex.Pattern.compile("<[^>]+>",
+					java.util.regex.Pattern.CASE_INSENSITIVE);
+			m_html = p_html.matcher(goodsExperienceDetail);
+			List<String> list=new ArrayList<String>();     // list存储转换过的<img>标签，用于防止相同图片都添加<br/>标签
+			while (m_html.find()) {
+				String imgTag = m_html.group();
+				if(!list.contains(imgTag)){
+					goodsExperienceDetail=goodsExperienceDetail.replace(imgTag, "<br/>" + imgTag
+							+ "<br/>");
+					list.add(imgTag);
+				}
+			}
+			goodsExperience.setExperienceDetail(goodsExperienceDetail);
+		}
+		return null;
+	}
 	
 	/*
 	 * for Programmer
@@ -1830,6 +1925,120 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	 */
 	@Override
 	public String insertNoMapGoodsReal() {
+		List<GoodsReal> goodsReals = goodsRealDAO.findAll();
+		for (GoodsReal goodsReal : goodsReals) {
+			List<GoodsMap> goodsMaps=goodsMapDAO.findByGoodsRealId(goodsReal.getGoodsRealId());
+			if(goodsMaps.isEmpty() && goodsReal.getCategoryId()!=0){ //不在goodsMap中的内容需要添加到goods表中
+				Goods goods = new Goods();
+				URL url;
+				InputStream is = null;
+				FileOutputStream out = null;
+				try {
+					/* 将图片的url存入自己的图片数据库，但是图片不保存，imgType设置为0，代表外站来源 */
+					url = new URL(goodsReal.getGoodsThumb());
+					URLConnection uc = url.openConnection();
+					is = uc.getInputStream();
+					File file = new File("D:/testImg");
+					out = new FileOutputStream(file);
+					int i = 0;
+					while ((i = is.read()) != -1) {
+						out.write(i);
+					}
+
+					int imageid = getImgAttribute(file, goodsReal.getGoodsThumb(),
+							0); // 只需要取到image不需要本地存储
+					goods.setGoodsThumbId(imageid);// 保存缩略图URL
+
+					goods.setBrandId(goodsReal.getBrandId());
+					goods.setCategoryId(goodsReal.getCategoryId());
+					goods.setGoodsAddTime(Timestamp.valueOf(dateTimeFormat
+							.format(new Date())));
+					goods.setGoodsAge(goodsReal.getGoodsAge());
+					goods.setGoodsBuyCount(goodsReal.getGoodsBuyCount()); // 购买数量，初始值应该是0
+					goods.setGoodsDescription(goodsReal.getGoodsDescription());
+					goods.setGoodsForskin(goodsReal.getGoodsForskin());
+					goods.setGoodsLastUpdate(Timestamp.valueOf(dateTimeFormat
+							.format(new Date())));
+					goods.setGoodsName(goodsReal.getGoodsName());
+					goods.setGoodsNotforskin(goodsReal.getGoodsNotforskin());
+					goods.setGoodsNoticeforskin(goodsReal.getGoodsNoticeforskin());
+					goods.setGoodsRank(0); // 排序值，暂无，以后需修改
+					goods.setGoodsScore(goodsReal.getGoodsScore());
+					goods.setGoodsSpecification(goodsReal.getGoodsSpecification());
+					goods.setGoodsStatus((short) 3);
+					goods.setSeriesId(0); // 系列id 暂时设置为0
+					goods.setGoodsViewCount(goodsReal.getGoodsViewCount()); // 访问数量，初始值应该是0\
+					goodsDAO.save(goods);
+
+					/* 保存详情图对应关系 */
+					int goodsId = goods.getGoodsId();
+					List<String> fileNames = (List<String>) PHPSerializer
+							.unserialize(goodsReal.getGoodsImages().getBytes()); // 反序列化goodsreal中的商品详情图到goodsImage中
+					for (String fileName : fileNames) {
+						GoodsImages goodsImages = new GoodsImages();
+						goodsImages.setGoodsId(goodsId);
+						/* 将图片的url存入自己的图片数据库，但是图片不保存，imgType设置为0，代表外站来源 */
+						url = new URL(goodsReal.getGoodsThumb());
+						uc = url.openConnection();
+						is = uc.getInputStream();
+						file = new File("D:/testImg");
+						out = new FileOutputStream(file);
+						i = 0;
+						while ((i = is.read()) != -1) {
+							out.write(i);
+						}
+						imageid = getImgAttribute(file, fileName, 0); // 只需要取到image不需要本地存储
+						goodsImages.setImgId(imageid);
+						goodsImagesDAO.save(goodsImages);
+					}
+					is.close();
+					out.close();
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	/*
+	 * for Programmer
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#updateGoodsExperienceDetail()
+	 */
+	@Override
+	public String deleteRepeatGoods() {
+		List<Goods> goodsList=goodsDAO.findByRepeatGoods();
+		for (Goods goods : goodsList) {
+			int goodsId=goods.getGoodsId();
+			
+			/*删除对应功效*/
+			List<GoodsEfficacy> goodsEfficacies=goodsEfficacyDAO.findByGoods(goods);
+			for (GoodsEfficacy goodsEfficacy : goodsEfficacies) {
+				goodsEfficacyDAO.delete(goodsEfficacy);
+			}
+			/*删除对应心得*/
+			List<GoodsExperience> goodsExperiences=goodsExperienceDAO.findByGoodsId(goodsId);
+			for (GoodsExperience goodsExperience : goodsExperiences) {
+				goodsExperienceDAO.delete(goodsExperience);
+			}
+			/*删除goodsMap*/
+			List<GoodsMap> goodsMaps=goodsMapDAO.findByGoodsId(goodsId);
+			for (GoodsMap goodsMap : goodsMaps) {
+				goodsMapDAO.delete(goodsMap);
+			}
+			/*删除对应goods_images*/
+			List<GoodsImages> goodsImages=goodsImagesDAO.findByGoodsId(goodsId);
+			for (GoodsImages goodsImage : goodsImages) {
+				goodsImagesDAO.delete(goodsImage);
+			}
+			
+			goodsDAO.delete(goods);
+		}
 		return null;
 	}
 }
