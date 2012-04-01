@@ -658,12 +658,13 @@ public class LafasoCOD extends BaseCOD {
 	}
 
 	public static void main(String[] args) {
-		LafasoCOD lafasoCOD = new LafasoCOD();
+		/*LafasoCOD lafasoCOD = new LafasoCOD();
 		UserAddress address = new UserAddress();
 		address.setProvince("河北省");
 		address.setCity("石家庄市");
 		address.setDistrict("裕华区");
 		System.out.println(lafasoCOD.supportCOD(address));
-		System.out.println(lafasoCOD.supportArea(address));
+		System.out.println(lafasoCOD.supportArea(address));*/
+		LafasoCOD.getCodStr();
 	}
 }

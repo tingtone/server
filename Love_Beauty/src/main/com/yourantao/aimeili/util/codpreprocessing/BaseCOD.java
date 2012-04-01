@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 
 import main.com.yourantao.aimeili.bean.UserAddress;
 
@@ -56,10 +57,19 @@ abstract class BaseCOD implements CODJudgement {
 		try {
 			URL U = new URL(url);
 			URLConnection connection = U.openConnection();
+			/*connection.setRequestProperty("Accept-Charset", "UTF-8");*/
 			connection.connect();
+			/*Charset charset = Charset.forName("UTF8");
+			InputStreamReader stream = new InputStreamReader(connection.getInputStream(), charset);
+			BufferedReader in = new BufferedReader(stream);*/
+			String charsetName ="";
+			String contentType = connection.getContentType();
+			charsetName = contentType.substring(19);//strlen("text/html; charset=");
+			//System.out.println(contentType);
 			BufferedReader in = new BufferedReader(new InputStreamReader(
-					connection.getInputStream()));
-			String line = in.readLine();
+					connection.getInputStream(),charsetName));
+			//TODO
+			String line = "";
 			while ((line = in.readLine()) != null) {
 				if (line.trim().isEmpty())
 					continue;
@@ -67,7 +77,9 @@ abstract class BaseCOD implements CODJudgement {
 			}
 			in.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		//System.out.println("result :"+result.toString());
 		return result.toString();
 	}
 
