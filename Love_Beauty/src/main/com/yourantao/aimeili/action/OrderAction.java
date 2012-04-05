@@ -1157,7 +1157,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 
 		List<Order> orderList = orderDAO.findByOrderNum(orderNum);
 		if (orderList.isEmpty()) {
-			printString("'msg':'没有这个订单'");// 可能有问题
+			printString("{'msg':'没有这个订单'}");// 可能有问题
 			return null;
 		}
 		Order orderTmp = orderList.get(0);
