@@ -85,6 +85,11 @@ public interface UserInterface {
 	public String deleteUserAddress();
 	
 	/**
+	 * 获得某件商品的收藏数
+	 */
+	public String getUserFavoriteCount();
+	
+	/**
 	 * 客户端页面结束时需调用，用于传送页面停留时间
 	 * 暂时先不做了
 	 */

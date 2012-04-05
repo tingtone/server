@@ -1,12 +1,19 @@
 package main.com.yourantao.aimeili.log;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
 
 import main.com.yourantao.aimeili.conf.Constant;
 
+/**
+ * 用户登出日志
+ * 
+ * @author mac
+ * 创建时间： 2012-4-1 下午05:21:27
+ * 修改时间：2012-4-1 下午05:21:27
+ * 具体描述： TODO
+ */
 public class UserLogoutLog implements Constant {
 	public static final String LOGGER_NAME = "userLogout";
 	private LogHeader header;

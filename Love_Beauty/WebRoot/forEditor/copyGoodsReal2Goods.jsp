@@ -69,5 +69,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  <form action="goods_deleteRepeatGoods" enctype="multipart/form-data" method="post">
  <input type="submit" value="去重"/>
  </form>
+ 
+   6.爬取到的商品，在品牌表中新建新的品牌（goodsreal , brand）：
+ <form action="goods_insertBrand" enctype="multipart/form-data" method="post">
+ <input type="submit" value="处理"/>
+ </form>
   </body>
 </html>

@@ -7,25 +7,41 @@ import javax.servlet.http.HttpServletRequest;
 import main.com.yourantao.aimeili.conf.Constant;
 
 /**
- * 用户收藏日志
+ * 商品详情日志
  * 
  * @author mac
- * 创建时间： 2012-4-1 下午05:20:34
- * 修改时间：2012-4-1 下午05:20:34
+ * 创建时间： 2012-4-1 下午05:19:20
+ * 修改时间：2012-4-1 下午05:19:20
  * 具体描述： TODO
  */
-public class UserFavoriteLog implements Constant
+public class GetGoodsDetailLog implements Constant
 {
-	public static final int INSERT=1; 
-	public static final int GET=2; 
-	public static final int DELETE=3; 
-	public static final String LOGGER_NAME="userFavorite"; 
+	public static final int IMAGES=1; 
+	public static final int BIBIJIA=2; 
+	public static final int EXPERIENCE=3; 
+	public static final String LOGGER_NAME="goodsDetailLog"; 
 	
-	private int type;
 	private LogHeader header;
-	private int goodsId;
+	private int detail_type;   //商品详情的类型（图片，比比价，心得）
+	private int goodsId;  //商品ID
 	
-	
+	public LogHeader getHeader() {
+		return header;
+	}
+
+	public void setHeader(LogHeader header) {
+		this.header = header;
+	}
+
+
+	public int getDetail_type() {
+		return detail_type;
+	}
+
+	public void setDetail_type(int detailType) {
+		detail_type = detailType;
+	}
+
 	public int getGoodsId() {
 		return goodsId;
 	}
@@ -34,15 +50,7 @@ public class UserFavoriteLog implements Constant
 		this.goodsId = goodsId;
 	}
 
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
-	public UserFavoriteLog(String uuid,HttpServletRequest request){
+	public GetGoodsDetailLog(String uuid,HttpServletRequest request){
 		//配置request中的编码为utf-8
 		try {
 			request.setCharacterEncoding("UTF-8");
@@ -66,7 +74,7 @@ public class UserFavoriteLog implements Constant
 		
 		sb.append("type");
 		sb.append(SEPARATOR_COLON);
-		sb.append(type);
+		sb.append(detail_type);
 		sb.append(SEPARATOR_COMMA);
 		
 		sb.append("gid");

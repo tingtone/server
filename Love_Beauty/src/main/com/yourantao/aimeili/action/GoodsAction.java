@@ -47,6 +47,7 @@ import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.bean.UserLoginDAO;
 import main.com.yourantao.aimeili.conf.Config;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.log.GetGoodsDetailLog;
 import main.com.yourantao.aimeili.log.GetGoodsListLog;
 import main.com.yourantao.aimeili.util.CompareTool;
 import main.com.yourantao.aimeili.util.MD5;
@@ -69,6 +70,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	private static final Logger log = LoggerFactory
 			.getLogger(GoodsAction.class);
 	private static Log getGoodsListLogger = LogFactory.getLog("GetGoodsList"); /*获得商品列表记录*/
+	private static Log getGoodsDetailLogger = LogFactory.getLog("GetGoodsDetail"); /*获得商品详情记录*/
 
 	private short GOODS_EDITORCONFIRM_CORRECT=6;
 	private short GOODS_NOCONFIRM=3;
@@ -360,7 +362,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 			getGoodsListLog.setFrom(GetGoodsListLog.FAVORITE);
 			getGoodsListLog.setFromMsg(uid+"");//收藏的fromId实际上是uid
-			getGoodsListLogger.debug(getGoodsListLog);
+			getGoodsListLogger.debug(getGoodsListLog.toString());
 			
 			return null;
 		}
@@ -568,12 +570,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	 */
 	@Override
 	public String getGoodsImages() {
-		Integer goods_id = getIntegerParameter(GOODS_ID);
-		if (goods_id == null) {
+		String uuid = getRequest().getParameter(UUID);
+		Integer goodsId = getIntegerParameter(GOODS_ID);
+		if (goodsId == null) {
 			printString("{'msg':'没有商品号'}");
 			return null;
 		}
-		List<GoodsImages> goodsimages = goodsImagesDAO.findByGoodsId(goods_id);
+		List<GoodsImages> goodsimages = goodsImagesDAO.findByGoodsId(goodsId);
 		List<GoodsImageView> result = new ArrayList<GoodsImageView>();
 		for (GoodsImages goodsImages : goodsimages) {
 			Image image = imageDAO.findById(goodsImages.getImgId());
@@ -589,6 +592,13 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			result.add(goodsImageView);
 		}
 		printArray(result);
+		
+		
+		/*日志记录*/
+		GetGoodsDetailLog getGoodsDetailLog = new GetGoodsDetailLog(uuid, getRequest());
+		getGoodsDetailLog.setDetail_type(GetGoodsDetailLog.IMAGES);
+		getGoodsDetailLog.setGoodsId(goodsId);
+		getGoodsDetailLogger.debug(getGoodsDetailLog.toString());
 
 		return null;
 	}
@@ -664,6 +674,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	 */
 	@Override
 	public String GetGoodsRealListByMap() {
+		String uuid = getStringParameter(UUID);
 		Integer goodsId = getIntegerParameter(GOODS_ID);
 		if (goodsId == null || goodsId == 0) {
 			printString("{'msg':'没有商品id'}");
@@ -693,6 +704,12 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			result.add(goodsRealComparePriceView);
 		}
 		printArray(result);
+		
+		/*日志记录*/
+		GetGoodsDetailLog getGoodsDetailLog = new GetGoodsDetailLog(uuid, getRequest());
+		getGoodsDetailLog.setDetail_type(GetGoodsDetailLog.BIBIJIA);
+		getGoodsDetailLog.setGoodsId(goodsId);
+		getGoodsDetailLogger.debug(getGoodsDetailLog.toString());
 		return null;
 	}
 
@@ -1084,7 +1101,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.CATEGORY);
 		getGoodsListLog.setFromMsg(categoryId+"");
-		getGoodsListLogger.debug(getGoodsListLog);
+		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
 
@@ -1261,7 +1278,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.SEARCH);
 		getGoodsListLog.setFromMsg(keyword);
-		getGoodsListLogger.debug(getGoodsListLog);
+		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
 
@@ -1337,7 +1354,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.EFFICASY);
 		getGoodsListLog.setFromMsg(eid+"");
-		getGoodsListLogger.debug(getGoodsListLog);
+		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
 
@@ -1421,7 +1438,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.EFFICASY);
 		getGoodsListLog.setFromMsg(bid+"");
-		getGoodsListLogger.debug(getGoodsListLog);
+		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
 
@@ -1433,6 +1450,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	 */
 	@Override
 	public String getGoodsExperience() {
+		String uuid = getRequest().getParameter(UUID);
 		Integer gid = getIntegerParameter(GOODS_ID);
 		if (gid == null || gid == 0) {
 			printString("{'msg':'没有输入商品号'}");
@@ -1450,6 +1468,12 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			return null;
 		}
 		printArray(goodsExperiences);
+		
+		/*日志记录*/
+		GetGoodsDetailLog getGoodsDetailLog = new GetGoodsDetailLog(uuid, getRequest());
+		getGoodsDetailLog.setDetail_type(GetGoodsDetailLog.BIBIJIA);
+		getGoodsDetailLog.setGoodsId(gid);
+		getGoodsDetailLogger.debug(getGoodsDetailLog.toString());
 		return null;
 	}
 
@@ -1534,7 +1558,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.RANKING);
 		getGoodsListLog.setFromMsg(rankingId+"");
-		getGoodsListLogger.debug(getGoodsListLog);
+		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
 
@@ -1615,6 +1639,29 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodsViewWithRankings.add(goodsViewWithRanking);
 		}
 		printArray(goodsViewWithRankings);
+		return null;
+	}
+	
+	/*
+	 * for Client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#getGoodsFavoriteCount()
+	 */
+	@Override
+	public String getGoodsFavoriteCount() {
+		Integer goodsId=getIntegerParameter(GOODS_ID);
+		if(goodsId==null || goodsId==0){
+			printString("{'msg':'没有商品ID'}");
+			return null;
+		}
+		Goods goods=goodsDAO.findById(goodsId);
+		if(goods==null){
+			printString("{'msg':'没有该商品'}");
+			return null;
+		}
+		List<UserFavorite> userFavorites=userFavoriteDAO.findByRelatedId(goodsId);
+		int count=userFavorites.size();
+		printString("{'favCount':'"+count+"'}");
 		return null;
 	}
 	
@@ -2038,6 +2085,37 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			}
 			
 			goodsDAO.delete(goods);
+		}
+		return null;
+	}
+
+	/*
+	 * for Programmer
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.GoodsInterface#insertBrand()
+	 */
+	@Override
+	public String insertBrand() {
+		List<GoodsReal> goodsReals = goodsRealDAO.findBySameBrandName();  //group by 品牌名一下，下面新增品牌
+		for (GoodsReal goodsReal : goodsReals) {
+				String brandName= goodsReal.getBrandName();
+				boolean hasbrand=false;
+				List<Brand> brands= brandDAO.findAll();
+				for (Brand brand : brands) {
+					if(brandName.contains(brand.getBrandName()) || (brandName.contains(brand.getBrandAlias()) && brand.getBrandAlias()!=null && !brand.getBrandAlias().equals(""))){
+						hasbrand=true;
+						break;
+					}
+				}
+				if(!hasbrand){   //不包含，则插入该条品牌
+					Brand brand = new Brand();
+					brand.setBrandName(brandName);
+					brand.setBrandAlias(brandName);
+					brand.setBrandImageId(0);
+					brand.setBrandDescription("");
+					brand.setBrandRank((long)0);
+					brandDAO.save(brand);
+				}
 		}
 		return null;
 	}

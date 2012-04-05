@@ -642,6 +642,30 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	}
 	
 	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#getUserFavoriteCount()
+	 */
+	@Override
+	public String getUserFavoriteCount(){
+		String uuid = getStringParameter("uuid");
+		if (uuid == null || uuid.equals("null")) {
+			printString("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
+		if (userLogin.size() == 0) {
+			printString("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId = userLogin.get(0).getUserId();
+		List<UserFavorite> userFavlist = userFavoriteDAO.findByUserId(userId);
+		int favCount = userFavlist.size();
+		printString("{'favCount':'"+favCount+"'}");
+		return null;
+	}
+	
+	/*
 	 * for statistic
 	 * (non-Javadoc)
 	 * @see main.com.yourantao.aimeili.action.StatisticInterface#statistic()
