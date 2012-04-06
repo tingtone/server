@@ -124,9 +124,12 @@ function acceptDatabasePrice(index) {
 					if (json == null) {
 						alert("操作失败");
 					} else {
-						$('#price'+index).empty();
-						var newprice = $('#newprice'+index).text();
-						$('#price'+index).append(newprice);
+						alert(json.msg);
+						if(json.msg == "done"){
+							$('#price'+index).empty();
+							var newprice = $('#newprice'+index).text();
+							$('#price'+index).append(newprice);
+						}
 					}
 				}
 				});
@@ -157,9 +160,12 @@ function acceptWebPrice(index) {
 					if (json == null) {
 						alert("操作失败");
 					} else {
-						$('#price'+index).empty();
-						var newprice = $('#nprice'+index).val();
-						$('#price'+index).append(newprice);
+					alert(json.msg);
+						if(json.msg == "done"){
+							$('#price'+index).empty();
+							var newprice = $('#nprice'+index).val();
+							$('#price'+index).append(newprice);
+						}
 					}
 				}
 				});
@@ -202,7 +208,7 @@ function deleteOrder(index){
 		return;
 	}
 	var url = BASE_SERVER + "/order_deleteOrderForEditor";
-	var oid = $('#oid'+index).val();
+	var oid = $('#ooid'+index).val();
 	var params = {
 		"oid" : oid,
 	};
@@ -257,7 +263,7 @@ function getSpecificOrder(uid, ono) {
 							result += "<div id='div"+oIdx+"'o>";
 							result += "<hr size='5'>";
 							result += "<form>";
-							result += "<input type='hidden' name='ooid" + oIdx + "' value='"
+							result += "<input type='hidden' id='ooid" + oIdx + "' value='"
 									+ json.orderIdList[oIdx] + "'/>";
 							result += "<input type='button' onclick='deleteOrder(" + oIdx
 									+ ")' value='删除此订单'/>";

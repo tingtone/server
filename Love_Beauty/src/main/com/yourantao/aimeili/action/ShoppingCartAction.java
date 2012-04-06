@@ -107,7 +107,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				//TODO 修改status的判断条件
 				//删除购物车记录
 				shoppingCartDAO.delete(shoppingCart);
-				System.out.println("in delete");
+				//System.out.println("in delete");
 			}
 			else{
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
@@ -191,7 +191,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				shoppingCartDAO.save(shoppingCart);
 			}
 		}
-		printString(SUCCESS);
+		printString(MSG_SUCCESS);
 		
 		/*日志记录*/
 		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
@@ -230,25 +230,17 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		} else if (count <= 0) {
 			printObject("{'msg':'参数值出错'}");
 			return null;
-		}
-		ShoppingCart shoppingCartExample = new ShoppingCart();
-		shoppingCartExample.setGoodsRealId(goodsRealId);
-		shoppingCartExample.setUserId(userId);
-		List<ShoppingCart> shoppingCartList = shoppingCartDAO
-				.findByExample(shoppingCartExample);
-		if (shoppingCartList.size() == 0) {
+		}		
+		ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
+		if(shoppingCart == null){
 			printObject("{'msg':'购物车中不存在这样的商品'}");
 			return null;
-		} else if (shoppingCartList.size() == 1) {
-			ShoppingCart shoppingCart = shoppingCartList.get(0);
+		}
+		else{
 			shoppingCart.setCount(count);
 			shoppingCartDAO.merge(shoppingCart);
-		} else {
-			// 这种情况是不应该出现的，这里先写出来，防止出现问题
-			printObject("{'msg':'存在多个相同商品'}");
-			return null;
 		}
-		printString(SUCCESS);
+		printString(MSG_SUCCESS);
 		
 		/*日志记录*/
 		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
@@ -266,7 +258,6 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * @return
 	 */
 	public String acceptGoods() {
-		String msg = "";
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printObject("{'msg':'没有设备号'}");
@@ -285,36 +276,25 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			printObject("{'msg':'没有提供商品'}");
 			return null;
 		}
-		ShoppingCart shoppingCartExample = new ShoppingCart();
-		shoppingCartExample.setUserId(userId);
-		shoppingCartExample.setGoodsRealId(goodsRealId);
-		// shoppingCartExample.setProviderId(providerId);
-		List<ShoppingCart> shoppingCartList = shoppingCartDAO
-				.findByExample(shoppingCartExample);
-		if (shoppingCartList.size() == 0) {
-			msg = "{'msg':'购物车不存在这样的商品'}";
-			printObject(msg);
-		} else if (shoppingCartList.size() > 1) {
-			msg = "{'msg':'购物车中存在多件商品'}";// 这样的情况不应该出现的
-			printObject(msg);
-		} else {
-			// shoppingCartDAO.delete(shoppingCartList.get(0));
+		ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
+		if(shoppingCart == null){
+			printObject("{'msg':'购物车中不存在这样的商品'}");
+			return null;
+		}
+		else{
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
 			if (goodsReal == null) {
-				msg = "{'msg':'该商品不存在'}";
-				printObject(msg);
-			} else {
-				if (goodsReal.getGoodsStatus() != 6){
-					msg = "{'msg':'该商品已下架或者待审核'}";
-					printObject(msg);
-				}
-				else {
-					shoppingCartList.get(0).setPrice(goodsReal.getGoodsPrice());
-					shoppingCartDAO.merge(shoppingCartList.get(0));
-				}
+				printObject("{'msg':'该商品不存在'}");
+			} else if(goodsReal.getGoodsStatus() == 0){
+				//TODO 测试的时候进行了修改,正常使用要修改回去
+				printObject("{'msg':'该商品已下架或者待审核'}");
+			}
+			else {
+				shoppingCart.setPrice(goodsReal.getGoodsPrice());
+				shoppingCartDAO.merge(shoppingCart);
 			}
 		}
-		printString(SUCCESS);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 	/**
@@ -324,7 +304,6 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * 此操作不可撤销
 	 */
 	public String acceptAllGoods(){
-		String msg = "";
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
 			printObject("{'msg':'没有设备号'}");
@@ -352,7 +331,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				shoppingCartDAO.delete(shoppingCart);
 			}
 		}
-		printString(SUCCESS);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 	/*
@@ -362,7 +341,6 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * main.com.yourantao.aimeili.action.ShoppingCartInterface#deleteGoods()
 	 */
 	public String deleteGoods() {
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -389,17 +367,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
 		if (shoppingCartList.size() == 0) {
-			msg = "{'msg':'购物车不存在这样的商品'}";
-			printObject(msg);
+			printObject("{'msg':'购物车不存在这样的商品'}");
 			return null;
 		} else if (shoppingCartList.size() == 1) {
 			shoppingCartDAO.delete(shoppingCartList.get(0));
 		} else {
-			msg = "{'msg':'购物车中存在多件商品'}";// 这样的情况不应该出现的
-			printObject(msg);
+			printObject("{'msg':'购物车中存在多件商品'}");
 			return null;
 		}
-		printString(SUCCESS);
+		printString(MSG_SUCCESS);
 		
 		/*日志记录*/
 		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
@@ -417,7 +393,6 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * main.com.yourantao.aimeili.action.ShoppingCartInterface#deleteAllGoods()
 	 */
 	public String deleteAllGoods() {
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -449,7 +424,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			shoppingCartLog.setType(ShoppingCartLog.DELETE);
 			shoppingLogger.debug(shoppingCartLog.toString());
 		}
-		printString(SUCCESS);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 }

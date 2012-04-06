@@ -9,10 +9,10 @@ public class OrderEditorView {
 	// 用户ID
 	private int userId;
 	// 订单ID
-	private List<Integer> orderIdList = new ArrayList<Integer>(6);
+	private List<Integer> orderIdList = new ArrayList<Integer>();
 	//
 	private List<ArrayList<GoodsRealSimpleEditorView>> goodsList = new ArrayList<ArrayList<GoodsRealSimpleEditorView>>(
-			6);
+			);
 	// 收件人姓名
 	private String name;
 	// 收件人地址

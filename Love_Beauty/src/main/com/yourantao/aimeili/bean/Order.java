@@ -29,6 +29,7 @@ public class Order implements java.io.Serializable {
 	private Short invoiceType;
 	private String invoiceContent;
 	private String invoiceName;
+	private String logistics;
 
 	// Constructors
 
@@ -37,13 +38,12 @@ public class Order implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Order(Integer userId, Integer addressId, Float postage,
-			String paymentType, String deliverType, String deliverTime,
-			Short invoice, Timestamp addTime, Short finish, Integer providerId,
-			String relatedNum, Short handled, Timestamp handledTime) {
+	public Order(Integer userId, Integer addressId, String paymentType,
+			String deliverType, String deliverTime, Short invoice,
+			Timestamp addTime, Short finish, Integer providerId, Short handled,
+			Timestamp handledTime) {
 		this.userId = userId;
 		this.addressId = addressId;
-		this.postage = postage;
 		this.paymentType = paymentType;
 		this.deliverType = deliverType;
 		this.deliverTime = deliverTime;
@@ -51,7 +51,6 @@ public class Order implements java.io.Serializable {
 		this.addTime = addTime;
 		this.finish = finish;
 		this.providerId = providerId;
-		this.relatedNum = relatedNum;
 		this.handled = handled;
 		this.handledTime = handledTime;
 	}
@@ -62,7 +61,8 @@ public class Order implements java.io.Serializable {
 			String deliverType, String deliverTime, Short invoice,
 			Timestamp addTime, Short finish, Integer providerId,
 			String relatedNum, Short handled, Timestamp handledTime,
-			Short invoiceType, String invoiceContent, String invoiceName) {
+			Short invoiceType, String invoiceContent, String invoiceName,
+			String logistics) {
 		this.userId = userId;
 		this.orderNum = orderNum;
 		this.orderSum = orderSum;
@@ -81,6 +81,7 @@ public class Order implements java.io.Serializable {
 		this.invoiceType = invoiceType;
 		this.invoiceContent = invoiceContent;
 		this.invoiceName = invoiceName;
+		this.logistics = logistics;
 	}
 
 	// Property accessors
@@ -235,6 +236,14 @@ public class Order implements java.io.Serializable {
 
 	public void setInvoiceName(String invoiceName) {
 		this.invoiceName = invoiceName;
+	}
+
+	public String getLogistics() {
+		return this.logistics;
+	}
+
+	public void setLogistics(String logistics) {
+		this.logistics = logistics;
 	}
 
 }
