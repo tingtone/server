@@ -479,7 +479,6 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	}
 
 	public String examOrderGoods() { 
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -535,7 +534,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			//TODO 还有可能是购物车中不存在这样的记录
 		}
 		if(goodsRealErrorViewList.isEmpty())
-			printObject(msg);
+			printString(MSG_SUCCESS);
 		else
 			printObject(goodsRealErrorViewList);
 		return null;
@@ -546,7 +545,6 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * @see main.com.yourantao.aimeili.action.OrderInterface#addOrder()
 	 */
 	public String addOrder() {
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -689,7 +687,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				orderDAO.merge(order);
 			}
 		}
-		printObject(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 
