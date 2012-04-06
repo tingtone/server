@@ -74,7 +74,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
@@ -155,7 +155,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
@@ -179,11 +179,13 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			// 保存
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
 			if(goodsReal == null){
-				msg = "{'msg':'商品不存在'}";
+				printObject("{'msg':'商品不存在'}");
+				return null;
 			}
 			else if (goodsReal.getGoodsStatus() == 0) {
 				//TODO
-				msg = "{'msg':'商品已经下架或待审核'}";
+				printObject("{'msg':'商品已经下架或待审核'}");
+				return null;
 			} else {
 				shoppingCart.setPrice(goodsReal.getGoodsPrice());
 				shoppingCart.setCount(1);
@@ -216,7 +218,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
@@ -264,7 +266,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
@@ -310,7 +312,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
@@ -348,32 +350,24 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
-		//Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
 		if (goodsRealId == null) {
 			printObject("{'msg':'没有提供商品'}");
 			return null;
 		}
-		ShoppingCart shoppingCartExample = new ShoppingCart();
-		shoppingCartExample.setUserId(userId);
-		shoppingCartExample.setGoodsRealId(goodsRealId);
-		//shoppingCartExample.setProviderId(providerId);
-		List<ShoppingCart> shoppingCartList = shoppingCartDAO
-				.findByExample(shoppingCartExample);
-		if (shoppingCartList.size() == 0) {
-			printObject("{'msg':'购物车不存在这样的商品'}");
+		ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
+		if(shoppingCart == null){
+			printObject("{'msg':'购物车中不存在这样的商品'}");
 			return null;
-		} else if (shoppingCartList.size() == 1) {
-			shoppingCartDAO.delete(shoppingCartList.get(0));
-		} else {
-			printObject("{'msg':'购物车中存在多件商品'}");
-			return null;
+		}
+		else{
+			shoppingCartDAO.delete(shoppingCart);
 		}
 		printString(MSG_SUCCESS);
 		
@@ -400,7 +394,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}

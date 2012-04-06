@@ -1,10 +1,16 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -175,11 +181,20 @@ public class ShoppingCartDAO extends HibernateDaoSupport {
 
 	public ShoppingCart getCartByUserAndGoods(int userId, int goodsRealId) {
 		// TODO Auto-generated method stub
-		String hql = "from ShoppingCart where userId = " + userId + " and goodsRealId = " + goodsRealId;
-		/*HibernateTemplate hibernateTemplate = getHibernateTemplate();
-		hibernateTemplate.setMaxResults(1);
-		List<ShoppingCart> result = hibernateTemplate.find(hql);*/
-		List<ShoppingCart> result = getHibernateTemplate().find(hql);
+		final String hql = "from ShoppingCart where userId = " + userId + " and goodsRealId = " + goodsRealId;
+		List<ShoppingCart> result = getHibernateTemplate().executeFind(new HibernateCallback(){
+			@Override
+			public Object doInHibernate(Session arg0)
+					throws HibernateException, SQLException {
+				// TODO Auto-generated method stub
+				Query query= arg0.createQuery(hql);
+                query.setFirstResult(0);
+                query.setMaxResults(1);
+                List<ShoppingCart> list = query.list();
+                return list;
+			}
+		});
+		/*List<ShoppingCart> result = getHibernateTemplate().find(hql);*/
 		if(result.isEmpty())
 			return null;
 		else

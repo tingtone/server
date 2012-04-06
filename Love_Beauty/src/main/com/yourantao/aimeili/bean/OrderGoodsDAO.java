@@ -1,10 +1,16 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -161,5 +167,28 @@ public class OrderGoodsDAO extends HibernateDaoSupport {
 
 	public static OrderGoodsDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (OrderGoodsDAO) ctx.getBean("OrderGoodsDAO");
+	}
+	/**
+	 * 自定义查找订单中的某一件商品的函数
+	 **/
+	public OrderGoods findByOrderAndGoodsId(Integer orderId, Integer goodsRealId) {
+		// TODO Auto-generated method stub
+		final String hql = "from OrderGoods where orderId = "+ orderId + " and goodsRealId = " + goodsRealId;
+		List<OrderGoods> result = getHibernateTemplate().executeFind(new HibernateCallback(){
+			@Override
+			public Object doInHibernate(Session arg0)
+					throws HibernateException, SQLException {
+				// TODO Auto-generated method stub
+				Query query= arg0.createQuery(hql);
+                query.setFirstResult(0);
+                query.setMaxResults(1);
+                List<OrderGoods> list = query.list();
+                return list;
+			}
+		});
+		if(result.isEmpty())
+			return null;
+		else
+			return result.get(0);
 	}
 }

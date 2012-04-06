@@ -166,7 +166,6 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * @see main.com.yourantao.aimeili.action.OrderInterface#getOrderCount()
 	 */
 	public String fetchCountOverview() {
-
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -174,7 +173,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
-		if (userLogin.size() == 0) {
+		if (userLogin.isEmpty()) {
 			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
@@ -264,7 +263,9 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			// 设置收货人相关信息
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
-			orderView.setAddress(userAddress.getDetail());
+			orderView.setAddressCity(userAddress.getProvince()+userAddress.getCity()
+					+userAddress.getDistrict()+userAddress.getDetail());
+			orderView.setAddressDetail(userAddress.getUserAddress());
 			orderView.setName(userAddress.getReceiver());
 			orderView.setMobile(userAddress.getMobile());
 			if (!existFlag) {
@@ -305,26 +306,23 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		}
 		List<Order> orderList = orderDAO.findByOrderNum(orderNum);
 		if (orderList.isEmpty()) {
-			msg = "{'msg':'订单号不存在'}";
-			printObject(msg);
+			printObject("{'msg':'订单号不存在'}");
 			return null;
 		}
 		for (Order order : orderList) {
 			if (order.getUserId() != userId) {
-				msg = "{'msg':'订单与用户不匹配'}";
-				printObject(msg);
+				printObject("{'msg':'订单与用户不匹配'}");
 				return null;
 			} else if (order.getHandled() == 3 && order.getFinish() == 0) {
 				// 用户确认之后需要进行更新操作
 				order.setFinish((short) 3);
 				orderDAO.merge(order);
 			} else {
-				msg = "{'msg':'订单不存在或请等待管理员处理或已经收货'}";
-				printObject(msg);
+				printObject("{'msg':'订单不存在或请等待管理员处理或已经收货'}");
 				return null;
 			}
 		}
-		printObject(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 
@@ -465,7 +463,9 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			// 设置收货人相关信息
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
-			orderView.setAddress(userAddress.getDetail());
+			orderView.setAddressCity(userAddress.getProvince()+userAddress.getCity()
+					+userAddress.getDistrict()+userAddress.getDetail());
+			orderView.setAddressDetail(userAddress.getUserAddress());
 			orderView.setName(userAddress.getReceiver());
 			orderView.setMobile(userAddress.getMobile());
 
@@ -535,7 +535,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			//TODO 还有可能是购物车中不存在这样的记录
 		}
 		if(goodsRealErrorViewList.isEmpty())
-			printObject(msg);
+			printString(MSG_SUCCESS);
 		else
 			printObject(goodsRealErrorViewList);
 		return null;
@@ -689,7 +689,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				orderDAO.merge(order);
 			}
 		}
-		printObject(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 
@@ -721,28 +721,29 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			printObject("{'msg':'已经下单或已经收货,无法更改'}");
 			return null;
 		}
+		//TODO
 		OrderGoods orderGoodsExample = new OrderGoods();
 		orderGoodsExample.setOrderId(orderId);
 		orderGoodsExample.setGoodsRealId(goodsRealId);
 		List<OrderGoods> orderGoodsList = orderGoodsDAO
 				.findByExample(orderGoodsExample);
 		if (orderGoodsList.isEmpty()) {
-			msg = "{'msg':'不存在这样的订单商品'}";
-			// outputString("{'msg':'不存在这样的订单商品'}");
+			printObject("{'msg':'不存在这样的订单商品'}");
 			return null;
 		} else if (orderGoodsList.size() == 1) {
 			orderGoodsDAO.delete(orderGoodsList.get(0));
 			// 判断订单中是否还有商品
 			List<OrderGoods> orderGoodsList2 = orderGoodsDAO
 					.findByOrderId(orderId);
-			if (orderGoodsList2.size() > 0) {
+			if (orderGoodsList2.isEmpty()) {
 				orderDAO.delete(order);
 			}
 		} else {
-			msg = "{'msg':'订单中商品不是唯一的'}";
+			printObject("{'msg':'订单中商品不是唯一的'}");
+			return null;
 		}
 		//
-		printObject(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 
@@ -782,19 +783,16 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		int intval = 10;
 		// long intvalMillise = intval * 24 * 60 * 60 * 1000;
 		long intvalMillise = 60 * 1000;
+		//TODO 测试使用的时间
 		Order orderExample = new Order();
 		orderExample.setFinish((short) 0);
 		orderExample.setHandled((short) 3);
 		List<Order> orderList = orderDAO.findByExample(orderExample);
-
-		// List<Order> orderList = orderDAO.findUnconfirmedOrders();
-
-		// System.out.println(orderList.size());
 		for (Order order : orderList) {
 			Timestamp handledTime = order.getHandledTime();
 			if (System.currentTimeMillis() - handledTime.getTime() > intvalMillise) {
-				System.out.println(System.currentTimeMillis());
-				System.out.println(handledTime.getTime());
+				//System.out.println(System.currentTimeMillis());
+				//System.out.println(handledTime.getTime());
 				// Order orderTmp = orderDAO.findById(order.getOrderId());
 				// orderTmp.setFinish((short)3);
 				// orderDAO.merge(orderTmp);
@@ -937,7 +935,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			order.setOrderSum(summary);
 			orderDAO.merge(order);
 		}
-		printObject("{'msg':'操作结束'}");
+		printObject("{'msg':'done'}");
 		return null;
 	}
 
@@ -979,29 +977,23 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			printObject("{'msg':'已经下单或已经收货,无法更改'}");
 			return null;
 		}
-		OrderGoods orderGoodsExample = new OrderGoods();
-		orderGoodsExample.setOrderId(orderId);
-		orderGoodsExample.setGoodsRealId(goodsRealId);
-		List<OrderGoods> orderGoodsList = orderGoodsDAO
-				.findByExample(orderGoodsExample);
-		if (orderGoodsList.isEmpty()) {
-			msg = "{'msg':'不存在这样的订单商品'}";
-			// outputString("{'msg':'不存在这样的订单商品'}");
-			// return null;
-		} else if (orderGoodsList.size() == 1) {
-			orderGoodsDAO.delete(orderGoodsList.get(0));
+		//TODO
+		OrderGoods orderGoods = orderGoodsDAO.findByOrderAndGoodsId(orderId, goodsRealId);
+		if(order == null){
+			printObject("{'msg':'不存在这样的订单商品'}");
+			return null;
+		}
+		else{
+			orderGoodsDAO.delete(orderGoods);
 			// 判断订单中是否还有商品
 			List<OrderGoods> orderGoodsList2 = orderGoodsDAO
 					.findByOrderId(orderId);
 			if (orderGoodsList2.isEmpty()) {
-				// System.out.println("order is empty");
 				orderDAO.delete(order);
 			}
-		} else {
-			msg = "{'msg':'订单中商品不是唯一的'}";
 		}
 		//
-		printObject(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 
@@ -1036,6 +1028,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			printObject("{'msg':'参数个数不足'}");
 			return null;
 		}
+		//TODO
 		OrderGoods orderGoodsExample = new OrderGoods();
 		orderGoodsExample.setOrderId(orderId);
 		orderGoodsExample.setGoodsRealId(goodsRealId);
@@ -1056,13 +1049,11 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 					// 使用数据库中的价格
 					orderGoodsList.get(0).setPrice(goodsReal.getGoodsPrice());
 					orderGoodsList.get(0).setPriceType((short) 0);
-					System.out.println("使用数据库中的价格");
 				} else {
 					// 使用网站的价格
 					Float nPrice = Float.valueOf(getStringParameter("nprice"));
 					if (nPrice == null) {
-						msg = "{'msg':'没有提供网站价格'}";
-						printObject(msg);
+						printObject("{'msg':'没有提供网站价格'}");
 						return null;
 					}
 					orderGoodsList.get(0).setPrice(nPrice);
@@ -1087,24 +1078,19 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 验证参数
 		if (orderId == null || goodsRealId == null || count == null) {
 			// System.out.println("{'msg':'参数个数不足'}");
-			printString("{'msg':'参数个数不足'}");
+			printObject("{'msg':'参数个数不足'}");
 			return null;
 		} else if (count <= 0) {
-			printString("{'msg':'数量必须大于0'}");
+			printObject("{'msg':'数量必须大于0'}");
 			return null;
 		}
-		OrderGoods orderGoodsExample = new OrderGoods();
-		orderGoodsExample.setGoodsRealId(goodsRealId);
-		orderGoodsExample.setOrderId(orderId);
-		List<OrderGoods> orderGoodsList = orderGoodsDAO
-				.findByExample(orderGoodsExample);
-		if (orderGoodsList.isEmpty()) {
+		OrderGoods orderGoods = orderGoodsDAO.findByOrderAndGoodsId(orderId, goodsRealId);
+		if(orderGoods == null){
 			msg = "{'msg':'订单中午此商品'}";
-		} else if (orderGoodsList.size() > 1) {
-			msg = "{'msg':'订单中存在同一个商品'}";// 这种情况是不应该出现的，这里先写出来，防止出现问题
-		} else {
-			orderGoodsList.get(0).setCount(count);
-			orderGoodsDAO.merge(orderGoodsList.get(0));
+		}
+		else{
+			orderGoods.setCount(count);
+			orderGoodsDAO.merge(orderGoods);
 		}
 		printObject(msg);
 		return null;
@@ -1114,6 +1100,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * 
 	 */
 	public String addRelatedNumForEditor() {
+		String msg = "{'msg':'done'}";
 		Integer orderId = getIntegerParameter(ORDER_ID);
 		String relatedNum = getStringParameter("relatednum");
 		Integer postage = getIntegerParameter("postage");
@@ -1126,18 +1113,19 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		}
 		else if(logistics.equals("")){
 			printObject("{'msg':'物流URL不合法'}");
+			return null;
 		}
 		Order order = orderDAO.findById(orderId);
 		if (order == null) {
-			printObject("{'msg':'订单不存在'}");
-			return null;
+			msg = "{'msg':'订单不存在'}";
 		} else {
 			order.setHandled((short) 3);//关键的设置
 			order.setHandledTime(new Timestamp(System.currentTimeMillis()));
 			order.setLogistics(logistics);
 			order.setRelatedNum(relatedNum);
-			printObject("{'msg':'done'}");
+			
 		}
+		printObject(msg);
 		return null;
 	}
 
@@ -1240,14 +1228,14 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		case 3:
 			url = "";
 			break;
-		case 4:
+		case 4://京东
 			url = Config.JINGDONG_UNION_BASEURL;
 			break;
-		case 5:
+		case 5://当当
 			url = Config.DANGDANG_BASEURL;
 			break;
-		case 6:
-			url = Config.JINGDONG_UNION_BASEURL;
+		case 6://卓越
+			url = "";
 			break;
 		default:
 
