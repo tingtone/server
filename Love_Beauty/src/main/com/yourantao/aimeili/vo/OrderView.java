@@ -15,12 +15,10 @@ public class OrderView {
 	private String addTime;
 	// 订单ID
 	private List<Integer> orderIdList = new ArrayList<Integer>();
-	// 商品和物流信息一一对应
-	private List<ArrayList<GoodsRealSimpleView>> goodsList = new ArrayList<ArrayList<GoodsRealSimpleView>>(
-			);
+	//订单商品
+	private List<ShoppingCartView> goodsList = new ArrayList<ShoppingCartView>();
 	// 物流信息
 	private List<OrderTraceView> traceList = new ArrayList<OrderTraceView>();
-
 	// 收件人姓名
 	private String name;
 	// 收件人地址
@@ -34,14 +32,12 @@ public class OrderView {
 	public void addOrderId(int orderId) {
 		this.orderIdList.add(orderId);
 	}
-	// 自定义setter
-	public void addGoodsList(ArrayList<GoodsRealSimpleView> goodsList) {
-		this.goodsList.add(goodsList);
+	//自定义setter
+	public void addGoods(ShoppingCartView shoppingCartView ) {
+		this.goodsList.add(shoppingCartView);
 	}
 	// 自定义setter
-	public void addGoodsAndTraceList(ArrayList<GoodsRealSimpleView> goodsList,
-			OrderTraceView traceView) {
-		this.goodsList.add(goodsList);
+	public void addTraceView(OrderTraceView traceView) {
 		this.traceList.add(traceView);
 	}
 	public String getOrderNum() {
@@ -74,12 +70,6 @@ public class OrderView {
 	public void setOrderIdList(List<Integer> orderIdList) {
 		this.orderIdList = orderIdList;
 	}
-	public List<ArrayList<GoodsRealSimpleView>> getGoodsList() {
-		return goodsList;
-	}
-	public void setGoodsList(List<ArrayList<GoodsRealSimpleView>> goodsList) {
-		this.goodsList = goodsList;
-	}
 	public List<OrderTraceView> getTraceList() {
 		return traceList;
 	}
@@ -109,6 +99,12 @@ public class OrderView {
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
+	}
+	public List<ShoppingCartView> getGoodsList() {
+		return goodsList;
+	}
+	public void setGoodsList(List<ShoppingCartView> goodsList) {
+		this.goodsList = goodsList;
 	}
 
 }

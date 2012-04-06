@@ -101,14 +101,6 @@ public interface OrderInterface {
 	 */
 	public abstract String confirmOrders();
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * main.com.yourantao.aimeili.action.OrderInterface#getUnfinishedOrders()
-	 */
-	public abstract String fetchUnfinishedOrders();
-
 	/**
 	 * 获取成功订单
 	 * 

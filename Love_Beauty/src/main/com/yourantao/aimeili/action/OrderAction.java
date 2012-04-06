@@ -29,6 +29,7 @@ import main.com.yourantao.aimeili.vo.GoodsRealSimpleEditorView;
 import main.com.yourantao.aimeili.vo.OrderEditorView;
 import main.com.yourantao.aimeili.vo.OrderTraceView;
 import main.com.yourantao.aimeili.vo.OrderView;
+import main.com.yourantao.aimeili.vo.ShoppingCartView;
 import main.com.yourantao.aimeili.vo.UserOrderView;
 
 public class OrderAction extends BaseAction implements Constant, OrderInterface {
@@ -231,35 +232,31 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				existFlag = false;
 				orderView = new OrderView();
 			}
-			orderView.setHandled(order.getHandled());
-			orderView.setHandleTime(order.getHandledTime().toString());
-			orderView.setAddTime(order.getAddTime().toString());
-			orderView.addOrderId(order.getOrderId());
-
-			ArrayList<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
+			ShoppingCartView shoppingCartView = new ShoppingCartView();
 			//
-			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-					.getOrderId());
-
-			orderView.setOrderNum(order.getOrderNum());
-			for (OrderGoods orderGoods : orderGoodsList) {
+			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order.getOrderId());
+			for(OrderGoods orderGoods : orderGoodsList){
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
 				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
 				goodsRealSimpleView.setGoodsRealId(orderGoods.getGoodsRealId());
 				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
-
+				
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
 				goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
 				goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
-
-				goodsRealSimpleViewList.add(goodsRealSimpleView);
+				goodsRealSimpleView.setProviderId(goodsReal.getProviderId());
+				
+				shoppingCartView.addGoods(goodsRealSimpleView);
+				shoppingCartView.setProviderId(goodsReal.getProviderId());
 			}
+			orderView.addGoods(shoppingCartView);
+			
 			OrderTraceView orderTraceView = new OrderTraceView();
+			//TODO
 			// 物流信息需要从某处获得
 			// related_num相关获取
 
-			orderView.addGoodsAndTraceList(goodsRealSimpleViewList,
-					orderTraceView);
+			orderView.addTraceView(orderTraceView);
 			// 设置收货人相关信息
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
@@ -269,6 +266,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			orderView.setName(userAddress.getReceiver());
 			orderView.setMobile(userAddress.getMobile());
 			if (!existFlag) {
+				orderView.setHandled(order.getHandled());
+				orderView.setHandleTime(order.getHandledTime().toString());
+				orderView.setAddTime(order.getAddTime().toString());
+				orderView.addOrderId(order.getOrderId());
+				orderView.setOrderNum(order.getOrderNum());
+				
 				orderViewList.add(orderView);
 			}
 		}
@@ -331,7 +334,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * 
 	 * @see
 	 * main.com.yourantao.aimeili.action.OrderInterface#getUnfinishedOrders()
-	 */
+	 
 	public String fetchUnfinishedOrders() {
 		// 获取参数
 		String uuid = getStringParameter("uuid");
@@ -395,7 +398,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		orderView.addGoodsList(goodsRealViewList6);
 		printObject(orderView);
 		return null;
-	}
+	}*/
 
 	/*
 	 * (non-Javadoc)
@@ -433,33 +436,31 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				existFlag = false;
 				orderView = new OrderView();
 			}
-			orderView.setHandled(order.getHandled());
-			orderView.setHandleTime(order.getHandledTime().toString());
-			orderView.setAddTime(order.getAddTime().toString());
-			orderView.addOrderId(order.getOrderId());
-			ArrayList<GoodsRealSimpleView> goodsRealSimpleViewList = new ArrayList<GoodsRealSimpleView>();
+			ShoppingCartView shoppingCartView = new ShoppingCartView();
 			//
-			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order
-					.getOrderId());
-			orderView.setOrderNum(order.getOrderNum());
-			for (OrderGoods orderGoods : orderGoodsList) {
+			List<OrderGoods> orderGoodsList = orderGoodsDAO.findByOrderId(order.getOrderId());
+			for(OrderGoods orderGoods : orderGoodsList){
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
 				goodsRealSimpleView.setGoodsCount(orderGoods.getCount());
 				goodsRealSimpleView.setGoodsRealId(orderGoods.getGoodsRealId());
 				goodsRealSimpleView.setGoodsPrice(orderGoods.getPrice());
-
+				
 				GoodsReal goodsReal = goodsRealDAO.findById(orderGoods.getId());
 				goodsRealSimpleView.setGoodsName(goodsReal.getGoodsName());
 				goodsRealSimpleView.setGoodsThumb(goodsReal.getGoodsThumb());
-
-				goodsRealSimpleViewList.add(goodsRealSimpleView);
+				goodsRealSimpleView.setProviderId(goodsReal.getProviderId());
+				
+				shoppingCartView.addGoods(goodsRealSimpleView);
+				shoppingCartView.setProviderId(goodsReal.getProviderId());
 			}
+			orderView.addGoods(shoppingCartView);
+			
 			OrderTraceView orderTraceView = new OrderTraceView();
+			//TODO
 			// 物流信息需要从某处获得
 			// related_num相关获取
 
-			orderView.addGoodsAndTraceList(goodsRealSimpleViewList,
-					orderTraceView);
+			orderView.addTraceView(orderTraceView);
 			// 设置收货人相关信息
 			UserAddress userAddress = userAddressDAO.findById(order
 					.getAddressId());
@@ -468,8 +469,13 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			orderView.setAddressDetail(userAddress.getUserAddress());
 			orderView.setName(userAddress.getReceiver());
 			orderView.setMobile(userAddress.getMobile());
-
 			if (!existFlag) {
+				orderView.setHandled(order.getHandled());
+				orderView.setHandleTime(order.getHandledTime().toString());
+				orderView.setAddTime(order.getAddTime().toString());
+				orderView.addOrderId(order.getOrderId());
+				orderView.setOrderNum(order.getOrderNum());
+				
 				orderViewList.add(orderView);
 			}
 		}
@@ -570,10 +576,10 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 根据是否使用发票来决定是否接受其他参数
 		Integer invoice = getIntegerParameter("invoice");
 		// 验证参数
-		/*if (providerIdString == null) {
+		if (providerIdString == null) {
 			printObject("{'msg':'没有供应商'}");
 			return null;
-		}*/
+		}
 		if (addressId == null) {
 			printObject("{'msg':'无地址信息'}");
 			return null;
