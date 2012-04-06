@@ -309,4 +309,21 @@ public class GoodsRealDAO extends HibernateDaoSupport {
 			throw re;
 		}
 	}
+	
+	
+	/**
+	 * 自定义函数，group by brand_name 找出全部的品牌来
+	 * @param brandId
+	 * @param categoryId
+	 * @return
+	 */
+	public List<GoodsReal> findBySameBrandName(){
+		try {
+			String queryString = "from GoodsReal where category_id<>0 group by brand_name";
+			return getHibernateTemplate().find(queryString);
+		} catch (RuntimeException re) {
+			log.error("find by property name failed", re);
+			throw re;
+		}
+	}
 }

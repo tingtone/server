@@ -8,6 +8,14 @@ import org.slf4j.LoggerFactory;
 
 import main.com.yourantao.aimeili.conf.Constant;
 
+/**
+ * 爱美丽日志头结构
+ * 
+ * @author mac
+ * 创建时间： 2012-4-1 下午05:20:18
+ * 修改时间：2012-4-1 下午05:20:18
+ * 具体描述： TODO
+ */
 public class LogHeader implements Constant{
 
 	private static Logger log = LoggerFactory.getLogger(LogHeader.class);

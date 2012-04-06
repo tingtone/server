@@ -89,10 +89,13 @@ public class DangDangCOD extends BaseCOD {
 						// System.out.println(districDes);
 						JSONObject districJO = JSONObject
 								.fromObject(districDes);
-						if (!districJO.getString("errorCode").equals("0"))
+						if (!districJO.getString("errorCode").equals(0))
 							continue;
 						JSONArray detailJA = districJO
 								.getJSONArray("ship_types");
+
+						if (!districJO.getString("errorCode").equals("0"))
+							continue;
 						//System.out.println(detailJA.size());
 						for (int oIndex = 0; oIndex < detailJA.size(); oIndex++) {
 							Integer shipType = Integer.valueOf(detailJA

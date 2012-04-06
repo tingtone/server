@@ -115,6 +115,12 @@ public interface GoodsInterface {
 	public String getGoodsListByRanking();
 	
 	/**
+	 * 获得某件商品的收藏数
+	 * @return
+	 */
+	public String getGoodsFavoriteCount();
+	
+	/**
 	 * 根据排行榜获得商品列表,为小编建立的接口
 	 * @return
 	 */
@@ -157,9 +163,17 @@ public interface GoodsInterface {
 	
 	/**
 	 * for Programmer
+	 * 删除重复的商品数据
 	 * @param 
 	 */
 	public String deleteRepeatGoods();
+	
+	/**
+	 * for Programmer
+	 * 插入更多的品牌
+	 * @param 
+	 */
+	public String insertBrand();
 	
 	
 	public void setNewGoods_thumbContentType(String thumbContentType);

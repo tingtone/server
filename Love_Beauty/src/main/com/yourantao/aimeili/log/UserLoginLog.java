@@ -7,11 +7,13 @@ import javax.servlet.http.HttpServletRequest;
 
 import main.com.yourantao.aimeili.conf.Constant;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 /**
- * @author whp
- *
+ * 用户登录日志
+ * 
+ * @author mac
+ * 创建时间： 2012-4-1 下午05:21:13
+ * 修改时间：2012-4-1 下午05:21:13
+ * 具体描述： TODO
  */
 public class UserLoginLog implements Constant
 {
