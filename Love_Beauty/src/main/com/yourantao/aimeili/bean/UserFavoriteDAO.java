@@ -1,11 +1,17 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -28,8 +34,26 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 	public static final String FAVORITE_TYPE = "favoriteType";
 	public static final String RELATED_ID = "relatedId";
 
+	public int page=0;
+	public int num=0;
 	protected void initDao() {
 		// do nothing
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	public void save(UserFavorite transientInstance) {
@@ -79,13 +103,25 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByProperty(String propertyName, Object value) {
+	public List findByProperty(final String propertyName,final Object value) {
 		log.debug("finding UserFavorite instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from UserFavorite as model where model."
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from UserFavorite as model where model."
 					+ propertyName + "= ? order by model.addTime desc";
-			return getHibernateTemplate().find(queryString, value);
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, value);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
+	                List list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -159,12 +195,26 @@ public class UserFavoriteDAO extends HibernateDaoSupport {
 	 * 
 	 * @param brandName
 	 */
-	public List findByUserIdAndGoodId(Integer userId, Integer relatedId, Short favoriteType) {
+	public List findByUserIdAndGoodId(final Integer userId,final Integer relatedId,final Short favoriteType) {
 		log.debug("confirm given favoite existing");
 		try {
-			String query = "from UserFavorite as model where model." + USER_ID
-					+ "=? and " + RELATED_ID + "=? and " + FAVORITE_TYPE + "=?";
-			return getHibernateTemplate().find(query, userId, relatedId,favoriteType);
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from UserFavorite as model where model." + USER_ID
+				+ "=? and " + RELATED_ID + "=? and " + FAVORITE_TYPE + "=?";
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, userId);
+					query.setParameter(1, relatedId);
+					query.setParameter(2, favoriteType);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
+	                List list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("exist failed", re);
 			throw re;

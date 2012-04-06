@@ -1,10 +1,16 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -26,10 +32,27 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 	public static final String EFFICACY_ID = "efficacyId";
 	public static final String GOODS = "goods";
 
+	public int page=0;
+	public int num=0;
 	protected void initDao() {
 		// do nothing
 	}
 
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
 	public void save(GoodsEfficacy transientInstance) {
 		log.debug("saving GoodsEfficacy instance");
 		try {
@@ -77,13 +100,25 @@ public class GoodsEfficacyDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByProperty(String propertyName, Object value) {
+	public List findByProperty(final String propertyName,final Object value) {
 		log.debug("finding GoodsEfficacy instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from GoodsEfficacy as model where model."
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from GoodsEfficacy as model where model."
 					+ propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, value);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
+	                List list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;

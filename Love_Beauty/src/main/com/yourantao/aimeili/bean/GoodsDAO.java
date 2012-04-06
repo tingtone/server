@@ -52,8 +52,26 @@ public class GoodsDAO extends HibernateDaoSupport {
 	public static final String GOODS_STATUS = "goodsStatus";
 	public static final String GOODS_RANK = "goodsRank";
 
+	public int page=0;
+	public int num=0;
 	protected void initDao() {
 		// do nothing
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	public void save(Goods transientInstance) {
@@ -115,12 +133,12 @@ public class GoodsDAO extends HibernateDaoSupport {
 						throws HibernateException, SQLException {
 					Query query= session.createQuery(queryString);
 					query.setParameter(0, value);
-	                query.setFirstResult(0);
-	                query.setMaxResults(2);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
 	                List list=query.list();
 	                return list;
 				}
-				
 			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
@@ -297,8 +315,9 @@ public class GoodsDAO extends HibernateDaoSupport {
 				public Object doInHibernate(Session session)
 						throws HibernateException, SQLException {
 					Query query= session.createQuery(queryString);
-	                query.setFirstResult(0);
-	                query.setMaxResults(2);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
 	                List<Goods> list=query.list();
 	                return list;
 				}

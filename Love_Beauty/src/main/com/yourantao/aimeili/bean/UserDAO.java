@@ -1,12 +1,18 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 /**
@@ -91,13 +97,23 @@ public class UserDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByProperty(String propertyName, Object value) {
+	public List findByProperty(final String propertyName,final Object value) {
 		log.debug("finding User instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from User as model where model."
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from User as model where model."
 					+ propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, value);
+					query.setMaxResults(1);
+	                List list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
