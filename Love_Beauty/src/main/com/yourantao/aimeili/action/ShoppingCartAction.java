@@ -100,7 +100,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				//TODO 修改status的判断条件
 				//删除购物车记录
 				shoppingCartDAO.delete(shoppingCart);
-				System.out.println("in delete");
+				//System.out.println("in delete");
 			}
 			else{
 				GoodsRealSimpleView goodsRealSimpleView = new GoodsRealSimpleView();
@@ -220,19 +220,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			printString("{'msg':'参数值出错'}");
 			return null;
 		}
-		ShoppingCart shoppingCartExample = new ShoppingCart();
-		shoppingCartExample.setGoodsRealId(goodsRealId);
-		shoppingCartExample.setUserId(userId);
-		List<ShoppingCart> shoppingCartList = shoppingCartDAO
-				.findByExample(shoppingCartExample);
-		if (shoppingCartList.size() == 0) {
+		
+		
+		ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
+		if(shoppingCart == null){
 			msg = "{'msg':'购物车中不存在这样的商品'}";
-		} else if (shoppingCartList.size() == 1) {
-			ShoppingCart shoppingCart = shoppingCartList.get(0);
+		}
+		else{
 			shoppingCart.setCount(count);
 			shoppingCartDAO.merge(shoppingCart);
-		} else {
-			msg = "{'msg':'存在多个相同商品'}";// 这种情况是不应该出现的，这里先写出来，防止出现问题
 		}
 		printString(msg);
 		return null;

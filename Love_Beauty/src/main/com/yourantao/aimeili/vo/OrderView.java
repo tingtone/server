@@ -17,9 +17,9 @@ public class OrderView {
 	private List<Integer> orderIdList = new ArrayList<Integer>();
 	// 商品和物流信息一一对应
 	private List<ArrayList<GoodsRealSimpleView>> goodsList = new ArrayList<ArrayList<GoodsRealSimpleView>>(
-			6);
+			);
 	// 物流信息
-	private List<OrderTraceView> traceList = new ArrayList<OrderTraceView>(6);
+	private List<OrderTraceView> traceList = new ArrayList<OrderTraceView>();
 
 	// 收件人姓名
 	private String Name;

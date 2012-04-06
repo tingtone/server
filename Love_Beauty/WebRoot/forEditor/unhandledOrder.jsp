@@ -52,13 +52,15 @@ function addRelatedNum(oIdx) {
 	var oid = $('#oid' + oIdx).val();
 	var relatednum = $('#relatedNum' + oIdx).val();
 	var postage = $('#postage'+ oIdx).val();
-	alert(postage);
+	var logistics = $('#logistics'+ oIdx).val();
+	//alert(postage);
 	//alert(oid);
 	//alert(relatednum);
 	var params = {
 		"oid" : oid,
 		"relatednum" : relatednum,
-		"postage" : postage
+		"postage" : postage,
+		"logistics": logistics
 	};
 	var result = "";
 	$.ajax( {
@@ -74,6 +76,35 @@ function addRelatedNum(oIdx) {
 			}
 		}
 	});
+}
+function deleteOrder(index){
+	var flag = confirm("确认删除该订单");
+	if(flag == false){
+		return;
+	}
+	var url = BASE_SERVER + "/order_deleteOrderForEditor";
+	var oid = $('#ooid'+index).val();
+	//alert(oid);
+	var params = {
+		"oid" : oid,
+	};
+	var result = "";
+	$.ajax({
+				type : "POST",
+				data : params,
+				dataType : "json",
+				url : url,
+				success : function(json) {
+					if (json == null) {
+						alert("json null");
+					} else {
+						//alert(json.msg);
+						if(json.msg == 'done'){
+							$('#divdiv'+index).remove();
+						}
+					}
+				}
+				});
 }
 function TransShopName(index) {
 	var shopName;
@@ -129,16 +160,20 @@ function getSpecificOrder(uid, ono) {
 		//
 		for ( var oIdx = 0; oIdx < json.goodsList.length; oIdx++) {
 			var goodsList = json.goodsList[oIdx];
+			result += "<div id='divdiv"+oIdx+"'>";
 			result += "<hr size='5'>";
 			result += "<form>";
-			result += "<input type='hidden' name='ooid" + oIdx + "' value='"
+			result += "<input type='hidden' id='ooid" + oIdx + "' value='"
 					+ json.orderIdList[oIdx] + "'/>";
 			//result += "商城:" + TransShopName();
-			result += "商城:" + oIdx;
-			result += "商城订单编号:<input type='text' id='relatedNum" + oIdx + "'/>";
+			result += "商城:" + oIdx+"<br/>";
+			result += "商城订单编号:<input type='text' id='relatedNum" + oIdx + "'/><br/>";
 			result += "邮费:<input type='text' id='postage" + oIdx + "' value='0'/>";
+			result += "物流URL:<input type='text' id='logistics"+oIdx+"'/><br/>";
 			result += "<input type='button' onclick='addRelatedNum(" + oIdx
-					+ ")' value='设置订单号'/>";
+					+ ")' value='设置订单号,邮费,物流URL'/>";
+			result += "<input type='button' onclick='deleteOrder(" + oIdx
+									+ ")' value='删除此订单'/>";
 			result += "</form>";
 
 			for ( var mIdx = 0; mIdx < goodsList.length; mIdx++) {
@@ -172,6 +207,7 @@ function getSpecificOrder(uid, ono) {
 				result += "</div>";
 				index++;
 			}
+			result += "</div>";
 		}
 	}
 	$('#result').html(result.toString());

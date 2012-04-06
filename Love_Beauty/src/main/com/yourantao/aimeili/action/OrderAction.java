@@ -478,7 +478,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		return null;
 	}
 
-	public String examOrderGoods() {
+	public String examOrderGoods() { 
 		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
@@ -500,7 +500,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		List<GoodsRealErrorView> goodsRealErrorViewList = new ArrayList<GoodsRealErrorView>();
 		for(int outerIndex = 0; outerIndex < goodsRealIdList.length; outerIndex++){
 			int goodsRealId = Integer.valueOf(goodsRealIdList[outerIndex]);
-			ShoppingCart shoppingCart = shoppingCartDAO.getCartByGoodsAndUser(goodsRealId, userId);
+			ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId );
 			if(shoppingCart != null){
 				GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
 				if(goodsReal == null){
@@ -651,7 +651,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			boolean emptyOrderFlag = true;
 			//存储order_goods
 			for(int innerIndex = 0; innerIndex < countList.length; innerIndex++){
-				ShoppingCart shoppingCart =  shoppingCartDAO.getCartByGoodsAndUser(Integer.valueOf(goodsRealIdList[innerIndex]), userId);
+				ShoppingCart shoppingCart =  shoppingCartDAO.getCartByUserAndGoods(userId, Integer.valueOf(goodsRealIdList[innerIndex]));
 				if(shoppingCart != null){
 					OrderGoods orderGoods = new OrderGoods();
 					orderGoods.setGoodsRealId(shoppingCart.getGoodsRealId());
@@ -754,7 +754,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		List<GoodsRealErrorView> goodsRealErrorViewList = new ArrayList<GoodsRealErrorView>();
 		for(int outerIndex = 0; outerIndex < goodsRealIdList.length; outerIndex++){
 			int goodsRealId = Integer.valueOf(goodsRealIdList[outerIndex]);
-			ShoppingCart shoppingCart = shoppingCartDAO.getCartByGoodsAndUser(goodsRealId, userId);
+			ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
 			if(shoppingCart != null){
 				GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
 				if(goodsReal == null){
@@ -1027,7 +1027,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * 接受订单中新的价格
 	 */
 	public String acceptPriceForEditor() {
-		String msg = "{'msg':'操作完成'}";
+		String msg = "{'msg':'done'}";
 		Integer orderId = getIntegerParameter(ORDER_ID);
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 		Integer priceType = getIntegerParameter("type");
@@ -1056,6 +1056,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 					// 使用数据库中的价格
 					orderGoodsList.get(0).setPrice(goodsReal.getGoodsPrice());
 					orderGoodsList.get(0).setPriceType((short) 0);
+					System.out.println("使用数据库中的价格");
 				} else {
 					// 使用网站的价格
 					Float nPrice = Float.valueOf(getStringParameter("nprice"));
@@ -1086,10 +1087,10 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 验证参数
 		if (orderId == null || goodsRealId == null || count == null) {
 			// System.out.println("{'msg':'参数个数不足'}");
-			printString("{'msg':'param not complete'}");
+			printString("{'msg':'参数个数不足'}");
 			return null;
 		} else if (count <= 0) {
-			printString("{'msg':'count must > 0'}");
+			printString("{'msg':'数量必须大于0'}");
 			return null;
 		}
 		OrderGoods orderGoodsExample = new OrderGoods();
@@ -1098,13 +1099,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		List<OrderGoods> orderGoodsList = orderGoodsDAO
 				.findByExample(orderGoodsExample);
 		if (orderGoodsList.isEmpty()) {
-			msg = "{'msg':'goods not in order'}";
+			msg = "{'msg':'订单中午此商品'}";
 		} else if (orderGoodsList.size() > 1) {
-			msg = "{'msg':'too many goods'}";// 这种情况是不应该出现的，这里先写出来，防止出现问题
+			msg = "{'msg':'订单中存在同一个商品'}";// 这种情况是不应该出现的，这里先写出来，防止出现问题
 		} else {
 			orderGoodsList.get(0).setCount(count);
 			orderGoodsDAO.merge(orderGoodsList.get(0));
-			msg = "{'msg':'done'}";
 		}
 		printObject(msg);
 		return null;
@@ -1117,19 +1117,24 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		Integer orderId = getIntegerParameter(ORDER_ID);
 		String relatedNum = getStringParameter("relatednum");
 		Integer postage = getIntegerParameter("postage");
+		String logistics = getStringParameter("logistics");
 		//
-		if (orderId == null || relatedNum == null || postage == null) {
+		if (orderId == null || relatedNum == null || postage == null || logistics == null) {
 			//
-			printObject("{'msg':'param not complete'}");
+			printObject("{'msg':'缺少参数'}");
 			return null;
+		}
+		else if(logistics.equals("")){
+			printObject("{'msg':'物流URL不合法'}");
 		}
 		Order order = orderDAO.findById(orderId);
 		if (order == null) {
-			printObject("{'msg':'order not exist'}");
+			printObject("{'msg':'订单不存在'}");
 			return null;
 		} else {
-			order.setHandled((short) 3);
+			order.setHandled((short) 3);//关键的设置
 			order.setHandledTime(new Timestamp(System.currentTimeMillis()));
+			order.setLogistics(logistics);
 			order.setRelatedNum(relatedNum);
 			printObject("{'msg':'done'}");
 		}
@@ -1249,7 +1254,61 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		}
 		return url;
 	}
-
+	/**
+	 * 计算邮费,暂时未使用
+	 **/
+	//TODO
+	private int getPostage(int providerId, int goodsNum, float Sum){
+		int postage = 0;
+		switch(providerId){
+		case 1://no5
+			//北京五环内/上海外环线以内/广州市
+			if(Sum < 80){
+				postage = 5;
+			}
+			else{
+				postage = 0;
+			}
+			//北京(五环外)/上海(暂定为崇明县)/广东省(除广州)
+			postage = 10;
+			//其他城市
+			postage = 18;
+			break;
+		case 2://乐蜂网
+			if(Sum < 99){
+				postage = 5;
+			}
+			break;
+		case 3://聚美优品
+			postage = 5;
+			//当商品数量大于2时
+			//postage = 0;
+			break;
+		case 4://京东
+			if(Sum < 39){
+				postage = 5;
+			}
+			break;
+		case 5://当当
+			//重点城市
+			if(Sum < 29){
+				postage = 5;
+			}
+		/*	//非重点城市
+			if(Sum < 99){
+				postage = 5;
+			}*/
+			break;
+		case 6://卓越
+			if(Sum < 29){
+				postage = 5;
+			}
+			break;
+		default:
+				
+		}
+		return postage;
+	}
 	/*
 	 * 暂时不使用
 	 */

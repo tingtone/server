@@ -31,7 +31,7 @@
             </column>
         </property>
         <property name="postage" type="java.lang.Float">
-            <column name="postage" precision="12" scale="0" not-null="true">
+            <column name="postage" precision="12" scale="0">
                 <comment>é'®è´¹</comment>
             </column>
         </property>
@@ -93,6 +93,11 @@
         </property>
         <property name="invoiceName" type="java.lang.String">
             <column name="invoice_name" length="64" />
+        </property>
+        <property name="logistics" type="java.lang.String">
+            <column name="logistics">
+                <comment>ç‰©æµ�ä¿¡æ�¯çš"URL</comment>
+            </column>
         </property>
     </class>
 </hibernate-mapping>

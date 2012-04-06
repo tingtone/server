@@ -1,5 +1,5 @@
 #MyEclipse Hibernate Properties
-#Fri Mar 30 14:23:58 CST 2012
+#Thu Apr 05 13:03:19 CST 2012
 sessionFactoryName=main.com.yourantao.aimeili.bean.HibernateSessionFactory
 genBasicCompId=false
 profile=

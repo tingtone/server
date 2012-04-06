@@ -40,6 +40,7 @@ public class OrderDAO extends HibernateDaoSupport {
 	public static final String INVOICE_TYPE = "invoiceType";
 	public static final String INVOICE_CONTENT = "invoiceContent";
 	public static final String INVOICE_NAME = "invoiceName";
+	public static final String LOGISTICS = "logistics";
 
 	protected void initDao() {
 		// do nothing
@@ -169,6 +170,10 @@ public class OrderDAO extends HibernateDaoSupport {
 		return findByProperty(INVOICE_NAME, invoiceName);
 	}
 
+	public List findByLogistics(Object logistics) {
+		return findByProperty(LOGISTICS, logistics);
+	}
+
 	public List findAll() {
 		log.debug("finding all Order instances");
 		try {
@@ -218,7 +223,6 @@ public class OrderDAO extends HibernateDaoSupport {
 	public static OrderDAO getFromApplicationContext(ApplicationContext ctx) {
 		return (OrderDAO) ctx.getBean("OrderDAO");
 	}
-
 	/**
 	 * 自定义查找用户待确认订单
 	 */

@@ -1,51 +1,38 @@
 /*package main.com.yourantao.aimeili.vo;
+
+import java.util.ArrayList;
+import java.util.List;
+
 *//**
- * 暂时废弃不用
- * @author rmss
+ * 
+ * @author 
  *
  *//*
 public class OrderSimpleView {
-	private int orderId;
-	private String orderNum;
-	private float orderSumary;
-	private int orderHandled;
-	private String time;
-	private String arrivalTime;
-	public int getOrderId() {
-		return orderId;
+	//商城ID
+	private int providerId;
+	//商品列表
+	private List<GoodsRealSimpleView> goodsList = new ArrayList<GoodsRealSimpleView>();
+	//物流信息
+	private OrderTraceView orderTraceView;
+	
+	public int getProviderId() {
+		return providerId;
 	}
-	public void setOrderId(int orderId) {
-		this.orderId = orderId;
+	public void setProviderId(int providerId) {
+		this.providerId = providerId;
 	}
-	public String getOrderNum() {
-		return orderNum;
+	public List<GoodsRealSimpleView> getGoodsList() {
+		return goodsList;
 	}
-	public void setOrderNum(String orderNum) {
-		this.orderNum = orderNum;
+	public void setGoodsList(List<GoodsRealSimpleView> goodsList) {
+		this.goodsList = goodsList;
 	}
-	public String getTime() {
-		return time;
+	public OrderTraceView getOrderTraceView() {
+		return orderTraceView;
 	}
-	public void setTime(String time) {
-		this.time = time;
-	}
-	public String getArrivalTime() {
-		return arrivalTime;
-	}
-	public void setArrivalTime(String arrivalTime) {
-		this.arrivalTime = arrivalTime;
-	}
-	public void setOrderSumary(float orderSumary) {
-		this.orderSumary = orderSumary;
-	}
-	public float getOrderSumary() {
-		return orderSumary;
-	}
-	public void setOrderHandled(int orderHandled) {
-		this.orderHandled = orderHandled;
-	}
-	public int getOrderHandled() {
-		return orderHandled;
+	public void setOrderTraceView(OrderTraceView orderTraceView) {
+		this.orderTraceView = orderTraceView;
 	}
 	
 }
