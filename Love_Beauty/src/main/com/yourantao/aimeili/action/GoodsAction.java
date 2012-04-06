@@ -371,7 +371,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			/*日志记录*/
 			GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 			getGoodsListLog.setFrom(GetGoodsListLog.FAVORITE);
-			getGoodsListLog.setFromMsg(uid+"");//收藏的fromId实际上是uid
+			getGoodsListLog.setFromId(uid+"");//收藏的fromId实际上是uid
 			getGoodsListLogger.debug(getGoodsListLog.toString());
 			
 			return null;
@@ -1120,7 +1120,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		/*日志记录*/
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.CATEGORY);
-		getGoodsListLog.setFromMsg(categoryId+"");
+		getGoodsListLog.setFromId(categoryId+"");
 		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
@@ -1297,7 +1297,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		/*日志记录*/
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.SEARCH);
-		getGoodsListLog.setFromMsg(keyword);
+		getGoodsListLog.setFromId(keyword);
 		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
@@ -1383,7 +1383,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		/*日志记录*/
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.EFFICASY);
-		getGoodsListLog.setFromMsg(eid+"");
+		getGoodsListLog.setFromId(eid+"");
 		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
@@ -1477,7 +1477,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		/*日志记录*/
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.EFFICASY);
-		getGoodsListLog.setFromMsg(bid+"");
+		getGoodsListLog.setFromId(bid+"");
 		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
@@ -1607,7 +1607,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		/*日志记录*/
 		GetGoodsListLog getGoodsListLog = new GetGoodsListLog(uuid, getRequest());
 		getGoodsListLog.setFrom(GetGoodsListLog.RANKING);
-		getGoodsListLog.setFromMsg(rankingId+"");
+		getGoodsListLog.setFromId(rankingId+"");
 		getGoodsListLogger.debug(getGoodsListLog.toString());
 		return null;
 	}
@@ -1802,7 +1802,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		Integer providerId = getIntegerParameter(PROVIDER_ID);
 		List<GoodsReal> goodsReals = goodsRealDAO.findByProviderId(providerId);
 		for (GoodsReal goodsReal : goodsReals) {
-			if (goodsReal.getCategoryId() == 0) { // 分类ID号无法对应的，代表不是护肤类得，这期先不上线
+			if (goodsReal.getCategoryId() == 0 ||goodsReal.getBrandId()==0 ) { // 分类ID号或者品牌id号无法对应的，代表是不需要的商品，这期先不上线
 				continue;
 			}
 			Goods goods = new Goods();
@@ -2024,8 +2024,9 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	public String insertNoMapGoodsReal() {
 		List<GoodsReal> goodsReals = goodsRealDAO.findAll();
 		for (GoodsReal goodsReal : goodsReals) {
+			goodsMapDAO.setNum(0);
 			List<GoodsMap> goodsMaps=goodsMapDAO.findByGoodsRealId(goodsReal.getGoodsRealId());
-			if(goodsMaps.isEmpty() && goodsReal.getCategoryId()!=0){ //不在goodsMap中的内容需要添加到goods表中
+			if(goodsMaps.isEmpty() && goodsReal.getCategoryId()!=0 && goodsReal.getBrandId()!=0){ //不在goodsMap中的内容需要添加到goods表中
 				Goods goods = new Goods();
 				URL url;
 				InputStream is = null;

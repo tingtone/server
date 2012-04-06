@@ -26,7 +26,7 @@ public class GetGoodsListLog implements Constant
 	
 	private LogHeader header;
 	private int from;   //商品列表的来自（）
-	private String fromMsg;  //商品列表来自信息
+	private String fromId;  //商品列表来自信息
 
 	
 	public LogHeader getHeader() {
@@ -45,12 +45,12 @@ public class GetGoodsListLog implements Constant
 		this.from = from;
 	}
 
-	public String getFromMsg() {
-		return fromMsg;
+	public String getFromId() {
+		return fromId;
 	}
 
-	public void setFromMsg(String fromMsg) {
-		this.fromMsg = fromMsg;
+	public void setFromId(String fromId) {
+		this.fromId = fromId;
 	}
 
 	public GetGoodsListLog(String uuid,HttpServletRequest request){
@@ -80,9 +80,9 @@ public class GetGoodsListLog implements Constant
 		sb.append(from);
 		sb.append(SEPARATOR_COMMA);
 		
-		sb.append("fromMsg");
+		sb.append("fromId");
 		sb.append(SEPARATOR_COLON);
-		sb.append(fromMsg);
+		sb.append(fromId);
 //		sb.append(SEPARATOR_COMMA);
 
 		return sb.toString();
