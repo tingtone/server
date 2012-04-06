@@ -3,6 +3,8 @@ package main.com.yourantao.aimeili.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,8 @@ import main.com.yourantao.aimeili.bean.ShoppingCart;
 import main.com.yourantao.aimeili.bean.ShoppingCartDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.conf.Constant;
+import main.com.yourantao.aimeili.log.GetGoodsListLog;
+import main.com.yourantao.aimeili.log.ShoppingCartLog;
 import main.com.yourantao.aimeili.vo.GoodsRealSimpleView;
 import main.com.yourantao.aimeili.vo.ShoppingCartView;
 
@@ -19,6 +23,9 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		ShoppingCartInterface {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(ShoppingCartAction.class);
+	private static Log shoppingLogger = LogFactory.getLog("shopping"); /*购物车日志记录*/
+	
+	
 	private ShoppingCartDAO shoppingCartDAO;
 	private GoodsRealDAO goodsRealDAO;
 
@@ -63,12 +70,12 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -144,19 +151,19 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
 		Integer goodsRealId = getIntegerParameter(GOODS_REAL_ID);
 		// 验证参数
 		if (goodsRealId == null){
-			printString("{'msg':'参数个数不足'}");
+			printObject("{'msg':'参数个数不足'}");
 			return null;
 		}
 		// 设置对象状态
@@ -184,9 +191,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				shoppingCartDAO.save(shoppingCart);
 			}
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
+		
+		/*日志记录*/
+		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
+		shoppingCartLog.setgoodsRealId(goodsRealId);
+		shoppingCartLog.setCount(1);
+		shoppingCartLog.setType(ShoppingCartLog.INSERT);
+		shoppingLogger.debug(shoppingCartLog.toString());
 		return null;
-
 	}
 
 	/*
@@ -196,17 +209,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * main.com.yourantao.aimeili.action.ShoppingCartInterface#modifyQuantity()
 	 */
 	public String modifyQuantity() {
-		String msg = "";
-
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -214,23 +225,30 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		Integer count = getIntegerParameter(GOODS_COUNT);
 		// 验证参数
 		if (goodsRealId == null || count == null) {
-			printString("{'msg':'参数个数不足'}");
+			printObject("{'msg':'参数个数不足'}");
 			return null;
 		} else if (count <= 0) {
-			printString("{'msg':'参数值出错'}");
+			printObject("{'msg':'参数值出错'}");
 			return null;
-		}
-		
-		
+		}		
 		ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
 		if(shoppingCart == null){
-			msg = "{'msg':'购物车中不存在这样的商品'}";
+			printObject("{'msg':'购物车中不存在这样的商品'}");
+			return null;
 		}
 		else{
 			shoppingCart.setCount(count);
 			shoppingCartDAO.merge(shoppingCart);
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
+		
+		/*日志记录*/
+		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
+		shoppingCartLog.setgoodsRealId(goodsRealId);
+		shoppingCartLog.setCount(count);
+		shoppingCartLog.setType(ShoppingCartLog.UPDATE);
+		shoppingLogger.debug(shoppingCartLog.toString());
+		
 		return null;
 	}
 
@@ -240,15 +258,14 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * @return
 	 */
 	public String acceptGoods() {
-		String msg = "";
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -256,34 +273,28 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		// Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
 		if (goodsRealId == null) {
-			printString("{'msg':'没有提供商品'}");
+			printObject("{'msg':'没有提供商品'}");
 			return null;
 		}
-		ShoppingCart shoppingCartExample = new ShoppingCart();
-		shoppingCartExample.setUserId(userId);
-		shoppingCartExample.setGoodsRealId(goodsRealId);
-		// shoppingCartExample.setProviderId(providerId);
-		List<ShoppingCart> shoppingCartList = shoppingCartDAO
-				.findByExample(shoppingCartExample);
-		if (shoppingCartList.size() == 0) {
-			msg = "{'msg':'购物车不存在这样的商品'}";
-		} else if (shoppingCartList.size() > 1) {
-			msg = "{'msg':'购物车中存在多件商品'}";// 这样的情况不应该出现的
-		} else {
-			// shoppingCartDAO.delete(shoppingCartList.get(0));
+		ShoppingCart shoppingCart = shoppingCartDAO.getCartByUserAndGoods(userId, goodsRealId);
+		if(shoppingCart == null){
+			printObject("{'msg':'购物车中不存在这样的商品'}");
+			return null;
+		}
+		else{
 			GoodsReal goodsReal = goodsRealDAO.findById(goodsRealId);
 			if (goodsReal == null) {
-				msg = "{'msg':'该商品不存在'}";
-			} else {
-				if (goodsReal.getGoodsStatus() != 6)
-					msg = "{'msg':'该商品已下架或者待审核'}";
-				else {
-					shoppingCartList.get(0).setPrice(goodsReal.getGoodsPrice());
-					shoppingCartDAO.merge(shoppingCartList.get(0));
-				}
+				printObject("{'msg':'该商品不存在'}");
+			} else if(goodsReal.getGoodsStatus() == 0){
+				//TODO 测试的时候进行了修改,正常使用要修改回去
+				printObject("{'msg':'该商品已下架或者待审核'}");
+			}
+			else {
+				shoppingCart.setPrice(goodsReal.getGoodsPrice());
+				shoppingCartDAO.merge(shoppingCart);
 			}
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 	/**
@@ -293,15 +304,14 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * 此操作不可撤销
 	 */
 	public String acceptAllGoods(){
-		String msg = "";
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -321,7 +331,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 				shoppingCartDAO.delete(shoppingCart);
 			}
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 	/*
@@ -331,16 +341,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * main.com.yourantao.aimeili.action.ShoppingCartInterface#deleteGoods()
 	 */
 	public String deleteGoods() {
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -348,7 +357,7 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		//Integer providerId = getIntegerParameter(PROVIDER_ID);
 		// 验证参数
 		if (goodsRealId == null) {
-			printString("{'msg':'没有提供商品'}");
+			printObject("{'msg':'没有提供商品'}");
 			return null;
 		}
 		ShoppingCart shoppingCartExample = new ShoppingCart();
@@ -358,13 +367,22 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
 		if (shoppingCartList.size() == 0) {
-			msg = "{'msg':'购物车不存在这样的商品'}";
+			printObject("{'msg':'购物车不存在这样的商品'}");
+			return null;
 		} else if (shoppingCartList.size() == 1) {
 			shoppingCartDAO.delete(shoppingCartList.get(0));
 		} else {
-			msg = "{'msg':'购物车中存在多件商品'}";// 这样的情况不应该出现的
+			printObject("{'msg':'购物车中存在多件商品'}");
+			return null;
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
+		
+		/*日志记录*/
+		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
+		shoppingCartLog.setgoodsRealId(goodsRealId);
+		shoppingCartLog.setCount(0);
+		shoppingCartLog.setType(ShoppingCartLog.DELETE);
+		shoppingLogger.debug(shoppingCartLog.toString());
 		return null;
 	}
 
@@ -375,16 +393,15 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 	 * main.com.yourantao.aimeili.action.ShoppingCartInterface#deleteAllGoods()
 	 */
 	public String deleteAllGoods() {
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -394,10 +411,20 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 		// shoppingCartExample.setProviderId(providerId);
 		List<ShoppingCart> shoppingCartList = shoppingCartDAO
 				.findByExample(shoppingCartExample);
+		
+		
+		/*日志记录*/
+		ShoppingCartLog shoppingCartLog = new ShoppingCartLog(uuid, getRequest());
+		
 		for (ShoppingCart shoppingCart : shoppingCartList) {
+			Integer goodsRealId=shoppingCart.getGoodsRealId();
 			shoppingCartDAO.delete(shoppingCart);
+			shoppingCartLog.setgoodsRealId(goodsRealId);
+			shoppingCartLog.setCount(0);  
+			shoppingCartLog.setType(ShoppingCartLog.DELETE);
+			shoppingLogger.debug(shoppingCartLog.toString());
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
 		return null;
 	}
 }

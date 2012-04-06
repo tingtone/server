@@ -16,6 +16,8 @@ import main.com.yourantao.aimeili.bean.UserFavorite;
 import main.com.yourantao.aimeili.bean.UserFavoriteDAO;
 import main.com.yourantao.aimeili.bean.UserLogin;
 import main.com.yourantao.aimeili.bean.UserLoginDAO;
+import main.com.yourantao.aimeili.bean.UserMessage;
+import main.com.yourantao.aimeili.bean.UserMessageDAO;
 import main.com.yourantao.aimeili.bean.UserRelative;
 import main.com.yourantao.aimeili.bean.UserRelativeDAO;
 import main.com.yourantao.aimeili.conf.Constant;
@@ -26,6 +28,7 @@ import main.com.yourantao.aimeili.log.UserInfoLog;
 import main.com.yourantao.aimeili.log.UserLoginLog;
 import main.com.yourantao.aimeili.log.UserLogoutLog;
 import main.com.yourantao.aimeili.log.UserRegisterLog;
+import main.com.yourantao.aimeili.util.MD5;
 import main.com.yourantao.aimeili.util.TransTool;
 import main.com.yourantao.aimeili.vo.UserView;
 
@@ -58,6 +61,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	private GoodsDAO goodsDAO;
 	private UserAddressDAO userAddressDAO;
 	private UserRelativeDAO userRelativeDAO;
+	private UserMessageDAO userMessageDAO;
 
 	/*
 	 * for client (non-Javadoc)
@@ -71,21 +75,21 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		Integer goodsId = getIntegerParameter(GOODS_ID);
 		Short favoriteType = FavoriteType.GOODS;
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		if (goodsId == null || goodsId == 0) {
-			printString(NO_GOODS_ID);
+			printObject(NO_GOODS_ID);
 			return null;
 		}
 		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
 		if (userLoginList.isEmpty()) {
-			printString(NO_USER_LOGIN);
+			printObject(NO_USER_LOGIN);
 			return null;
 		}
 		int userId = userLoginList.get(0).getUserId();
 		if (!userFavoriteDAO.findByUserIdAndGoodId(userId, goodsId, favoriteType).isEmpty()) {
-			printString(FAVORITE_DUPLICATED);
+			printObject(FAVORITE_DUPLICATED);
 			return null;
 		}
 		userFavoriteDAO.save(new UserFavorite(userId, favoriteType, goodsId,
@@ -110,7 +114,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public String userLoginRegister() {
 		String uuid = getStringParameter(UUID);
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
@@ -169,7 +173,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 
 		String uuid = getStringParameter(UUID);
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		String nickName=getStringParameter("nick");   //昵称
@@ -178,25 +182,25 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		String isSensitive = getStringParameter(SKIN).substring(1,2);
 		String birthday = getStringParameter("birth");
 		if (skin == null || skin.equals("n")) {
-			printString(NO_SKIN);
+			printObject(NO_SKIN);
 			return null;
 		}
 		if(birthday==null && birthday.equals("null")){
-			printString("{'msg':'没有生日信息'}");
+			printObject("{'msg':'没有生日信息'}");
 			return null;
 		}
 		String userTags=getStringParameter("tag");
 		if (userTags == null || userTags.equals("null")) {
-			printString(NO_SKIN);
+			printObject(NO_SKIN);
 			return null;
 		}
 		userTags=TransTool.transUserTagsIdToName(userTags);
 		if (city == null|| city.equals("null")) {
-			printString("{'msg':'没有城市'}");
+			printObject("{'msg':'没有城市'}");
 			return null;
 		}
 		if (userTags == null|| userTags.equals("null")||userTags.equals("000000")) {
-			printString("{'msg':'没有用户标签'}");
+			printObject("{'msg':'没有用户标签'}");
 			return null;
 		}
 		skin = TransTool.transSkinIdToName(skin);
@@ -236,16 +240,16 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	 * @see main.com.yourantao.aimeili.action.UserInterface#getUserAddress()
 	 */
 	@Override
-	public String getUserAddress() {
+	public String userGetAddress() {
 		// 获取参数
 		String uuid = getStringParameter(UUID);
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
 		if (userLoginList.isEmpty()) {
-			printString(NO_USER_LOGIN);
+			printObject(NO_USER_LOGIN);
 			return null;
 		}
 		int userId = userLoginList.get(0).getUserId();
@@ -263,17 +267,17 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public String userUpdateAddress() {
 		Integer aid = getIntegerParameter(ADDRESS_ID); // 送货信息id
 		if (aid==null || aid == 0) {
-			printString("{'msg':'没有送货ID'}");
+			printObject("{'msg':'没有送货ID'}");
 			return null;
 		}
 		UserAddress userAddress = userAddressDAO.findById(aid);
 		if(userAddress==null){
-			printString("{'msg':'没有该送货地址'}");
+			printObject("{'msg':'没有该送货地址'}");
 			return null;
 		}
 
 		String location = getStringParameter("loc"); // 省，市，区，方位
-		String[] locations = location.split("/"); // 0-》省，1-》市，2=》区 ，3=》方位
+		String[] locations = location.split("-"); // 0-》省，1-》市，2=》区 ，3=》方位
 		String address = getStringParameter("add");
 		String userName = getStringParameter("user");
 		String telphone = getStringParameter("tel");
@@ -302,7 +306,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public String userInsertAddress() {
 		String uuid = getStringParameter(UUID);
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
@@ -316,7 +320,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		
 		UserAddress userAddress = new UserAddress();
 		String location = getStringParameter("loc"); // 省，市，区，方位
-		String[] locations = location.split("/"); // 0-》省，1-》市，2=》区 ，3=》方位
+		String[] locations = location.split("-"); // 0-》省，1-》市，2=》区 ，3=》方位
 		String address = getStringParameter("add");   //用户填的具体地址
 		String userName = getStringParameter("user");
 		String mobile = getStringParameter("mobile");
@@ -344,12 +348,13 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	 * 
 	 * @see main.com.yourantao.aimeili.action.UserInterface#deleteUserAddress()
 	 */
-	public String deleteUserAddress() {
+	@Override
+	public String userDeleteAddress() {
 		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter(UUID);
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
@@ -360,8 +365,10 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			userAddressDAO.delete(userAddress);//
 		} else {
 			msg = "{'msg':'地址与用户不匹配'}";
+			printObject(msg);
+			return null;
 		}
-		printString(msg);
+		printString(MSG_SUCCESS);
 		return null;
 
 	}
@@ -384,37 +391,37 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		String userTags = getStringParameter("tag");
 		int relativeId=0;
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString(NO_USER);
+			printObject(NO_USER);
 			return null;
 		}
 		int uid = userLogin.get(0).getUserId();
 		if (skin == null|| skin.equals("n")) {
 			msg = "{'msg':'没有肤质结果'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		if (relative == null|| relative.equals("null")) {
 			msg = "{'msg':'没有亲戚关键词'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		if (city == null|| city.equals("null")) {
 			msg = "{'msg':'没有城市'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		if (userTags == null|| userTags.equals("null")||userTags.equals("000000")) {
 			msg = "{'msg':'没有用户标签'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		if(birthday==null && birthday.equals("null")){
-			printString("{'msg':'没有生日信息'}");
+			printObject("{'msg':'没有生日信息'}");
 			return null;
 		}
 		// try {
@@ -464,7 +471,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		}else{
 			UserRelative userRelative=userRelativeDAO.findById(id);
 			if(userRelative==null){
-				printString("{'msg':'没有该id'}");
+				printObject("{'msg':'没有该id'}");
 				return null;
 			}
 			try {
@@ -490,8 +497,6 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 			userInfoLog.setUserTags(userTags);
 			userInfoLogger.debug(userInfoLog.toString());
 			
-			printString(MSG_SUCCESS);
-			return null;
 		}
 		
 		
@@ -511,12 +516,12 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		String msg = "";
 		String uuid = getStringParameter(UUID);
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString(NO_USER);
+			printObject(NO_USER);
 			return null;
 		}
 		int uid = userLogin.get(0).getUserId();
@@ -569,23 +574,23 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		Integer relativeId=getIntegerParameter("id");
 		
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString(NO_USER);
+			printObject(NO_USER);
 			return null;
 		}
 		int uid = userLogin.get(0).getUserId();
 		if (relativeId == null|| relativeId==0) {
-			printString("{'msg':'没有亲戚ID'}");
+			printObject("{'msg':'没有亲戚ID'}");
 			return null;
 		}
 		UserRelative userRelative = userRelativeDAO.findById(relativeId);
 				
 		if(userRelative==null){
-			printString("{'msg':'没有该亲戚'}");
+			printObject("{'msg':'没有该亲戚'}");
 			return null;
 		}else{
 			userRelativeDAO.delete(userRelative);
@@ -611,22 +616,22 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		String uuid = getStringParameter(UUID); 
 		Short favoriteType = FavoriteType.GOODS;
 		if (uuid == null || uuid.equals("null")) {
-			printString(NO_UUID);
+			printObject(NO_UUID);
 			return null;
 		}
 		if (goodsId == null || goodsId == 0) {
-			printString(NO_GOODS_ID);
+			printObject(NO_GOODS_ID);
 			return null;
 		}
 		List<UserLogin> userLoginList = userLoginDAO.findByUuid(uuid);
 		if (userLoginList.isEmpty()) {
-			printString(NO_USER_LOGIN);
+			printObject(NO_USER_LOGIN);
 			return null;
 		}
 		int userId=userLoginList.get(0).getUserId();
 		List<UserFavorite> userFavorites=userFavoriteDAO.findByUserIdAndGoodId(userId, goodsId, favoriteType);
 		if (userFavorites.isEmpty()) {
-			printString("{'msg':'没有收藏'}");
+			printObject("{'msg':'没有收藏'}");
 			return null;
 		}else{
 			userFavoriteDAO.delete(userFavorites.get(0));
@@ -650,18 +655,19 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public String getUserFavoriteCount(){
 		String uuid = getStringParameter("uuid");
 		if (uuid == null || uuid.equals("null")) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
 		List<UserFavorite> userFavlist = userFavoriteDAO.findByUserId(userId);
 		int favCount = userFavlist.size();
-		printString("{'favCount':'"+favCount+"'}");
+//		printObject("{favCount:"+favCount+"}");
+		printObject(favCount);
 		return null;
 	}
 	
@@ -680,6 +686,45 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		leaveCurrentPage.setPageName(pageName);
 		leaveCurrentPage.setTime(time);
 		leaveCurrentPageLogger.debug(leaveCurrentPage);
+	}
+	
+	/*
+	 * for client
+	 * (non-Javadoc)
+	 * @see main.com.yourantao.aimeili.action.UserInterface#userInsertMessage()
+	 */
+	@Override
+	public String userInsertMessage() {
+		String uuid = getStringParameter("uuid");
+		if (uuid == null || uuid.equals("null")) {
+			printObject("{'msg':'没有设备号'}");
+			return null;
+		}
+		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
+		if (userLogin.size() == 0) {
+			printObject("{'msg':'没有该用户'}");
+			return null;
+		}
+		int userId = userLogin.get(0).getUserId();
+		String msg= getStringParameter("msg");
+		if(msg == null || msg.equals("null")){
+			printObject("{'msg':'没有留言'}");
+			return null;
+		}
+		String msg_md5=MD5.md5(msg+uuid);
+		List<UserMessage> userMessages=userMessageDAO.findByMessageMd5(msg_md5);
+		if(userMessages.isEmpty()){    //是空则添加
+			UserMessage userMessage = new UserMessage();
+			userMessage.setUserId(userId);
+			userMessage.setMessageText(msg);
+			userMessage.setMessageMd5(msg_md5);
+			userMessage.setMessageTime(new Timestamp(System.currentTimeMillis()));
+			userMessageDAO.save(userMessage);
+		}else{
+			printObject("{'msg':'重复的留言'}");
+			return null;
+		}
+		return null;
 	}
 	
 	public UserRelativeDAO getUserRelativeDAO() {
@@ -729,4 +774,13 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	public void setUserDAO(UserDAO userDAO) {
 		this.userDAO = userDAO;
 	}
+
+	public UserMessageDAO getUserMessageDAO() {
+		return userMessageDAO;
+	}
+
+	public void setUserMessageDAO(UserMessageDAO userMessageDAO) {
+		this.userMessageDAO = userMessageDAO;
+	}
+	
 }

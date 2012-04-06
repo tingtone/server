@@ -287,20 +287,20 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid = getRequest().getParameter("uuid");
 		if (uuid == null) {
 			msg = "{'msg':'没有设备号'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		Integer uid = userLogin.get(0).getUserId();
 		if (uid == null || uid == 0) {
 			msg = "{'msg':'设备号未登记'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<UserFavorite> userfavlist = userFavoriteDAO.findByUserId(uid);
 		if (userfavlist.size() == 0) { // 没有收藏
 			msg = "{'msg':'没有收藏商品'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		} else { // 有收藏，取得相应商品
 			List<GoodsView> result = new ArrayList<GoodsView>();
@@ -377,7 +377,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	public String getGoodsListByCat() {
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
 		if (categoryId == null) {
-			printString("{'msg':'没有分类号'}");
+			printObject("{'msg':'没有分类号'}");
 			return null;
 		}
 		List<Goods> goodsList = goodsDAO.findByCategoryId(categoryId);
@@ -573,7 +573,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid = getRequest().getParameter(UUID);
 		Integer goodsId = getIntegerParameter(GOODS_ID);
 		if (goodsId == null) {
-			printString("{'msg':'没有商品号'}");
+			printObject("{'msg':'没有商品号'}");
 			return null;
 		}
 		List<GoodsImages> goodsimages = goodsImagesDAO.findByGoodsId(goodsId);
@@ -677,7 +677,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid = getStringParameter(UUID);
 		Integer goodsId = getIntegerParameter(GOODS_ID);
 		if (goodsId == null || goodsId == 0) {
-			printString("{'msg':'没有商品id'}");
+			printObject("{'msg':'没有商品id'}");
 			return null;
 		}
 		List<GoodsMap> GoodsMapList = goodsMapDAO.findByGoodsId(goodsId);
@@ -763,7 +763,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodslist = goodsDAO.findBySkin(skinName); // 获取适合肤质，不适合，需要注意的
 			if (goodslist.isEmpty()) {
 				msg = "{'msg':'无商品'}";
-				printString(msg);
+				printObject(msg);
 				return null;
 			}
 			for (Goods goods : goodslist) {
@@ -828,7 +828,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodslist = goodsDAO.findBySkinSensitive(skinName); // 获取适合肤质，不适合，需要注意的
 			if (goodslist.isEmpty()) {
 				msg = "{'msg':'无商品'}";
-				printString(msg);
+				printObject(msg);
 				return null;
 			}
 			for (Goods goods : goodslist) {
@@ -895,7 +895,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		}
 		if (goodslist.isEmpty()) {
 			msg = "{'msg':'无商品'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		GoodsSkinView result = new GoodsSkinView();
@@ -934,7 +934,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid=getStringParameter(UUID);
 		if (uuid == null) {
 			msg = "{'msg':'没有设备号'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		String skin = getRequest().getParameter("skin").substring(0, 1);
@@ -946,7 +946,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		Integer categoryId = getIntegerParameter(CATEGORY_ID);
 		if (categoryId == null) {
 			msg = "{'msg':'没有分类号'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		String skinName = TransTool.transSkinIdToName(skin);
@@ -958,7 +958,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 			goodslist = goodsDAO.findBySkinAndCat(skinName, categoryId); // 获取适合肤质，不适合，需要注意的
 			if (goodslist.isEmpty()) {
 				msg = "{'msg':'无商品'}";
-				printString(msg);
+				printObject(msg);
 				return null;
 			}
 			for (Goods goods : goodslist) {
@@ -1024,7 +1024,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 					.findBySkinAndCatSensitive(skinName, categoryId); // 获取适合肤质，不适合，需要注意的(敏感性肌肤的)
 			if (goodslist.isEmpty()) {
 				msg = "{'msg':'无商品'}";
-				printString(msg);
+				printObject(msg);
 				return null;
 			}
 			for (Goods goods : goodslist) {
@@ -1118,7 +1118,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String[] keywords = keyword
 				.split(",|\\.|/|\\\\|=|-(|)|\\*|%|@|\\~|\\+|<|>|$|&|。| |，|！|、"); // 按分隔符分割为多个词
 		if (keywords == null || keywords[0].equals("null")) {
-			printString("{'msg':'没有搜索关键词'}");
+			printObject("{'msg':'没有搜索关键词'}");
 			return null;
 		}
 		List<GoodsView> goodsViews = new ArrayList<GoodsView>(); // 返回的结果
@@ -1216,7 +1216,7 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		}
 
 		if (goodsId.isEmpty()) { // 无商品
-			printString("{'msg':'没有搜索到商品'}");
+			printObject("{'msg':'没有搜索到商品'}");
 			return null;
 		}
 
@@ -1293,18 +1293,18 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid = getStringParameter(UUID);
 		Integer eid = getIntegerParameter("eid");
 		if (eid == null || eid == 0) {
-			printString("{'msg':'没有输入功效号'}");
+			printObject("{'msg':'没有输入功效号'}");
 			return null;
 		}
 		Efficacy efficacy = efficacyDAO.findById(eid);
 		if (efficacy == null) {
-			printString("{'msg':'没有找到功效'}");
+			printObject("{'msg':'没有找到功效'}");
 			return null;
 		}
 		List<GoodsView> goodsViews = new ArrayList<GoodsView>(); // 返回的结果
 		List<GoodsEfficacy> goodsList = goodsEfficacyDAO.findByEfficacyId(eid);
 		if (goodsList.isEmpty()) {
-			printString("{'msg':'没有商品'}");
+			printObject("{'msg':'没有商品'}");
 			return null;
 		}
 		for (GoodsEfficacy goodsEfficacy : goodsList) {
@@ -1370,18 +1370,18 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid = getStringParameter(UUID);
 		Integer bid = getIntegerParameter("bid");
 		if (bid == null || bid == 0) {
-			printString("{'msg':'没有输入品牌号'}");
+			printObject("{'msg':'没有输入品牌号'}");
 			return null;
 		}
 		Brand brand = brandDAO.findById(bid);
 		if (brand == null) {
-			printString("{'msg':'没有找到品牌'}");
+			printObject("{'msg':'没有找到品牌'}");
 			return null;
 		}
 		List<GoodsView> goodsViews = new ArrayList<GoodsView>(); // 返回的结果
 		List<Goods> goodsList = goodsDAO.findByBrandId(bid);
 		if (goodsList.isEmpty()) {
-			printString("{'msg':'没有商品'}");
+			printObject("{'msg':'没有商品'}");
 			return null;
 		}
 		for (Goods goods : goodsList) {
@@ -1453,18 +1453,18 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		String uuid = getRequest().getParameter(UUID);
 		Integer gid = getIntegerParameter(GOODS_ID);
 		if (gid == null || gid == 0) {
-			printString("{'msg':'没有输入商品号'}");
+			printObject("{'msg':'没有输入商品号'}");
 			return null;
 		}
 
 		Goods goods = goodsDAO.findById(gid);
 		if (goods == null) {
-			printString("{'msg':'没有该商品'}");
+			printObject("{'msg':'没有该商品'}");
 			return null;
 		}
 		List<GoodsExperience> goodsExperiences = goodsExperienceDAO.findByGoodsId(gid);
 		if(goodsExperiences.isEmpty()){
-			printString("{'msg':'此商品暂无心得评测'}");
+			printObject("{'msg':'此商品暂无心得评测'}");
 			return null;
 		}
 		printArray(goodsExperiences);
@@ -1490,14 +1490,14 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		Integer rankingId = getIntegerParameter(RANKING_ID);
 		if (rankingId == null) {
 			msg = "{'msg':'没有排行榜ID'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<RankingGoods> goodsList = rankingGoodsDAO
 				.findByRankingId(rankingId);
 		if (goodsList.isEmpty()) {
 			msg = "{'msg':'暂无排行商品'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<GoodsView> goodsViews = new ArrayList<GoodsView>(); // 返回的结果
@@ -1574,14 +1574,14 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 		Integer rankingId = getIntegerParameter(RANKING_ID);
 		if (rankingId == null) {
 			msg = "{'msg':'没有排行榜ID'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<RankingGoods> goodsList = rankingGoodsDAO
 				.findByRankingId(rankingId);
 		if (goodsList.isEmpty()) {
 			msg = "{'msg':'暂无排行商品'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<GoodsViewWithRanking> goodsViewWithRankings = new ArrayList<GoodsViewWithRanking>(); // 返回的结果
@@ -1651,17 +1651,17 @@ public class GoodsAction extends BaseAction implements GoodsInterface, Constant 
 	public String getGoodsFavoriteCount() {
 		Integer goodsId=getIntegerParameter(GOODS_ID);
 		if(goodsId==null || goodsId==0){
-			printString("{'msg':'没有商品ID'}");
+			printObject("{'msg':'没有商品ID'}");
 			return null;
 		}
 		Goods goods=goodsDAO.findById(goodsId);
 		if(goods==null){
-			printString("{'msg':'没有该商品'}");
+			printObject("{'msg':'没有该商品'}");
 			return null;
 		}
 		List<UserFavorite> userFavorites=userFavoriteDAO.findByRelatedId(goodsId);
 		int count=userFavorites.size();
-		printString("{'favCount':'"+count+"'}");
+		printObject("{'favCount':'"+count+"'}");
 		return null;
 	}
 	
