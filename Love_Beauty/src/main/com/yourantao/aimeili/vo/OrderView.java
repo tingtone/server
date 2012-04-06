@@ -16,7 +16,7 @@ public class OrderView {
 	// 订单ID
 	private List<Integer> orderIdList = new ArrayList<Integer>();
 	//订单商品
-	private List<ShoppingCartView> goodsList = new ArrayList<ShoppingCartView>();
+	private List<ShoppingCartView> shoppingCartList = new ArrayList<ShoppingCartView>();
 	// 物流信息
 	private List<OrderTraceView> traceList = new ArrayList<OrderTraceView>();
 	// 收件人姓名
@@ -34,7 +34,7 @@ public class OrderView {
 	}
 	//自定义setter
 	public void addGoods(ShoppingCartView shoppingCartView ) {
-		this.goodsList.add(shoppingCartView);
+		this.shoppingCartList.add(shoppingCartView);
 	}
 	// 自定义setter
 	public void addTraceView(OrderTraceView traceView) {
@@ -101,10 +101,10 @@ public class OrderView {
 		this.mobile = mobile;
 	}
 	public List<ShoppingCartView> getGoodsList() {
-		return goodsList;
+		return shoppingCartList;
 	}
 	public void setGoodsList(List<ShoppingCartView> goodsList) {
-		this.goodsList = goodsList;
+		this.shoppingCartList = goodsList;
 	}
 
 }
