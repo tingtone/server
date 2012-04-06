@@ -170,12 +170,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.size() == 0) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -189,7 +189,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		String countString = "{'favourite':'" + favCount + "','shopping':'"
 				+ shoppingCount + "','unconfirm':'" + countList.get(0)
 				+ "','history':'" + countList.get(1) + "'}";
-		printString(countString);
+		printObject(countString);
 		return null;
 	}
 
@@ -204,12 +204,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -286,12 +286,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -300,19 +300,19 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 
 		// 验证参数
 		if (orderNum == null) {
-			printString("{'msg':'参数个数不足'}");
+			printObject("{'msg':'参数个数不足'}");
 			return null;
 		}
 		List<Order> orderList = orderDAO.findByOrderNum(orderNum);
 		if (orderList.isEmpty()) {
 			msg = "{'msg':'订单号不存在'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		for (Order order : orderList) {
 			if (order.getUserId() != userId) {
 				msg = "{'msg':'订单与用户不匹配'}";
-				printString(msg);
+				printObject(msg);
 				return null;
 			} else if (order.getHandled() == 3 && order.getFinish() == 0) {
 				// 用户确认之后需要进行更新操作
@@ -320,11 +320,11 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				orderDAO.merge(order);
 			} else {
 				msg = "{'msg':'订单不存在或请等待管理员处理或已经收货'}";
-				printString(msg);
+				printObject(msg);
 				return null;
 			}
 		}
-		printString(msg);
+		printObject(msg);
 		return null;
 	}
 
@@ -338,12 +338,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -408,12 +408,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -483,12 +483,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -535,7 +535,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			//TODO 还有可能是购物车中不存在这样的记录
 		}
 		if(goodsRealErrorViewList.isEmpty())
-			printString(msg);
+			printObject(msg);
 		else
 			printObject(goodsRealErrorViewList);
 		return null;
@@ -550,12 +550,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -573,16 +573,16 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		Integer invoice = getIntegerParameter("invoice");
 		// 验证参数
 		/*if (providerIdString == null) {
-			printString("{'msg':'没有供应商'}");
+			printObject("{'msg':'没有供应商'}");
 			return null;
 		}*/
 		if (addressId == null) {
-			printString("{'msg':'无地址信息'}");
+			printObject("{'msg':'无地址信息'}");
 			return null;
 		}
 		if (// paymentType == null || deliverType == null ||
 		deliverTime == null || invoice == null) {
-			printString("{'msg':'参数个数不足'}");
+			printObject("{'msg':'参数个数不足'}");
 			return null;
 		}
 
@@ -592,12 +592,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		 * getStringParameter("invoicecontent"); String invoiceName =
 		 * getStringParameter("invoicename"); //验证参数 if(invoice != 0 &&
 		 * (invoiceContent == null || invoiceName == null || invoiceType ==
-		 * null)) { printString("{'msg':'发票相关参数个数不足'}"); return null; }
+		 * null)) { printObject("{'msg':'发票相关参数个数不足'}"); return null; }
 		 */
 		
 		boolean filterResult = quickExamOrderGoods(goodsRealIdString, userId);
 		if(!filterResult){
-			printString("{'msg':'商品出错'}");
+			printObject("{'msg':'商品出错'}");
 			return null;
 		}
 		String[] goodsRealIdListList = goodsRealIdString.split(PROVIDER_SPLITER);
@@ -689,7 +689,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 				orderDAO.merge(order);
 			}
 		}
-		printString(msg);
+		printObject(msg);
 		return null;
 	}
 
@@ -703,12 +703,12 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
-			printString("{'msg':'没有设备号'}");
+			printObject("{'msg':'没有设备号'}");
 			return null;
 		}
 		List<UserLogin> userLogin = userLoginDAO.findByUuid(uuid);
 		if (userLogin.isEmpty()) {
-			printString("{'msg':'没有该用户'}");
+			printObject("{'msg':'没有该用户'}");
 			return null;
 		}
 		int userId = userLogin.get(0).getUserId();
@@ -718,7 +718,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		Order order = orderDAO.findById(orderId);
 		if (order.getHandled() > 0 || order.getFinish() == 3) {
 			// 管理员下单之后就无法更改了
-			printString("{'msg':'已经下单或已经收货,无法更改'}");
+			printObject("{'msg':'已经下单或已经收货,无法更改'}");
 			return null;
 		}
 		OrderGoods orderGoodsExample = new OrderGoods();
@@ -742,7 +742,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 			msg = "{'msg':'订单中商品不是唯一的'}";
 		}
 		//
-		printString(msg);
+		printObject(msg);
 		return null;
 	}
 
@@ -847,7 +847,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * public String getOrdersForEditor() { // 获取参数 Integer orderType =
 	 * getIntegerParameter("ocid"); if (orderType == null) {
 	 * 
-	 * printString("{'msg':'没有订单种类'}"); return null;
+	 * printObject("{'msg':'没有订单种类'}"); return null;
 	 * 
 	 * } autoConfirmOrder(); // 获取未处理订单 List<Order> unhandledOrderList =
 	 * orderDAO.getUnhandledOrders(); List<OrderEditorView> orderEditorViewList
@@ -1033,7 +1033,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		Integer priceType = getIntegerParameter("type");
 		// 验证参数
 		if (goodsRealId == null || orderId == null || priceType == null) {
-			printString("{'msg':'参数个数不足'}");
+			printObject("{'msg':'参数个数不足'}");
 			return null;
 		}
 		OrderGoods orderGoodsExample = new OrderGoods();
@@ -1086,10 +1086,10 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 		// 验证参数
 		if (orderId == null || goodsRealId == null || count == null) {
 			// System.out.println("{'msg':'参数个数不足'}");
-			printString("{'msg':'param not complete'}");
+			printObject("{'msg':'param not complete'}");
 			return null;
 		} else if (count <= 0) {
-			printString("{'msg':'count must > 0'}");
+			printObject("{'msg':'count must > 0'}");
 			return null;
 		}
 		OrderGoods orderGoodsExample = new OrderGoods();
@@ -1157,7 +1157,7 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 
 		List<Order> orderList = orderDAO.findByOrderNum(orderNum);
 		if (orderList.isEmpty()) {
-			printString("{'msg':'没有这个订单'}");// 可能有问题
+			printObject("{'msg':'没有这个订单'}");// 可能有问题
 			return null;
 		}
 		Order orderTmp = orderList.get(0);

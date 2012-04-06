@@ -324,13 +324,13 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 		Integer rankingId = getIntegerParameter(RANKING_ID);
 		if (rankingId == null){
 			msg="{'msg':'没有排行榜ID'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List goods = rankingGoodsDAO.findByRankingId(rankingId);
 		if(goods.size()==0){
 			msg="{'msg':'暂无排行商品'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		printArray(goods);
@@ -371,13 +371,13 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 		String ranking_name=getRequest().getParameter("ranking_name");
 		if(ranking_name==null || ranking_name.equals("null") ||ranking_name.equals("")){
 			msg="{'msg':'没有排行榜名'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		List<Ranking> rankings=rankingDAO.findByRankingName(ranking_name);
 		if(rankings.size()!=0){
 			msg="{'msg':'重复的排行榜名'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		ranking.setRankingName(ranking_name);
@@ -409,19 +409,19 @@ public class RankingAction extends BaseAction implements Constant, RankingInterf
 		Integer rankingId=getIntegerParameter(RANKING_ID);
 		if (rankingId == null){
 			msg="{'msg':'没有排行榜ID'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		Integer gid=getIntegerParameter(GOODS_ID);
 		if (gid == null){
 			msg="{'msg':'没有商品ID'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		Goods goods=goodsDAO.findById(gid);
 		if(goods==null){
 			msg="{'msg':'该商品ID没有录入'}";
-			printString(msg);
+			printObject(msg);
 			return null;
 		}
 		RankingGoods rankingGoods=new RankingGoods();

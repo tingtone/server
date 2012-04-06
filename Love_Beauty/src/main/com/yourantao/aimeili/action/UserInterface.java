@@ -65,7 +65,7 @@ public interface UserInterface {
 	 * 获得用户送货信息
 	 * @return
 	 */
-	public String getUserAddress();
+	public String userGetAddress();
 	
 	/**
 	 * 用户更新送货信息
@@ -82,12 +82,17 @@ public interface UserInterface {
 	 * 用户删除送货信息
 	 * @return
 	 */
-	public String deleteUserAddress();
+	public String userDeleteAddress();
 	
 	/**
 	 * 获得某件商品的收藏数
 	 */
 	public String getUserFavoriteCount();
+	
+	/**
+	 * 获得某件商品的收藏数
+	 */
+	public String userInsertMessage();
 	
 	/**
 	 * 客户端页面结束时需调用，用于传送页面停留时间

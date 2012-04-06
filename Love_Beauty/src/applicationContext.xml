@@ -156,6 +156,9 @@
 				</value>
 				<value>
 					main/com/yourantao/aimeili/bean/GoodsExperience.hbm.xml
+				</value>
+				<value>
+					main/com/yourantao/aimeili/bean/UserMessage.hbm.xml
 				</value></list>
 		</property>
 	</bean>
@@ -570,6 +573,9 @@
 		<property name="userAddressDAO">
 			<ref bean="UserAddressDAO" />
 		</property>
+		<property name="userMessageDAO">
+			<ref bean="UserMessageDAO" />
+		</property>
 	</bean>
 	<!-- end -->
 	<bean id="SearchDAO"
@@ -586,6 +592,12 @@
 	</bean>
 	<bean id="GoodsExperienceDAO"
 		class="main.com.yourantao.aimeili.bean.GoodsExperienceDAO">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<bean id="UserMessageDAO"
+		class="main.com.yourantao.aimeili.bean.UserMessageDAO">
 		<property name="sessionFactory">
 			<ref bean="sessionFactory" />
 		</property>
