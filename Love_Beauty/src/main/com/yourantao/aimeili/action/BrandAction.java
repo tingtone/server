@@ -87,12 +87,14 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 		this.newImageFileName = newImageFileName;
 	}
 	/*
+	 * for Client Editor
 	 * (non-Javadoc)
 	 * 
 	 * @see main.com.yourantao.aimeili.action.BrandInterface#getBrands()
 	 */
 	@Override
 	public String getBrands() {
+		List<BrandView> brandViews_NoOtherName = new ArrayList<BrandView>();
 		List<BrandView> brandViews=new ArrayList<BrandView>();
 		List<Brand> brandList = brandDAO.findAll(); // 无条件全部获得
 		for (Brand brand : brandList) {
@@ -102,7 +104,6 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 			brandView.setBrandId(brand.getBrandId());
 			brandView.setBrandOtherName(brand.getBrandOtherNames());
 			
-			
 			if (brand.getBrandImageId()!= 0) // 图片非空
 			{
 				Image image = imageDAO.findById(brand.getBrandImageId());
@@ -110,15 +111,23 @@ public class BrandAction extends BaseAction implements Constant, BrandInterface 
 						.get(Config.BASE_IMAGEURL)
 						+ image.getImgUrl());
 			}
+			if(brand.getBrandOtherNames()==null || brand.getBrandOtherNames().equals("")){
+				brandViews_NoOtherName.add(brandView);
+			}else{
+				brandViews.add(brandView);
+			}
+		}
+		
+		for (BrandView brandView : brandViews_NoOtherName) {  //将otherName为空的排到最后面
 			brandViews.add(brandView);
 		}
 		printArray(brandViews);
 		return null;
 	}
 
-	/* for Editor
+	/* 
+	 * for Editor
 	 * (non-Javadoc)
-	 * 
 	 * @see main.com.yourantao.aimeili.action.BrandInterface#getSeries()
 	 */
 	@Override

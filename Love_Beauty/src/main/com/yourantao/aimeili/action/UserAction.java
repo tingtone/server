@@ -254,7 +254,13 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		}
 		int userId = userLoginList.get(0).getUserId();
 		List<UserAddress> userAddresses = userAddressDAO.findByUserId(userId);
-		printArray(userAddresses);
+		List<UserAddress> result = new ArrayList<UserAddress>();
+		for (UserAddress userAddress : userAddresses) {
+			if(userAddress.getIsDefault()!=2){  //2代表用户已经删除
+				result.add(userAddress);
+			}
+		}
+		printArray(result);
 		return null;
 	}
 
@@ -344,6 +350,7 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 	}
 
 	/*
+	 * for client
 	 * (non-Javadoc)
 	 * 
 	 * @see main.com.yourantao.aimeili.action.UserInterface#deleteUserAddress()
@@ -362,7 +369,9 @@ public class UserAction extends BaseAction implements UserInterface, Constant {
 		int addressId = getIntegerParameter(ADDRESS_ID);//
 		UserAddress userAddress = userAddressDAO.findById(addressId);
 		if (userAddress.getUserId() == uid) {
-			userAddressDAO.delete(userAddress);//
+			
+			//删除用户地址，标志位设置为2
+			userAddress.setIsDefault((short)2);
 		} else {
 			msg = "{'msg':'地址与用户不匹配'}";
 			printObject(msg);
