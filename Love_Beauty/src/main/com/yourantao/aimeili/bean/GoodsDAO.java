@@ -1,17 +1,23 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import main.com.yourantao.aimeili.vo.GoodsView;
 
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.sun.istack.internal.FinalArrayList;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
 /**
@@ -97,13 +103,25 @@ public class GoodsDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByProperty(String propertyName, Object value) {
+	public List findByProperty(final String propertyName,final Object value) {
 		log.debug("finding Goods instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from Goods as model where model."
-					+ propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				 String queryString = "from Goods as model where model."
+						+ propertyName + "= ?";
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, value);
+	                query.setFirstResult(0);
+	                query.setMaxResults(2);
+	                List list=query.list();
+	                return list;
+				}
+				
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -270,11 +288,21 @@ public class GoodsDAO extends HibernateDaoSupport {
 	 * @param hqlSearch
 	 * @return
 	 */
-	public List<Goods> findBySearchKeyword(String hqlSearch) {
+	public List<Goods> findBySearchKeyword(final String hqlSearch) {
 		try {
-			String queryString = "from Goods where "
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from Goods where "
 					+ hqlSearch;
-			return getHibernateTemplate().find(queryString);
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+	                query.setFirstResult(0);
+	                query.setMaxResults(2);
+	                List<Goods> list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
