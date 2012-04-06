@@ -11,6 +11,8 @@ package main.com.yourantao.aimeili.conf;
 public interface Constant {
 	
 	public static final String UTF8 = "UTF-8";
+	public static final String PAGE = "page";  //分页页码
+	public static final String NUM= "num";  
 	
 	public static final String CATEGORY_ID = "cid";  //分类ID
 	public static final String TOPIC_ID = "tid";  //专题ID

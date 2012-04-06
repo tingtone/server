@@ -1,11 +1,19 @@
 package main.com.yourantao.aimeili.bean;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import org.hibernate.HibernateException;
 import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+
+import com.sun.istack.internal.FinalArrayList;
 
 /**
  * A data access object (DAO) providing persistence and search support for
@@ -26,8 +34,26 @@ public class GoodsMapDAO extends HibernateDaoSupport {
 	public static final String GOODS_REAL_ID = "goodsRealId";
 	public static final String GOODS_ID = "goodsId";
 
+	public int page=0;
+	public int num=0;
 	protected void initDao() {
 		// do nothing
+	}
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	public void save(GoodsMap transientInstance) {
@@ -77,13 +103,25 @@ public class GoodsMapDAO extends HibernateDaoSupport {
 		}
 	}
 
-	public List findByProperty(String propertyName, Object value) {
+	public List findByProperty(final String propertyName,final Object value) {
 		log.debug("finding GoodsMap instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from GoodsMap as model where model."
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from GoodsMap as model where model."
 					+ propertyName + "= ?";
-			return getHibernateTemplate().find(queryString, value);
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, value);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
+	                List list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;
@@ -154,12 +192,25 @@ public class GoodsMapDAO extends HibernateDaoSupport {
 	 * @param goodsRealId
 	 * @return
 	 */
-	public List<GoodsMap> findByGoodsIdAndGoodsRealId(Integer goodsId,
-			Integer goodsRealId) {
+	public List<GoodsMap> findByGoodsIdAndGoodsRealId(final Integer goodsId,
+			final Integer goodsRealId) {
 		try {
-			String queryString = "from GoodsMap where "
+			return getHibernateTemplate().executeFind(new HibernateCallback() {
+				String queryString = "from GoodsMap where "
 					+ GOODS_ID + "= ? and "+GOODS_REAL_ID+"= ?";
-			return getHibernateTemplate().find(queryString, goodsId,goodsRealId);
+				@Override
+				public Object doInHibernate(Session session)
+						throws HibernateException, SQLException {
+					Query query= session.createQuery(queryString);
+					query.setParameter(0, goodsId);
+					query.setParameter(1, goodsRealId);
+					query.setFirstResult(num*page);
+					if(num!=0)
+						query.setMaxResults(num);
+	                List list=query.list();
+	                return list;
+				}
+			});
 		} catch (RuntimeException re) {
 			log.error("find by property name failed", re);
 			throw re;

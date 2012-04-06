@@ -479,7 +479,6 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	}
 
 	public String examOrderGoods() { 
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
@@ -546,7 +545,6 @@ public class OrderAction extends BaseAction implements Constant, OrderInterface 
 	 * @see main.com.yourantao.aimeili.action.OrderInterface#addOrder()
 	 */
 	public String addOrder() {
-		String msg = "";
 		// 获取参数
 		String uuid = getStringParameter("uuid");
 		if (uuid == null) {
