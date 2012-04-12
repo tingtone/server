@@ -137,7 +137,10 @@ public class ShoppingCartAction extends BaseAction implements Constant,
 			}
 		}
 		//
-		printArray(shoppingCartViewList);
+		if(shoppingCartViewList.isEmpty())
+			printObject("{'msg':'购物车为空'}");
+		else
+			printArray(shoppingCartViewList);
 		return null;
 	}
 
